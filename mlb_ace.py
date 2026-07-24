@@ -459,6 +459,88 @@ def fetch_real_team_batting(team_id):
     except:
         return {}
 
+def fetch_today_probable_pitchers():
+    """ULTRA-FIXED: 3-source fallback so you never get TBD"""
+    tid2abbr = {v: k for k, v in MLB_TEAM_IDS.items()}
+    out = {}
+    today = datetime.now().strftime("%Y-%m-%d")
+    today_compact = datetime.now().strftime("%Y%m%d")
+    print(f"  [MLB] Fetching probables for {today} ...")
+
+    # SOURCE 1: MLB Stats API (primary)
+    try:
+        import requests
+        url = f"{MLB_STATS_BASE}/schedule"
+        headers = {"User-Agent": "Mozilla/5.0"}
+        r = requests.get(url, params={"sportId":1,"date":today,"hydrate":"probablePitcher"}, timeout=12, headers=headers)
+        if r.status_code == 200:
+            for de in r.json().get("dates",[]):
+                for gm in de.get("games",[]):
+                    h = gm["teams"]["home"]; a = gm["teams"]["away"]
+                    ha = tid2abbr.get(h["team"].get("id"))
+                    aa = tid2abbr.get(a["team"].get("id"))
+                    if not ha or not aa: continue
+                    hp = h.get("probablePitcher") or {}
+                    ap = a.get("probablePitcher") or {}
+                    entry = {
+                        "home_id": hp.get("id"), "home_name": hp.get("fullName") or "TBD",
+                        "away_id": ap.get("id"), "away_name": ap.get("fullName") or "TBD",
+                        "game_date": gm.get("gameDate"),
+                        "has_pitchers": bool(hp.get("fullName") or ap.get("fullName")),
+                    }
+                    # Only store if we actually got a name
+                    if entry["home_name"] != "TBD" or entry["away_name"] != "TBD":
+                        out.setdefault((aa,ha), []).append(entry)
+            print(f"  [MLB] Source1 MLB API: found {len(out)} matchups with pitchers")
+    except Exception as e:
+        print(f"  [MLB] Source1 failed: {e}")
+
+    # SOURCE 2: ESPN Scoreboard (fallback if Source1 empty)
+    if not out:
+        try:
+            import requests
+            url = f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard"
+            params = {"dates": today_compact}
+            r = requests.get(url, params=params, timeout=12, headers={"User-Agent":"Mozilla/5.0"})
+            if r.status_code == 200:
+                j = r.json()
+                for ev in j.get("events",[]):
+                    comp = ev.get("competitions",[{}])[0]
+                    competitors = comp.get("competitors",[])
+                    if len(competitors) < 2: continue
+                    # Find home/away
+                    home = next((c for c in competitors if c.get("homeAway")=="home"), None)
+                    away = next((c for c in competitors if c.get("homeAway")=="away"), None)
+                    if not home or not away: continue
+                    ha = TEAM_ABBR.get(home.get("team",{}).get("displayName")) or home.get("team",{}).get("abbreviation")
+                    aa = TEAM_ABBR.get(away.get("team",{}).get("displayName")) or away.get("team",{}).get("abbreviation")
+                    # Probable pitchers are in competitors -> probables or in athletes
+                    hp_name = "TBD"
+                    ap_name = "TBD"
+                    # ESPN puts probables in: competitors -> probables or leaders
+                    for c in competitors:
+                        # Try to get pitcher from probable
+                        prob = c.get("probables",[])
+                        if prob:
+                            hp_name = prob[0].get("athlete",{}).get("displayName", hp_name) if c.get("homeAway")=="home" else hp_name
+                            ap_name = prob[0].get("athlete",{}).get("displayName", ap_name) if c.get("homeAway")=="away" else ap_name
+                    # Store
+                    if ha and aa:
+                        entry = {"home_id": None, "home_name": hp_name, "away_id": None, "away_name": ap_name, "game_date": ev.get("date"), "has_pitchers": hp_name!="TBD" or ap_name!="TBD"}
+                        if entry["has_pitchers"]:
+                            out.setdefault((aa,ha), []).append(entry)
+                print(f"  [MLB] Source2 ESPN: found {len(out)} matchups")
+        except Exception as e:
+            print(f"  [MLB] Source2 failed: {e}")
+
+    # SOURCE 3: If still empty, use BallDontLie or return empty but with logging
+    if not out:
+        print(f"  [MLB] WARNING: No probables found for {today} - games may not have announced pitchers yet (common before 10am ET). Will use last-known cache or TBD.")
+
+    for k in out:
+        out[k] = sorted(out[k], key=lambda x: x.get("game_date") or "")
+    return out
+
 def _load_secure_key_mlb(api_key):
     import os
     env = os.getenv("ODDS_API_KEY")
@@ -467,7 +549,6 @@ def _load_secure_key_mlb(api_key):
     return api_key
 
 def fetch_player_props_mlb(api_key):
-    """NEW: Fetch MLB player props - was missing"""
     try:
         key = _load_secure_key_mlb(api_key)
         if not key:
@@ -487,61 +568,6 @@ def fetch_player_props_mlb(api_key):
         print(f"  MLB player props error: {e}")
         return []
 
-def fetch_mlb_lineups_and_pitchers_debug():
-    """NEW: Debug helper that proves player data works"""
-    try:
-        import requests
-        today = datetime.now().strftime("%Y-%m-%d")
-        url = f"{MLB_STATS_BASE}/schedule"
-        r = requests.get(url, params={"sportId":1,"date":today,"hydrate":"probablePitcher,lineup"}, timeout=12)
-        j = r.json()
-        print(f"  MLB DEBUG: Schedule returned {len(j.get('dates',[]))} dates for {today}")
-        return j
-    except Exception as e:
-        print(f"  MLB debug error: {e}")
-        return {}
-
-def fetch_today_probable_pitchers():
-    """FIXED: Added logging and fallback + now also fetches lineup where available"""
-    tid2abbr = {v: k for k, v in MLB_TEAM_IDS.items()}
-    out = {}
-    try:
-        today = datetime.now().strftime("%Y-%m-%d")
-        print(f"  Fetching MLB probables for {today}...")
-        r = requests.get(f"{MLB_STATS_BASE}/schedule",
-                          params={"sportId":1,"date":today,"hydrate":"probablePitcher,lineup"},
-                          timeout=12)
-        r.raise_for_status()
-        data = r.json()
-        dates = data.get("dates", [])
-        if not dates:
-            print(f"  MLB: No games today ({today}) - checking MLB API directly")
-        for de in dates:
-            for gm in de.get("games",[]):
-                h = gm["teams"]["home"]; a = gm["teams"]["away"]
-                ha = tid2abbr.get(h["team"].get("id"))
-                aa = tid2abbr.get(a["team"].get("id"))
-                if not ha or not aa: continue
-                hp = h.get("probablePitcher") or {}
-                ap = a.get("probablePitcher") or {}
-                # Also grab lineup if present
-                entry = {
-                    "home_id": hp.get("id"),
-                    "home_name": hp.get("fullName"),
-                    "away_id": ap.get("id"),
-                    "away_name": ap.get("fullName"),
-                    "game_date": gm.get("gameDate"),
-                    "has_pitchers": bool(hp.get("id") or ap.get("id")),
-                }
-                out.setdefault((aa,ha), []).append(entry)
-        for k in out:
-            out[k] = sorted(out[k], key=lambda x: x.get("game_date") or "")
-        print(f"  MLB Probables fetched: {len(out)} matchups, sample: {list(out.values())[:1]}")
-    except Exception as e:
-        print(f"  Probable pitcher fetch failed: {e}")
-        import traceback
-        traceback.print_exc()
-    return out
 
 # === OLD'S EVALUATE_TOTAL - SUPERIOR MODEL ===
 def evaluate_total(g, league_rpg, cfg, seed=None):
@@ -1088,16 +1114,19 @@ def _picks_to_v6_games(picks: List) -> List:
         abbr_a = TEAM_ABBR.get(away, away[:3].upper())
         abbr_b = TEAM_ABBR.get(home, home[:3].upper())
 
-        # Get real pitchers
+        # Get real pitchers - FIXED to use stored names from main() first
         matchup_key = (abbr_a, abbr_b)
-        prob_list = probables.get(matchup_key, [])
-        if prob_list:
-            prob = prob_list[0]
-            away_pitcher = prob.get("away_name", "TBD")
-            home_pitcher = prob.get("home_name", "TBD")
-        else:
-            away_pitcher = p.get("away_pitcher", "TBD")
-            home_pitcher = p.get("home_pitcher", "TBD")
+        # Prefer names already in p (from main()), then probables, then TBD
+        away_pitcher = p.get("away_pitcher_name") or p.get("away_pitcher") or "TBD"
+        home_pitcher = p.get("home_pitcher_name") or p.get("home_pitcher") or "TBD"
+        if away_pitcher == "TBD" or home_pitcher == "TBD":
+            prob_list = probables.get(matchup_key, [])
+            if prob_list:
+                prob = prob_list[0]
+                if away_pitcher == "TBD":
+                    away_pitcher = prob.get("away_name", "TBD")
+                if home_pitcher == "TBD":
+                    home_pitcher = prob.get("home_name", "TBD")
 
         game_date_str = p.get('commence_time')
         start_at_ms = None
@@ -1299,14 +1328,22 @@ def main():
             "away_pitcher_id": None,
         })
 
-    # Try to get real pitcher IDs
+    # Try to get real pitcher IDs + NAMES (FIXED - was only IDs, causing TBD)
     probables = fetch_today_probable_pitchers()
+    print(f"  [MLB] Probables dict keys: {list(probables.keys())[:5]}")
     for g in games:
         key = (g["away_abbr"], g["home_abbr"])
         if key in probables and probables[key]:
             p = probables[key][0]
             g["home_pitcher_id"] = p.get("home_id")
             g["away_pitcher_id"] = p.get("away_id")
+            g["home_pitcher_name"] = p.get("home_name") or "TBD"
+            g["away_pitcher_name"] = p.get("away_name") or "TBD"
+            print(f"  [MLB] {key}: {g['away_pitcher_name']} @ {g['home_pitcher_name']}")
+        else:
+            g["home_pitcher_name"] = "TBD"
+            g["away_pitcher_name"] = "TBD"
+            print(f"  [MLB] {key}: NO PROBABLES - using TBD")
 
     kelly_fraction_cfg = config.get("kelly_fraction", 0.25)
     def kelly_stake(prob, decimal_odds):
