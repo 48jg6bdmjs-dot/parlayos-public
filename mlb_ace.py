@@ -689,87 +689,6 @@ def load_config():
     return cfg
 
 # === PREDICTION ENGINE (IMPROVED WITH OLD'S LOGIC) ===
-
-def fetch_today_mlb_schedule_fallback():
-    """Fallback: if Odds API returns 0 or old games, get today's schedule from MLB Stats API so dashboard never shows No games"""
-    try:
-        from zoneinfo import ZoneInfo
-        ET_ZONE = ZoneInfo("America/New_York")
-    except:
-        import datetime as _dt
-        ET_ZONE = _dt.timezone.utc
-    try:
-        today = __import__('datetime').datetime.now().strftime("%Y-%m-%d")
-        r = requests.get(f"{MLB_STATS_BASE}/schedule", params={"sportId":1,"date":today}, timeout=10)
-        data = r.json()
-        games = []
-        for date_entry in data.get("dates", []):
-            for game in date_entry.get("games", []):
-                teams = game.get("teams", {})
-                away_team = teams.get("away", {}).get("team", {}).get("name")
-                home_team = teams.get("home", {}).get("team", {}).get("name")
-                if not away_team or not home_team:
-                    continue
-                if away_team not in TEAM_ABBR or home_team not in TEAM_ABBR:
-                    continue
-                abbr_a = TEAM_ABBR[away_team]
-                abbr_b = TEAM_ABBR[home_team]
-                game_time = game.get("gameDate", "")
-                if not game_time:
-                    et = ET_ZONE
-                    dt = __import__('datetime').datetime.now().replace(hour=19, minute=10, second=0, microsecond=0, tzinfo=et)
-                    game_time = dt.astimezone(__import__('datetime').timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-                games.append({
-                    "home_team": home_team,
-                    "away_team": away_team,
-                    "home_abbr": abbr_b,
-                    "away_abbr": abbr_a,
-                    "commence_time": game_time,
-                    "home_id": MLB_TEAM_IDS.get(abbr_b, 0),
-                    "away_id": MLB_TEAM_IDS.get(abbr_a, 0),
-                    "lat": STADIUM_LOCATIONS.get(abbr_b, (40.0, -74.0))[0],
-                    "lon": STADIUM_LOCATIONS.get(abbr_b, (40.0, -74.0))[1],
-                    "market_prob": 0.5,
-                    "odds": {"home": -110, "away": -110},
-                    "real_total": 8.5,
-                    "home_pitcher_id": None,
-                    "away_pitcher_id": None,
-                })
-        print(f"  Fallback schedule: {len(games)} games from MLB Stats API for {today}")
-        return games
-    except Exception as e:
-        print(f"  Fallback schedule failed: {e}")
-        return []
-
-def ensure_today_timestamps(picks):
-    """Ensure all picks have startAt = today ET, not old dates - fixes stale data issue"""
-    try:
-        from zoneinfo import ZoneInfo
-        ET_ZONE = ZoneInfo("America/New_York")
-    except:
-        import datetime as _dt
-        ET_ZONE = _dt.timezone.utc
-    today_et = __import__('datetime').datetime.now().astimezone(ET_ZONE).date()
-    for p in picks:
-        ct = p.get('commence_time', '')
-        try:
-            if ct:
-                dt_utc = __import__('datetime').datetime.strptime(ct, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=__import__('datetime').timezone.utc)
-                dt_et = dt_utc.astimezone(ET_ZONE)
-                if dt_et.date() != today_et:
-                    dt_et_today = dt_et.replace(year=today_et.year, month=today_et.month, day=today_et.day)
-                    dt_utc_today = dt_et_today.astimezone(__import__('datetime').timezone.utc)
-                    p['commence_time'] = dt_utc_today.strftime('%Y-%m-%dT%H:%M:%SZ')
-        except:
-            try:
-                et = ET_ZONE
-                dt = __import__('datetime').datetime.now().replace(hour=19, minute=10, second=0, microsecond=0, tzinfo=et)
-                p['commence_time'] = dt.astimezone(__import__('datetime').timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
-            except:
-                pass
-    return picks
-
-
 class PredictionEngine:
     def __init__(self, api_key: str):
         self.api_key = api_key
@@ -1268,41 +1187,6 @@ def main():
 
     games = []
     seen = set()
-    # If Odds API returned no games or stale games, fallback to MLB schedule so dashboard never shows No games
-    if not odds_data:
-        print("  No odds data - using fallback schedule")
-        fallback_games = fetch_today_mlb_schedule_fallback()
-        if not fallback_games:
-                        # Final fallback: create mock games for today so dashboard never empty
-            print("  Fallback also failed - creating mock games for today")
-            ET = ZoneInfo("America/New_York") if 'ZoneInfo' in globals() else timezone.utc
-            try:
-                ET = ZoneInfo("America/New_York")
-            except:
-                ET = timezone.utc
-            today = datetime.now().astimezone(ET).date()
-            mock_teams = [("San Diego Padres", "Atlanta Braves"), ("Minnesota Twins", "Cleveland Guardians"), ("Tampa Bay Rays", "Toronto Blue Jays")]
-            for away, home in mock_teams:
-                if away in TEAM_ABBR and home in TEAM_ABBR:
-                    dt = datetime.now().replace(hour=19, minute=10, second=0, microsecond=0, tzinfo=ET)
-                    fallback_games.append({
-                        "home": home, "away": away,
-                        "home_team": home, "away_team": away,
-                        "home_abbr": TEAM_ABBR[home], "away_abbr": TEAM_ABBR[away],
-                        "commence_time": dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                        "home_id": MLB_TEAM_IDS.get(TEAM_ABBR[home], 0),
-                        "away_id": MLB_TEAM_IDS.get(TEAM_ABBR[away], 0),
-                        "lat": STADIUM_LOCATIONS.get(TEAM_ABBR[home], (40.0, -74.0))[0],
-                        "lon": STADIUM_LOCATIONS.get(TEAM_ABBR[home], (40.0, -74.0))[1],
-                        "market_prob": 0.5, "odds": {"home": -110, "away": -110},
-                        "real_total": 8.5, "home_pitcher_id": None, "away_pitcher_id": None,
-                        "home_pitcher": "TBD", "away_pitcher": "TBD",
-                    })
-        for fg in fallback_games:
-            key = (fg['away_team'], fg['home_team'])
-            if key not in seen:
-                seen.add(key)
-                games.append(fg)
     for game in odds_data:
         if not game.get("bookmakers"):
             continue
@@ -1396,72 +1280,32 @@ def main():
         all_games_data.append(game_data)
         write_pick_to_log(game_data)
 
-    # Ensure timestamps are today - fixes old data showing as No games
-    all_games_data = ensure_today_timestamps(all_games_data)
     export_to_html(all_games_data)
     print(f"\nâœ“ {len(all_games_data)} games exported")
 
+
 def run(html_path: str = None):
-    """Wrapper for run_all.py - takes html_path and returns picks"""
-    if html_path is None:
-        html_path = _find_v6_template()
-        if not html_path:
-            # Try parlayos_3.html
-            import os
-            here = os.path.dirname(os.path.abspath(__file__))
-            html_path = os.path.join(here, "parlayos_3.html")
-    # Call main logic but with html_path override
-    # For compatibility, we need to replicate main but with custom html_path
-    
-    # Load config
-    config = load_config()
-    api_key = None
+    """Wrapper for run_all.py"""
     try:
-        import json, os
-        HERE = os.path.dirname(os.path.abspath(__file__))
-        with open(os.path.join(HERE, "sports_config.json")) as f:
-            api_key = json.load(f).get("odds_api_key")
-    except:
-        api_key = "test"
-    
-    # Use existing main logic but capture picks
-    # Simplified: call the existing main's core logic
-    try:
-        # Try to find and call the internal logic
-        # For mlb_ace, it has engine and games building
-        # We'll just call main() and then load the generated data from html if needed
-        # But better: implement run that returns picks
-        import sys
-        # Save original export_to_html to capture picks
+        if html_path is None:
+            html_path = _find_v6_template()
+        # Capture picks
         original_export = globals().get('export_to_html')
-        captured_picks = []
-        
-        def capturing_export(picks, html_path_arg=None):
-            nonlocal captured_picks
-            captured_picks = picks
-            # Call original with provided html_path
-            if html_path_arg:
-                return original_export(picks, html_path_arg)
-            else:
-                return original_export(picks, html_path)
-        
-        # Monkey patch
-        globals()['export_to_html'] = capturing_export
-        
-        # Call main
+        captured = []
+        def cap_export(picks, hp=None):
+            nonlocal captured
+            captured = picks
+            return original_export(picks, hp or html_path)
+        globals()['export_to_html'] = cap_export
         main()
-        
-        # Restore
         globals()['export_to_html'] = original_export
-        
-        return captured_picks
+        return captured
     except Exception as e:
         print(f"run() failed: {e}")
         import traceback
         traceback.print_exc()
         return []
 
+
 if __name__ == "__main__":
-    import sys
-    path = sys.argv[1] if len(sys.argv)>1 else None
-    run(path)
+    main()
