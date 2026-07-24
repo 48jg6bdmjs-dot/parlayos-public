@@ -1,5 +1,5 @@
 """
-nba_ace.py â€” IMPROVED VERSION inspired by old MLB ace + FIXES critical bugs
+nba_ace.py Ã¢â‚¬â€ IMPROVED VERSION inspired by old MLB ace + FIXES critical bugs
 Critical fixes:
 - FIXED: was fetching NFL odds (americanfootball_nfl) instead of NBA (basketball_nba)
 - Form blending: 50% season, 30% last 10, 20% last 5 (like old MLB)
@@ -135,20 +135,79 @@ class NBAPredictionEngine:
     def __init__(self, api_key: str):
         self.api_key = api_key
 
+    def _load_secure_key(self):
+        env = __import__("os").getenv("ODDS_API_KEY")
+        if env:
+            return env.strip()
+        return self.api_key
+
     def fetch_live_odds(self) -> List:
-        """FIXED: was fetching NFL, now correctly fetches NBA"""
+        """FIXED: was fetching NFL, now correctly fetches NBA + handles off-season"""
         url = "https://api.the-odds-api.com/v4/sports/basketball_nba/odds"
-        params = {"apiKey": self.api_key, "regions": "us", "markets": "h2h,spreads,totals", "oddsFormat": "american"}
+        params = {"apiKey": self._load_secure_key(), "regions": "us", "markets": "h2h,spreads,totals", "oddsFormat": "american"}
         try:
-            r = requests.get(url, params=params, timeout=10)
+            r = requests.get(url, params=params, timeout=15)
+            if r.status_code == 422:
+                print(f"NBA: Off-season (422) - 0 games expected in July")
+                return []
             data = r.json()
             if isinstance(data, dict) and data.get("message"):
                 print(f"Odds API error: {data.get('message')}")
                 return []
-            print(f"Odds API returned {len(data)} NBA games")
+            print(f"Odds API returned {len(data)} NBA games | remaining: {r.headers.get('x-requests-remaining','?')}")
             return data
         except Exception as e:
             print(f"Odds API error: {e}")
+            return []
+
+    # === NEW: PLAYER DATA FIX - ADDED ===
+    def fetch_player_props(self) -> List:
+        """Fetch NBA player props - was missing"""
+        try:
+            url = "https://api.the-odds-api.com/v4/sports/basketball_nba/odds"
+            params = {"apiKey": self._load_secure_key(), "regions": "us", "markets": "player_points,player_rebounds,player_assists,player_threes,player_points_rebounds_assists", "oddsFormat": "american"}
+            r = requests.get(url, params=params, timeout=15)
+            if r.status_code == 422:
+                return []
+            data = r.json()
+            if isinstance(data, list):
+                print(f"NBA: Player props for {len(data)} games")
+                return data
+            return []
+        except Exception as e:
+            print(f"NBA player props error: {e}")
+            return []
+
+    def fetch_team_roster_players(self, team_abbr: str) -> List[Dict]:
+        """FIXED: Uses ESPN Core API for roster"""
+        team_id = ESPN_TEAM_IDS.get(team_abbr, NBA_TEAM_IDS_ACCURATE.get(team_abbr))
+        if not team_id:
+            return []
+        cache_key = f"nba_roster_players_{team_id}"
+        cached = get_cached(cache_key, ttl=3600*6)
+        if cached:
+            return cached
+        try:
+            year = __import__("datetime").datetime.now().year
+            url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{year}/teams/{team_id}/athletes?limit=30&active=true"
+            r = requests.get(url, timeout=12)
+            j = r.json()
+            players = []
+            for it in j.get("items", []):
+                ath = it.get("athlete", {})
+                pos = ath.get("position", {})
+                pos_abbr = pos.get("abbreviation") if isinstance(pos, dict) else pos
+                players.append({
+                    "id": ath.get("id"),
+                    "name": ath.get("displayName") or ath.get("fullName"),
+                    "position": pos_abbr,
+                    "jersey": ath.get("jersey"),
+                })
+            set_cache(cache_key, players)
+            print(f"NBA: {team_abbr} roster {len(players)} players")
+            return players
+        except Exception as e:
+            print(f"NBA roster {team_abbr} error: {e}")
             return []
 
     def fetch_team_season_stats(self, team_abbr: str) -> Dict:
@@ -464,7 +523,7 @@ def export_to_html(picks: List, html_path: str) -> str:
     html = re.sub(r'[ \t]*//[^\n]*PARLAYOS NBA LIVE DATA.*?[ \t]*//[^\n]*END PARLAYOS NBA LIVE DATA[^\n]*\n?', '', html, flags=re.DOTALL)
     html = re.sub(r'\n{3,}', '\n\n', html)
     injection_lines = [
-        f"    // â”€â”€ PARLAYOS NBA LIVE DATA ({run_date}) â”€â”€",
+        f"    // Ã¢â€â‚¬Ã¢â€â‚¬ PARLAYOS NBA LIVE DATA ({run_date}) Ã¢â€â‚¬Ã¢â€â‚¬",
         "    window.PARLAYOS_NBA_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -476,7 +535,7 @@ def export_to_html(picks: List, html_path: str) -> str:
         "      if(typeof renderNBADashboard==='function') renderNBADashboard();",
         "      if(typeof renderLeagueSchedule==='function'){ try{ renderLeagueSchedule('nba'); }catch(e){} }",
         "    })();",
-        "    // â”€â”€ END PARLAYOS NBA LIVE DATA â”€â”€",
+        "    // Ã¢â€â‚¬Ã¢â€â‚¬ END PARLAYOS NBA LIVE DATA Ã¢â€â‚¬Ã¢â€â‚¬",
     ]
     injection = "\n".join(injection_lines)
     MARKER = '    // <!--PARLAYOS_NBA_INJECT_POINT-->'
@@ -486,7 +545,7 @@ def export_to_html(picks: List, html_path: str) -> str:
         html = html.replace('</body>', f'<script>\n{injection}\n</script>\n</body>')
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"âœ“ {pick_count} NBA picks â†’ {html_path}")
+    print(f"Ã¢Å“â€œ {pick_count} NBA picks Ã¢â€ â€™ {html_path}")
     return html_path
 
 def load_config():
