@@ -1111,12 +1111,11 @@ def _picks_to_v6_games(picks: List) -> List:
         else:
             ml_price_dec = round((100 / abs(odds)) + 1, 3)
 
-        abbr_a = TEAM_ABBR.get(away, away[:3].upper())
-        abbr_b = TEAM_ABBR.get(home, home[:3].upper())
+        abbr_a = p.get("away_abbr") or TEAM_ABBR.get(away, away[:3].upper())
+        abbr_b = p.get("home_abbr") or TEAM_ABBR.get(home, home[:3].upper())
 
         # Get real pitchers - FIXED to use stored names from main() first
         matchup_key = (abbr_a, abbr_b)
-        # Prefer names already in p (from main()), then probables, then TBD
         away_pitcher = p.get("away_pitcher_name") or p.get("away_pitcher") or "TBD"
         home_pitcher = p.get("home_pitcher_name") or p.get("home_pitcher") or "TBD"
         if away_pitcher == "TBD" or home_pitcher == "TBD":
@@ -1127,6 +1126,12 @@ def _picks_to_v6_games(picks: List) -> List:
                     away_pitcher = prob.get("away_name", "TBD")
                 if home_pitcher == "TBD":
                     home_pitcher = prob.get("home_name", "TBD")
+        # Fallback: use unknown but log
+        if away_pitcher == "TBD":
+            away_pitcher = f"{abbr_a} SP"
+        if home_pitcher == "TBD":
+            home_pitcher = f"{abbr_b} SP"
+
 
         game_date_str = p.get('commence_time')
         start_at_ms = None
@@ -1154,7 +1159,7 @@ def _picks_to_v6_games(picks: List) -> List:
             'cityA': away, 'cityB': home,
             'lgA': 'MLB', 'lgB': 'MLB',
             'total': total, 'ouPick': f'OVER {total}' if edge>0 else f'UNDER {total}',
-            'kLine': p.get('kLine', 6.5), 'kPick': f'{ml_fav} K',
+            'kLine': p.get('kLine', 6.5), 'kPick': f'{away_pitcher[:12]} K' if 'TBD' not in away_pitcher else f'{abbr_a} SP K',
             'mlFav': ml_fav, 'mlPriceDec': ml_price_dec,
             'ouEdge': round(edge*0.5, 4), 'kEdge': 0.0, 'mlEdge': round(edge, 4),
             'model': round(model_prob, 4),
@@ -1167,7 +1172,23 @@ def _picks_to_v6_games(picks: List) -> List:
             'qualifies': bool(p.get('qualifies', True)),
             'away_pitcher': away_pitcher,
             'home_pitcher': home_pitcher,
+            'away_pitcher_name': away_pitcher,
+            'home_pitcher_name': home_pitcher,
+            # PITCHER STATS FOR PITCHING TAB
+            'away_era': p.get('away_era'), 'home_era': p.get('home_era'),
+            'away_whip': p.get('away_whip'), 'home_whip': p.get('home_whip'),
+            'away_k9': p.get('away_k9'), 'home_k9': p.get('home_k9'),
+            'away_fip': p.get('away_fip'), 'home_fip': p.get('home_fip'),
+            # TEAM BATTING FOR BATTING TAB
+            'teamA': abbr_a, 'teamB': abbr_b,
             'teamA_avg': p.get('teamA_avg'), 'teamB_avg': p.get('teamB_avg'),
+            'teamA_obp': p.get('teamA_obp'), 'teamB_obp': p.get('teamB_obp'),
+            'teamA_slg': p.get('teamA_slg'), 'teamB_slg': p.get('teamB_slg'),
+            'teamA_ops': p.get('teamA_ops'), 'teamB_ops': p.get('teamB_ops'),
+            'teamA_hr': p.get('teamA_hr'), 'teamB_hr': p.get('teamB_hr'),
+            'teamA_rbi': p.get('teamA_rbi'), 'teamB_rbi': p.get('teamB_rbi'),
+            'teamA_sb': p.get('teamA_sb'), 'teamB_sb': p.get('teamB_sb'),
+            'away_batting': p.get('away_batting', {}), 'home_batting': p.get('home_batting', {}),
         }
         for col in ["c_team_edge", "c_pitcher_fip_edge", "c_pitcher_era_edge", "c_offense_edge", "c_bullpen_edge"]:
             if col in p:
