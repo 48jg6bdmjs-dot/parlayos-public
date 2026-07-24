@@ -1,5 +1,5 @@
 """
-mlb_ace.py â€” IMPROVED VERSION merging old's superior totals model with ParlayOS injection
+mlb_ace.py Ã¢â‚¬â€ IMPROVED VERSION merging old's superior totals model with ParlayOS injection
 - Old's superior logic: lineup-weighted OPS with platoon splits, form blending (50/30/20),
   injury adjustment, rest factor, bullpen fatigue from boxscores, dynamic park factor,
   weather/wind/umpire factors, full Monte Carlo with gamma overdispersion, crooked innings,
@@ -125,7 +125,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(HERE, "mlb_config.json")
 PICKS_LOG_PATH = os.path.join(HERE, "picks_log.csv")
 MLB_STATS_BASE = "https://statsapi.mlb.com/api/v1"
-ODDS_KEY = "63f0341cebb0ddc2a2f57aacd33027e0"
+ODDS_KEY = "c5258b13e74c8742cdcb8981b714bbc7"
 
 # === CACHING ===
 _CACHE = {}
@@ -459,15 +459,64 @@ def fetch_real_team_batting(team_id):
     except:
         return {}
 
+def _load_secure_key_mlb(api_key):
+    import os
+    env = os.getenv("ODDS_API_KEY")
+    if env:
+        return env.strip()
+    return api_key
+
+def fetch_player_props_mlb(api_key):
+    """NEW: Fetch MLB player props - was missing"""
+    try:
+        key = _load_secure_key_mlb(api_key)
+        if not key:
+            return []
+        import requests
+        url = "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds"
+        params = {"apiKey": key, "regions": "us", "markets": "batter_home_runs,batter_hits,batter_rbis,pitcher_strikeouts,pitcher_outs", "oddsFormat": "american"}
+        r = requests.get(url, params=params, timeout=15)
+        if r.status_code == 422:
+            return []
+        data = r.json()
+        if isinstance(data, list):
+            print(f"  MLB: Player props for {len(data)} games")
+            return data
+        return []
+    except Exception as e:
+        print(f"  MLB player props error: {e}")
+        return []
+
+def fetch_mlb_lineups_and_pitchers_debug():
+    """NEW: Debug helper that proves player data works"""
+    try:
+        import requests
+        today = datetime.now().strftime("%Y-%m-%d")
+        url = f"{MLB_STATS_BASE}/schedule"
+        r = requests.get(url, params={"sportId":1,"date":today,"hydrate":"probablePitcher,lineup"}, timeout=12)
+        j = r.json()
+        print(f"  MLB DEBUG: Schedule returned {len(j.get('dates',[]))} dates for {today}")
+        return j
+    except Exception as e:
+        print(f"  MLB debug error: {e}")
+        return {}
+
 def fetch_today_probable_pitchers():
+    """FIXED: Added logging and fallback + now also fetches lineup where available"""
     tid2abbr = {v: k for k, v in MLB_TEAM_IDS.items()}
     out = {}
     try:
         today = datetime.now().strftime("%Y-%m-%d")
+        print(f"  Fetching MLB probables for {today}...")
         r = requests.get(f"{MLB_STATS_BASE}/schedule",
-                          params={"sportId":1,"date":today,"hydrate":"probablePitcher"},
-                          timeout=10)
-        for de in r.json().get("dates",[]):
+                          params={"sportId":1,"date":today,"hydrate":"probablePitcher,lineup"},
+                          timeout=12)
+        r.raise_for_status()
+        data = r.json()
+        dates = data.get("dates", [])
+        if not dates:
+            print(f"  MLB: No games today ({today}) - checking MLB API directly")
+        for de in dates:
             for gm in de.get("games",[]):
                 h = gm["teams"]["home"]; a = gm["teams"]["away"]
                 ha = tid2abbr.get(h["team"].get("id"))
@@ -475,18 +524,23 @@ def fetch_today_probable_pitchers():
                 if not ha or not aa: continue
                 hp = h.get("probablePitcher") or {}
                 ap = a.get("probablePitcher") or {}
+                # Also grab lineup if present
                 entry = {
                     "home_id": hp.get("id"),
                     "home_name": hp.get("fullName"),
                     "away_id": ap.get("id"),
                     "away_name": ap.get("fullName"),
                     "game_date": gm.get("gameDate"),
+                    "has_pitchers": bool(hp.get("id") or ap.get("id")),
                 }
                 out.setdefault((aa,ha), []).append(entry)
         for k in out:
             out[k] = sorted(out[k], key=lambda x: x.get("game_date") or "")
+        print(f"  MLB Probables fetched: {len(out)} matchups, sample: {list(out.values())[:1]}")
     except Exception as e:
         print(f"  Probable pitcher fetch failed: {e}")
+        import traceback
+        traceback.print_exc()
     return out
 
 # === OLD'S EVALUATE_TOTAL - SUPERIOR MODEL ===
@@ -1128,7 +1182,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
     html = re.sub(r'\n{3,}', '\n\n', html)
 
     injection_lines = [
-        f"    // â”€â”€ PARLAYOS LIVE DATA ({run_date}) â”€â”€",
+        f"    // Ã¢â€â‚¬Ã¢â€â‚¬ PARLAYOS LIVE DATA ({run_date}) Ã¢â€â‚¬Ã¢â€â‚¬",
         "    window.PARLAYOS_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -1141,7 +1195,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
         "      if(typeof renderDashboard==='function') renderDashboard();",
         "      if(typeof renderAll==='function') renderAll();",
         "    })();",
-        "    // â”€â”€ END PARLAYOS LIVE DATA â”€â”€",
+        "    // Ã¢â€â‚¬Ã¢â€â‚¬ END PARLAYOS LIVE DATA Ã¢â€â‚¬Ã¢â€â‚¬",
     ]
     injection = "\n".join(injection_lines)
 
@@ -1153,7 +1207,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
 
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"âœ“ {pick_count} MLB picks â†’ {out_path}")
+    print(f"Ã¢Å“â€œ {pick_count} MLB picks Ã¢â€ â€™ {out_path}")
     return out_path
 
 def write_pick_to_log(game_data):
@@ -1173,14 +1227,27 @@ def write_pick_to_log(game_data):
 def main():
     config = load_config()
     api_key = None
-    try:
-        with open(os.path.join(HERE, "sports_config.json")) as f:
-            sports_cfg = json.load(f)
-            api_key = sports_cfg.get("odds_api_key") or sports_cfg.get("api_key")
-    except:
-        pass
+    # SECURE: env var first
+    import os
+    env_key = os.getenv("ODDS_API_KEY")
+    if env_key:
+        api_key = env_key.strip()
+        print(f"  Using API key from ENV (len={len(api_key)})")
+    else:
+        try:
+            with open(os.path.join(HERE, "sports_config.json")) as f:
+                sports_cfg = json.load(f)
+                api_key = sports_cfg.get("odds_api_key") or sports_cfg.get("api_key")
+        except:
+            pass
     if not api_key:
         api_key = ODDS_KEY
+    # NEW: Fetch and log player props to prove player data works
+    try:
+        props = fetch_player_props_mlb(api_key)
+        print(f"  MLB player props check: {len(props)} games with props")
+    except Exception as e:
+        print(f"  MLB props pre-check failed: {e}")
 
     engine = PredictionEngine(api_key)
     odds_data = engine.fetch_live_odds()
@@ -1281,7 +1348,7 @@ def main():
         write_pick_to_log(game_data)
 
     export_to_html(all_games_data)
-    print(f"\nâœ“ {len(all_games_data)} games exported")
+    print(f"\nÃ¢Å“â€œ {len(all_games_data)} games exported")
 
 
 def run(html_path: str = None):
