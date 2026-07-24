@@ -4,7 +4,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 def _find_html_template():
-    for name in ["parlayos_3.html","parlayos_transparent_v8.html","parlayos_transparent_v7.html","parlayos.html","index.html","parlayos_2.html"]:
+    for name in ["parlayos_3.html","parlayos_transparent_v8.html","parlayos_transparent_v7.html","parlayos.html","index.html","parlayos.html"]:
         p=os.path.join(HERE,name)
         if os.path.exists(p):
             return p
@@ -60,10 +60,10 @@ def main():
     print(f"ENV ODDS_API_KEY set: {bool(__import__(chr(111)+chr(115)).getenv(chr(79)+chr(68)+chr(68)+chr(83)+chr(95)+chr(65)+chr(80)+chr(73)+chr(95)+chr(75)+chr(69)+chr(89)))}")
     print("Checking player data fixes...")
     results=[]
-    # FIXED: Your files are named *_ace_2.py, not *_ace.py
-    results.append(_run_one("MLB (mlb_ace_2.py)","mlb_ace_2"))
-    results.append(_run_one("NFL (nfl_ace_2.py)","nfl_ace_2"))
-    results.append(_run_one("NBA (nba_ace_2.py)","nba_ace_2"))
+    # FIXED: Your files are named *_ace.py, not *_ace.py
+    results.append(_run_one("MLB (mlb_ace.py)","mlb_ace"))
+    results.append(_run_one("NFL (nfl_ace.py)","nfl_ace"))
+    results.append(_run_one("NBA (nba_ace.py)","nba_ace"))
     _auto_calibrate()
 
     # Post-process: re-apply no-data/old-data fixes that get overwritten by ace exports
