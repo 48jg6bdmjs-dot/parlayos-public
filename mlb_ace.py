@@ -442,22 +442,38 @@ def fetch_team_form(year, day):
     return {}
 
 def fetch_real_team_batting(team_id):
-    if not team_id: return {}
+    if not team_id: 
+        return {"avg": ".250", "obp": ".320", "slg": ".410", "ops": ".730", "hr": 100, "rbi": 400, "sb": 50, "has_data": False}
+    cache_key = f"team_batting_{team_id}"
+    cached = get_cached(cache_key, ttl=3600*2)
+    if cached:
+        return cached
     try:
+        import requests
+        year = datetime.now().year
         r = requests.get(f"{MLB_STATS_BASE}/teams/{team_id}/stats",
-                          params={"stats":"season","season":datetime.now().year,"group":"hitting"},
-                          timeout=8)
-        splits = r.json().get("stats",[{}])[0].get("splits",[])
-        if not splits: return {}
-        s = splits[0].get("stat",{})
-        return {
-            "avg": s.get("avg",".000"), "obp": s.get("obp",".000"),
-            "slg": s.get("slg",".000"), "ops": s.get("ops",".000"),
-            "hr":  int(s.get("homeRuns",0) or 0), "rbi": int(s.get("rbi",0) or 0),
-            "sb":  int(s.get("stolenBases",0) or 0),
-        }
-    except:
-        return {}
+                          params={"stats":"season","season":year,"group":"hitting"},
+                          timeout=10, headers={"User-Agent":"Mozilla/5.0"})
+        if r.status_code == 200:
+            j = r.json()
+            stats = j.get("stats", [])
+            if stats:
+                splits = stats[0].get("splits", [])
+                if splits:
+                    s = splits[0].get("stat",{})
+                    result = {
+                        "avg": s.get("avg",".250"), "obp": s.get("obp",".320"),
+                        "slg": s.get("slg",".410"), "ops": s.get("ops",".730"),
+                        "hr":  int(s.get("homeRuns",0) or 0), "rbi": int(s.get("rbi",0) or 0),
+                        "sb":  int(s.get("stolenBases",0) or 0),
+                        "has_data": True,
+                    }
+                    set_cache(cache_key, result)
+                    return result
+    except Exception as e:
+        print(f"  Batting {team_id} error: {e}")
+    # Fallback with league avg so frontend doesn't show dashes
+    return {"avg": ".250", "obp": ".320", "slg": ".410", "ops": ".730", "hr": 95, "rbi": 380, "sb": 45, "has_data": False}
 
 def fetch_today_probable_pitchers():
     """ULTRA-FIXED: 3-source fallback so you never get TBD"""
@@ -547,6 +563,75 @@ def _load_secure_key_mlb(api_key):
     if env:
         return env.strip()
     return api_key
+
+
+def resolve_pitcher_id_by_name(pitcher_name: str):
+    """Try to find MLBAM ID from name via search API"""
+    if not pitcher_name or pitcher_name == "TBD":
+        return None
+    try:
+        import requests
+        # Search people
+        url = f"{MLB_STATS_BASE}/people/search"
+        params = {"names": pitcher_name}
+        r = requests.get(url, params=params, timeout=8, headers={"User-Agent":"Mozilla/5.0"})
+        if r.status_code == 200:
+            data = r.json()
+            people = data.get("people", [])
+            if people:
+                # Return first match who is pitcher
+                for p in people:
+                    if p.get("primaryPosition",{}).get("code") == "1" or "pitcher" in str(p.get("primaryPosition",{}).get("name","")).lower():
+                        return p.get("id")
+                return people[0].get("id")
+    except Exception as e:
+        print(f"  Resolve ID for {pitcher_name} failed: {e}")
+    return None
+
+def fetch_player_props_dict(api_key):
+    """Returns dict (away_abbr, home_abbr) -> {k_line, k_name, k_over_odds, etc}"""
+    result = {}
+    try:
+        props = fetch_player_props_mlb(api_key)
+        for game in props:
+            home = game.get("home_team")
+            away = game.get("away_team")
+            if not home or not away:
+                continue
+            ha = TEAM_ABBR.get(home, home[:3].upper())
+            aa = TEAM_ABBR.get(away, away[:3].upper())
+            # Find pitcher strikeouts market
+            for book in game.get("bookmakers", [])[:1]:  # just first book
+                for market in book.get("markets", []):
+                    if market.get("key") == "pitcher_strikeouts":
+                        for outcome in market.get("outcomes", []):
+                            # outcome name is pitcher name, point is line
+                            pname = outcome.get("description") or outcome.get("name") or ""
+                            # Some books put Over/Under as separate outcomes with same player
+                            # We need to find the Over with point
+                            if outcome.get("point") is not None:
+                                result.setdefault((aa, ha), {})["k_line"] = outcome.get("point")
+                                # Try to extract pitcher name from description or name
+                                # Format often "Sugano strikeouts Over" or just "Tomoyuki Sugano"
+                                # Keep full name
+                                if "Over" not in pname and "Under" not in pname:
+                                    result[(aa, ha)]["k_pitcher"] = pname
+                                else:
+                                    # name might be in description field
+                                    desc = outcome.get("description") or ""
+                                    if desc:
+                                        result[(aa, ha)]["k_pitcher"] = desc
+                                # Also store odds
+                                if outcome.get("name") == "Over":
+                                    result[(aa, ha)]["k_over_odds"] = outcome.get("price")
+            # If we got k_line, log it
+            if (aa, ha) in result:
+                print(f"  [MLB Props] {aa}@{ha}: K line {result[(aa,ha)].get('k_line')} for {result[(aa,ha)].get('k_pitcher','?')}")
+    except Exception as e:
+        print(f"  Props dict error: {e}")
+    return result
+
+
 
 def fetch_player_props_mlb(api_key):
     try:
@@ -1126,11 +1211,11 @@ def _picks_to_v6_games(picks: List) -> List:
                     away_pitcher = prob.get("away_name", "TBD")
                 if home_pitcher == "TBD":
                     home_pitcher = prob.get("home_name", "TBD")
-        # Fallback: use unknown but log
+        # Keep TBD if still missing - will show as TBD in UI but logs will show why
         if away_pitcher == "TBD":
-            away_pitcher = f"{abbr_a} SP"
+            print(f"  [WARN] Still TBD for {abbr_a}")
         if home_pitcher == "TBD":
-            home_pitcher = f"{abbr_b} SP"
+            print(f"  [WARN] Still TBD for {abbr_b}")
 
 
         game_date_str = p.get('commence_time')
@@ -1159,7 +1244,7 @@ def _picks_to_v6_games(picks: List) -> List:
             'cityA': away, 'cityB': home,
             'lgA': 'MLB', 'lgB': 'MLB',
             'total': total, 'ouPick': f'OVER {total}' if edge>0 else f'UNDER {total}',
-            'kLine': p.get('kLine', 6.5), 'kPick': f'{away_pitcher[:12]} K' if 'TBD' not in away_pitcher else f'{abbr_a} SP K',
+            'kLine': p.get('kLine', p.get('kLine', 6.5)), 'kPick': f"{p.get('kPitcher', away_pitcher)[:20]} K {p.get('kLine', 6.5)}" ,
             'mlFav': ml_fav, 'mlPriceDec': ml_price_dec,
             'ouEdge': round(edge*0.5, 4), 'kEdge': 0.0, 'mlEdge': round(edge, 4),
             'model': round(model_prob, 4),
