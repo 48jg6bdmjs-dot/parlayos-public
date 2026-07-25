@@ -889,6 +889,80 @@ DEFAULT_CONFIG = {
     "max_stake_pct": 0.05,
 }
 
+
+def _k_prob_over(projected_k: float, line: float) -> float:
+    """Projected K vs line -> prob over using normal approx with continuity correction"""
+    import math
+    if projected_k <=0:
+        return 0.5
+    # SD grows with mean, but with floor
+    sd = max(1.25, math.sqrt(max(0.5, projected_k)) * 0.92)
+    # continuity correction: over means > line, so threshold = line + 0.5
+    z = (line + 0.5 - projected_k) / sd
+    # 1 - CDF(z)
+    p_over = 0.5 * (1 - math.erf(z / math.sqrt(2)))
+    return max(0.12, min(0.88, p_over))
+
+def _compute_k_edge(pitcher_stats: dict, k_line: float, home_abbr: str) -> tuple:
+    """Returns (p_over, edge, proj_k) for a pitcher K prop based on real stats"""
+    LEAGUE_K9 = 8.6
+    k9 = pitcher_stats.get('k_per_9', LEAGUE_K9)
+    has = pitcher_stats.get('has_data', False)
+    # Expected IP: elite pitchers go deeper
+    era = pitcher_stats.get('era', 4.25)
+    base_ip = 5.8 if era < 3.5 else 5.5 if era < 4.2 else 5.0
+    # reliability blend for IP
+    rel = pitcher_stats.get('reliability', 0.6) if has else 0.3
+    exp_ip = base_ip * rel + 5.1 * (1-rel)
+    # park factor slightly suppresses Ks in some parks
+    pf = PARK_FACTORS.get(home_abbr, 100) / 100.0
+    # Slight park adjustment: pitcher friendly parks (low PF) slightly boost K? keep near 1
+    park_k_mult = 0.92 + (pf * 0.08)  # 0.92 to 1.08 range
+    proj_k = k9 * exp_ip / 9.0 * park_k_mult
+    # Clamp realistic
+    proj_k = max(2.0, min(11.5, proj_k))
+    p_over = _k_prob_over(proj_k, k_line)
+    # Edge vs 50% (if no market juice, assume fair 50/50). Positive = OVER edge, negative = UNDER edge
+    # For UI, we store edge as p_over - 0.5 if we pick OVER, else p_under -0.5
+    if p_over >= 0.5:
+        edge = p_over - 0.5
+    else:
+        edge = (1 - p_over) - 0.5
+    return p_over, edge, proj_k
+
+def _compute_totals_edge_via_model(engine, game: dict, real_total: float):
+    """Use engine's Monte Carlo to get real O/U edge based on team form, park, weather"""
+    try:
+        pick, proj_total, edge = engine.calculate_total_points(game, real_total)
+        # pick is OVER/UNDER string, edge is p - 0.5
+        # Need p_over for full calc
+        # Recompute p_over for consistency
+        cfg = load_config()
+        home_form = engine.fetch_team_form(game["home_id"], game["away_id"])
+        away_form = engine.fetch_team_form(game["away_id"], game["home_id"])
+        league_rpg = 4.4
+        away_rpg = away_form.get("runs_per_game", 4.5)
+        home_rpg = home_form.get("runs_per_game", 4.5)
+        pf = PARK_FACTORS.get(game.get("home_abbr",""), 100)/100.0
+        weather = engine.fetch_weather(game.get("lat",40.0), game.get("lon",-74.0))
+        env = weather_factor(weather.get("temp_f",70))
+        lam_away = max(1.5, min(12.0, league_rpg * (away_rpg/league_rpg) * pf * env * AWAY_OFF_MULT))
+        lam_home = max(1.5, min(12.0, league_rpg * (home_rpg/league_rpg) * pf * env * HOME_OFF_MULT))
+        sim = simulate(lam_away, lam_home, cfg.get("n_sims", 5000))
+        p_over, p_under, _ = p_over_ensemble(sim, real_total)
+        if pick == "OVER":
+            ou_edge = p_over - 0.5
+            p_model = p_over
+        else:
+            ou_edge = p_under - 0.5
+            p_model = p_under
+        return pick, proj_total, ou_edge, p_model, p_over, p_under
+    except Exception as e:
+        print(f"  totals edge calc failed: {e}")
+        return "OVER", real_total, 0.0, 0.5, 0.5, 0.5
+
+
+
 def load_config():
     cfg = dict(DEFAULT_CONFIG)
     try:
@@ -1367,17 +1441,43 @@ def _picks_to_v6_games(picks: List) -> List:
 
         total = p.get('line') or p.get('total') or 8.5
         ml_fav = TEAM_ABBR.get(pick_team, pick_team[:3].upper()) if pick_team else abbr_b
-        hot = edge > 0.03
+        # Use real edges computed in main() if available, else fallback
+        real_ou_edge = p.get('ou_edge')
+        real_k_edge = p.get('k_edge')
+        real_ou_pick = p.get('ou_pick')
+        real_k_pick = p.get('k_pick')
+        real_k_line = p.get('k_line') or p.get('kLine', 6.5)
+        # If ace computed edges, use them - this fixes 50% everywhere bug
+        if real_ou_edge is not None:
+            ou_edge_val = float(real_ou_edge)
+        else:
+            ou_edge_val = round(edge*0.5, 4)
+        if real_k_edge is not None:
+            k_edge_val = float(real_k_edge)
+        else:
+            k_edge_val = 0.0
+
+        if real_ou_pick:
+            ou_pick_val = real_ou_pick
+        else:
+            ou_pick_val = f'OVER {total}' if edge>0 else f'UNDER {total}'
+
+        if real_k_pick:
+            k_pick_val = real_k_pick
+        else:
+            k_pick_val = f"{p.get('kPitcher', away_pitcher)[:20]} K {real_k_line}"
+
+        hot = edge > 0.03 or abs(ou_edge_val) > 0.03 or abs(k_edge_val) > 0.03
 
         game = {
             'id': f'mlb_live_{idx}_{int(datetime.now().timestamp())}',
             'a': abbr_a, 'b': abbr_b,
             'cityA': away, 'cityB': home,
             'lgA': 'MLB', 'lgB': 'MLB',
-            'total': total, 'ouPick': f'OVER {total}' if edge>0 else f'UNDER {total}',
-            'kLine': p.get('kLine', p.get('kLine', 6.5)), 'kPick': f"{p.get('kPitcher', away_pitcher)[:20]} K {p.get('kLine', 6.5)}" ,
+            'total': total, 'ouPick': ou_pick_val,
+            'kLine': real_k_line, 'kPick': k_pick_val,
             'mlFav': ml_fav, 'mlPriceDec': ml_price_dec,
-            'ouEdge': round(edge*0.5, 4), 'kEdge': 0.0, 'mlEdge': round(edge, 4),
+            'ouEdge': round(ou_edge_val, 4), 'kEdge': round(k_edge_val, 4), 'mlEdge': round(edge, 4),
             'model': round(model_prob, 4),
             'tv': 'ESPN+', 'hot': hot,
             'startAt': start_at_ms, 'time': time_display, 'date': date_display,
@@ -1735,11 +1835,69 @@ def main():
 
         print(f"  [STATS] {away_bat.get('avg')} {g['away_abbr']} SP {g.get('away_pitcher_name')} ERA={away_p_stats.get('era')} WHIP={away_p_stats.get('whip')} | {g['home_abbr']} SP {g.get('home_pitcher_name')} ERA={home_p_stats.get('era')}")
 
+        # --- NEW: Compute real O/U and K edges based on pitcher stats + history ---
+        real_total_val = g.get('real_total') or 8.5
+        try:
+            ou_pick_raw, proj_total, ou_edge_raw, ou_model_prob, p_over_tot, p_under_tot = _compute_totals_edge_via_model(engine, g, real_total_val)
+        except:
+            ou_pick_raw, proj_total, ou_edge_raw, ou_model_prob = "OVER", real_total_val, 0.0, 0.5
+            p_over_tot, p_under_tot = 0.5, 0.5
+
+        # K props: try to get real K line from player props API, else default 6.5
+        try:
+            props_cache = getattr(main, '_props_cache', None)
+            if props_cache is None:
+                props_cache = fetch_player_props_dict(api_key)
+                setattr(main, '_props_cache', props_cache)
+        except:
+            props_cache = {}
+        k_line_key = (g.get('away_abbr'), g.get('home_abbr'))
+        k_line_info = props_cache.get(k_line_key, {})
+        k_line = float(k_line_info.get('k_line', 6.5) if isinstance(k_line_info, dict) else 6.5)
+        # Away pitcher is primary K prop (MLB markets list K for each starter, we show away)
+        p_over_k, k_edge_raw, proj_k = _compute_k_edge(away_p_stats, k_line, g.get('home_abbr',''))
+        # Also compute home pitcher K for completeness (could be used later)
+        p_over_k_home, k_edge_home, proj_k_home = _compute_k_edge(home_p_stats, k_line, g.get('home_abbr',''))
+
+        # Decide K pick based on which side has edge
+        if p_over_k >= 0.5:
+            k_pick_side = "OVER"
+            k_model_prob = p_over_k
+            k_edge = p_over_k - 0.5
+        else:
+            k_pick_side = "UNDER"
+            k_model_prob = 1 - p_over_k
+            k_edge = (1 - p_over_k) - 0.5
+
+        # For O/U, edge already computed
+        ou_edge = ou_edge_raw
+        # Build ouPick string
+        ou_pick_str = f"{ou_pick_raw} {real_total_val}"
+
+        # Build kPick string
+        k_pitcher_name = g.get('away_pitcher_name') or 'SP'
+        k_pick_str = f"{k_pitcher_name} {k_pick_side} {k_line} K"
+
+        print(f"  [MODEL] {g['away_abbr']}@{g['home_abbr']} proj_total={proj_total:.1f} vs {real_total_val} => {ou_pick_raw} edge={ou_edge:.3f} | K {k_pitcher_name} proj={proj_k:.1f} line={k_line} prob={p_over_k:.3f} edge={k_edge:.3f}")
+
+
         game_data = {
             "home": g["home"], "away": g["away"], "pick": pick,
             "odds": pick_odds, "model_prob": round(pick_prob*100, 1), "edge": round(edge*100, 1),
             "edge_pct": round(edge*100, 1), "kelly_stake_pct": round(stake_frac*100, 2),
             "line": g.get("real_total"), "kind": "team", "market": "Moneyline",
+            # NEW: Real O/U and K model outputs based on pitcher stats + history
+            "ou_pick": ou_pick_str,
+            "ou_edge": round(ou_edge, 4),
+            "ou_model_prob": round(ou_model_prob, 4) if 'ou_model_prob' in locals() else 0.5,
+            "proj_total": proj_total,
+            "k_pick": k_pick_str,
+            "k_edge": round(k_edge, 4),
+            "k_model_prob": round(k_model_prob, 4),
+            "k_line": k_line,
+            "proj_k": round(proj_k, 2),
+            "proj_k_home": round(proj_k_home, 2) if 'proj_k_home' in locals() else 0,
+            "p_over_k": round(p_over_k, 4),
             # store for v6 conversion
             "home_pitcher": g.get("home_pitcher_name"), "away_pitcher": g.get("away_pitcher_name"),
             "home_pitcher_name": g.get("home_pitcher_name"), "away_pitcher_name": g.get("away_pitcher_name"),
