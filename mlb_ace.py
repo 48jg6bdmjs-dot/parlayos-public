@@ -1276,7 +1276,7 @@ def _picks_to_v6_games(picks: List) -> List:
             'ouEdge': round(edge*0.5, 4), 'kEdge': round(k_edge_val, 4) if k_edge_val is not None else 0.0, 'mlEdge': round(edge, 4),
             'model': round(model_prob, 4),
             'tv': 'ESPN+', 'hot': hot,
-            'startAt': start_at_ms, 'time': time_display, 'date': date_display,
+            'startAt': start_at_ms, 'start_at': start_at_ms, 'commence_time': p.get('commence_time') or game_date_str, 'time': time_display, 'date': date_display, 'time_et': time_display, 'date_et': date_display,
             'status': 'live',
             'modelProb': round(model_prob, 3),
             'mlPriceAmerican': odds,
