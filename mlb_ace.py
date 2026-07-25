@@ -1,5 +1,5 @@
 """
-mlb_ace.py ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â IMPROVED VERSION merging old's superior totals model with ParlayOS injection
+mlb_ace.py ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â IMPROVED VERSION merging old's superior totals model with ParlayOS injection
 - Old's superior logic: lineup-weighted OPS with platoon splits, form blending (50/30/20),
   injury adjustment, rest factor, bullpen fatigue from boxscores, dynamic park factor,
   weather/wind/umpire factors, full Monte Carlo with gamma overdispersion, crooked innings,
@@ -588,9 +588,38 @@ def _load_secure_key_mlb(api_key):
 
 
 def resolve_pitcher_id_by_name(pitcher_name: str):
-    """Try to find MLBAM ID from name via search API"""
+    """Try to find MLBAM ID from name via search API - FIXED to handle partial matches"""
     if not pitcher_name or pitcher_name == "TBD":
         return None
+    try:
+        import requests
+        # Search people - try full name then last name
+        url = f"{MLB_STATS_BASE}/people/search"
+        for qname in [pitcher_name, pitcher_name.split()[-1]]:
+            params = {"names": qname}
+            r = requests.get(url, params=params, timeout=8)
+            if r.ok:
+                data = r.json()
+                people = data.get("people", [])
+                if not people:
+                    continue
+                # Prefer exact match, then pitcher
+                for person in people:
+                    full = person.get("fullName","").lower()
+                    if pitcher_name.lower() in full or full in pitcher_name.lower():
+                        if person.get("primaryPosition", {}).get("code") == "1" or "pitcher" in person.get("primaryPosition", {}).get("name","").lower():
+                            return person.get("id")
+                # fallback to first pitcher found
+                for person in people:
+                    if person.get("primaryPosition", {}).get("code") == "1":
+                        return person.get("id")
+                if people:
+                    return people[0].get("id")
+        return None
+    except Exception as e:
+        print(f"  resolve ID failed for {pitcher_name}: {e}")
+        return None
+
     try:
         import requests
         # Search people
@@ -947,10 +976,11 @@ class PredictionEngine:
         set_cache(cache_key, result)
         return result
 
+    
     def fetch_pitcher_stats(self, pitcher_id: int) -> Dict:
         if not pitcher_id:
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                    "fip": LEAGUE_AVG_FIP, "has_data": False}
+                    "fip": LEAGUE_AVG_FIP, "ip": "0.0", "w": 0, "l": 0, "has_data": False}
         cache_key = f"pitcher_stats_v4_{pitcher_id}"
         cached = get_cached(cache_key, ttl=3600)
         if cached:
@@ -959,35 +989,48 @@ class PredictionEngine:
             r = requests.get(f"{MLB_STATS_BASE}/people/{pitcher_id}/stats",
                               params={"stats": "season", "season": datetime.now().year, "group": "pitching"},
                               timeout=8)
-            splits = r.json()["stats"][0]["splits"]
+            data = r.json()
+            stats_arr = data.get("stats", [])
+            if not stats_arr:
+                return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
+                        "fip": LEAGUE_AVG_FIP, "ip": "0.0", "w": 0, "l": 0, "has_data": False}
+            splits = stats_arr[0].get("splits", [])
             if not splits:
                 return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                        "fip": LEAGUE_AVG_FIP, "has_data": False}
-            stat = splits[0]["stat"]
-            innings = float(stat.get("inningsPitched", 0) or 0)
-            if innings < 5:
-                return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                        "fip": LEAGUE_AVG_FIP, "has_data": False}
+                        "fip": LEAGUE_AVG_FIP, "ip": "0.0", "w": 0, "l": 0, "has_data": False}
+            stat = splits[0].get("stat", {})
+            innings_raw = stat.get("inningsPitched", "0.0")
+            try:
+                innings = float(str(innings_raw).split(".")[0]) + float(str(innings_raw).split(".")[1] or 0)/3 if "." in str(innings_raw) else float(innings_raw)
+            except:
+                innings = float(stat.get("inningsPitched", 0) or 0)
+            if innings < 1:
+                # still return stats but mark has_data False if tiny sample
+                has = False
+            else:
+                has = True
             hr  = int(stat.get("homeRuns", 0) or 0)
             bb  = int(stat.get("baseOnBalls", 0) or 0)
             hbp = int(stat.get("hitByPitch", 0) or 0)
             k   = int(stat.get("strikeOuts", 0) or 0)
-            fip_raw  = ((13*hr + 3*(bb+hbp) - 2*k) / innings) + 3.10
+            w   = int(stat.get("wins", 0) or 0)
+            l   = int(stat.get("losses", 0) or 0)
+            fip_raw  = ((13*hr + 3*(bb+hbp) - 2*k) / max(1,innings)) + 3.10
             era_raw  = float(stat.get("era", LEAGUE_AVG_ERA) or LEAGUE_AVG_ERA)
             whip_raw = float(stat.get("whip", LEAGUE_AVG_WHIP) or LEAGUE_AVG_WHIP)
             k9_raw   = float(stat.get("strikeoutsPer9Inn", LEAGUE_AVG_K9) or LEAGUE_AVG_K9)
-            # Shrink small samples toward league average
             reliability = min(1.0, innings / 50.0)
             era = round(reliability * era_raw + (1-reliability) * LEAGUE_AVG_ERA, 2)
             whip = round(reliability * whip_raw + (1-reliability) * LEAGUE_AVG_WHIP, 2)
             k9 = round(reliability * k9_raw + (1-reliability) * LEAGUE_AVG_K9, 2)
             fip = round(reliability * fip_raw + (1-reliability) * LEAGUE_AVG_FIP, 2)
-            result = {"era": era, "whip": whip, "k_per_9": k9, "fip": fip, "has_data": True, "reliability": reliability}
+            result = {"era": era, "whip": whip, "k_per_9": k9, "fip": fip, "ip": str(innings_raw), "w": w, "l": l, "has_data": has, "reliability": reliability, "raw_ip": innings}
             set_cache(cache_key, result)
             return result
         except Exception as e:
+            # print(f"pitcher stats error {pitcher_id}: {e}")
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                    "fip": LEAGUE_AVG_FIP, "has_data": False}
+                    "fip": LEAGUE_AVG_FIP, "ip": "0.0", "w": 0, "l": 0, "has_data": False}
 
     def fetch_weather(self, lat: float, lon: float) -> Dict:
         cache_key = f"weather_{round(lat,2)}_{round(lon,2)}"
@@ -1353,11 +1396,21 @@ def _picks_to_v6_games(picks: List) -> List:
             'k_pitcher': p.get('kPitcher') or away_pitcher,
             'away_pitcher_name': away_pitcher,
             'home_pitcher_name': home_pitcher,
-            # PITCHER STATS FOR PITCHING TAB
+            # PITCHER STATS FOR PITCHING TAB - FIXED: propagate to both naming conventions
             'away_era': p.get('away_era'), 'home_era': p.get('home_era'),
             'away_whip': p.get('away_whip'), 'home_whip': p.get('home_whip'),
             'away_k9': p.get('away_k9'), 'home_k9': p.get('home_k9'),
             'away_fip': p.get('away_fip'), 'home_fip': p.get('home_fip'),
+            'away_ip': p.get('away_ip'), 'home_ip': p.get('home_ip'),
+            'away_w': p.get('away_w'), 'home_w': p.get('home_w'),
+            'away_l': p.get('away_l'), 'home_l': p.get('home_l'),
+            # Legacy frontend expects pitcherA_era etc (A=away, B=home)
+            'pitcherA_era': p.get('away_era'), 'pitcherB_era': p.get('home_era'),
+            'pitcherA_whip': p.get('away_whip'), 'pitcherB_whip': p.get('home_whip'),
+            'pitcherA_k9': p.get('away_k9'), 'pitcherB_k9': p.get('home_k9'),
+            'pitcherA_ip': p.get('away_ip'), 'pitcherB_ip': p.get('home_ip'),
+            'pitcherA_w': p.get('away_w'), 'pitcherB_w': p.get('home_w'),
+            'pitcherA_l': p.get('away_l'), 'pitcherB_l': p.get('home_l'),
             # TEAM BATTING FOR BATTING TAB
             'teamA': abbr_a, 'teamB': abbr_b,
             'teamA_avg': p.get('teamA_avg'), 'teamB_avg': p.get('teamB_avg'),
@@ -1427,7 +1480,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
     html = re.sub(r'\n{3,}', '\n\n', html)
 
     injection_lines = [
-        f"    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ PARLAYOS LIVE DATA ({run_date}) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
+        f"    // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ PARLAYOS LIVE DATA ({run_date}) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
         "    window.PARLAYOS_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -1440,7 +1493,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
         "      if(typeof renderDashboard==='function') renderDashboard();",
         "      if(typeof renderAll==='function') renderAll();",
         "    })();",
-        "    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ END PARLAYOS LIVE DATA ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
+        "    // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ END PARLAYOS LIVE DATA ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
     ]
     injection = "\n".join(injection_lines)
 
@@ -1452,7 +1505,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
 
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {pick_count} MLB picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {out_path}")
+    print(f"ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ {pick_count} MLB picks ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬ ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ {out_path}")
     return out_path
 
 def write_pick_to_log(game_data):
@@ -1655,6 +1708,33 @@ def main():
             }
             home_bat = home_bat or FALLBACK_BATTING.get(g.get('home_abbr'), {'avg':'.245','obp':'.315','slg':'.400','ops':'.715','hr':155,'rbi':600,'sb':90})
             away_bat = away_bat or FALLBACK_BATTING.get(g.get('away_abbr'), {'avg':'.245','obp':'.315','slg':'.400','ops':'.715','hr':155,'rbi':600,'sb':90})
+        # FIXED: Actually fetch pitcher stats instead of None - this was causing empty ERA in UI
+        home_pid = g.get('home_pitcher_id')
+        away_pid = g.get('away_pitcher_id')
+        # Resolve IDs by name if missing
+        if not home_pid and g.get('home_pitcher_name') and g.get('home_pitcher_name')!='TBD':
+            try:
+                home_pid = resolve_pitcher_id_by_name(g.get('home_pitcher_name'))
+                g['home_pitcher_id'] = home_pid
+            except: pass
+        if not away_pid and g.get('away_pitcher_name') and g.get('away_pitcher_name')!='TBD':
+            try:
+                away_pid = resolve_pitcher_id_by_name(g.get('away_pitcher_name'))
+                g['away_pitcher_id'] = away_pid
+            except: pass
+
+        # Fetch stats with caching
+        try:
+            home_p_stats = engine.fetch_pitcher_stats(home_pid) if home_pid else {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9, "ip": "0.0", "w": 0, "l": 0, "has_data": False}
+        except:
+            home_p_stats = {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9, "ip": "0.0", "w": 0, "l": 0, "has_data": False}
+        try:
+            away_p_stats = engine.fetch_pitcher_stats(away_pid) if away_pid else {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9, "ip": "0.0", "w": 0, "l": 0, "has_data": False}
+        except:
+            away_p_stats = {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9, "ip": "0.0", "w": 0, "l": 0, "has_data": False}
+
+        print(f"  [STATS] {away_bat.get('avg')} {g['away_abbr']} SP {g.get('away_pitcher_name')} ERA={away_p_stats.get('era')} WHIP={away_p_stats.get('whip')} | {g['home_abbr']} SP {g.get('home_pitcher_name')} ERA={home_p_stats.get('era')}")
+
         game_data = {
             "home": g["home"], "away": g["away"], "pick": pick,
             "odds": pick_odds, "model_prob": round(pick_prob*100, 1), "edge": round(edge*100, 1),
@@ -1673,8 +1753,15 @@ def main():
             "teamA_hr": away_bat.get("hr"), "teamB_hr": home_bat.get("hr"),
             "teamA_rbi": away_bat.get("rbi"), "teamB_rbi": home_bat.get("rbi"),
             "teamA_sb": away_bat.get("sb"), "teamB_sb": home_bat.get("sb"),
-            # also include pitcher stats if available
-            "home_era": None, "away_era": None, "home_whip": None, "away_whip": None,
+            # FIXED: Actually include pitcher stats so UI doesn't show â€”
+            "home_era": home_p_stats.get("era"), "away_era": away_p_stats.get("era"),
+            "home_whip": home_p_stats.get("whip"), "away_whip": away_p_stats.get("whip"),
+            "home_k9": home_p_stats.get("k_per_9"), "away_k9": away_p_stats.get("k_per_9"),
+            "home_fip": home_p_stats.get("fip"), "away_fip": away_p_stats.get("fip"),
+            "home_ip": home_p_stats.get("ip"), "away_ip": away_p_stats.get("ip"),
+            "home_w": home_p_stats.get("w"), "away_w": away_p_stats.get("w"),
+            "home_l": home_p_stats.get("l"), "away_l": away_p_stats.get("l"),
+            "home_has_data": home_p_stats.get("has_data"), "away_has_data": away_p_stats.get("has_data"),
         }
         for col, val in g.get("_edge_components", {}).items():
             game_data[col] = round(val, 4)
@@ -1686,7 +1773,7 @@ def main():
         write_pick_to_log(game_data)
 
     export_to_html(all_games_data)
-    print(f"\nÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {len(all_games_data)} games exported")
+    print(f"\nÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ {len(all_games_data)} games exported")
 
 
 def run(html_path: str = None):
