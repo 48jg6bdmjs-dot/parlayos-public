@@ -70,6 +70,12 @@ LEAGUE_AVG_OFF_RATING = 112.0
 LEAGUE_AVG_DEF_RATING = 112.0
 LEAGUE_AVG_PACE = 100.0
 
+
+# OFF-SEASON FALLBACK - ensures hub shows data even in July
+SAMPLE_FALLBACK = [
+    {"home":"Sample Team A","away":"Sample Team B","home_abbr":"LAL","away_abbr":"GSW","total":220.0},
+]
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(HERE, "nba_config.json")
 
@@ -607,6 +613,8 @@ def run(html_path: str):
             "market_prob": market_prob, "odds": {"home": home_odds, "away": away_odds},
             "real_total": real_total, "commence_time": game.get("commence_time"),
         })
+    if not games:
+        print(f"  [{league.upper()}] Off-season, no live games - hub will show 0 but engine intact")
     all_games_data = []
     for g in games:
         prob = engine.calculate_win_probability(g)
