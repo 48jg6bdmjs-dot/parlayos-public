@@ -2,14 +2,15 @@ name: Update Live Scores
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # Every 5 minutes - updates final scores for calendars
+    - cron: '*/5 * * * *'
   workflow_dispatch:
   push:
     branches: [ main, master ]
     paths:
-      - 'live_scores.yml'
-      - 'data/live_scores.yml'
       - 'live_scores_fetcher.py'
+      - 'mlb_ace.py'
+      - 'nba_ace.py'
+      - 'nfl_ace.py'
 
 jobs:
   update-scores:
@@ -17,32 +18,20 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-          
-      - name: Install deps
-        run: |
-          pip install requests pyyaml
-          
-      - name: Fetch live final scores for all hubs
-        env:
+      - run: pip install requests pyyaml
+      - env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
-          echo "Fetching live scores for calendar final scores..."
           python live_scores_fetcher.py
-          echo "Updating game data..."
-          python mlb_ace.py || echo "MLB skipped"
-          python nfl_ace.py || echo "NFL skipped"
-          python nba_ace_2.py || echo "NBA skipped"
-          
-      - name: Commit and push if changed
-        run: |
+          python mlb_ace.py parlayos.html || echo "MLB fallback"
+          python nfl_ace.py parlayos.html || echo "NFL off-season"
+          python nba_ace.py parlayos.html || echo "NBA off-season"
+      - run: |
           git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action - Live Scores"
-          git add live_scores.json data/live_scores.json live_scores.yml parlayos.html 2>/dev/null || true
-          git diff --staged --quiet || (git commit -m "🔴 Update live scores - $(date -u) - Finals for calendars" && git push)
+          git config --local user.name "GitHub Action"
+          git add live_scores.json data/live_scores.json parlayos.html 2>/dev/null || true
+          git diff --staged --quiet || (git commit -m "Update live scores - $(date -u)" && git push)
