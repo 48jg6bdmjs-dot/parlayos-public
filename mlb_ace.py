@@ -1320,67 +1320,6 @@ def main():
             g["home_pitcher_id"] = p.get("home_id")
             g["away_pitcher_id"] = p.get("away_id")
 
-    # FALLBACK: If odds API returned < 8 games (rate limit / early slate), supplement from MLB schedule
-    # This prevents "only 3 games showing" issue
-    if len(games) < 8:
-        print(f"  Only {len(games)} games from odds API, supplementing from MLB schedule...")
-        try:
-            today_str = datetime.now().strftime("%Y-%m-%d")
-            r = requests.get(f"{MLB_STATS_BASE}/schedule",
-                              params={"sportId":1,"date":today_str,"hydrate":"probablePitcher"},
-                              timeout=12)
-            schedule_games = []
-            for de in r.json().get("dates",[]):
-                for gm in de.get("games",[]):
-                    h_team = gm["teams"]["home"]["team"]
-                    a_team = gm["teams"]["away"]["team"]
-                    h_id = h_team.get("id"); a_id = a_team.get("id")
-                    # Map IDs to abbr
-                    h_abbr = None; a_abbr = None
-                    for ab, mid in MLB_TEAM_IDS.items():
-                        if mid == h_id: h_abbr = ab
-                        if mid == a_id: a_abbr = ab
-                    if not h_abbr or not a_abbr:
-                        continue
-                    # Skip if already have this matchup
-                    key = (f"{a_team.get('name')}", f"{h_team.get('name')}")
-                    # Use abbr key for dedup
-                    abbr_key = (a_abbr, h_abbr)
-                    if any(g["home_abbr"]==h_abbr and g["away_abbr"]==a_abbr for g in games):
-                        continue
-                    # Get pitcher IDs from this game
-                    hp = gm["teams"]["home"].get("probablePitcher",{}) or {}
-                    ap = gm["teams"]["away"].get("probablePitcher",{}) or {}
-                    # Build game dict with default odds
-                    schedule_games.append({
-                        "home": h_team.get("name"), "away": a_team.get("name"),
-                        "home_abbr": h_abbr, "away_abbr": a_abbr,
-                        "market_prob": 0.5,
-                        "odds": {"home": -110, "away": 100, "home_true": 0.5, "away_true": 0.5},
-                        "real_total": 8.5,
-                        "commence_time": gm.get("gameDate"),
-                        "home_id": h_id, "away_id": a_id,
-                        "lat": STADIUM_LOCATIONS.get(h_abbr, (40.0, -74.0))[0],
-                        "lon": STADIUM_LOCATIONS.get(h_abbr, (40.0, -74.0))[1],
-                        "home_pitcher_id": hp.get("id"),
-                        "away_pitcher_id": ap.get("id"),
-                    })
-            print(f"  Found {len(schedule_games)} additional games from MLB schedule")
-            games.extend(schedule_games)
-        except Exception as e:
-            print(f"  Schedule fallback failed: {e}")
-
-    # Deduplicate again
-    seen_final = set()
-    deduped = []
-    for g in games:
-        key = (g["away_abbr"], g["home_abbr"])
-        if key not in seen_final:
-            seen_final.add(key)
-            deduped.append(g)
-    games = deduped
-    print(f"  Final game count: {len(games)}")
-
     kelly_fraction_cfg = config.get("kelly_fraction", 0.25)
     def kelly_stake(prob, decimal_odds):
         if decimal_odds <= 1 or prob * decimal_odds <= 1:
