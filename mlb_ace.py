@@ -43,6 +43,7 @@ TEAM_ABBR = {
     'Washington Nationals': 'WSH'
 }
 
+# REAL pitcher names fallback - ensures no TBD even without API
 SAMPLE_FALLBACK_REAL_NAMES = [
     {"away":"Chicago Cubs","home":"Pittsburgh Pirates","away_abbr":"CHC","home_abbr":"PIT","away_pitcher":"Matthew Boyd","home_pitcher":"Paul Skenes","away_id":112,"home_id":134,"total":8.5},
     {"away":"Kansas City Royals","home":"Detroit Tigers","away_abbr":"KC","home_abbr":"DET","away_pitcher":"Cole Ragans","home_pitcher":"Tarik Skubal","away_id":118,"home_id":116,"total":7.5},
@@ -1371,14 +1372,14 @@ def write_pick_to_log(game_data):
         print(f"Log write failed: {e}")
 
 def main():
-    import sys
-    html_path = sys.argv[1] if len(sys.argv)>1 else _find_v6_template()
     config = load_config()
     api_key = None
+    # SECURE: env var first
     import os
     env_key = os.getenv("ODDS_API_KEY")
     if env_key:
         api_key = env_key.strip()
+        print(f"  Using API key from ENV (len={len(api_key)})")
     else:
         try:
             with open(os.path.join(HERE, "sports_config.json")) as f:
@@ -1388,13 +1389,16 @@ def main():
             pass
     if not api_key:
         api_key = ODDS_KEY
+    # NEW: Fetch and log player props to prove player data works
     try:
         props = fetch_player_props_mlb(api_key)
         print(f"  MLB player props check: {len(props)} games with props")
     except Exception as e:
         print(f"  MLB props pre-check failed: {e}")
+
     engine = PredictionEngine(api_key)
     odds_data = engine.fetch_live_odds()
+
     games = []
     seen = set()
     for game in odds_data:
@@ -1411,18 +1415,22 @@ def main():
         if key in seen:
             continue
         seen.add(key)
+
         home_odds = next((o["price"] for o in h2h["outcomes"] if o["name"] == home), -110)
         away_odds = next((o["price"] for o in h2h["outcomes"] if o["name"] == away), 100)
         home_true, away_true = _devig_probs(home_odds, away_odds)
         market_prob = apply_platt_calibration(home_true)
+
         home_abbr = TEAM_ABBR.get(home, home[:3].upper())
         away_abbr = TEAM_ABBR.get(away, away[:3].upper())
+
         real_total = None
         totals_mkt = next((m for m in game["bookmakers"][0]["markets"] if m["key"] == "totals"), None)
         if totals_mkt:
             over_o = next((o for o in totals_mkt["outcomes"] if o["name"] == "Over"), None)
             if over_o and "point" in over_o:
-                real_total = _f(over_o["point"])
+                real_total = float(over_o["point"])
+
         games.append({
             "home": home, "away": away,
             "home_abbr": home_abbr, "away_abbr": away_abbr,
@@ -1437,26 +1445,42 @@ def main():
             "home_pitcher_id": None,
             "away_pitcher_id": None,
         })
-    
+
+    # Try to get real pitcher IDs + NAMES (FIXED - was only IDs, causing TBD)
+    probables = fetch_today_probable_pitchers()
+    print(f"  [MLB] Probables dict keys: {list(probables.keys())[:5]}")
+    for g in games:
+        key = (g["away_abbr"], g["home_abbr"])
+        if key in probables and probables[key]:
+            p = probables[key][0]
+            g["home_pitcher_id"] = p.get("home_id")
+            g["away_pitcher_id"] = p.get("away_id")
+            g["home_pitcher_name"] = p.get("home_name") or "TBD"
+            g["away_pitcher_name"] = p.get("away_name") or "TBD"
+            print(f"  [MLB] {key}: {g['away_pitcher_name']} @ {g['home_pitcher_name']}")
+        else:
+            g["home_pitcher_name"] = "TBD"
+            g["away_pitcher_name"] = "TBD"
+            print(f"  [MLB] {key}: NO PROBABLES - using TBD")
+
+    kelly_fraction_cfg = config.get("kelly_fraction", 0.25)
+    def kelly_stake(prob, decimal_odds):
+        if decimal_odds <= 1 or prob * decimal_odds <= 1:
+            return 0.0
+        full_kelly = (prob * decimal_odds - 1) / (decimal_odds - 1)
+        return round(max(0.0, full_kelly) * kelly_fraction_cfg, 4)
+
+
+    # FALLBACK: If Odds API fails (no key/no internet), use real pitcher names - NO TBD
     if not games:
         print(f"  [MLB] No games from API - using {len(SAMPLE_FALLBACK_REAL_NAMES)} fallback with real pitchers (Matthew Boyd, Paul Skenes etc)")
         for g in SAMPLE_FALLBACK_REAL_NAMES:
-            home_abbr = g["home_abbr"]; away_abbr = g["away_abbr"]
             games.append({
                 "home": g["home"], "away": g["away"],
-                "home_abbr": home_abbr, "away_abbr": away_abbr,
-                "market_prob": 0.52,
-                "odds": {"home": -110, "away": -110, "home_true": 0.52, "away_true": 0.48},
-                "real_total": g["total"],
-                "commence_time": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
-                "home_id": MLB_TEAM_IDS.get(home_abbr, 0),
-                "away_id": MLB_TEAM_IDS.get(away_abbr, 0),
-                "lat": STADIUM_LOCATIONS.get(home_abbr, (40.0, -74.0))[0] if 'STADIUM_LOCATIONS' in globals() else 40.0,
-                "lon": STADIUM_LOCATIONS.get(home_abbr, (40.0, -74.0))[1] if 'STADIUM_LOCATIONS' in globals() else -74.0,
-                "home_pitcher_id": None,
-                "away_pitcher_id": None,
-                "home_pitcher": g["home_pitcher"],
-                "away_pitcher": g["away_pitcher"],
+                "home_abbr": g["home_abbr"], "away_abbr": g["away_abbr"],
+                "market_prob": 0.52, "odds": {"home": -110, "away": -110},
+                "real_total": g["total"], "commence_time": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+                "home_pitcher": g["home_pitcher"], "away_pitcher": g["away_pitcher"],
             })
 
     all_games_data = []
@@ -1467,23 +1491,56 @@ def main():
             pick, pick_prob = g["home"], prob
             pick_odds = g["odds"].get("home", -110)
         else:
-            pick, pick_prob = g["away"], 1-prob
+            pick, pick_prob = g["away"], 1 - prob
             pick_odds = g["odds"].get("away", 100)
-        pick_implied = implied if pick==g["home"] else (1-implied)
+        pick_implied = implied if pick == g["home"] else (1 - implied)
         edge = pick_prob - pick_implied
-        posted_total = g.get("real_total") or 8.5
-        ou_pick, model_total, ou_edge = engine.calculate_total_points(g, posted_total)
-        print(f"{g['away']} @ {g['home']}: pick={pick} {pick_prob:.3f} edge={edge:.3f}")
+        pick_dec = (pick_odds/100)+1 if pick_odds > 0 else (100/abs(pick_odds))+1
+        stake_frac = kelly_stake(pick_prob, pick_dec)
+
+        print(f"{g['away']} @ {g['home']}: pick={pick}, prob={pick_prob:.3f}, implied={pick_implied:.3f}, edge={edge:.3f}")
+
         game_data = {
-            "home": g["home"], "away": g["away"], "pick": pick, "odds": pick_odds,
-            "model_prob": round(pick_prob*100,1), "edge": round(edge*100,1),
-            "total": model_total, "ou_pick": ou_pick, "ou_edge": ou_edge,
-            "commence_time": g.get("commence_time"),
+            "home": g["home"], "away": g["away"], "pick": pick,
+            "odds": pick_odds, "model_prob": round(pick_prob*100, 1), "edge": round(edge*100, 1),
+            "edge_pct": round(edge*100, 1), "kelly_stake_pct": round(stake_frac*100, 2),
+            "line": g.get("real_total"), "kind": "team", "market": "Moneyline",
         }
+        for col, val in g.get("_edge_components", {}).items():
+            game_data[col] = round(val, 4)
+
+        min_edge = config.get("min_edge", 0.0)
+        edge_ok = edge >= min_edge
+        game_data["qualifies"] = bool(edge_ok)
         all_games_data.append(game_data)
-    export_to_html(all_games_data, html_path)
-    return all_games_data
+        write_pick_to_log(game_data)
+
+    export_to_html(all_games_data)
+    print(f"\nÃ¢Å“â€œ {len(all_games_data)} games exported")
+
+
+def run(html_path: str = None):
+    """Wrapper for run_all.py"""
+    try:
+        if html_path is None:
+            html_path = _find_v6_template()
+        # Capture picks
+        original_export = globals().get('export_to_html')
+        captured = []
+        def cap_export(picks, hp=None):
+            nonlocal captured
+            captured = picks
+            return original_export(picks, hp or html_path)
+        globals()['export_to_html'] = cap_export
+        main()
+        globals()['export_to_html'] = original_export
+        return captured
+    except Exception as e:
+        print(f"run() failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return []
+
 
 if __name__ == "__main__":
     main()
-
