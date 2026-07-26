@@ -1,5 +1,5 @@
 """
-nba_ace.py Ã¢â‚¬â€ IMPROVED VERSION inspired by old MLB ace + FIXES critical bugs
+nba_ace.py ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â IMPROVED VERSION inspired by old MLB ace + FIXES critical bugs
 Critical fixes:
 - FIXED: was fetching NFL odds (americanfootball_nfl) instead of NBA (basketball_nba)
 - Form blending: 50% season, 30% last 10, 20% last 5 (like old MLB)
@@ -24,6 +24,17 @@ try:
     ET_ZONE = ZoneInfo("America/New_York")
 except:
     ET_ZONE = timezone.utc
+
+
+# === YOUTUBE HIGHLIGHT VISION V4 ===
+try:
+    from youtube_highlight_engine import YouTubeHighlightAnalyzer, get_youtube_boost
+    YT_AVAILABLE = True
+except ImportError:
+    YT_AVAILABLE = False
+    def get_youtube_boost(*args, **kwargs):
+        return {"momentum_boost":0.0,"pace_boost":0.0,"total_boost":0.0,"confidence":0.0,"videos_analyzed":0,"status":"not_installed"}
+
 
 TEAM_ABBR = {
     'Atlanta Hawks': 'ATL', 'Boston Celtics': 'BOS', 'Brooklyn Nets': 'BKN',
@@ -365,7 +376,39 @@ class NBAPredictionEngine:
         home_edge = 0.03  # Base 3% ~ 2-3 points in NBA
         # Adjust based on team home/road splits (would need data)
 
-        total_edge = offense_edge + defense_edge + pace_edge + rest_edge + inj_edge + home_edge
+        total_edge = offense_edge + defense_edge + pace_edge + rest_edge + inj_edge + home_edge + yt_momentum
+
+
+        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) ===
+        yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
+        yt_momentum = 0.0
+        yt_pace = 0.0
+        if YT_AVAILABLE:
+            try:
+                if game.get("home") and game.get("away") and "Sample" not in str(game.get("home")):
+                    yt_cfg = {}
+                    try:
+                        import json as _js
+                        with open(os.path.join(os.path.dirname(__file__), "sports_config.json")) as _f:
+                            yt_cfg = _js.load(_f).get("youtube", {})
+                    except:
+                        pass
+                    if yt_cfg.get("enabled", True):
+                        max_vids = yt_cfg.get("max_videos_per_matchup", 2)
+                        yt_result = get_youtube_boost("nba", game.get("home",""), game.get("away",""), max_videos=max_vids)
+                        yt_boost_data = yt_result
+                        conf = yt_result.get("confidence", 0.0)
+                        raw_mom = yt_result.get("momentum_boost", 0.0)
+                        raw_pace = yt_result.get("pace_boost", 0.0)
+                        gameplay_pct = yt_result.get("gameplay_pct", 0.7)
+                        yt_momentum = raw_mom * conf * gameplay_pct
+                        yt_pace = raw_pace * conf * gameplay_pct
+                        game["_yt_boost"] = yt_result
+            except Exception as _yt_e:
+                print(f"  YT nba boost skip: {_yt_e}")
+                game["_yt_boost"] = {"status": f"error {_yt_e}", "momentum_boost":0.0}
+        else:
+            game["_yt_boost"] = yt_boost_data
 
         game["_edge_components"] = {
             "c_offense_edge": offense_edge,
@@ -529,7 +572,7 @@ def export_to_html(picks: List, html_path: str) -> str:
     html = re.sub(r'[ \t]*//[^\n]*PARLAYOS NBA LIVE DATA.*?[ \t]*//[^\n]*END PARLAYOS NBA LIVE DATA[^\n]*\n?', '', html, flags=re.DOTALL)
     html = re.sub(r'\n{3,}', '\n\n', html)
     injection_lines = [
-        f"    // Ã¢â€â‚¬Ã¢â€â‚¬ PARLAYOS NBA LIVE DATA ({run_date}) Ã¢â€â‚¬Ã¢â€â‚¬",
+        f"    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ PARLAYOS NBA LIVE DATA ({run_date}) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
         "    window.PARLAYOS_NBA_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -541,7 +584,7 @@ def export_to_html(picks: List, html_path: str) -> str:
         "      if(typeof renderNBADashboard==='function') renderNBADashboard();",
         "      if(typeof renderLeagueSchedule==='function'){ try{ renderLeagueSchedule('nba'); }catch(e){} }",
         "    })();",
-        "    // Ã¢â€â‚¬Ã¢â€â‚¬ END PARLAYOS NBA LIVE DATA Ã¢â€â‚¬Ã¢â€â‚¬",
+        "    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ END PARLAYOS NBA LIVE DATA ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
     ]
     injection = "\n".join(injection_lines)
     MARKER = '    // <!--PARLAYOS_NBA_INJECT_POINT-->'
@@ -551,7 +594,7 @@ def export_to_html(picks: List, html_path: str) -> str:
         html = html.replace('</body>', f'<script>\n{injection}\n</script>\n</body>')
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"Ã¢Å“â€œ {pick_count} NBA picks Ã¢â€ â€™ {html_path}")
+    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {pick_count} NBA picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {html_path}")
     return html_path
 
 def load_config():
