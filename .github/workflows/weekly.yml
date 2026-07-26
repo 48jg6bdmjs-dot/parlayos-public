@@ -42,10 +42,10 @@ jobs:
 
       - name: Run weekly update
         run: |
-          echo "=== ACE V4 Weekly Update - $(date -u) ==="
+          echo "=== ACE Weekly Update - $(date -u) ==="
           echo "Config: $(cat sports_config.json | head -20)"
           
-          # 1. Run ACE engines (now with YouTube Vision V4)
+          # 1. Run ACE engines (now with YouTube Vision)
           echo "--- Running MLB ACE (with YT Vision) ---"
           python mlb_ace.py || true
           
@@ -63,8 +63,8 @@ jobs:
           echo "--- Fetching live scores ---"
           python live_scores_fetcher.py || true
           
-          # 4. Run V4 backtests (with YouTube performance analysis)
-          echo "--- Running V4 Backtests (dry-run, no config overwrite) ---"
+          # 4. Run backtests (with YouTube performance analysis)
+          echo "--- Running backtests (dry-run, no config overwrite) ---"
           python backtest_core.py --help || true
           python mlb_backtest.py --dry-run || true
           python nfl_backtest.py --dry-run || true
