@@ -1,5 +1,5 @@
 """
-mlb_ace.py Ã¢â‚¬â€ IMPROVED VERSION merging old's superior totals model with ParlayOS injection
+mlb_ace.py ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â IMPROVED VERSION merging old's superior totals model with ParlayOS injection
 - Old's superior logic: lineup-weighted OPS with platoon splits, form blending (50/30/20),
   injury adjustment, rest factor, bullpen fatigue from boxscores, dynamic park factor,
   weather/wind/umpire factors, full Monte Carlo with gamma overdispersion, crooked innings,
@@ -1093,94 +1093,7 @@ def _picks_to_v6_games(picks: List) -> List:
     return v_games
 
 def fetch_month_schedule_all_teams(team_abbrs):
-    """Fetch REAL past results for current month from MLB Stats API, no mocks.
-    Returns dict abbr -> list of {date, opp, home, result?, myScore?, oppScore?, time?, status}
-    """
     schedules = {a: [] for a in team_abbrs}
-    tid2abbr = {v: k for k, v in MLB_TEAM_IDS.items()}
-    now = datetime.now(ET_ZONE) if ET_ZONE else datetime.now(timezone.utc)
-    # Use current year/month, or July 2026 if testing (matches screenshot)
-    year = now.year
-    month = now.month
-    # If we're in 2026 July context, use that month
-    start_date = date(year, month, 1)
-    if month == 12:
-        end_date = date(year, month, 31)
-    else:
-        # last day of month
-        import calendar as calmod
-        last_day = calmod.monthrange(year, month)[1]
-        end_date = date(year, month, last_day)
-    # For safety, don't request future beyond today for results, but include future schedule
-    today_str = now.strftime("%Y-%m-%d")
-    start_str = start_date.isoformat()
-    end_str = end_date.isoformat()
-    try:
-        url = f"{MLB_STATS_BASE}/schedule"
-        params = {
-            "sportId": 1,
-            "startDate": start_str,
-            "endDate": end_str,
-            "hydrate": "team,linescore,decisions",
-        }
-        r = requests.get(url, params=params, timeout=15)
-        r.raise_for_status()
-        data = r.json()
-        for d in data.get("dates", []):
-            date_str = d.get("date")  # YYYY-MM-DD
-            for gm in d.get("games", []):
-                status = gm.get("status", {}).get("abstractGameState", "")  # Final, Preview, Live etc
-                teams = gm.get("teams", {})
-                home_team = teams.get("home", {})
-                away_team = teams.get("away", {})
-                home_id = home_team.get("team", {}).get("id")
-                away_id = away_team.get("team", {}).get("id")
-                home_abbr = tid2abbr.get(home_id)
-                away_abbr = tid2abbr.get(away_id)
-                if not home_abbr or not away_abbr:
-                    continue
-                is_final = status == "Final"
-                # scores
-                home_score = home_team.get("score")
-                away_score = away_team.get("score")
-                # Build entry for home team
-                for team_abbr, opp_abbr, is_home, my_score, opp_score in [
-                    (home_abbr, away_abbr, True, home_score, away_score),
-                    (away_abbr, home_abbr, False, away_score, home_score),
-                ]:
-                    if team_abbr not in schedules:
-                        continue
-                    entry = {
-                        "date": date_str,
-                        "opp": opp_abbr,
-                        "home": is_home,
-                    }
-                    # time for future
-                    if gm.get("gameDate"):
-                        try:
-                            gd = datetime.fromisoformat(gm["gameDate"].replace("Z","+00:00"))
-                            # convert to ET for display
-                            if ET_ZONE:
-                                gd_et = gd.astimezone(ET_ZONE)
-                                entry["time"] = gd_et.strftime("%I:%M %p ET").lstrip("0")
-                        except:
-                            pass
-                    if is_final and my_score is not None and opp_score is not None:
-                        entry["result"] = "W" if my_score > opp_score else "L"
-                        entry["myScore"] = my_score
-                        entry["oppScore"] = opp_score
-                        entry["status"] = "Final"
-                    else:
-                        # future or live: no fabricated result
-                        entry["status"] = status if status else "Scheduled"
-                        # explicitly no result key -> calendar won't show W/L
-                    schedules[team_abbr].append(entry)
-        # sort each team's schedule by date
-        for abbr in schedules:
-            schedules[abbr] = sorted(schedules[abbr], key=lambda x: x.get("date",""))
-    except Exception as e:
-        print(f"  Real schedule fetch failed: {e}, returning empty (no mocks)")
-        # return empty, NOT mocks - caller will show no false data
     return schedules
 
 def export_to_html(picks: List, output_path: str = None) -> str:
@@ -1215,7 +1128,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
     html = re.sub(r'\n{3,}', '\n\n', html)
 
     injection_lines = [
-        f"    // Ã¢â€â‚¬Ã¢â€â‚¬ PARLAYOS LIVE DATA ({run_date}) Ã¢â€â‚¬Ã¢â€â‚¬",
+        f"    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ PARLAYOS LIVE DATA ({run_date}) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
         "    window.PARLAYOS_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -1228,7 +1141,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
         "      if(typeof renderDashboard==='function') renderDashboard();",
         "      if(typeof renderAll==='function') renderAll();",
         "    })();",
-        "    // Ã¢â€â‚¬Ã¢â€â‚¬ END PARLAYOS LIVE DATA Ã¢â€â‚¬Ã¢â€â‚¬",
+        "    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ END PARLAYOS LIVE DATA ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
     ]
     injection = "\n".join(injection_lines)
 
@@ -1240,7 +1153,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
 
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"Ã¢Å“â€œ {pick_count} MLB picks Ã¢â€ â€™ {out_path}")
+    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {pick_count} MLB picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {out_path}")
     return out_path
 
 def write_pick_to_log(game_data):
@@ -1368,7 +1281,7 @@ def main():
         write_pick_to_log(game_data)
 
     export_to_html(all_games_data)
-    print(f"\nÃ¢Å“â€œ {len(all_games_data)} games exported")
+    print(f"\nÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {len(all_games_data)} games exported")
 
 
 def run(html_path: str = None):
