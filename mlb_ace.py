@@ -1,5 +1,5 @@
 """
-mlb_ace.py Ã¢â‚¬â€ IMPROVED VERSION merging old's superior totals model with ParlayOS injection
+mlb_ace.py ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â IMPROVED VERSION merging old's superior totals model with ParlayOS injection
 - Old's superior logic: lineup-weighted OPS with platoon splits, form blending (50/30/20),
   injury adjustment, rest factor, bullpen fatigue from boxscores, dynamic park factor,
   weather/wind/umpire factors, full Monte Carlo with gamma overdispersion, crooked innings,
@@ -25,6 +25,17 @@ try:
     ET_ZONE = ZoneInfo("America/New_York")
 except:
     ET_ZONE = timezone.utc
+
+
+# === YOUTUBE HIGHLIGHT VISION V4 ===
+try:
+    from youtube_highlight_engine import YouTubeHighlightAnalyzer, get_youtube_boost
+    YT_AVAILABLE = True
+except ImportError:
+    YT_AVAILABLE = False
+    def get_youtube_boost(*args, **kwargs):
+        return {"momentum_boost":0.0,"pace_boost":0.0,"total_boost":0.0,"confidence":0.0,"videos_analyzed":0,"status":"not_installed"}
+
 from pathlib import Path
 from typing import List, Dict, Any, Tuple
 
@@ -1075,10 +1086,42 @@ class PredictionEngine:
         # In full old model, this comes from schedule analysis
 
         # Combine with old's superior weighting - pitcher is now properly weighted
-        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge +
+        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge + + yt_momentum
                       offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
 
         # Store edge components for logging (for future weight fitting)
+
+        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) ===
+        yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
+        yt_momentum = 0.0
+        yt_pace = 0.0
+        if YT_AVAILABLE:
+            try:
+                if game.get("home") and game.get("away") and "Sample" not in str(game.get("home")):
+                    yt_cfg = {}
+                    try:
+                        import json as _js
+                        with open(os.path.join(os.path.dirname(__file__), "sports_config.json")) as _f:
+                            yt_cfg = _js.load(_f).get("youtube", {})
+                    except:
+                        pass
+                    if yt_cfg.get("enabled", True):
+                        max_vids = yt_cfg.get("max_videos_per_matchup", 2)
+                        yt_result = get_youtube_boost("mlb", game.get("home",""), game.get("away",""), max_videos=max_vids)
+                        yt_boost_data = yt_result
+                        conf = yt_result.get("confidence", 0.0)
+                        raw_mom = yt_result.get("momentum_boost", 0.0)
+                        raw_pace = yt_result.get("pace_boost", 0.0)
+                        gameplay_pct = yt_result.get("gameplay_pct", 0.7)
+                        yt_momentum = raw_mom * conf * gameplay_pct
+                        yt_pace = raw_pace * conf * gameplay_pct
+                        game["_yt_boost"] = yt_result
+            except Exception as _yt_e:
+                print(f"  YT mlb boost skip: {_yt_e}")
+                game["_yt_boost"] = {"status": f"error {_yt_e}", "momentum_boost":0.0}
+        else:
+            game["_yt_boost"] = yt_boost_data
+
         game["_edge_components"] = {
             "c_team_edge": team_edge,
             "c_pitcher_fip_edge": pitcher_fip_edge,
@@ -1450,7 +1493,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
     html = re.sub(r'\n{3,}', '\n\n', html)
 
     injection_lines = [
-        f"    // Ã¢â€â‚¬Ã¢â€â‚¬ PARLAYOS LIVE DATA ({run_date}) Ã¢â€â‚¬Ã¢â€â‚¬",
+        f"    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ PARLAYOS LIVE DATA ({run_date}) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
         "    window.PARLAYOS_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -1463,7 +1506,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
         "      if(typeof renderDashboard==='function') renderDashboard();",
         "      if(typeof renderAll==='function') renderAll();",
         "    })();",
-        "    // Ã¢â€â‚¬Ã¢â€â‚¬ END PARLAYOS LIVE DATA Ã¢â€â‚¬Ã¢â€â‚¬",
+        "    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ END PARLAYOS LIVE DATA ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
     ]
     injection = "\n".join(injection_lines)
 
@@ -1475,7 +1518,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
 
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"Ã¢Å“â€œ {pick_count} MLB picks Ã¢â€ â€™ {out_path}")
+    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {pick_count} MLB picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {out_path}")
     return out_path
 
 def write_pick_to_log(game_data):
@@ -1760,10 +1803,10 @@ def main():
             "teamB_k_rate": home_bat_data.get("k_rate"),
             # Pitcher stats for Pitching tab
             "pitcherA_era": away_p_data.get("era"), "pitcherA_whip": away_p_data.get("whip"),
-            "pitcherA_k9": away_p_data.get("k_per_9"), "pitcherA_ip": away_p_data.get("ip", "â€”"),
+            "pitcherA_k9": away_p_data.get("k_per_9"), "pitcherA_ip": away_p_data.get("ip", "Ã¢â‚¬â€"),
             "pitcherA_fip": away_p_data.get("fip"), "pitcherA_w": away_p_data.get("wins"), "pitcherA_l": away_p_data.get("losses"),
             "pitcherB_era": home_p_data.get("era"), "pitcherB_whip": home_p_data.get("whip"),
-            "pitcherB_k9": home_p_data.get("k_per_9"), "pitcherB_ip": home_p_data.get("ip", "â€”"),
+            "pitcherB_k9": home_p_data.get("k_per_9"), "pitcherB_ip": home_p_data.get("ip", "Ã¢â‚¬â€"),
             "pitcherB_fip": home_p_data.get("fip"), "pitcherB_w": home_p_data.get("wins"), "pitcherB_l": home_p_data.get("losses"),
             # Lineups
             "lineupA": g.get("_lineupA", []),
@@ -1786,7 +1829,7 @@ def main():
         write_pick_to_log(game_data)
 
     export_to_html(all_games_data)
-    print(f"\nÃ¢Å“â€œ {len(all_games_data)} games exported")
+    print(f"\nÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {len(all_games_data)} games exported")
 
 
 def run(html_path: str = None):
