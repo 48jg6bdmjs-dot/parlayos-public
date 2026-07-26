@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-nfl_fit_weights.py â€” Improved accuracy version
+nfl_fit_weights.py Ã¢â‚¬â€ Improved accuracy version
 - De-vigs market probs before fitting (previous version used raw American odds implied, not de-vigged)
 - Applies L2 regularization (C=1.0) and clamps a,b to avoid extreme calibration from small samples
 - Now auto-writes clamped values + computes suggested edge_threshold adjustment
@@ -85,20 +85,20 @@ def status(argv):
     print(f"  Graded moneyline rows : {n_total}")
     print(f"  With full edge data   : {n_with_components}")
     if n_total >= MIN_FOR_CALIBRATION:
-        print(f"  âœ“ Calibration READY")
+        print(f"  Ã¢Å“â€œ Calibration READY")
     else:
-        print(f"  âœ— Need {MIN_FOR_CALIBRATION - n_total} more for calibration")
+        print(f"  Ã¢Å“â€” Need {MIN_FOR_CALIBRATION - n_total} more for calibration")
     if n_with_components >= MIN_FOR_FULL_FIT:
-        print(f"  âœ“ Full fit READY")
+        print(f"  Ã¢Å“â€œ Full fit READY")
     else:
-        print(f"  âœ— Need {MIN_FOR_FULL_FIT - n_with_components} more for full fit")
+        print(f"  Ã¢Å“â€” Need {MIN_FOR_FULL_FIT - n_with_components} more for full fit")
     print("=" * 60)
 
 def fit_calibration(argv):
     rows, _ = load_graded_moneylines(CSV_PATH)
     n = len(rows)
     if n < MIN_FOR_CALIBRATION:
-        print(f"Only {n} rows â€” need {MIN_FOR_CALIBRATION}+")
+        print(f"Only {n} rows Ã¢â‚¬â€ need {MIN_FOR_CALIBRATION}+")
         return
     try:
         import numpy as np
@@ -142,11 +142,11 @@ def fit_calibration(argv):
     print(f"  Raw fit a={a_raw:.4f} b={b_raw:+.4f} -> clamped a={a:.4f} b={b:+.4f}")
     print(f"  Brier raw {brier_raw:.4f} -> cal {brier_cal:.4f} (lower better)")
     if gap < -0.02:
-        print("  â†’ Market running HOT, model overestimates favorites")
+        print("  Ã¢â€ â€™ Market running HOT, model overestimates favorites")
     elif gap > 0.02:
-        print("  â†’ Market running COLD")
+        print("  Ã¢â€ â€™ Market running COLD")
     else:
-        print("  â†’ Roughly in line")
+        print("  Ã¢â€ â€™ Roughly in line")
 
     out = {
         "fitted_on": date.today().isoformat(),
