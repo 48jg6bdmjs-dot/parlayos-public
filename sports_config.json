@@ -1,5 +1,16 @@
 {
-  "odds_api_key": "63f0341cebb0ddc2a2f57aacd33027e0",
+  "odds_api_key": "373aadcf1852b15f1d8f4f483faf6d8",
+  "youtube_api_key": null,
+  "youtube": {
+    "enabled": true,
+    "max_videos_per_matchup": 2,
+    "cache_hours": 12,
+    "skip_ads": true,
+    "gameplay_only": true,
+    "weight_mlb": 0.08,
+    "weight_nba": 0.07,
+    "weight_nfl": 0.06
+  },
   "mlb": {
     "min_edge": 0.035,
     "min_total_line": 6.5,
@@ -30,7 +41,7 @@
     "market_weight": 0.6,
     "stat_weight": 0.4
   },
-  "version": "ACE V3 ULTRA 2026-07-20",
+  "version": "ACE V4 YOUTUBE VISION 2026-07-26",
   "highlights_enabled": true,
   "features": [
     "multi_book_consensus_pinnacle_weighted",
@@ -48,6 +59,9 @@
     "ev_kelly_confidence",
     "four_factors",
     "epa_proxy",
-    "qb_cpoe"
+    "qb_cpoe",
+    "youtube_highlight_vision_ad_aware",
+    "gameplay_only_filter",
+    "yt_momentum_boost"
   ]
 }
