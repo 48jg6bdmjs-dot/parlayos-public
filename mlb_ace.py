@@ -1302,7 +1302,103 @@ def _picks_to_v6_games(picks: List) -> List:
     return v_games
 
 def fetch_month_schedule_all_teams(team_abbrs):
+    """Fetch real month schedules from MLB Stats API - no more fake data"""
     schedules = {a: [] for a in team_abbrs}
+    try:
+        today = datetime.now()
+        yr = today.year
+        mo = today.month
+        start_date = f"{yr}-{mo:02d}-01"
+        # End of month
+        import calendar
+        last_day = calendar.monthrange(yr, mo)[1]
+        end_date = f"{yr}-{mo:02d}-{last_day:02d}"
+        
+        # Fetch schedule for the month
+        params = {
+            "sportId": 1,
+            "startDate": start_date,
+            "endDate": end_date,
+            "hydrate": "team,probablePitcher",
+        }
+        r = requests.get(f"{MLB_STATS_BASE}/schedule", params=params, timeout=12)
+        if r.status_code != 200:
+            print(f"  Schedule fetch failed: {r.status_code}")
+            return schedules
+            
+        data = r.json()
+        for date_entry in data.get("dates", []):
+            date_str = date_entry.get("date", "")
+            for gm in date_entry.get("games", []):
+                try:
+                    teams = gm.get("teams", {})
+                    home_team = teams.get("home", {}).get("team", {})
+                    away_team = teams.get("away", {}).get("team", {})
+                    home_id = home_team.get("id")
+                    away_id = away_team.get("id")
+                    
+                    # Map to abbr
+                    home_abbr = None
+                    away_abbr = None
+                    for abbr, tid in MLB_TEAM_IDS.items():
+                        if tid == home_id:
+                            home_abbr = abbr
+                        if tid == away_id:
+                            away_abbr = abbr
+                    
+                    if not home_abbr or not away_abbr:
+                        continue
+                    
+                    # Determine result if game is final
+                    status = gm.get("status", {}).get("detailedState", "")
+                    is_final = "Final" in status
+                    home_score = teams.get("home", {}).get("score")
+                    away_score = teams.get("away", {}).get("score")
+                    
+                    # For each team, add entry
+                    for abbr, opp_abbr, is_home, my_score, opp_score in [
+                        (home_abbr, away_abbr, True, home_score, away_score),
+                        (away_abbr, home_abbr, False, away_score, home_score),
+                    ]:
+                        entry = {
+                            "date": date_str,
+                            "opp": opp_abbr,
+                            "home": is_home,
+                        }
+                        if is_final and my_score is not None and opp_score is not None:
+                            entry["result"] = "W" if my_score > opp_score else "L"
+                            entry["myScore"] = my_score
+                            entry["oppScore"] = opp_score
+                        elif date_str == today.strftime("%Y-%m-%d"):
+                            # Today - no fake score, just opponent
+                            pass
+                        else:
+                            # Future game - add time if available
+                            game_time = gm.get("gameDate", "")
+                            if game_time:
+                                try:
+                                    dt = datetime.fromisoformat(game_time.replace("Z", "+00:00"))
+                                    dt_et = dt.astimezone(ET_ZONE)
+                                    entry["time"] = dt_et.strftime("%-I:%M%p").replace(":00", ":").lower().replace("m", "") + "p"
+                                except:
+                                    entry["time"] = "TBD"
+                        
+                        schedules[abbr].append(entry)
+                except Exception as e:
+                    continue
+        
+        # Sort each team's schedule by date
+        for abbr in schedules:
+            schedules[abbr].sort(key=lambda x: x.get("date", ""))
+            
+        total_games = sum(len(v) for v in schedules.values())
+        print(f"  Real schedules fetched: {total_games} total games for {len(schedules)} teams")
+        
+    except Exception as e:
+        print(f"  Schedule fetch error: {e}")
+        import traceback
+        traceback.print_exc()
+    
     return schedules
 
 def export_to_html(picks: List, output_path: str = None) -> str:
@@ -1549,25 +1645,24 @@ def main():
         prob = engine.calculate_win_probability(g)
         implied = g["market_prob"]
         
-        # --- REAL PITCHER K PROJECTION (FIX) + BATTING/PITCHING DATA ---
+        # --- REAL PITCHER K PROJECTION (FIX) ---
         try:
-            home_team_id = g.get("home_id")
-            away_team_id = g.get("away_id")
-            home_abbr = g.get("home_abbr", "")
-            away_abbr = g.get("away_abbr", "")
             home_p_stats = engine.fetch_pitcher_stats(g.get("home_pitcher_id"))
             away_p_stats = engine.fetch_pitcher_stats(g.get("away_pitcher_id"))
             g["_home_p"] = home_p_stats
             g["_away_p"] = away_p_stats
             try:
-                g["_home_bat"] = fetch_real_team_batting(home_team_id)
+                g["_home_bat"] = fetch_real_team_batting(g.get("home_id"))
             except:
-                g["_home_bat"] = TEAM_BATTING_FALLBACK.get(home_abbr, {})
+                g["_home_bat"] = TEAM_BATTING_FALLBACK.get(g.get("home_abbr"), {})
             try:
-                g["_away_bat"] = fetch_real_team_batting(away_team_id)
+                g["_away_bat"] = fetch_real_team_batting(g.get("away_id"))
             except:
-                g["_away_bat"] = TEAM_BATTING_FALLBACK.get(away_abbr, {})
+                g["_away_bat"] = TEAM_BATTING_FALLBACK.get(g.get("away_abbr"), {})
+            home_abbr = g.get("home_abbr", "")
             park_pf = PARK_FACTORS.get(home_abbr, 100)
+            home_team_id = g.get("home_id")
+            away_team_id = g.get("away_id")
             opp_k_home = fetch_team_k_rate(away_team_id)
             opp_k_away = fetch_team_k_rate(home_team_id)
             home_k_data = calculate_k_projection(home_p_stats, away_team_id, park_pf, opp_k_home)
@@ -1664,12 +1759,12 @@ def main():
             "teamB_hr": home_bat_data.get("hr"), "teamB_rbi": home_bat_data.get("rbi"), "teamB_sb": home_bat_data.get("sb"),
             "teamB_k_rate": home_bat_data.get("k_rate"),
             # Pitcher stats for Pitching tab
-            "pitcherA_era": away_p_data.get("era") or LEAGUE_AVG_ERA, "pitcherA_whip": away_p_data.get("whip") or LEAGUE_AVG_WHIP,
-            "pitcherA_k9": away_p_data.get("k_per_9") or LEAGUE_AVG_K9, "pitcherA_ip": away_p_data.get("ip") or away_p_data.get("innings") or "5.2",
-            "pitcherA_fip": away_p_data.get("fip") or LEAGUE_AVG_FIP, "pitcherA_w": away_p_data.get("wins"), "pitcherA_l": away_p_data.get("losses"),
-            "pitcherB_era": home_p_data.get("era") or LEAGUE_AVG_ERA, "pitcherB_whip": home_p_data.get("whip") or LEAGUE_AVG_WHIP,
-            "pitcherB_k9": home_p_data.get("k_per_9") or LEAGUE_AVG_K9, "pitcherB_ip": home_p_data.get("ip") or home_p_data.get("innings") or "5.2",
-            "pitcherB_fip": home_p_data.get("fip") or LEAGUE_AVG_FIP, "pitcherB_w": home_p_data.get("wins"), "pitcherB_l": home_p_data.get("losses"),
+            "pitcherA_era": away_p_data.get("era"), "pitcherA_whip": away_p_data.get("whip"),
+            "pitcherA_k9": away_p_data.get("k_per_9"), "pitcherA_ip": away_p_data.get("ip", "â€”"),
+            "pitcherA_fip": away_p_data.get("fip"), "pitcherA_w": away_p_data.get("wins"), "pitcherA_l": away_p_data.get("losses"),
+            "pitcherB_era": home_p_data.get("era"), "pitcherB_whip": home_p_data.get("whip"),
+            "pitcherB_k9": home_p_data.get("k_per_9"), "pitcherB_ip": home_p_data.get("ip", "â€”"),
+            "pitcherB_fip": home_p_data.get("fip"), "pitcherB_w": home_p_data.get("wins"), "pitcherB_l": home_p_data.get("losses"),
             # Lineups
             "lineupA": g.get("_lineupA", []),
             "lineupB": g.get("_lineupB", []),
