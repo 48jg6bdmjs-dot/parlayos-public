@@ -27,7 +27,7 @@ except:
     ET_ZONE = timezone.utc
 
 
-# === YOUTUBE HIGHLIGHT VISION V4 ===
+# === YOUTUBE HIGHLIGHT VISION ===
 try:
     from youtube_highlight_engine import YouTubeHighlightAnalyzer, get_youtube_boost
     YT_AVAILABLE = True
@@ -497,7 +497,7 @@ class NFLPredictionEngine:
 
         # Store components
 
-        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) ===
+        # === YOUTUBE HIGHLIGHT INTELLIGENCE ===
         yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
         yt_momentum = 0.0
         yt_pace = 0.0
