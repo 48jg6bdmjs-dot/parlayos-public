@@ -32,19 +32,49 @@ jobs:
 
       - name: Install deps
         run: |
-          pip install requests
+          pip install -r requirements.txt || pip install requests pyyaml yt-dlp youtube-transcript-api
           # Ensure __pycache__ is ignored
           echo "__pycache__/" >> .gitignore
           echo "*.pyc" >> .gitignore
           echo "*.pyo" >> .gitignore
           echo ".pytest_cache/" >> .gitignore
+          echo ".yt_cache/" >> .gitignore
 
       - name: Run weekly update
         run: |
-          # Your weekly update script here - adjust as needed
+          echo "=== ACE V4 Weekly Update - $(date -u) ==="
+          echo "Config: $(cat sports_config.json | head -20)"
+          
+          # 1. Run ACE engines (now with YouTube Vision V4)
+          echo "--- Running MLB ACE (with YT Vision) ---"
           python mlb_ace.py || true
+          
+          echo "--- Running NFL ACE (with YT Vision) ---"
           python nfl_ace.py || true
+          
+          echo "--- Running NBA ACE (with YT Vision) ---"
           python nba_ace.py || true
+          
+          # 2. Run unified runner (generates parlayos.html with YT badges)
+          echo "--- Running run_all.py ---"
+          python run_all.py || true
+          
+          # 3. Fetch live scores
+          echo "--- Fetching live scores ---"
+          python live_scores_fetcher.py || true
+          
+          # 4. Run V4 backtests (with YouTube performance analysis)
+          echo "--- Running V4 Backtests (dry-run, no config overwrite) ---"
+          python backtest_core.py --help || true
+          python mlb_backtest.py --dry-run || true
+          python nfl_backtest.py --dry-run || true
+          python nba_backtest.py --dry-run || true
+          
+          # 5. Show YT cache stats
+          echo "--- YouTube cache ---"
+          du -sh .yt_cache 2>/dev/null || echo "No YT cache yet"
+          ls -lh *.json *.html 2>/dev/null | head -20
+          
           # Remove any pycache that was created
           find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
           find . -name "*.pyc" -delete 2>/dev/null || true
