@@ -450,76 +450,14 @@ def fetch_real_team_batting(team_id):
         splits = r.json().get("stats",[{}])[0].get("splits",[])
         if not splits: return {}
         s = splits[0].get("stat",{})
-        pa = int(s.get("plateAppearances", 0) or 0)
-        so = int(s.get("strikeOuts", 0) or 0)
-        k_rate = (so / pa) if pa > 100 else 0.23
         return {
             "avg": s.get("avg",".000"), "obp": s.get("obp",".000"),
             "slg": s.get("slg",".000"), "ops": s.get("ops",".000"),
             "hr":  int(s.get("homeRuns",0) or 0), "rbi": int(s.get("rbi",0) or 0),
             "sb":  int(s.get("stolenBases",0) or 0),
-            "so": so, "pa": pa, "k_rate": round(k_rate, 4),
         }
     except:
-        return {"k_rate": 0.23}
-
-def fetch_team_k_rate(team_id):
-    """Fetch opponent team strikeout rate per PA for K projection"""
-    try:
-        data = fetch_real_team_batting(team_id)
-        return data.get("k_rate", 0.23)
-    except:
-        return 0.23
-
-def _norm_cdf_k(x):
-    return 0.5 * (1.0 + math.erf(x / math.sqrt(2.0)))
-
-def calculate_k_projection(pitcher_stats: Dict, opp_team_id: int = None, park_factor: float = 100, opp_k_rate: float = None):
-    """
-    REAL K PROJECTION - replaces hardcoded 6.5K
-    Uses K/9, expected IP based on WHIP/ERA, opponent K tendency, park
-    """
-    if not pitcher_stats:
-        pitcher_stats = {"k_per_9": LEAGUE_AVG_K9, "whip": LEAGUE_AVG_WHIP, "era": LEAGUE_AVG_ERA, "has_data": False}
-    k9 = float(pitcher_stats.get("k_per_9", LEAGUE_AVG_K9))
-    whip = float(pitcher_stats.get("whip", LEAGUE_AVG_WHIP))
-    era = float(pitcher_stats.get("era", LEAGUE_AVG_ERA))
-    ip_expected = 5.2 + (k9 - 8.5) * 0.08 - (whip - 1.30) * 1.0 - (era - 4.25) * 0.15
-    ip_expected = max(4.0, min(7.0, ip_expected))
-    if opp_k_rate is None and opp_team_id:
-        opp_k_rate = fetch_team_k_rate(opp_team_id)
-    if opp_k_rate is None:
-        opp_k_rate = 0.23
-    league_k_rate = 0.23
-    opp_factor = opp_k_rate / league_k_rate
-    opp_factor = max(0.80, min(1.25, opp_factor))
-    pf_adj = 1.0
-    if park_factor != 100 and park_factor != 1.0:
-        if park_factor > 10:
-            pf_adj = 1.0 + (100 - park_factor) * 0.0025
-        else:
-            pf_adj = park_factor
-    raw_k = k9 * (ip_expected / 9.0)
-    proj_k = raw_k * opp_factor * pf_adj
-    reliability = pitcher_stats.get("reliability", 0.7) if pitcher_stats.get("has_data") else 0.5
-    proj_k = reliability * proj_k + (1 - reliability) * LEAGUE_AVG_K9 * 5.5 / 9.0
-    return {
-        "proj": round(max(1.0, proj_k), 2),
-        "ip_expected": round(ip_expected, 2),
-        "opp_k_rate": round(opp_k_rate, 4),
-        "opp_factor": round(opp_factor, 3),
-        "raw_k9": k9,
-    }
-
-def k_prob_over(proj_k: float, line: float = 6.5):
-    """Probability pitcher goes over line using normal approx with overdispersion"""
-    mean = proj_k
-    sd = math.sqrt(max(0.8, mean * 1.25))
-    z = (line + 0.5 - mean) / sd
-    p_over = 1.0 - _norm_cdf_k(z)
-    return max(0.05, min(0.95, p_over))
-
-
+        return {}
 
 def fetch_today_probable_pitchers():
     tid2abbr = {v: k for k, v in MLB_TEAM_IDS.items()}
@@ -549,127 +487,6 @@ def fetch_today_probable_pitchers():
             out[k] = sorted(out[k], key=lambda x: x.get("game_date") or "")
     except Exception as e:
         print(f"  Probable pitcher fetch failed: {e}")
-    return out
-
-def _parse_boxscore_lineup(box_data, side):
-    """Parse boxscore side into lineup list matching HTML format"""
-    try:
-        team_data = box_data.get("teams", {}).get(side, {})
-        batters_ids = team_data.get("batters", [])
-        players = team_data.get("players", {})
-        lineup = []
-        for bid in batters_ids:
-            pkey = f"ID{bid}" if not str(bid).startswith("ID") else str(bid)
-            pdata = players.get(pkey, {})
-            if not pdata:
-                continue
-            bo = pdata.get("battingOrder")
-            # battingOrder is "100", "200"... 0 = not starting, empty = bench
-            if bo is None or str(bo).strip() == "" or str(bo) == "0":
-                continue
-            try:
-                order_num = int(str(bo))
-            except:
-                order_num = 999
-            if order_num % 100 != 0:  # only starters are 100,200...
-                continue
-            person = pdata.get("person", {})
-            pos_data = pdata.get("position", {})
-            stats_data = pdata.get("stats", {}).get("batting", {}) or {}
-            season_stats = pdata.get("seasonStats", {}).get("batting", {}) or stats_data
-
-            # Try to get season avg etc from stats
-            avg = season_stats.get("avg")
-            obp = season_stats.get("obp")
-            slg = season_stats.get("slg")
-            ops = season_stats.get("ops")
-            hr = season_stats.get("homeRuns")
-            rbi = season_stats.get("rbi")
-            sb = season_stats.get("stolenBases")
-            # person may have batSide
-            hand = person.get("batSide", {}).get("code") if isinstance(person.get("batSide"), dict) else person.get("batSide")
-            if not hand:
-                hand = pdata.get("batSide", {}).get("code", "R") if isinstance(pdata.get("batSide"), dict) else "R"
-
-            lineup.append({
-                "order": order_num,
-                "pos": pos_data.get("abbreviation", "DH"),
-                "name": person.get("fullName") or person.get("lastName") or f"Player {bid}",
-                "hand": hand,
-                "avg": avg,
-                "obp": obp,
-                "slg": slg,
-                "ops": ops,
-                "hr": hr,
-                "rbi": rbi,
-                "sb": sb,
-            })
-        lineup = sorted(lineup, key=lambda x: x.get("order", 999))
-        # strip order before returning
-        for b in lineup:
-            b.pop("order", None)
-        return lineup
-    except Exception as e:
-        print(f"  Parse lineup {side} failed: {e}")
-        return []
-
-def fetch_today_lineups(game_pks=None):
-    """Fetch live lineups for today's games via boxscore endpoint"""
-    out = {}  # (away_abbr, home_abbr) -> {away_lineup, home_lineup, away_confirmed, home_confirmed, gamePk}
-    try:
-        if not game_pks:
-            # Get today's gamePks from schedule
-            today = datetime.now().strftime("%Y-%m-%d")
-            r = requests.get(f"{MLB_STATS_BASE}/schedule", params={"sportId":1,"date":today}, timeout=10)
-            game_pks = []
-            id_to_abbr = {}
-            for de in r.json().get("dates",[]):
-                for gm in de.get("games",[]):
-                    pk = gm.get("gamePk")
-                    if pk:
-                        game_pks.append(pk)
-                        h_id = gm["teams"]["home"]["team"]["id"]
-                        a_id = gm["teams"]["away"]["team"]["id"]
-                        # map ids to abbr
-                        a_abbr = next((k for k,v in MLB_TEAM_IDS.items() if v==a_id), None)
-                        h_abbr = next((k for k,v in MLB_TEAM_IDS.items() if v==h_id), None)
-                        if a_abbr and h_abbr:
-                            id_to_abbr[pk] = (a_abbr, h_abbr)
-        else:
-            id_to_abbr = {}
-
-        for pk in (game_pks or []):
-            try:
-                r = requests.get(f"{MLB_STATS_BASE}/game/{pk}/boxscore", timeout=8)
-                if r.status_code != 200:
-                    continue
-                box_data = r.json()
-                away_lineup = _parse_boxscore_lineup(box_data, "away")
-                home_lineup = _parse_boxscore_lineup(box_data, "home")
-                # Determine abbrs
-                if pk in id_to_abbr:
-                    a_abbr, h_abbr = id_to_abbr[pk]
-                else:
-                    # fallback from boxscore team ids
-                    a_id = box_data.get("teams",{}).get("away",{}).get("team",{}).get("id")
-                    h_id = box_data.get("teams",{}).get("home",{}).get("team",{}).get("id")
-                    a_abbr = next((k for k,v in MLB_TEAM_IDS.items() if v==a_id), None)
-                    h_abbr = next((k for k,v in MLB_TEAM_IDS.items() if v==h_id), None)
-                if not a_abbr or not h_abbr:
-                    continue
-                out[(a_abbr, h_abbr)] = {
-                    "away_lineup": away_lineup,
-                    "home_lineup": home_lineup,
-                    "away_confirmed": len(away_lineup) >= 9,
-                    "home_confirmed": len(home_lineup) >= 9,
-                    "gamePk": pk,
-                }
-            except Exception as e:
-                # print(f"  Lineup fetch pk {pk} failed: {e}")
-                continue
-    except Exception as e:
-        print(f"  Lineup bulk fetch failed: {e}")
-    print(f"  Lineups fetched for {len(out)} games")
     return out
 
 # === OLD'S EVALUATE_TOTAL - SUPERIOR MODEL ===
@@ -1248,35 +1065,18 @@ def _picks_to_v6_games(picks: List) -> List:
         ml_fav = TEAM_ABBR.get(pick_team, pick_team[:3].upper()) if pick_team else abbr_b
         hot = edge > 0.03
 
-        # --- REAL K PROJECTION (fix hardcoded 6.5K) ---
-        k_line = p.get('kLine', 6.5)
-        k_proj = p.get('kProj', p.get('kLine', 5.5))
-        k_pitcher = p.get('kPitcher', away_pitcher if p.get('kSide')=='away' else home_pitcher)
-        k_over_prob = p.get('kOverProb', 0.5)
-        k_edge_val = p.get('kEdge', p.get('kOverProb', 0.5) - 0.5 if p.get('kOverProb') else 0.0)
-        
-        if p.get('kPick') and 'Ks' in str(p.get('kPick')):
-            k_pick_str = p.get('kPick')
-        else:
-            side_str = "Over" if k_over_prob > 0.5 else "Under"
-            if k_proj is not None:
-                k_pick_str = f"{side_str} {k_line}K ({k_proj} Ks)"
-            else:
-                k_pick_str = f"{side_str} {k_line}K"
-
         game = {
             'id': f'mlb_live_{idx}_{int(datetime.now().timestamp())}',
             'a': abbr_a, 'b': abbr_b,
             'cityA': away, 'cityB': home,
             'lgA': 'MLB', 'lgB': 'MLB',
             'total': total, 'ouPick': f'OVER {total}' if edge>0 else f'UNDER {total}',
-            'kLine': k_line, 'kPick': k_pick_str, 'kProj': k_proj, 'kPitcher': k_pitcher,
-            'kOverProb': k_over_prob, 'kPickRaw': f"{side_str} {k_line}K" if 'side_str' in locals() else f"{ml_fav} K",
+            'kLine': p.get('kLine', 6.5), 'kPick': f'{ml_fav} K',
             'mlFav': ml_fav, 'mlPriceDec': ml_price_dec,
-            'ouEdge': round(edge*0.5, 4), 'kEdge': round(k_edge_val, 4) if k_edge_val is not None else 0.0, 'mlEdge': round(edge, 4),
+            'ouEdge': round(edge*0.5, 4), 'kEdge': 0.0, 'mlEdge': round(edge, 4),
             'model': round(model_prob, 4),
             'tv': 'ESPN+', 'hot': hot,
-            'startAt': start_at_ms, 'start_at': start_at_ms, 'commence_time': p.get('commence_time') or game_date_str, 'time': time_display, 'date': date_display, 'time_et': time_display, 'date_et': date_display,
+            'startAt': start_at_ms, 'time': time_display, 'date': date_display,
             'status': 'live',
             'modelProb': round(model_prob, 3),
             'mlPriceAmerican': odds,
@@ -1284,16 +1084,7 @@ def _picks_to_v6_games(picks: List) -> List:
             'qualifies': bool(p.get('qualifies', True)),
             'away_pitcher': away_pitcher,
             'home_pitcher': home_pitcher,
-            'pitcherA': away_pitcher,
-            'pitcherB': home_pitcher,
-            'pitcherA_name': away_pitcher,
-            'pitcherB_name': home_pitcher,
-            'teamA_avg': p.get('teamA_avg'), 'teamA_obp': p.get('teamA_obp'), 'teamA_slg': p.get('teamA_slg'), 'teamA_ops': p.get('teamA_ops'), 'teamA_hr': p.get('teamA_hr'), 'teamA_rbi': p.get('teamA_rbi'), 'teamA_sb': p.get('teamA_sb'),
-            'teamB_avg': p.get('teamB_avg'), 'teamB_obp': p.get('teamB_obp'), 'teamB_slg': p.get('teamB_slg'), 'teamB_ops': p.get('teamB_ops'), 'teamB_hr': p.get('teamB_hr'), 'teamB_rbi': p.get('teamB_rbi'), 'teamB_sb': p.get('teamB_sb'),
-            'pitcherA_era': p.get('pitcherA_era'), 'pitcherA_whip': p.get('pitcherA_whip'), 'pitcherA_k9': p.get('pitcherA_k9'), 'pitcherA_ip': p.get('pitcherA_ip'), 'pitcherA_fip': p.get('pitcherA_fip'), 'pitcherA_w': p.get('pitcherA_w'), 'pitcherA_l': p.get('pitcherA_l'),
-            'pitcherB_era': p.get('pitcherB_era'), 'pitcherB_whip': p.get('pitcherB_whip'), 'pitcherB_k9': p.get('pitcherB_k9'), 'pitcherB_ip': p.get('pitcherB_ip'), 'pitcherB_fip': p.get('pitcherB_fip'), 'pitcherB_w': p.get('pitcherB_w'), 'pitcherB_l': p.get('pitcherB_l'),
-            'lineupA': p.get('lineupA', []), 'lineupB': p.get('lineupB', []),
-            'lineupA_confirmed': p.get('lineupA_confirmed', False), 'lineupB_confirmed': p.get('lineupB_confirmed', False),
+            'teamA_avg': p.get('teamA_avg'), 'teamB_avg': p.get('teamB_avg'),
         }
         for col in ["c_team_edge", "c_pitcher_fip_edge", "c_pitcher_era_edge", "c_offense_edge", "c_bullpen_edge"]:
             if col in p:
@@ -1302,7 +1093,94 @@ def _picks_to_v6_games(picks: List) -> List:
     return v_games
 
 def fetch_month_schedule_all_teams(team_abbrs):
+    """Fetch REAL past results for current month from MLB Stats API, no mocks.
+    Returns dict abbr -> list of {date, opp, home, result?, myScore?, oppScore?, time?, status}
+    """
     schedules = {a: [] for a in team_abbrs}
+    tid2abbr = {v: k for k, v in MLB_TEAM_IDS.items()}
+    now = datetime.now(ET_ZONE) if ET_ZONE else datetime.now(timezone.utc)
+    # Use current year/month, or July 2026 if testing (matches screenshot)
+    year = now.year
+    month = now.month
+    # If we're in 2026 July context, use that month
+    start_date = date(year, month, 1)
+    if month == 12:
+        end_date = date(year, month, 31)
+    else:
+        # last day of month
+        import calendar as calmod
+        last_day = calmod.monthrange(year, month)[1]
+        end_date = date(year, month, last_day)
+    # For safety, don't request future beyond today for results, but include future schedule
+    today_str = now.strftime("%Y-%m-%d")
+    start_str = start_date.isoformat()
+    end_str = end_date.isoformat()
+    try:
+        url = f"{MLB_STATS_BASE}/schedule"
+        params = {
+            "sportId": 1,
+            "startDate": start_str,
+            "endDate": end_str,
+            "hydrate": "team,linescore,decisions",
+        }
+        r = requests.get(url, params=params, timeout=15)
+        r.raise_for_status()
+        data = r.json()
+        for d in data.get("dates", []):
+            date_str = d.get("date")  # YYYY-MM-DD
+            for gm in d.get("games", []):
+                status = gm.get("status", {}).get("abstractGameState", "")  # Final, Preview, Live etc
+                teams = gm.get("teams", {})
+                home_team = teams.get("home", {})
+                away_team = teams.get("away", {})
+                home_id = home_team.get("team", {}).get("id")
+                away_id = away_team.get("team", {}).get("id")
+                home_abbr = tid2abbr.get(home_id)
+                away_abbr = tid2abbr.get(away_id)
+                if not home_abbr or not away_abbr:
+                    continue
+                is_final = status == "Final"
+                # scores
+                home_score = home_team.get("score")
+                away_score = away_team.get("score")
+                # Build entry for home team
+                for team_abbr, opp_abbr, is_home, my_score, opp_score in [
+                    (home_abbr, away_abbr, True, home_score, away_score),
+                    (away_abbr, home_abbr, False, away_score, home_score),
+                ]:
+                    if team_abbr not in schedules:
+                        continue
+                    entry = {
+                        "date": date_str,
+                        "opp": opp_abbr,
+                        "home": is_home,
+                    }
+                    # time for future
+                    if gm.get("gameDate"):
+                        try:
+                            gd = datetime.fromisoformat(gm["gameDate"].replace("Z","+00:00"))
+                            # convert to ET for display
+                            if ET_ZONE:
+                                gd_et = gd.astimezone(ET_ZONE)
+                                entry["time"] = gd_et.strftime("%I:%M %p ET").lstrip("0")
+                        except:
+                            pass
+                    if is_final and my_score is not None and opp_score is not None:
+                        entry["result"] = "W" if my_score > opp_score else "L"
+                        entry["myScore"] = my_score
+                        entry["oppScore"] = opp_score
+                        entry["status"] = "Final"
+                    else:
+                        # future or live: no fabricated result
+                        entry["status"] = status if status else "Scheduled"
+                        # explicitly no result key -> calendar won't show W/L
+                    schedules[team_abbr].append(entry)
+        # sort each team's schedule by date
+        for abbr in schedules:
+            schedules[abbr] = sorted(schedules[abbr], key=lambda x: x.get("date",""))
+    except Exception as e:
+        print(f"  Real schedule fetch failed: {e}, returning empty (no mocks)")
+        # return empty, NOT mocks - caller will show no false data
     return schedules
 
 def export_to_html(picks: List, output_path: str = None) -> str:
@@ -1326,25 +1204,8 @@ def export_to_html(picks: List, output_path: str = None) -> str:
                 continue
             avg = g.get(f'team{side}_avg')
             if avg is None:
-                # Use hardcoded fallback so Stats tab never blank
-                fb = TEAM_BATTING_FALLBACK.get(abbr)
-                if fb:
-                    team_stats[abbr] = fb
                 continue
-            team_stats[abbr] = {
-                'avg': avg, 
-                'obp': g.get(f'team{side}_obp'), 
-                'slg': g.get(f'team{side}_slg'), 
-                'ops': g.get(f'team{side}_ops'),
-                'hr': g.get(f'team{side}_hr'),
-                'rbi': g.get(f'team{side}_rbi'),
-                'sb': g.get(f'team{side}_sb'),
-                'k_rate': g.get(f'team{side}_k_rate'),
-            }
-    # Fill any missing teams with fallback so we always have 30
-    if len(team_stats) < 10:
-        print(f"  Only {len(team_stats)} teams in teamStats, using hardcoded fallback for all")
-        team_stats = TEAM_BATTING_FALLBACK.copy()
+            team_stats[abbr] = {'avg': avg, 'obp': g.get(f'team{side}_obp'), 'slg': g.get(f'team{side}_slg'), 'ops': g.get(f'team{side}_ops')}
 
     team_stats_json = json.dumps(team_stats, separators=(',', ':'))
     run_date = datetime.now().strftime('%b %d %Y  %H:%M')
@@ -1467,76 +1328,6 @@ def main():
             g["home_pitcher_id"] = p.get("home_id")
             g["away_pitcher_id"] = p.get("away_id")
 
-    # FALLBACK: If odds API returned < 8 games, supplement from MLB schedule
-    if len(games) < 8:
-        print(f"  Only {len(games)} games from odds API, supplementing from MLB schedule...")
-        try:
-            today_str = datetime.now().strftime("%Y-%m-%d")
-            r = requests.get(f"{MLB_STATS_BASE}/schedule",
-                              params={"sportId":1,"date":today_str,"hydrate":"probablePitcher"},
-                              timeout=12)
-            schedule_games = []
-            for de in r.json().get("dates",[]):
-                for gm in de.get("games",[]):
-                    h_team = gm["teams"]["home"]["team"]
-                    a_team = gm["teams"]["away"]["team"]
-                    h_id = h_team.get("id"); a_id = a_team.get("id")
-                    h_abbr = None; a_abbr = None
-                    for ab, mid in MLB_TEAM_IDS.items():
-                        if mid == h_id: h_abbr = ab
-                        if mid == a_id: a_abbr = ab
-                    if not h_abbr or not a_abbr:
-                        continue
-                    if any(g["home_abbr"]==h_abbr and g["away_abbr"]==a_abbr for g in games):
-                        continue
-                    hp = gm["teams"]["home"].get("probablePitcher",{}) or {}
-                    ap = gm["teams"]["away"].get("probablePitcher",{}) or {}
-                    schedule_games.append({
-                        "home": h_team.get("name"), "away": a_team.get("name"),
-                        "home_abbr": h_abbr, "away_abbr": a_abbr,
-                        "market_prob": 0.5,
-                        "odds": {"home": -110, "away": 100, "home_true": 0.5, "away_true": 0.5},
-                        "real_total": 8.5,
-                        "commence_time": gm.get("gameDate"),
-                        "home_id": h_id, "away_id": a_id,
-                        "lat": STADIUM_LOCATIONS.get(h_abbr, (40.0, -74.0))[0],
-                        "lon": STADIUM_LOCATIONS.get(h_abbr, (40.0, -74.0))[1],
-                        "home_pitcher_id": hp.get("id"),
-                        "away_pitcher_id": ap.get("id"),
-                    })
-            print(f"  Found {len(schedule_games)} additional games from MLB schedule")
-            games.extend(schedule_games)
-        except Exception as e:
-            print(f"  Schedule fallback failed: {e}")
-    # Deduplicate
-    seen_final = set()
-    deduped = []
-    for g in games:
-        key = (g["away_abbr"], g["home_abbr"])
-        if key not in seen_final:
-            seen_final.add(key)
-            deduped.append(g)
-    games = deduped
-    print(f"  Final game count: {len(games)}")
-
-    # Fetch live lineups
-    print("  Fetching live lineups...")
-    lineups_map = fetch_today_lineups()
-    for g in games:
-        key = (g["away_abbr"], g["home_abbr"])
-        if key in lineups_map:
-            ld = lineups_map[key]
-            g["_lineupA"] = ld.get("away_lineup", [])
-            g["_lineupB"] = ld.get("home_lineup", [])
-            g["_lineupA_confirmed"] = ld.get("away_confirmed", False)
-            g["_lineupB_confirmed"] = ld.get("home_confirmed", False)
-            g["_gamePk"] = ld.get("gamePk")
-        else:
-            g["_lineupA"] = []
-            g["_lineupB"] = []
-            g["_lineupA_confirmed"] = False
-            g["_lineupB_confirmed"] = False
-
     kelly_fraction_cfg = config.get("kelly_fraction", 0.25)
     def kelly_stake(prob, decimal_odds):
         if decimal_odds <= 1 or prob * decimal_odds <= 1:
@@ -1548,59 +1339,6 @@ def main():
     for g in games:
         prob = engine.calculate_win_probability(g)
         implied = g["market_prob"]
-        
-        # --- REAL PITCHER K PROJECTION (FIX) ---
-        try:
-            home_p_stats = engine.fetch_pitcher_stats(g.get("home_pitcher_id"))
-            away_p_stats = engine.fetch_pitcher_stats(g.get("away_pitcher_id"))
-            g["_home_p"] = home_p_stats
-            g["_away_p"] = away_p_stats
-            try:
-                g["_home_bat"] = fetch_real_team_batting(g.get("home_id"))
-            except:
-                g["_home_bat"] = TEAM_BATTING_FALLBACK.get(g.get("home_abbr"), {})
-            try:
-                g["_away_bat"] = fetch_real_team_batting(g.get("away_id"))
-            except:
-                g["_away_bat"] = TEAM_BATTING_FALLBACK.get(g.get("away_abbr"), {})
-            home_abbr = g.get("home_abbr", "")
-            park_pf = PARK_FACTORS.get(home_abbr, 100)
-            home_team_id = g.get("home_id")
-            away_team_id = g.get("away_id")
-            opp_k_home = fetch_team_k_rate(away_team_id)
-            opp_k_away = fetch_team_k_rate(home_team_id)
-            home_k_data = calculate_k_projection(home_p_stats, away_team_id, park_pf, opp_k_home)
-            away_k_data = calculate_k_projection(away_p_stats, home_team_id, park_pf, opp_k_away)
-            k_line_market = 6.5
-            home_over = k_prob_over(home_k_data["proj"], k_line_market)
-            away_over = k_prob_over(away_k_data["proj"], k_line_market)
-            home_edge = home_over - 0.5
-            away_edge = away_over - 0.5
-            if abs(away_edge) > abs(home_edge):
-                chosen = "away"
-                chosen_data = away_k_data
-                chosen_over = away_over
-                chosen_edge = away_edge
-            else:
-                chosen = "home"
-                chosen_data = home_k_data
-                chosen_over = home_over
-                chosen_edge = home_edge
-            g["_k_projection"] = {
-                "home": home_k_data,
-                "away": away_k_data,
-                "chosen_side": chosen,
-                "chosen_proj": chosen_data["proj"],
-                "chosen_over_prob": chosen_over,
-                "chosen_edge": chosen_edge,
-                "k_line": k_line_market,
-                "home_over": home_over,
-                "away_over": away_over,
-            }
-        except Exception as e:
-            print(f"  K projection error for {g.get('away')} @ {g.get('home')}: {e}")
-            g["_k_projection"] = None
-        
         if prob >= 0.5:
             pick, pick_prob = g["home"], prob
             pick_odds = g["odds"].get("home", -110)
@@ -1614,71 +1352,11 @@ def main():
 
         print(f"{g['away']} @ {g['home']}: pick={pick}, prob={pick_prob:.3f}, implied={pick_implied:.3f}, edge={edge:.3f}")
 
-        k_proj_info = g.get("_k_projection")
-        if k_proj_info:
-            k_line_val = k_proj_info.get("k_line", 6.5)
-            k_proj_val = k_proj_info.get("chosen_proj", 5.5)
-            k_over_p = k_proj_info.get("chosen_over_prob", 0.5)
-            k_edge_val = k_proj_info.get("chosen_edge", 0.0)
-            k_side = k_proj_info.get("chosen_side", "home")
-            k_pitcher_name = g["home"] if k_side == "home" else g["away"]
-            k_side_str = "Over" if k_over_p > 0.5 else "Under"
-            k_pick_str = f"{k_side_str} {k_line_val}K ({k_proj_val} Ks) - {k_pitcher_name}"
-        else:
-            k_line_val = 6.5
-            k_proj_val = 5.5
-            k_over_p = 0.5
-            k_edge_val = 0.0
-            k_pick_str = f"Over {k_line_val}K ({k_proj_val} Ks)"
-            k_side = "home"
-            k_pitcher_name = g["home"]
-
-        # --- FIX: Include batting and pitching data for Stats tabs + lineups ---
-        home_bat_data = g.get("_home_bat", {}) or fetch_real_team_batting(g.get("home_id")) or TEAM_BATTING_FALLBACK.get(g.get("home_abbr"), {})
-        away_bat_data = g.get("_away_bat", {}) or fetch_real_team_batting(g.get("away_id")) or TEAM_BATTING_FALLBACK.get(g.get("away_abbr"), {})
-        home_p_data = g.get("_home_p", {})
-        away_p_data = g.get("_away_p", {})
-
         game_data = {
             "home": g["home"], "away": g["away"], "pick": pick,
             "odds": pick_odds, "model_prob": round(pick_prob*100, 1), "edge": round(edge*100, 1),
             "edge_pct": round(edge*100, 1), "kelly_stake_pct": round(stake_frac*100, 2),
             "line": g.get("real_total"), "kind": "team", "market": "Moneyline",
-            "kLine": k_line_val,
-            "kProj": k_proj_val,
-            "kOverProb": round(k_over_p, 4),
-            "kEdge": round(k_edge_val, 4),
-            "kPick": k_pick_str,
-            "kPitcher": k_pitcher_name,
-            "kSide": k_side,
-            "home_k_proj": g.get("_k_projection", {}).get("home", {}).get("proj") if g.get("_k_projection") else None,
-            "away_k_proj": g.get("_k_projection", {}).get("away", {}).get("proj") if g.get("_k_projection") else None,
-            # Team batting for Stats tab
-            "teamA_avg": away_bat_data.get("avg"), "teamA_obp": away_bat_data.get("obp"),
-            "teamA_slg": away_bat_data.get("slg"), "teamA_ops": away_bat_data.get("ops"),
-            "teamA_hr": away_bat_data.get("hr"), "teamA_rbi": away_bat_data.get("rbi"), "teamA_sb": away_bat_data.get("sb"),
-            "teamA_k_rate": away_bat_data.get("k_rate"),
-            "teamB_avg": home_bat_data.get("avg"), "teamB_obp": home_bat_data.get("obp"),
-            "teamB_slg": home_bat_data.get("slg"), "teamB_ops": home_bat_data.get("ops"),
-            "teamB_hr": home_bat_data.get("hr"), "teamB_rbi": home_bat_data.get("rbi"), "teamB_sb": home_bat_data.get("sb"),
-            "teamB_k_rate": home_bat_data.get("k_rate"),
-            # Pitcher stats for Pitching tab
-            "pitcherA_era": away_p_data.get("era"), "pitcherA_whip": away_p_data.get("whip"),
-            "pitcherA_k9": away_p_data.get("k_per_9"), "pitcherA_ip": away_p_data.get("ip", "â€”"),
-            "pitcherA_fip": away_p_data.get("fip"), "pitcherA_w": away_p_data.get("wins"), "pitcherA_l": away_p_data.get("losses"),
-            "pitcherB_era": home_p_data.get("era"), "pitcherB_whip": home_p_data.get("whip"),
-            "pitcherB_k9": home_p_data.get("k_per_9"), "pitcherB_ip": home_p_data.get("ip", "â€”"),
-            "pitcherB_fip": home_p_data.get("fip"), "pitcherB_w": home_p_data.get("wins"), "pitcherB_l": home_p_data.get("losses"),
-            # Lineups
-            "lineupA": g.get("_lineupA", []),
-            "lineupB": g.get("_lineupB", []),
-            "lineupA_confirmed": g.get("_lineupA_confirmed", False),
-            "lineupB_confirmed": g.get("_lineupB_confirmed", False),
-            # Raw for v6 builder
-            "home_bat_raw": home_bat_data,
-            "away_bat_raw": away_bat_data,
-            "home_p_raw": home_p_data,
-            "away_p_raw": away_p_data,
         }
         for col, val in g.get("_edge_components", {}).items():
             game_data[col] = round(val, 4)
