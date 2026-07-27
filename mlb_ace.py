@@ -1,5 +1,5 @@
 """
-mlb_ace.py ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬-Ã‚Â IMPROVED VERSION merging old's superior totals model with ParlayOS injection
+mlb_ace.py ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â IMPROVED VERSION merging old's superior totals model with ParlayOS injection
 - Old's superior logic: lineup-weighted OPS with platoon splits, form blending (50/30/20),
   injury adjustment, rest factor, bullpen fatigue from boxscores, dynamic park factor,
   weather/wind/umpire factors, full Monte Carlo with gamma overdispersion, crooked innings,
@@ -27,7 +27,7 @@ except:
     ET_ZONE = timezone.utc
 
 
-# === YOUTUBE HIGHLIGHT VISION ===
+# === YOUTUBE HIGHLIGHT VISION V4 ===
 try:
     from youtube_highlight_engine import YouTubeHighlightAnalyzer, get_youtube_boost
     YT_AVAILABLE = True
@@ -72,42 +72,6 @@ STADIUM_LOCATIONS = {
     'SEA': (47.5914, -122.3325), 'STL': (38.6226, -90.1928), 'TB':  (27.7683, -82.6534),
     'TEX': (32.7473, -97.0842), 'TOR': (43.6414, -79.3894), 'WSH': (38.8730, -77.0074),
 }
-
-# === FALLBACK TEAM BATTING (ensures Stats tab never blank when API offline) ===
-TEAM_BATTING_FALLBACK = {
-    'ARI': {'avg': '.249', 'obp': '.321', 'slg': '.414', 'ops': '.735', 'hr': 180, 'rbi': 700, 'sb': 110, 'k_rate': '22.1'},
-    'ATL': {'avg': '.255', 'obp': '.331', 'slg': '.442', 'ops': '.773', 'hr': 210, 'rbi': 750, 'sb': 70, 'k_rate': '23.5'},
-    'BAL': {'avg': '.252', 'obp': '.320', 'slg': '.430', 'ops': '.750', 'hr': 200, 'rbi': 730, 'sb': 90, 'k_rate': '22.8'},
-    'BOS': {'avg': '.254', 'obp': '.328', 'slg': '.425', 'ops': '.753', 'hr': 175, 'rbi': 720, 'sb': 85, 'k_rate': '22.0'},
-    'CHC': {'avg': '.247', 'obp': '.319', 'slg': '.410', 'ops': '.729', 'hr': 185, 'rbi': 690, 'sb': 95, 'k_rate': '24.1'},
-    'CWS': {'avg': '.235', 'obp': '.302', 'slg': '.385', 'ops': '.687', 'hr': 150, 'rbi': 600, 'sb': 80, 'k_rate': '25.2'},
-    'CIN': {'avg': '.248', 'obp': '.320', 'slg': '.418', 'ops': '.738', 'hr': 190, 'rbi': 710, 'sb': 130, 'k_rate': '24.5'},
-    'CLE': {'avg': '.245', 'obp': '.314', 'slg': '.400', 'ops': '.714', 'hr': 160, 'rbi': 680, 'sb': 100, 'k_rate': '20.5'},
-    'COL': {'avg': '.257', 'obp': '.322', 'slg': '.437', 'ops': '.759', 'hr': 180, 'rbi': 720, 'sb': 90, 'k_rate': '24.0'},
-    'DET': {'avg': '.241', 'obp': '.310', 'slg': '.396', 'ops': '.706', 'hr': 170, 'rbi': 650, 'sb': 70, 'k_rate': '23.8'},
-    'HOU': {'avg': '.262', 'obp': '.332', 'slg': '.435', 'ops': '.767', 'hr': 190, 'rbi': 740, 'sb': 80, 'k_rate': '19.8'},
-    'KC':  {'avg': '.248', 'obp': '.309', 'slg': '.408', 'ops': '.717', 'hr': 165, 'rbi': 680, 'sb': 120, 'k_rate': '21.5'},
-    'LAA': {'avg': '.244', 'obp': '.310', 'slg': '.405', 'ops': '.715', 'hr': 180, 'rbi': 670, 'sb': 85, 'k_rate': '24.3'},
-    'LAD': {'avg': '.260', 'obp': '.338', 'slg': '.447', 'ops': '.785', 'hr': 220, 'rbi': 780, 'sb': 100, 'k_rate': '21.2'},
-    'MIA': {'avg': '.240', 'obp': '.305', 'slg': '.389', 'ops': '.694', 'hr': 140, 'rbi': 600, 'sb': 100, 'k_rate': '24.8'},
-    'MIL': {'avg': '.244', 'obp': '.315', 'slg': '.407', 'ops': '.722', 'hr': 190, 'rbi': 700, 'sb': 140, 'k_rate': '23.2'},
-    'MIN': {'avg': '.246', 'obp': '.318', 'slg': '.419', 'ops': '.737', 'hr': 200, 'rbi': 710, 'sb': 70, 'k_rate': '24.9'},
-    'NYM': {'avg': '.247', 'obp': '.320', 'slg': '.410', 'ops': '.730', 'hr': 185, 'rbi': 700, 'sb': 80, 'k_rate': '22.5'},
-    'NYY': {'avg': '.248', 'obp': '.328', 'slg': '.426', 'ops': '.754', 'hr': 230, 'rbi': 760, 'sb': 70, 'k_rate': '23.0'},
-    'OAK': {'avg': '.223', 'obp': '.300', 'slg': '.369', 'ops': '.669', 'hr': 150, 'rbi': 580, 'sb': 70, 'k_rate': '26.1'},
-    'PHI': {'avg': '.256', 'obp': '.328', 'slg': '.434', 'ops': '.762', 'hr': 200, 'rbi': 740, 'sb': 90, 'k_rate': '22.3'},
-    'PIT': {'avg': '.240', 'obp': '.310', 'slg': '.387', 'ops': '.697', 'hr': 150, 'rbi': 620, 'sb': 100, 'k_rate': '24.0'},
-    'SD':  {'avg': '.246', 'obp': '.318', 'slg': '.404', 'ops': '.722', 'hr': 170, 'rbi': 690, 'sb': 110, 'k_rate': '21.8'},
-    'SF':  {'avg': '.242', 'obp': '.312', 'slg': '.392', 'ops': '.704', 'hr': 160, 'rbi': 640, 'sb': 80, 'k_rate': '23.5'},
-    'SEA': {'avg': '.238', 'obp': '.310', 'slg': '.402', 'ops': '.712', 'hr': 190, 'rbi': 680, 'sb': 80, 'k_rate': '25.5'},
-    'STL': {'avg': '.250', 'obp': '.320', 'slg': '.412', 'ops': '.732', 'hr': 175, 'rbi': 700, 'sb': 70, 'k_rate': '21.5'},
-    'TB':  {'avg': '.244', 'obp': '.317', 'slg': '.407', 'ops': '.724', 'hr': 180, 'rbi': 690, 'sb': 120, 'k_rate': '24.2'},
-    'TEX': {'avg': '.256', 'obp': '.328', 'slg': '.437', 'ops': '.765', 'hr': 210, 'rbi': 760, 'sb': 70, 'k_rate': '22.1'},
-    'TOR': {'avg': '.250', 'obp': '.321', 'slg': '.414', 'ops': '.735', 'hr': 180, 'rbi': 700, 'sb': 80, 'k_rate': '21.0'},
-    'WSH': {'avg': '.242', 'obp': '.311', 'slg': '.396', 'ops': '.707', 'hr': 160, 'rbi': 640, 'sb': 110, 'k_rate': '22.8'},
-}
-
-
 
 # === OLD'S SUPERIOR CONSTANTS ===
 PARK_FACTORS_TEAMNAME = {
@@ -993,10 +957,13 @@ class PredictionEngine:
     def fetch_pitcher_stats(self, pitcher_id: int) -> Dict:
         if not pitcher_id:
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                    "fip": LEAGUE_AVG_FIP, "has_data": False}
+                    "fip": LEAGUE_AVG_FIP, "ip": "—", "wins": 0, "losses": 0, "has_data": False}
         cache_key = f"pitcher_stats_v4_{pitcher_id}"
         cached = get_cached(cache_key, ttl=3600)
         if cached:
+            # ensure ip exists in cached version
+            if "ip" not in cached:
+                cached["ip"] = "—"
             return cached
         try:
             r = requests.get(f"{MLB_STATS_BASE}/people/{pitcher_id}/stats",
@@ -1005,17 +972,30 @@ class PredictionEngine:
             splits = r.json()["stats"][0]["splits"]
             if not splits:
                 return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                        "fip": LEAGUE_AVG_FIP, "has_data": False}
+                        "fip": LEAGUE_AVG_FIP, "ip": "—", "wins": 0, "losses": 0, "has_data": False}
             stat = splits[0]["stat"]
-            innings = float(stat.get("inningsPitched", 0) or 0)
+            ip_raw = stat.get("inningsPitched", "0")
+            # Keep raw string for display e.g. "102.2"
+            ip_display = str(ip_raw) if ip_raw else "—"
+            # Parse baseball fractional innings: .1 = 1/3, .2 = 2/3
+            try:
+                if isinstance(ip_raw, str) and "." in ip_raw:
+                    whole, frac = ip_raw.split(".")
+                    innings = int(whole) + (int(frac) / 3.0 if frac in ("1","2") else float("0."+frac))
+                else:
+                    innings = float(ip_raw or 0)
+            except:
+                innings = float(stat.get("inningsPitched", 0) or 0)
             if innings < 5:
                 return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                        "fip": LEAGUE_AVG_FIP, "has_data": False}
+                        "fip": LEAGUE_AVG_FIP, "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0), "has_data": False}
             hr  = int(stat.get("homeRuns", 0) or 0)
             bb  = int(stat.get("baseOnBalls", 0) or 0)
             hbp = int(stat.get("hitByPitch", 0) or 0)
             k   = int(stat.get("strikeOuts", 0) or 0)
-            fip_raw  = ((13*hr + 3*(bb+hbp) - 2*k) / innings) + 3.10
+            # Avoid div by zero
+            innings_calc = innings if innings>0 else 1
+            fip_raw  = ((13*hr + 3*(bb+hbp) - 2*k) / innings_calc) + 3.10
             era_raw  = float(stat.get("era", LEAGUE_AVG_ERA) or LEAGUE_AVG_ERA)
             whip_raw = float(stat.get("whip", LEAGUE_AVG_WHIP) or LEAGUE_AVG_WHIP)
             k9_raw   = float(stat.get("strikeoutsPer9Inn", LEAGUE_AVG_K9) or LEAGUE_AVG_K9)
@@ -1025,12 +1005,12 @@ class PredictionEngine:
             whip = round(reliability * whip_raw + (1-reliability) * LEAGUE_AVG_WHIP, 2)
             k9 = round(reliability * k9_raw + (1-reliability) * LEAGUE_AVG_K9, 2)
             fip = round(reliability * fip_raw + (1-reliability) * LEAGUE_AVG_FIP, 2)
-            result = {"era": era, "whip": whip, "k_per_9": k9, "fip": fip, "has_data": True, "reliability": reliability}
+            result = {"era": era, "whip": whip, "k_per_9": k9, "fip": fip, "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0), "has_data": True, "reliability": reliability}
             set_cache(cache_key, result)
             return result
         except Exception as e:
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                    "fip": LEAGUE_AVG_FIP, "has_data": False}
+                    "fip": LEAGUE_AVG_FIP, "ip": "—", "wins": 0, "losses": 0, "has_data": False}
 
     def fetch_weather(self, lat: float, lon: float) -> Dict:
         cache_key = f"weather_{round(lat,2)}_{round(lon,2)}"
@@ -1122,17 +1102,15 @@ class PredictionEngine:
         # In full old model, this comes from schedule analysis
 
         # Combine with old's superior weighting - pitcher is now properly weighted
-        # YT boost initialized to 0 here - real value computed below, added after
-        yt_momentum = 0.0
-        yt_pace = 0.0
-        yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
-        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge +
+        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge + + yt_momentum
                       offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
 
         # Store edge components for logging (for future weight fitting)
 
-        # === YOUTUBE HIGHLIGHT INTELLIGENCE (real compute, adds to edge) ===
-        # yt_boost_data, yt_momentum, yt_pace already initialized above
+        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) ===
+        yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
+        yt_momentum = 0.0
+        yt_pace = 0.0
         if YT_AVAILABLE:
             try:
                 if game.get("home") and game.get("away") and "Sample" not in str(game.get("home")):
@@ -1159,13 +1137,6 @@ class PredictionEngine:
                 game["_yt_boost"] = {"status": f"error {_yt_e}", "momentum_boost":0.0}
         else:
             game["_yt_boost"] = yt_boost_data
-
-
-        # Add YT boosts to total edge after computation
-        try:
-            total_edge += yt_momentum + yt_pace
-        except:
-            pass
 
         game["_edge_components"] = {
             "c_team_edge": team_edge,
@@ -1538,7 +1509,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
     html = re.sub(r'\n{3,}', '\n\n', html)
 
     injection_lines = [
-        f"    // ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ PARLAYOS LIVE DATA ({run_date}) ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
+        f"    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ PARLAYOS LIVE DATA ({run_date}) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
         "    window.PARLAYOS_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -1551,7 +1522,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
         "      if(typeof renderDashboard==='function') renderDashboard();",
         "      if(typeof renderAll==='function') renderAll();",
         "    })();",
-        "    // ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ END PARLAYOS LIVE DATA ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
+        "    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ END PARLAYOS LIVE DATA ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
     ]
     injection = "\n".join(injection_lines)
 
@@ -1563,7 +1534,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
 
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“-Ã…â€œ {pick_count} MLB picks ÃƒÆ’Ã‚Â¢- -Ã¢â€žÂ¢ {out_path}")
+    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {pick_count} MLB picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {out_path}")
     return out_path
 
 def write_pick_to_log(game_data):
@@ -1848,10 +1819,10 @@ def main():
             "teamB_k_rate": home_bat_data.get("k_rate"),
             # Pitcher stats for Pitching tab
             "pitcherA_era": away_p_data.get("era"), "pitcherA_whip": away_p_data.get("whip"),
-            "pitcherA_k9": away_p_data.get("k_per_9"), "pitcherA_ip": away_p_data.get("ip", "-Â"),
+            "pitcherA_k9": away_p_data.get("k_per_9"), "pitcherA_ip": away_p_data.get("ip", away_p_data.get("inningsPitched", "—")),
             "pitcherA_fip": away_p_data.get("fip"), "pitcherA_w": away_p_data.get("wins"), "pitcherA_l": away_p_data.get("losses"),
             "pitcherB_era": home_p_data.get("era"), "pitcherB_whip": home_p_data.get("whip"),
-            "pitcherB_k9": home_p_data.get("k_per_9"), "pitcherB_ip": home_p_data.get("ip", "-Â"),
+            "pitcherB_k9": home_p_data.get("k_per_9"), "pitcherB_ip": home_p_data.get("ip", home_p_data.get("inningsPitched", "—")),
             "pitcherB_fip": home_p_data.get("fip"), "pitcherB_w": home_p_data.get("wins"), "pitcherB_l": home_p_data.get("losses"),
             # Lineups
             "lineupA": g.get("_lineupA", []),
@@ -1874,7 +1845,7 @@ def main():
         write_pick_to_log(game_data)
 
     export_to_html(all_games_data)
-    print(f"\nÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“-Ã…â€œ {len(all_games_data)} games exported")
+    print(f"\nÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {len(all_games_data)} games exported")
 
 
 def run(html_path: str = None):
