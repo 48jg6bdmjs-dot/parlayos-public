@@ -393,3 +393,28 @@ def main():
     picks=[{"home":"Los Angeles Lakers","away":"Golden State Warriors","home_abbr":"LAL","away_abbr":"GSW","pick":"LAL","odds":-110,"model_prob":55,"edge":3,"line":220.0,"qualifies":True}]
     export_to_html(picks)
 if __name__=="__main__": main()
+
+
+def run(html_path=None):
+    """Wrapper for run_all.py - compatible with Cloudflare build"""
+    try:
+        if html_path is None:
+            html_path = _find_v6_template()
+        # Capture picks
+        original_export = globals().get('export_to_html')
+        captured = []
+        def cap_export(picks, hp=None):
+            nonlocal captured
+            captured = picks
+            return original_export(picks, hp or html_path)
+        globals()['export_to_html'] = cap_export
+        main()
+        globals()['export_to_html'] = original_export
+        return captured
+    except Exception as e:
+        print(f"run() failed: {e}")
+        import traceback; traceback.print_exc()
+        return []
+
+def run_all_wrapper(html_path=None):
+    return run(html_path)
