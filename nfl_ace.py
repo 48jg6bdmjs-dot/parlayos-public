@@ -1,5 +1,5 @@
 """
-nfl_ace.py ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬-Ã‚Â IMPROVED VERSION inspired by old MLB ace's superior model
+nfl_ace.py ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬-Ãƒâ€šÃ‚Â IMPROVED VERSION inspired by old MLB ace's superior model
 Fixes + Improvements:
 - Form blending: 50% season, 30% last 5, 20% last 3 (weighted, not just last 10)
 - Rest factor: 0.99 no rest, 1.01 2+ days rest, applied to both offense and defense
@@ -14,6 +14,7 @@ Fixes + Improvements:
 import requests
 import json
 import os
+ODDS_KEY = "373aadcf1852b15f1d8f4f483faf6d8"
 import re
 import math
 import random
@@ -169,11 +170,13 @@ class NFLPredictionEngine:
         self.api_key = api_key
 
     def _load_secure_key(self):
-        # Prefer env var, fallback to instance key
+        # Prefer env var, fallback to instance key, then hardcoded fallback
         env = os.getenv("ODDS_API_KEY")
         if env:
             return env.strip()
-        return self.api_key
+        if getattr(self, "api_key", None):
+            return self.api_key
+        return "373aadcf1852b15f1d8f4f483faf6d8"
 
     def fetch_live_odds(self) -> List:
         url = "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds"
@@ -695,7 +698,7 @@ def export_to_html(picks: List, html_path: str) -> str:
     html = re.sub(r'[ \t]*//[^\n]*PARLAYOS NFL LIVE DATA.*?[ \t]*//[^\n]*END PARLAYOS NFL LIVE DATA[^\n]*\n?', '', html, flags=re.DOTALL)
     html = re.sub(r'\n{3,}', '\n\n', html)
     injection_lines = [
-        f"    // ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ PARLAYOS NFL LIVE DATA ({run_date}) ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
+        f"    // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ PARLAYOS NFL LIVE DATA ({run_date}) ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬",
         "    window.PARLAYOS_NFL_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -707,7 +710,7 @@ def export_to_html(picks: List, html_path: str) -> str:
         "      if(typeof renderNFLDashboard==='function') renderNFLDashboard();",
         "      if(typeof renderLeagueSchedule==='function'){ try{ renderLeagueSchedule('nfl'); }catch(e){} }",
         "    })();",
-        "    // ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ END PARLAYOS NFL LIVE DATA ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
+        "    // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ END PARLAYOS NFL LIVE DATA ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬",
     ]
     injection = "\n".join(injection_lines)
     MARKER = '    // <!--PARLAYOS_NFL_INJECT_POINT-->'
@@ -717,7 +720,7 @@ def export_to_html(picks: List, html_path: str) -> str:
         html = html.replace('</body>', f'<script>\n{injection}\n</script>\n</body>')
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“-Ã…â€œ {pick_count} NFL picks ÃƒÆ’Ã‚Â¢- -Ã¢â€žÂ¢ {html_path}")
+    print(f"ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ-Ãƒâ€¦Ã¢â‚¬Å“ {pick_count} NFL picks ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢- -ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ {html_path}")
     return html_path
 
 def load_config():
