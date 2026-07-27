@@ -1,5 +1,5 @@
 """
-nfl_ace.py ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â IMPROVED VERSION inspired by old MLB ace's superior model
+nfl_ace.py ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â IMPROVED VERSION inspired by old MLB ace's superior model
 Fixes + Improvements:
 - Form blending: 50% season, 30% last 5, 20% last 3 (weighted, not just last 10)
 - Rest factor: 0.99 no rest, 1.01 2+ days rest, applied to both offense and defense
@@ -695,7 +695,7 @@ def export_to_html(picks: List, html_path: str) -> str:
     html = re.sub(r'[ \t]*//[^\n]*PARLAYOS NFL LIVE DATA.*?[ \t]*//[^\n]*END PARLAYOS NFL LIVE DATA[^\n]*\n?', '', html, flags=re.DOTALL)
     html = re.sub(r'\n{3,}', '\n\n', html)
     injection_lines = [
-        f"    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ PARLAYOS NFL LIVE DATA ({run_date}) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
+        f"    // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ PARLAYOS NFL LIVE DATA ({run_date}) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
         "    window.PARLAYOS_NFL_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -707,7 +707,7 @@ def export_to_html(picks: List, html_path: str) -> str:
         "      if(typeof renderNFLDashboard==='function') renderNFLDashboard();",
         "      if(typeof renderLeagueSchedule==='function'){ try{ renderLeagueSchedule('nfl'); }catch(e){} }",
         "    })();",
-        "    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ END PARLAYOS NFL LIVE DATA ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
+        "    // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ END PARLAYOS NFL LIVE DATA ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
     ]
     injection = "\n".join(injection_lines)
     MARKER = '    // <!--PARLAYOS_NFL_INJECT_POINT-->'
@@ -717,7 +717,7 @@ def export_to_html(picks: List, html_path: str) -> str:
         html = html.replace('</body>', f'<script>\n{injection}\n</script>\n</body>')
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {pick_count} NFL picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {html_path}")
+    print(f"ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ {pick_count} NFL picks ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬ ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ {html_path}")
     return html_path
 
 def load_config():
@@ -780,7 +780,7 @@ def run(html_path: str):
             "real_total": real_total, "commence_time": game.get("commence_time"),
         })
     if not games:
-        print(f"  [{league.upper()}] Off-season, no live games - hub will show 0 but engine intact")
+        print(f"  [NFL] Off-season, no live games - hub will show 0 but engine intact")
     all_games_data = []
     for g in games:
         prob = engine.calculate_win_probability(g)
