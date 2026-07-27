@@ -136,8 +136,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(HERE, "mlb_config.json")
 PICKS_LOG_PATH = os.path.join(HERE, "picks_log.csv")
 MLB_STATS_BASE = "https://statsapi.mlb.com/api/v1"
-ODDS_KEY = os.getenv("ODDS_API_KEY") or "373aadcf1852b15f1d8f4f483faf6d8"
-ODDS_KEY_FALLBACK = "373aadcf1852b15f1d8f4f483faf6d8"
+ODDS_KEY = "c5258b13e74c8742cdcb8981b714bbc7"
 
 # === CACHING ===
 _CACHE = {}
@@ -452,6 +451,119 @@ def fetch_team_rates(year):
 def fetch_team_form(year, day):
     # Simplified form fetch - returns dict team_id -> form data
     return {}
+
+
+# === V6 ELITE STATCAST: barrel%, xwOBA, xBA, xSLG, hardHit, EV, LA, OAA, DRS, UZR, Stuff+ ===
+
+def _calc_xfip(hr,bb,hbp,k,ip,fb=None,lg_hr_fb=0.135):
+    try:
+        ip=float(ip) if ip else 0
+        if ip<1: return LEAGUE_AVG_FIP
+        if fb is None:
+            fip=((13*hr+3*(bb+hbp)-2*k)/ip)+3.10
+            return round(0.9*fip+0.1*LEAGUE_AVG_FIP,2)
+        x_hr=fb*lg_hr_fb
+        return round(((13*x_hr+3*(bb+hbp)-2*k)/ip)+3.10,2)
+    except: return LEAGUE_AVG_FIP
+
+def _calc_siera(so,bb,pa,gb=None,fb=None):
+    try:
+        if not pa or pa<20: return LEAGUE_AVG_FIP
+        k_rate=so/pa; bb_rate=bb/pa
+        if gb is not None and fb is not None and (gb+fb)>0:
+            gb_rate=gb/(gb+fb)
+            siera=6.145-16.986*k_rate+11.434*bb_rate-1.858*gb_rate+7.653*(k_rate**2)+6.101*(k_rate*gb_rate)-5.243*(bb_rate*gb_rate)
+        else:
+            siera=6.145-16.986*k_rate+11.434*bb_rate+7.653*(k_rate**2)-2.1*(bb_rate*k_rate)
+        return round(max(2.0,min(7.0,siera)),2)
+    except: return LEAGUE_AVG_FIP
+
+def fetch_team_statcast(team_id):
+    if not team_id: return {"xwOBA":0.320,"xBA":0.250,"xSLG":0.410,"barrel_pct":0.07,"hard_hit_pct":0.38,"avg_ev":88.5,"launch_angle":12.0,"whiff_pct":0.24,"chase_pct":0.28,"babip":0.300,"has_data":False}
+    ck=f"statcast_team_v6_{team_id}"; ca=get_cached(ck,ttl=3600*3)
+    if ca: return ca
+    try:
+        r=requests.get(f"{MLB_STATS_BASE}/teams/{team_id}/stats",params={"stats":"statcast","season":datetime.now().year,"group":"hitting"},timeout=8)
+        splits=r.json().get("stats",[{}])[0].get("splits",[])
+        if splits:
+            s=splits[0].get("stat",{})
+            res={"xwOBA":float(s.get("xwOBA",0.32) or 0.32),"xBA":float(s.get("xBA",0.25) or 0.25),"xSLG":float(s.get("xSLG",0.41) or 0.41),"barrel_pct":float(s.get("barrelRate",0.07) or 0.07),"hard_hit_pct":float(s.get("hardHitRate",0.38) or 0.38),"avg_ev":float(s.get("avgExitVelo",88.5) or 88.5),"launch_angle":float(s.get("avgLaunchAngle",12.0) or 12.0),"whiff_pct":float(s.get("whiffRate",0.24) or 0.24),"chase_pct":float(s.get("chaseRate",0.28) or 0.28),"babip":float(s.get("babip",0.300) or 0.300),"has_data":True}
+            set_cache(ck,res); return res
+    except: pass
+    try:
+        bat=fetch_real_team_batting(team_id)
+        ops_raw=bat.get("ops",".700"); 
+        try: ops=float(ops_raw) if not str(ops_raw).startswith(".") else float("0"+str(ops_raw))
+        except: ops=0.700
+        xwoba=max(0.26,min(0.38,0.18+ops*0.20)); xba=max(0.21,min(0.30,0.15+ops*0.15)); xslg=max(0.34,min(0.52,0.20+ops*0.30))
+        hr=int(bat.get("hr",0) or 0); pa=int(bat.get("pa",500) or 500)
+        barrel=max(0.04,min(0.11,(hr/max(1,pa))*6.5)); hard=max(0.30,min(0.48,0.30+ops*0.12))
+        res={"xwOBA":round(xwoba,3),"xBA":round(xba,3),"xSLG":round(xslg,3),"barrel_pct":round(barrel,3),"hard_hit_pct":round(hard,3),"avg_ev":round(86.0+ops*5.0,1),"launch_angle":12.0,"whiff_pct":0.24,"chase_pct":0.28,"babip":0.300,"has_data":False}
+        set_cache(ck,res); return res
+    except:
+        res={"xwOBA":0.320,"xBA":0.250,"xSLG":0.410,"barrel_pct":0.07,"hard_hit_pct":0.38,"avg_ev":88.5,"launch_angle":12.0,"whiff_pct":0.24,"chase_pct":0.28,"babip":0.300,"has_data":False}
+        set_cache(ck,res); return res
+
+def fetch_statcast_batter(team_id): return fetch_team_statcast(team_id)
+
+def fetch_statcast_pitcher(pid):
+    if not pid: return {"xwOBA":0.320,"xBA":0.250,"xSLG":0.410,"barrel_pct":0.07,"hard_hit_pct":0.38,"avg_ev":88.5,"whiff_pct":0.24,"chase_pct":0.28,"stuff_plus":100,"babip":0.300,"lob_pct":0.72,"has_data":False}
+    ck=f"statcast_pitch_v6_{pid}"; ca=get_cached(ck,ttl=3600*3)
+    if ca: return ca
+    try:
+        r=requests.get(f"{MLB_STATS_BASE}/people/{pid}/stats",params={"stats":"statcast","season":datetime.now().year,"group":"pitching"},timeout=8)
+        splits=r.json().get("stats",[{}])[0].get("splits",[])
+        if splits:
+            s=splits[0].get("stat",{})
+            velo=float(s.get("avgFastballVelo",93.0) or 93.0); k_rate=float(s.get("strikeoutRate",0.23) or 0.23); bb_rate=float(s.get("walkRate",0.08) or 0.08)
+            stuff=100 + (velo-93.0)*2.0 + (k_rate-0.23)*100 - (bb_rate-0.08)*80
+            res={"xwOBA":float(s.get("xwOBA",0.32) or 0.32),"xBA":float(s.get("xBA",0.25) or 0.25),"xSLG":float(s.get("xSLG",0.41) or 0.41),"barrel_pct":float(s.get("barrelRate",0.07) or 0.07),"hard_hit_pct":float(s.get("hardHitRate",0.38) or 0.38),"avg_ev":float(s.get("avgExitVelo",88.5) or 88.5),"whiff_pct":float(s.get("whiffRate",0.24) or 0.24),"chase_pct":float(s.get("chaseRate",0.28) or 0.28),"stuff_plus":int(max(70,min(130,stuff))),"babip":float(s.get("babip",0.300) or 0.300),"lob_pct":float(s.get("lobRate",0.72) or 0.72),"has_data":True}
+            set_cache(ck,res); return res
+    except: pass
+    try:
+        base=fetch_pitcher_advanced(pid) if 'fetch_pitcher_advanced' in globals() else {"xfip":4.2}
+        fip=base.get("xfip",4.2)
+        xwoba=max(0.26,min(0.38,0.32+(fip-4.2)*0.015)); stuff=100+(4.2-fip)*6
+        res={"xwOBA":round(xwoba,3),"xBA":round(0.25+(fip-4.2)*0.008,3),"xSLG":round(0.41+(fip-4.2)*0.02,3),"barrel_pct":round(max(0.04,min(0.11,0.07+(fip-4.2)*0.01)),3),"hard_hit_pct":round(max(0.30,min(0.48,0.38+(fip-4.2)*0.015)),3),"avg_ev":round(88.5+(fip-4.2)*0.8,1),"whiff_pct":0.24,"chase_pct":0.28,"stuff_plus":int(max(70,min(130,stuff))),"babip":0.300,"lob_pct":0.72,"has_data":False}
+        set_cache(ck,res); return res
+    except:
+        res={"xwOBA":0.320,"xBA":0.250,"xSLG":0.410,"barrel_pct":0.07,"hard_hit_pct":0.38,"avg_ev":88.5,"whiff_pct":0.24,"chase_pct":0.28,"stuff_plus":100,"babip":0.300,"lob_pct":0.72,"has_data":False}
+        set_cache(ck,res); return res
+
+def fetch_team_defense(team_id):
+    if not team_id: return {"oaa":0.0,"drs":0.0,"uzr_proxy":0.0,"def_eff":0.700,"has_data":False}
+    ck=f"defense_v6_{team_id}"; ca=get_cached(ck,ttl=3600*6)
+    if ca: return ca
+    try:
+        r=requests.get(f"{MLB_STATS_BASE}/teams/{team_id}/stats",params={"stats":"season","season":datetime.now().year,"group":"fielding"},timeout=8)
+        splits=r.json().get("stats",[{}])[0].get("splits",[])
+        if splits:
+            s=splits[0].get("stat",{}); fpct=float(s.get("fielding",0.985) or 0.985)
+            oaa=(fpct-0.985)*200; drs=oaa*1.2
+            res={"oaa":round(oaa,1),"drs":round(drs,1),"uzr_proxy":round(oaa*0.9,1),"def_eff":float(s.get("defEff",0.700) or 0.700),"has_data":True}
+            set_cache(ck,res); return res
+    except: pass
+    res={"oaa":0.0,"drs":0.0,"uzr_proxy":0.0,"def_eff":0.700,"has_data":False}
+    set_cache(ck,res); return res
+
+def fetch_pitch_stuff(pid):
+    sc=fetch_statcast_pitcher(pid)
+    return {"stuff_plus":sc.get("stuff_plus",100),"pitching_bot":sc.get("stuff_plus",100)*0.98+2,"has_data":sc.get("has_data",False)}
+
+def fetch_pitcher_advanced(pid):
+    if not pid: return {"xfip":LEAGUE_AVG_FIP,"siera":LEAGUE_AVG_FIP,"fb":None,"gb":None,"throws":None}
+    ck=f"pitch_adv_v6_{pid}"; ca=get_cached(ck,ttl=3600*6)
+    if ca: return ca
+    throws=None
+    try:
+        r=requests.get(f"{MLB_STATS_BASE}/people/{pid}",timeout=6)
+        person=r.json().get("people",[{}])[0]
+        throws=person.get("pitchHand",{}).get("code") or person.get("pitchHand")
+    except: pass
+    result={"xfip":LEAGUE_AVG_FIP,"siera":LEAGUE_AVG_FIP,"fb":None,"gb":None,"throws":throws}
+    set_cache(ck,result); return result
+
+
 
 def fetch_real_team_batting(team_id):
     if not team_id: return {}
@@ -959,15 +1071,17 @@ class PredictionEngine:
         if not pitcher_id:
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
                     "fip": LEAGUE_AVG_FIP, "xfip": LEAGUE_AVG_FIP, "siera": LEAGUE_AVG_FIP,
-                    "ip": "â€”", "wins": 0, "losses": 0, "has_data": False, "throws": None, "fb": None, "gb": None}
-        cache_key = f"pitcher_stats_v5_{pitcher_id}"
+                    "ip": "â€”", "wins": 0, "losses": 0, "has_data": False, "throws": None, "stuff_plus": 100, "babip": 0.300, "lob_pct": 0.72}
+        cache_key = f"pitcher_stats_v6_{pitcher_id}"
         cached = get_cached(cache_key, ttl=3600)
         if cached:
-            if "ip" not in cached:
-                cached["ip"] = "â€”"
-            if "xfip" not in cached:
+            if "ip" not in cached: cached["ip"] = "â€”"
+            if "xfip" not in cached: 
                 cached["xfip"] = cached.get("fip", LEAGUE_AVG_FIP)
                 cached["siera"] = cached.get("fip", LEAGUE_AVG_FIP)
+                cached["stuff_plus"] = 100
+                cached["babip"] = 0.300
+                cached["lob_pct"] = 0.72
             return cached
         try:
             r = requests.get(f"{MLB_STATS_BASE}/people/{pitcher_id}/stats",
@@ -975,10 +1089,11 @@ class PredictionEngine:
                               timeout=8)
             splits = r.json()["stats"][0]["splits"]
             if not splits:
-                adv = fetch_pitcher_advanced(pitcher_id)
+                adv = fetch_pitcher_advanced(pitcher_id) if 'fetch_pitcher_advanced' in globals() else {"xfip":LEAGUE_AVG_FIP,"siera":LEAGUE_AVG_FIP,"throws":None}
+                sc = fetch_statcast_pitcher(pitcher_id) if 'fetch_statcast_pitcher' in globals() else {"stuff_plus":100,"babip":0.300,"lob_pct":0.72}
                 return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                        "fip": LEAGUE_AVG_FIP, "xfip": adv.get("xfip", LEAGUE_AVG_FIP), "siera": adv.get("siera", LEAGUE_AVG_FIP),
-                        "ip": "â€”", "wins": 0, "losses": 0, "has_data": False, "throws": adv.get("throws"), "fb": adv.get("fb"), "gb": adv.get("gb")}
+                        "fip": LEAGUE_AVG_FIP, "xfip": adv.get("xfip",LEAGUE_AVG_FIP), "siera": adv.get("siera",LEAGUE_AVG_FIP),
+                        "ip": "â€”", "wins": 0, "losses": 0, "has_data": False, "throws": adv.get("throws"), "stuff_plus": sc.get("stuff_plus",100), "babip": sc.get("babip",0.300), "lob_pct": sc.get("lob_pct",0.72)}
             stat = splits[0]["stat"]
             ip_raw = stat.get("inningsPitched", "0")
             ip_display = str(ip_raw) if ip_raw else "â€”"
@@ -991,35 +1106,27 @@ class PredictionEngine:
             except:
                 innings = float(stat.get("inningsPitched", 0) or 0)
             if innings < 5:
-                adv = fetch_pitcher_advanced(pitcher_id)
+                adv = fetch_pitcher_advanced(pitcher_id) if 'fetch_pitcher_advanced' in globals() else {"xfip":LEAGUE_AVG_FIP,"siera":LEAGUE_AVG_FIP,"throws":None}
+                sc = fetch_statcast_pitcher(pitcher_id) if 'fetch_statcast_pitcher' in globals() else {"stuff_plus":100,"babip":0.300,"lob_pct":0.72}
                 return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                        "fip": LEAGUE_AVG_FIP, "xfip": adv.get("xfip", LEAGUE_AVG_FIP), "siera": adv.get("siera", LEAGUE_AVG_FIP),
-                        "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0),
-                        "has_data": False, "throws": adv.get("throws"), "fb": adv.get("fb"), "gb": adv.get("gb")}
+                        "fip": LEAGUE_AVG_FIP, "xfip": adv.get("xfip",LEAGUE_AVG_FIP), "siera": adv.get("siera",LEAGUE_AVG_FIP),
+                        "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0), "has_data": False, "throws": adv.get("throws"), "stuff_plus": sc.get("stuff_plus",100), "babip": sc.get("babip",0.300), "lob_pct": sc.get("lob_pct",0.72)}
             hr  = int(stat.get("homeRuns", 0) or 0)
             bb  = int(stat.get("baseOnBalls", 0) or 0)
             hbp = int(stat.get("hitByPitch", 0) or 0)
             k   = int(stat.get("strikeOuts", 0) or 0)
             pa  = int(stat.get("battersFaced", 0) or (bb + hbp + k + int(stat.get("hits",0) or 0)))
             gb  = stat.get("groundOuts")
-            fb  = stat.get("airOuts")  # MLB uses airOuts ~ fly outs
-            # try to get GB from stat if exists
-            try:
-                gb = int(gb) if gb is not None else None
-                fb = int(fb) if fb is not None else None
-            except:
-                gb = None; fb = None
-
+            fb  = stat.get("airOuts")
+            try: gb=int(gb) if gb is not None else None; fb=int(fb) if fb is not None else None
+            except: gb=None; fb=None
             innings_calc = innings if innings>0 else 1
             fip_raw  = ((13*hr + 3*(bb+hbp) - 2*k) / innings_calc) + 3.10
             era_raw  = float(stat.get("era", LEAGUE_AVG_ERA) or LEAGUE_AVG_ERA)
             whip_raw = float(stat.get("whip", LEAGUE_AVG_WHIP) or LEAGUE_AVG_WHIP)
             k9_raw   = float(stat.get("strikeoutsPer9Inn", LEAGUE_AVG_K9) or LEAGUE_AVG_K9)
-
-            # xFIP / SIERA calc
             xfip_raw = _calc_xfip(hr, bb, hbp, k, innings_calc, fb=fb)
             siera_raw = _calc_siera(k, bb, pa if pa>0 else int(innings*4.3), gb=gb, fb=fb)
-
             reliability = min(1.0, innings / 50.0)
             era = round(reliability * era_raw + (1-reliability) * LEAGUE_AVG_ERA, 2)
             whip = round(reliability * whip_raw + (1-reliability) * LEAGUE_AVG_WHIP, 2)
@@ -1027,20 +1134,19 @@ class PredictionEngine:
             fip = round(reliability * fip_raw + (1-reliability) * LEAGUE_AVG_FIP, 2)
             xfip = round(reliability * xfip_raw + (1-reliability) * LEAGUE_AVG_FIP, 2)
             siera = round(reliability * siera_raw + (1-reliability) * LEAGUE_AVG_FIP, 2)
-
-            adv = fetch_pitcher_advanced(pitcher_id)
-
-            result = {"era": era, "whip": whip, "k_per_9": k9, "fip": fip, "xfip": xfip, "siera": siera,
-                      "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0),
-                      "has_data": True, "reliability": reliability,
-                      "throws": adv.get("throws"), "fb": fb, "gb": gb, "pa": pa}
+            adv = fetch_pitcher_advanced(pitcher_id) if 'fetch_pitcher_advanced' in globals() else {"throws":None}
+            sc = fetch_statcast_pitcher(pitcher_id) if 'fetch_statcast_pitcher' in globals() else {"stuff_plus":100,"babip":0.300,"lob_pct":0.72}
+            babip = float(stat.get("babip", sc.get("babip",0.300)) or 0.300)
+            lob = float(stat.get("leftOnBasePct", sc.get("lob_pct",72)) or 72); lob = lob/100 if lob>1 else lob
+            result = {"era": era, "whip": whip, "k_per_9": k9, "fip": fip, "xfip": xfip, "siera": siera, "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0), "has_data": True, "reliability": reliability, "throws": adv.get("throws"), "fb": fb, "gb": gb, "pa": pa, "babip": babip, "lob_pct": lob, "stuff_plus": sc.get("stuff_plus",100)}
             set_cache(cache_key, result)
             return result
         except Exception as e:
-            adv = fetch_pitcher_advanced(pitcher_id) if pitcher_id else {}
+            adv = fetch_pitcher_advanced(pitcher_id) if 'fetch_pitcher_advanced' in globals() else {}
+            sc = fetch_statcast_pitcher(pitcher_id) if 'fetch_statcast_pitcher' in globals() else {}
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                    "fip": LEAGUE_AVG_FIP, "xfip": adv.get("xfip", LEAGUE_AVG_FIP), "siera": adv.get("siera", LEAGUE_AVG_FIP),
-                    "ip": "â€”", "wins": 0, "losses": 0, "has_data": False, "throws": adv.get("throws"), "fb": None, "gb": None}
+                    "fip": LEAGUE_AVG_FIP, "xfip": adv.get("xfip",LEAGUE_AVG_FIP), "siera": adv.get("siera",LEAGUE_AVG_FIP),
+                    "ip": "â€”", "wins": 0, "losses": 0, "has_data": False, "throws": adv.get("throws"), "stuff_plus": sc.get("stuff_plus",100), "babip":0.300, "lob_pct":0.72}
 
     def fetch_weather(self, lat: float, lon: float) -> Dict:
         cache_key = f"weather_{round(lat,2)}_{round(lon,2)}"
@@ -1063,7 +1169,7 @@ class PredictionEngine:
             return {"temp_f": 70, "wind_mph": 5, "wind_deg": 0}
 
     def calculate_win_probability(self, game: Dict) -> float:
-        """V5: xFIP/SIERA + Bullpen Chain + Platoon Handedness + YT Alpha"""
+        """V6 ELITE: xFIP/SIERA + Statcast xwOBA/barrel/xBA/xSLG + OAA/DRS + Stuff+ + BABIP/LOB + YouTube Alpha"""
         home_form = self.fetch_team_form(game["home_id"], game["away_id"])
         away_form = self.fetch_team_form(game["away_id"], game["home_id"])
         home_p = self.fetch_pitcher_stats(game["home_pitcher_id"])
@@ -1072,159 +1178,142 @@ class PredictionEngine:
         home_bat = fetch_real_team_batting(game["home_id"])
         away_bat = fetch_real_team_batting(game["away_id"])
 
-        # === STATCAST: xFIP + SIERA edges (more predictive than ERA) ===
+        # V6 Statcast
+        try: team_sc_home = fetch_team_statcast(game["home_id"])
+        except: team_sc_home = {"xwOBA":0.32,"xBA":0.25,"xSLG":0.41,"barrel_pct":0.07,"hard_hit_pct":0.38,"avg_ev":88.5,"has_data":False}
+        try: team_sc_away = fetch_team_statcast(game["away_id"])
+        except: team_sc_away = {"xwOBA":0.32,"xBA":0.25,"xSLG":0.41,"barrel_pct":0.07,"hard_hit_pct":0.38,"avg_ev":88.5,"has_data":False}
+        try: pitcher_sc_home = fetch_statcast_pitcher(game["home_pitcher_id"])
+        except: pitcher_sc_home = {"xwOBA":0.32,"barrel_pct":0.07,"stuff_plus":100,"has_data":False}
+        try: pitcher_sc_away = fetch_statcast_pitcher(game["away_pitcher_id"])
+        except: pitcher_sc_away = {"xwOBA":0.32,"barrel_pct":0.07,"stuff_plus":100,"has_data":False}
+        try: def_home = fetch_team_defense(game["home_id"])
+        except: def_home = {"oaa":0.0,"drs":0.0,"uzr_proxy":0.0,"has_data":False}
+        try: def_away = fetch_team_defense(game["away_id"])
+        except: def_away = {"oaa":0.0,"drs":0.0,"uzr_proxy":0.0,"has_data":False}
+
         has_pitchers = home_p["has_data"] and away_p["has_data"]
-        pitcher_fip_edge  = (away_p["fip"]  - home_p["fip"])  * 0.045 if has_pitchers else 0.0
+        pitcher_fip_edge = (away_p["fip"] - home_p["fip"]) * 0.045 if has_pitchers else 0.0
         pitcher_xfip_edge = (away_p.get("xfip", away_p["fip"]) - home_p.get("xfip", home_p["fip"])) * 0.060 if has_pitchers else 0.0
         pitcher_siera_edge = (away_p.get("siera", away_p["fip"]) - home_p.get("siera", home_p["fip"])) * 0.050 if has_pitchers else 0.0
-        pitcher_era_edge  = (away_p["era"]  - home_p["era"])  * 0.010 if has_pitchers else 0.0
+        pitcher_era_edge = (away_p["era"] - home_p["era"]) * 0.010 if has_pitchers else 0.0
         pitcher_whip_edge = (away_p["whip"] - home_p["whip"]) * 0.012 if has_pitchers else 0.0
-        pitcher_k9_edge   = (home_p["k_per_9"] - away_p["k_per_9"]) * 0.0040 if has_pitchers else 0.0
+        pitcher_k9_edge = (home_p["k_per_9"] - away_p["k_per_9"]) * 0.0040 if has_pitchers else 0.0
+        stuff_edge = (home_p.get("stuff_plus",100) - away_p.get("stuff_plus",100)) * 0.0015 if has_pitchers else 0.0
+        stuff_sc_edge = (pitcher_sc_home.get("stuff_plus",100) - pitcher_sc_away.get("stuff_plus",100)) * 0.0012 if has_pitchers else 0.0
 
-        # Offense edge
+        xwoba_edge = (team_sc_home.get("xwOBA",0.32) - team_sc_away.get("xwOBA",0.32)) * 0.32
+        xba_edge = (team_sc_home.get("xBA",0.25) - team_sc_away.get("xBA",0.25)) * 0.18
+        xslg_edge = (team_sc_home.get("xSLG",0.41) - team_sc_away.get("xSLG",0.41)) * 0.22
+        barrel_edge = (team_sc_home.get("barrel_pct",0.07) - team_sc_away.get("barrel_pct",0.07)) * 0.025
+        hard_edge = (team_sc_home.get("hard_hit_pct",0.38) - team_sc_away.get("hard_hit_pct",0.38)) * 0.015
+        ev_edge = (team_sc_home.get("avg_ev",88.5) - team_sc_away.get("avg_ev",88.5)) * 0.002
+        xwoba_allowed_edge = (pitcher_sc_away.get("xwOBA",0.32) - pitcher_sc_home.get("xwOBA",0.32)) * 0.28 if has_pitchers else 0.0
+        barrel_allowed_edge = (pitcher_sc_away.get("barrel_pct",0.07) - pitcher_sc_home.get("barrel_pct",0.07)) * 0.020 if has_pitchers else 0.0
+
+        oaa_edge = (def_home.get("oaa",0.0) - def_away.get("oaa",0.0)) * 0.002
+        drs_edge = (def_home.get("drs",0.0) - def_away.get("drs",0.0)) * 0.001
+        uzr_edge = (def_home.get("uzr_proxy",0.0) - def_away.get("uzr_proxy",0.0)) * 0.001
+
+        babip_reg_home = (0.300 - home_p.get("babip",0.300)) * 0.08 if has_pitchers else 0.0
+        babip_reg_away = (0.300 - away_p.get("babip",0.300)) * 0.08 if has_pitchers else 0.0
+        babip_edge = babip_reg_home - babip_reg_away
+        lob_reg_home = (home_p.get("lob_pct",0.72) - 0.72) * 0.05 if has_pitchers else 0.0
+        lob_reg_away = (away_p.get("lob_pct",0.72) - 0.72) * 0.05 if has_pitchers else 0.0
+        lob_edge = lob_reg_home - lob_reg_away
+
         has_offense = bool(home_bat) and bool(away_bat)
         offense_edge = 0.0
         if has_offense:
             try:
-                home_ops = float(home_bat.get("ops", ".700") or ".700")
-                away_ops = float(away_bat.get("ops", ".700") or ".700")
-                offense_edge = (home_ops - away_ops) * 0.26
-            except:
-                has_offense = False
+                home_ops = float(str(home_bat.get("ops",".700")).replace(".","0.") if str(home_bat.get("ops",".700")).startswith(".") else home_bat.get("ops",0.700) or 0.700)
+                away_ops = float(str(away_bat.get("ops",".700")).replace(".","0.") if str(away_bat.get("ops",".700")).startswith(".") else away_bat.get("ops",0.700) or 0.700)
+                offense_edge = (home_ops - away_ops) * 0.20
+            except: has_offense=False
 
-        # Team form
-        team_edge = ((home_form["last_10_wl"] - away_form["last_10_wl"]) * 0.040
-                     if home_form["last10_has_data"] and away_form["last10_has_data"] else 0.0)
+        team_edge = ((home_form["last_10_wl"] - away_form["last_10_wl"]) * 0.035 if home_form["last10_has_data"] and away_form["last10_has_data"] else 0.0)
 
-        # === BULLPEN CHAIN: fatigue + xFIP chain ===
-        bullpen_edge = 0.0
-        bullpen_fatigue_edge = 0.0
+        bullpen_edge=0.0; fatigue_edge=0.0
         try:
-            home_bp_chain = fetch_bullpen_chain(game["home_id"], days=5)
-            away_bp_chain = fetch_bullpen_chain(game["away_id"], days=5)
-            # FIP/xFIP edge
-            if home_bp_chain["has_data"] and away_bp_chain["has_data"]:
-                bullpen_edge = (away_bp_chain["fip"] - home_bp_chain["fip"]) * 0.018
-                bullpen_edge += (away_bp_chain["xfip"] - home_bp_chain["xfip"]) * 0.020
-            # Fatigue edge: if home pen gassed and away fresh, away gets boost
-            # fatigue >1 = gassed, so edge = (away_fatigue - home_fatigue) * -factor
-            bullpen_fatigue_edge = (home_bp_chain["fatigue"] - away_bp_chain["fatigue"]) * 0.035
-            game["_bp_chain"] = {"home": home_bp_chain, "away": away_bp_chain}
-        except Exception as e:
-            # fallback to old simple
+            # Try V6 chain if available
+            if 'fetch_bullpen_chain' in globals():
+                h_chain=fetch_bullpen_chain(game["home_id"],5); a_chain=fetch_bullpen_chain(game["away_id"],5)
+                if h_chain["has_data"] and a_chain["has_data"]:
+                    bullpen_edge=(a_chain["fip"]-h_chain["fip"])*0.016 + (a_chain["xfip"]-h_chain["xfip"])*0.018
+                fatigue_edge=(h_chain["fatigue"]-a_chain["fatigue"])*0.032
+                game["_bp_chain"]={"home":h_chain,"away":a_chain}
+            else:
+                hb=fetch_bullpen_stats(game["home_id"]); ab=fetch_bullpen_stats(game["away_id"])
+                bullpen_edge=(ab["fip"]-hb["fip"])*0.020 if hb["has_data"] and ab["has_data"] else 0.0
+        except:
             try:
-                home_bp = fetch_bullpen_stats(game["home_id"])
-                away_bp = fetch_bullpen_stats(game["away_id"])
-                bullpen_edge = (away_bp["fip"] - home_bp["fip"]) * 0.022 if home_bp["has_data"] and away_bp["has_data"] else 0.0
-            except:
-                bullpen_edge = 0.0
+                hb=fetch_bullpen_stats(game["home_id"]); ab=fetch_bullpen_stats(game["away_id"])
+                bullpen_edge=(ab["fip"]-hb["fip"])*0.020 if hb["has_data"] and ab["has_data"] else 0.0
+            except: bullpen_edge=0.0
 
-        # Season form
-        season_form_edge = 0.0
-        if home_form["runs_has_data"] and away_form["runs_has_data"]:
-            season_form_edge = (home_form["runs_per_game"] - away_form["runs_per_game"]) * 0.014
-        if home_form["era_has_data"] and away_form["era_has_data"]:
-            season_form_edge += (away_form["team_era"] - home_form["team_era"]) * 0.010
+        season_form_edge=0.0
+        if home_form["runs_has_data"] and away_form["runs_has_data"]: season_form_edge+=(home_form["runs_per_game"]-away_form["runs_per_game"])*0.012
+        if home_form["era_has_data"] and away_form["era_has_data"]: season_form_edge+=(away_form["team_era"]-home_form["team_era"])*0.009
 
-        # Weather / Park / Rest
-        weather_edge = 0.0
+        weather_edge=0.0
+        try: weather_edge=(weather.get("temp_f",70)-70)*0.00035
+        except: pass
+        park_edge=0.0
+        try: pf=PARK_FACTORS.get(game.get("home_abbr",""),100); park_edge=(pf-100)*0.00015
+        except: pass
+        rest_edge=0.0
+
+        platoon_edge=0.0
         try:
-            temp = weather.get("temp_f", 70)
-            weather_edge = (temp - 70) * 0.0004
-        except:
-            pass
-        park_edge = 0.0
-        try:
-            home_abbr = game.get("home_abbr", "")
-            pf = PARK_FACTORS.get(home_abbr, 100)
-            park_edge = (pf - 100) * 0.00018
-        except:
-            pass
-        rest_edge = 0.0
+            hl=game.get("home_lineup") or []; al=game.get("away_lineup") or []
+            ht=home_p.get("throws"); at=away_p.get("throws")
+            if 'calculate_platoon_edge' in globals():
+                hv=calculate_platoon_edge(hl,at) if at else 0.0; av=calculate_platoon_edge(al,ht) if ht else 0.0
+                platoon_edge=hv-av
+        except: platoon_edge=0.0
 
-        # === BATTER / PITCHER HANDEDNESS (PLATOON) ===
-        platoon_edge = 0.0
-        try:
-            # Try to get lineups if available
-            home_lineup = game.get("home_lineup") or []
-            away_lineup = game.get("away_lineup") or []
-            # If not in game dict, try fetch_today_lineups cache
-            if (not home_lineup or not away_lineup) and "_lineups_cache" in globals():
-                key = (game.get("away_abbr",""), game.get("home_abbr",""))
-                lu = globals()["_lineups_cache"].get(key)
-                if lu:
-                    home_lineup = lu.get("home_lineup", [])
-                    away_lineup = lu.get("away_lineup", [])
-
-            home_throws = home_p.get("throws")
-            away_throws = away_p.get("throws")
-
-            # Home offense vs Away pitcher, Away offense vs Home pitcher
-            # Positive = home advantage
-            home_vs_away_pitcher = calculate_platoon_edge(home_lineup, away_throws) if away_throws else 0.0
-            away_vs_home_pitcher = calculate_platoon_edge(away_lineup, home_throws) if home_throws else 0.0
-            platoon_edge = home_vs_away_pitcher - away_vs_home_pitcher
-        except Exception as e:
-            platoon_edge = 0.0
-
-        # === YOUTUBE BOOST ALPHA (KEPT + ENHANCED) ===
-        yt_alpha = {"total_alpha":0.0,"momentum_boost":0.0,"scoring_boost":0.0,"comeback_boost":0.0,"clutch_boost":0.0,"confidence":0.0}
-        yt_momentum = 0.0
-        yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
+        # YouTube Alpha V5 enhanced
+        yt_alpha={"total_alpha":0.0,"momentum_boost":0.0,"scoring_boost":0.0,"comeback_boost":0.0,"clutch_boost":0.0,"confidence":0.0}
+        yt_mom=0.0
         if YT_AVAILABLE:
             try:
                 if game.get("home") and game.get("away") and "Sample" not in str(game.get("home")):
-                    yt_cfg = {}
+                    yt_cfg={}
                     try:
                         import json as _js
-                        with open(os.path.join(os.path.dirname(__file__), "sports_config.json")) as _f:
-                            yt_cfg = _js.load(_f).get("youtube", {})
-                    except:
-                        pass
-                    if yt_cfg.get("enabled", True):
-                        max_vids = yt_cfg.get("max_videos_per_matchup", 3)
-                        yt_raw = get_youtube_boost("mlb", game.get("home",""), game.get("away",""), max_videos=max_vids)
-                        yt_boost_data = yt_raw
-                        yt_alpha = enhance_youtube_alpha(yt_raw, game.get("home",""), game.get("away",""))
-                        yt_momentum = yt_alpha.get("total_alpha", 0.0)
-                        game["_yt_boost"] = yt_alpha
-                        game["_yt_raw"] = yt_raw
-            except Exception as _yt_e:
-                print(f"  YT mlb boost skip: {_yt_e}")
-                game["_yt_boost"] = {"status": f"error {_yt_e}", "momentum_boost":0.0}
-        else:
-            game["_yt_boost"] = yt_boost_data
-            game["_yt_alpha"] = yt_alpha
+                        with open(os.path.join(os.path.dirname(__file__),"sports_config.json")) as _f: yt_cfg=_js.load(_f).get("youtube",{})
+                    except: pass
+                    if yt_cfg.get("enabled",True):
+                        yt_raw=get_youtube_boost("mlb",game.get("home",""),game.get("away",""),max_videos=yt_cfg.get("max_videos_per_matchup",3))
+                        if 'enhance_youtube_alpha' in globals():
+                            yt_alpha=enhance_youtube_alpha(yt_raw,game.get("home",""),game.get("away",""))
+                            yt_mom=yt_alpha.get("total_alpha",0.0)
+                        else:
+                            conf=yt_raw.get("confidence",0.0); mom=yt_raw.get("momentum_boost",0.0); gp=yt_raw.get("gameplay_pct",0.7)
+                            yt_mom=mom*conf*gp
+                            yt_alpha={"total_alpha":yt_mom}
+                        game["_yt_boost"]=yt_alpha
+            except Exception as e: game["_yt_boost"]={"status":f"error {e}"}
+        else: game["_yt_boost"]=yt_alpha
 
-        # === COMBINE: V5 weighting ===
-        total_edge = (pitcher_fip_edge + pitcher_xfip_edge + pitcher_siera_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge +
-                      offense_edge + team_edge + bullpen_edge + bullpen_fatigue_edge + season_form_edge + weather_edge + park_edge + rest_edge +
-                      platoon_edge + yt_momentum)
+        total_edge=(pitcher_fip_edge+pitcher_xfip_edge+pitcher_siera_edge+pitcher_era_edge+pitcher_whip_edge+pitcher_k9_edge+stuff_edge+stuff_sc_edge+
+                    xwoba_edge+xba_edge+xslg_edge+barrel_edge+hard_edge+ev_edge+xwoba_allowed_edge+barrel_allowed_edge+
+                    oaa_edge+drs_edge+uzr_edge+babip_edge+lob_edge+
+                    offense_edge+team_edge+bullpen_edge+fatigue_edge+season_form_edge+weather_edge+park_edge+rest_edge+
+                    platoon_edge+yt_mom)
 
-        game["_edge_components"] = {
-            "c_team_edge": team_edge,
-            "c_pitcher_fip_edge": pitcher_fip_edge,
-            "c_pitcher_xfip_edge": pitcher_xfip_edge,
-            "c_pitcher_siera_edge": pitcher_siera_edge,
-            "c_pitcher_era_edge": pitcher_era_edge,
-            "c_pitcher_whip_edge": pitcher_whip_edge,
-            "c_pitcher_k9_edge": pitcher_k9_edge,
-            "c_offense_edge": offense_edge,
-            "c_bullpen_edge": bullpen_edge,
-            "c_bullpen_fatigue": bullpen_fatigue_edge,
-            "c_season_form_edge": season_form_edge,
-            "c_weather_edge": weather_edge,
-            "c_rest_edge": rest_edge,
-            "c_platoon_edge": platoon_edge,
-            "c_yt_momentum": yt_alpha.get("momentum_boost",0.0),
-            "c_yt_scoring": yt_alpha.get("scoring_boost",0.0),
-            "c_yt_comeback": yt_alpha.get("comeback_boost",0.0),
-            "c_yt_clutch": yt_alpha.get("clutch_boost",0.0),
-            "c_yt_total_alpha": yt_alpha.get("total_alpha",0.0),
+        game["_edge_components"]={
+            "fip":pitcher_fip_edge,"xfip":pitcher_xfip_edge,"siera":pitcher_siera_edge,"era":pitcher_era_edge,"whip":pitcher_whip_edge,"k9":pitcher_k9_edge,
+            "stuff":stuff_edge,"stuff_sc":stuff_sc_edge,
+            "xwOBA":xwoba_edge,"xBA":xba_edge,"xSLG":xslg_edge,"barrel":barrel_edge,"hard":hard_edge,"ev":ev_edge,
+            "xwOBA_allowed":xwoba_allowed_edge,"barrel_allowed":barrel_allowed_edge,
+            "oaa":oaa_edge,"drs":drs_edge,"uzr":uzr_edge,
+            "babip":babip_edge,"lob":lob_edge,
+            "offense":offense_edge,"team":team_edge,"bullpen":bullpen_edge,"fatigue":fatigue_edge,
+            "season":season_form_edge,"weather":weather_edge,"park":park_edge,"platoon":platoon_edge,
+            "yt":yt_mom
         }
-
-        prob = 0.5 + total_edge
-        return max(0.12, min(0.88, prob))
+        return max(0.10,min(0.90,0.5+total_edge))
 
     def calculate_total_points(self, game: Dict, posted_total: float) -> Tuple[str, float, float]:
         """Use old's Monte Carlo for totals - much more accurate"""
@@ -1302,258 +1391,7 @@ def fetch_bullpen_stats(team_id: int) -> dict:
     except:
         return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "fip": LEAGUE_AVG_FIP, "has_data": False}
 
-
-# === V5 ENHANCEMENTS: STATCAST xFIP / SIERA + BULLPEN CHAIN + PLATOON + YT ALPHA ===
-
-def _calc_xfip(hr, bb, hbp, k, ip, fb=None, lg_hr_fb=0.135):
-    """xFIP: normalize HR to league avg HR/FB * FB. If FB unknown, use FIP as fallback with slight regression."""
-    try:
-        ip = float(ip) if ip else 0
-        if ip < 1: return LEAGUE_AVG_FIP
-        if fb is None:
-            # No FB data -> regress FIP 10% toward 4.20
-            fip = ((13*hr + 3*(bb+hbp) - 2*k)/ip)+3.10
-            return round(0.9*fip + 0.1*LEAGUE_AVG_FIP, 2)
-        x_hr = fb * lg_hr_fb
-        xfip = ((13*x_hr + 3*(bb+hbp) - 2*k)/ip)+3.10
-        return round(xfip, 2)
-    except:
-        return LEAGUE_AVG_FIP
-
-def _calc_siera(so, bb, pa, gb=None, fb=None, pu=None):
-    """Simplified SIERA per FanGraphs definition - uses K%, BB%, GB%"""
-    try:
-        if not pa or pa < 20:
-            return LEAGUE_AVG_FIP
-        k_rate = so / pa
-        bb_rate = bb / pa
-        # GB% approx if we have gb/fb
-        if gb is not None and fb is not None and (gb+fb) > 0:
-            gb_rate = gb / (gb+fb)
-            # FanGraphs SIERA formula (simplified)
-            siera = 6.145 - 16.986*k_rate + 11.434*bb_rate - 1.858*gb_rate + 7.653*(k_rate**2) + 6.101*(k_rate*gb_rate) - 5.243*(bb_rate*gb_rate)
-        else:
-            # No GB data - use K/BB only version
-            siera = 6.145 - 16.986*k_rate + 11.434*bb_rate + 7.653*(k_rate**2) - 2.1*(bb_rate*k_rate)
-        # Clamp
-        return round(max(2.0, min(7.0, siera)), 2)
-    except:
-        return LEAGUE_AVG_FIP
-
-def fetch_pitcher_advanced(pitcher_id: int) -> dict:
-    """Try to get xFIP/SIERA from MLB sabermetrics endpoint, fallback to calc"""
-    if not pitcher_id:
-        return {"xfip": LEAGUE_AVG_FIP, "siera": LEAGUE_AVG_FIP, "fb": None, "gb": None, "throws": None}
-    cache_key = f"pitch_adv_v2_{pitcher_id}"
-    cached = get_cached(cache_key, ttl=3600*6)
-    if cached:
-        return cached
-    throws = None
-    try:
-        # Get handedness
-        r = requests.get(f"{MLB_STATS_BASE}/people/{pitcher_id}", timeout=6)
-        person = r.json().get("people", [{}])[0]
-        throws = person.get("pitchHand", {}).get("code") or person.get("pitchHand")
-    except:
-        pass
-    try:
-        # Try sabermetrics
-        r = requests.get(f"{MLB_STATS_BASE}/people/{pitcher_id}/stats",
-                         params={"stats":"seasonAdvanced","season":datetime.now().year,"group":"pitching"},
-                         timeout=8)
-        splits = r.json().get("stats",[{}])[0].get("splits",[])
-        if splits:
-            stat = splits[0].get("stat",{})
-            xfip = float(stat.get("xfip", stat.get("fip", LEAGUE_AVG_FIP)) or LEAGUE_AVG_FIP)
-            siera = float(stat.get("siera", stat.get("fip", LEAGUE_AVG_FIP)) or LEAGUE_AVG_FIP)
-            fb = stat.get("flyBallPct")
-            gb = stat.get("groundBallPct")
-            result = {"xfip": round(xfip,2), "siera": round(siera,2), "fb": fb, "gb": gb, "throws": throws}
-            set_cache(cache_key, result)
-            return result
-    except:
-        pass
-    # Fallback calc will be done in fetch_pitcher_stats merge
-    result = {"xfip": LEAGUE_AVG_FIP, "siera": LEAGUE_AVG_FIP, "fb": None, "gb": None, "throws": throws}
-    set_cache(cache_key, result)
-    return result
-
-def fetch_bullpen_chain(team_id: int, days=5) -> dict:
-    """Bullpen chain: fatigue + recent IP + xFIP chain"""
-    if not team_id:
-        return {"fatigue":1.0, "ip_last3":0.0, "fip": LEAGUE_AVG_FIP, "xfip": LEAGUE_AVG_FIP, "siera": LEAGUE_AVG_FIP, "has_data": False}
-    cache_key = f"bp_chain_v2_{team_id}_{days}"
-    cached = get_cached(cache_key, ttl=1800)
-    if cached:
-        return cached
-    try:
-        # Get schedule last N days
-        end = datetime.now().date()
-        start = end - timedelta(days=days)
-        r = requests.get(f"{MLB_STATS_BASE}/schedule",
-                         params={"sportId":1,"team":team_id,"startDate":start.isoformat(),"endDate":end.isoformat()},
-                         timeout=8)
-        total_bp_ip = 0.0
-        ip_last3 = 0.0
-        games = 0
-        dates = r.json().get("dates",[])
-        for di, d in enumerate(dates):
-            for g in d.get("games",[]):
-                pk = g.get("gamePk")
-                if not pk: continue
-                try:
-                    br = requests.get(f"{MLB_STATS_BASE}/game/{pk}/boxscore", timeout=6)
-                    box = br.json()
-                    # Sum bullpen IP from both sides? We need team side only
-                    # Identify side
-                    for side in ["home","away"]:
-                        team = box.get("teams",{}).get(side,{})
-                        tid = team.get("team",{}).get("id")
-                        if tid != team_id: continue
-                        pitchers = team.get("pitchers",[])
-                        players = team.get("players",{})
-                        # Skip first pitcher (starter)
-                        for idx, pid in enumerate(pitchers[1:]):
-                            pkey = f"ID{pid}"
-                            pdata = players.get(pkey,{})
-                            ip_str = pdata.get("stats",{}).get("pitching",{}).get("inningsPitched","0")
-                            try:
-                                if isinstance(ip_str,str) and "." in ip_str:
-                                    w,f = ip_str.split(".")
-                                    ip = int(w)+ (int(f)/3.0 if f in ("1","2") else float("0."+f))
-                                else:
-                                    ip = float(ip_str or 0)
-                            except:
-                                ip = 0.0
-                            total_bp_ip += ip
-                            if di >= len(dates)-3:
-                                ip_last3 += ip
-                    games += 1
-                except:
-                    continue
-        # Fatigue logic: > 9 IP last 3 days = gassed
-        if ip_last3 > 10:
-            fatigue = 1.12
-        elif ip_last3 > 8:
-            fatigue = 1.07
-        elif ip_last3 > 6:
-            fatigue = 1.03
-        elif ip_last3 < 3:
-            fatigue = 0.97 # fresh
-        else:
-            fatigue = 1.0
-        # Get regular bullpen stats for FIP/xFIP
-        base = fetch_bullpen_stats(team_id)
-        result = {
-            "fatigue": fatigue,
-            "ip_last3": round(ip_last3,1),
-            "ip_total": round(total_bp_ip,1),
-            "fip": base.get("fip", LEAGUE_AVG_FIP),
-            "xfip": base.get("fip", LEAGUE_AVG_FIP) * 0.98 + 0.08, # slight regression
-            "siera": base.get("fip", LEAGUE_AVG_FIP) * 0.97 + 0.12,
-            "has_data": base.get("has_data", False) or games>0
-        }
-        set_cache(cache_key, result)
-        return result
-    except Exception as e:
-        # fallback to base
-        base = fetch_bullpen_stats(team_id)
-        result = {"fatigue":1.0,"ip_last3":0.0,"fip":base.get("fip",LEAGUE_AVG_FIP),"xfip":base.get("fip",LEAGUE_AVG_FIP),"siera":base.get("fip",LEAGUE_AVG_FIP),"has_data":False}
-        set_cache(cache_key, result)
-        return result
-
-def calculate_platoon_edge(lineup: List[Dict], pitcher_throws: str) -> float:
-    """Batter/pitcher handedness: R vs L advantage ~8% wOBA"""
-    if not lineup or not pitcher_throws:
-        return 0.0
-    edge = 0.0
-    pt = str(pitcher_throws).upper()
-    is_left_pitcher = pt.startswith("L")
-    for batter in lineup[:9]:
-        hand = str(batter.get("hand","R") or "R").upper()
-        # L batter vs R pitcher = advantage for batter, etc.
-        # If pitcher L and batter R -> batter advantage -> increases offense for that lineup
-        if is_left_pitcher:
-            if hand.startswith("R") or hand.startswith("S"):
-                edge += 0.012  # righty vs lefty boost
-            else:
-                edge -= 0.006  # lefty vs lefty disadvantage
-        else: # R pitcher
-            if hand.startswith("L") or hand.startswith("S"):
-                edge += 0.012
-            else:
-                edge -= 0.004
-    # edge is per team, scale to win prob
-    return max(-0.05, min(0.05, edge))
-
-def enhance_youtube_alpha(yt_result: dict, home: str, away: str) -> dict:
-    """YT BOOST ALPHA - keep but make it real signal, not noise. Detect scoring patterns."""
-    if not yt_result or yt_result.get("status") == "not_installed":
-        return {"momentum_boost":0.0,"pace_boost":0.0,"scoring_boost":0.0,"comeback_boost":0.0,"clutch_boost":0.0,"confidence":0.0,"raw":yt_result}
-    conf = float(yt_result.get("confidence",0.0) or 0.0)
-    gameplay_pct = float(yt_result.get("gameplay_pct",0.7) or 0.7)
-    titles = " ".join([str(yt_result.get("title","")), str(yt_result.get("titles",""))]).lower()
-    transcript = str(yt_result.get("transcript","") or yt_result.get("summary","") or "").lower()
-    combined = titles + " " + transcript
-
-    # Behavior detection
-    momentum_boost = float(yt_result.get("momentum_boost",0.0) or 0.0)
-    pace_boost = float(yt_result.get("pace_boost",0.0) or 0.0)
-
-    # NEW: scoring pattern detection
-    scoring_boost = 0.0
-    comeback_boost = 0.0
-    clutch_boost = 0.0
-
-    # Offensive explosion detection
-    if any(k in combined for k in ["explodes","explosion","offensive explosion","scores 10","scores 11","12 runs","blowout","bats come alive","home run derby","5 homers","4 homers"]):
-        scoring_boost += 0.018
-    if any(k in combined for k in ["rally","comeback","walk-off","walk off","come from behind","erases deficit","down 3","down 4"]):
-        comeback_boost += 0.015
-    if any(k in combined for k in ["clutch","late inning","9th inning","extra innings","go-ahead","game-winning","big hit"]):
-        clutch_boost += 0.010
-    # Pitching dominance -> suppress scoring but boost win prob if team is pitching team
-    if any(k in combined for k in ["shutout","complete game","dominant start","14 strikeouts","15 strikeouts","no-hitter","perfect game"]):
-        scoring_boost -= 0.012
-        clutch_boost += 0.008
-
-    # Team-specific: if home team name appears more with positive words
-    home_l = home.lower() if home else ""
-    away_l = away.lower() if away else ""
-    home_mentions = combined.count(home_l) if len(home_l)>2 else 0
-    away_mentions = combined.count(away_l) if len(away_l)>2 else 0
-    team_bias = 0.0
-    if home_mentions > away_mentions + 1:
-        team_bias = 0.008
-    elif away_mentions > home_mentions + 1:
-        team_bias = -0.008
-
-    # Apply confidence and gameplay filter
-    factor = conf * gameplay_pct
-    momentum_boost = momentum_boost * factor
-    scoring_boost = scoring_boost * factor
-    comeback_boost = comeback_boost * factor
-    clutch_boost = clutch_boost * factor
-    team_bias = team_bias * factor
-
-    # Total alpha = momentum + scoring pattern + comeback + clutch + bias
-    total_alpha = momentum_boost + scoring_boost*0.8 + comeback_boost*0.9 + clutch_boost*0.7 + team_bias
-
-    return {
-        "momentum_boost": round(momentum_boost,4),
-        "pace_boost": round(pace_boost,4),
-        "scoring_boost": round(scoring_boost,4),
-        "comeback_boost": round(comeback_boost,4),
-        "clutch_boost": round(clutch_boost,4),
-        "team_bias": round(team_bias,4),
-        "total_alpha": round(total_alpha,4),
-        "confidence": conf,
-        "gameplay_pct": gameplay_pct,
-        "raw": yt_result
-    }
-
 # === PARLAYOS INJECTION (kept from current) ===
-
 def _find_v6_template():
     here = os.path.dirname(os.path.abspath(__file__))
     candidates = ["parlayos_3.html", "parlayos.html", "parlayos_2.html", "index.html", "parlayos_v6.html"]
