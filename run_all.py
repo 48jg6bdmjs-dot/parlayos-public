@@ -4,7 +4,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 def _find_html_template():
-    for name in ["parlayos_3.html","parlayos_transparent_v8.html","parlayos_transparent_v7.html","parlayos.html","index.html","parlayos_2.html"]:
+    for name in ["parlayos_3.html","parlayos_transparent_v8.html","parlayos_transparent_v7.html","parlayos.html","index.html","parlayos_2.html","parlayos_fixed.html"]:
         p=os.path.join(HERE,name)
         if os.path.exists(p):
             return p
@@ -22,6 +22,9 @@ def _run_one(label, module_name):
         return (label,False,None,str(e))
     html_path=_find_html_template()
     try:
+        # Handle missing ODDS_API_KEY gracefully - engine should run in demo/offseason mode
+        if not os.getenv('ODDS_API_KEY'):
+            print(f"  Note: ODDS_API_KEY not set - {label} will run in offseason/demo mode")
         picks=module.run(html_path) if html_path else module.run()
         qual=sum(1 for p in (picks or []) if p.get("qualifies"))
         player_ok = sum(1 for p in (picks or []) if p.get("player_data_ok"))
@@ -33,7 +36,10 @@ def _run_one(label, module_name):
         return (label,False,None,str(e))
 
 def main():
-    print(f"ODDS_API_KEY set: {bool(os.getenv('ODDS_API_KEY'))}")
+    odds_key_set = bool(os.getenv('ODDS_API_KEY'))
+    print(f"ODDS_API_KEY set: {odds_key_set}")
+    if not odds_key_set:
+        print("Running in OFFSEASON/DEMO mode - games may be 0 but engine stays intact")
     results=[]
     results.append(_run_one("MLB (mlb_ace.py)","mlb_ace"))
     results.append(_run_one("NFL (nfl_ace.py)","nfl_ace"))
