@@ -1,5 +1,7 @@
-name = "parlayos-main"
-compatibility_date = "2024-12-01"
-
-[assets]
-directory = "./"
+{
+  "buildCommand": "pip install -r requirements.txt && python run_all.py && cp parlayos.html index.html",
+  "outputDirectory": ".",
+  "framework": null,
+  "installCommand": "echo 'skip'",
+  "functions": {}
+}
