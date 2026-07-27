@@ -1,5 +1,5 @@
 """
-nba_ace.py ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬-Ã‚Â IMPROVED VERSION inspired by old MLB ace + FIXES critical bugs
+nba_ace.py ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬-Ãƒâ€šÃ‚Â IMPROVED VERSION inspired by old MLB ace + FIXES critical bugs
 Critical fixes:
 - FIXED: was fetching NFL odds (americanfootball_nfl) instead of NBA (basketball_nba)
 - Form blending: 50% season, 30% last 10, 20% last 5 (like old MLB)
@@ -13,6 +13,7 @@ Critical fixes:
 import requests
 import json
 import os
+ODDS_KEY = "373aadcf1852b15f1d8f4f483faf6d8"
 import re
 import math
 import random
@@ -572,7 +573,7 @@ def export_to_html(picks: List, html_path: str) -> str:
     html = re.sub(r'[ \t]*//[^\n]*PARLAYOS NBA LIVE DATA.*?[ \t]*//[^\n]*END PARLAYOS NBA LIVE DATA[^\n]*\n?', '', html, flags=re.DOTALL)
     html = re.sub(r'\n{3,}', '\n\n', html)
     injection_lines = [
-        f"    // ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ PARLAYOS NBA LIVE DATA ({run_date}) ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
+        f"    // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ PARLAYOS NBA LIVE DATA ({run_date}) ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬",
         "    window.PARLAYOS_NBA_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -584,7 +585,7 @@ def export_to_html(picks: List, html_path: str) -> str:
         "      if(typeof renderNBADashboard==='function') renderNBADashboard();",
         "      if(typeof renderLeagueSchedule==='function'){ try{ renderLeagueSchedule('nba'); }catch(e){} }",
         "    })();",
-        "    // ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ END PARLAYOS NBA LIVE DATA ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢-Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
+        "    // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ END PARLAYOS NBA LIVE DATA ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢-Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬",
     ]
     injection = "\n".join(injection_lines)
     MARKER = '    // <!--PARLAYOS_NBA_INJECT_POINT-->'
@@ -594,7 +595,7 @@ def export_to_html(picks: List, html_path: str) -> str:
         html = html.replace('</body>', f'<script>\n{injection}\n</script>\n</body>')
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“-Ã…â€œ {pick_count} NBA picks ÃƒÆ’Ã‚Â¢- -Ã¢â€žÂ¢ {html_path}")
+    print(f"ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ-Ãƒâ€¦Ã¢â‚¬Å“ {pick_count} NBA picks ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢- -ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ {html_path}")
     return html_path
 
 def load_config():
