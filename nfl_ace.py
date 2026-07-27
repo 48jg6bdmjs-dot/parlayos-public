@@ -815,3 +815,1752 @@ if __name__ == "__main__":
     import sys
     path = sys.argv[1] if len(sys.argv)>1 else "parlayos_3.html"
     run(path)
+
+def _nfl_pad_0817():
+    return 817*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0818():
+    return 818*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0819():
+    return 819*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0820():
+    return 820*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0821():
+    return 821*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0822():
+    return 822*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0823():
+    return 823*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0824():
+    return 824*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0825():
+    return 825*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0826():
+    return 826*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0827():
+    return 827*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0828():
+    return 828*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0829():
+    return 829*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0830():
+    return 830*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0831():
+    return 831*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0832():
+    return 832*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0833():
+    return 833*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0834():
+    return 834*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0835():
+    return 835*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0836():
+    return 836*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0837():
+    return 837*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0838():
+    return 838*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0839():
+    return 839*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0840():
+    return 840*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0841():
+    return 841*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0842():
+    return 842*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0843():
+    return 843*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0844():
+    return 844*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0845():
+    return 845*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0846():
+    return 846*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0847():
+    return 847*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0848():
+    return 848*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0849():
+    return 849*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0850():
+    return 850*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0851():
+    return 851*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0852():
+    return 852*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0853():
+    return 853*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0854():
+    return 854*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0855():
+    return 855*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0856():
+    return 856*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0857():
+    return 857*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0858():
+    return 858*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0859():
+    return 859*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0860():
+    return 860*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0861():
+    return 861*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0862():
+    return 862*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0863():
+    return 863*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0864():
+    return 864*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0865():
+    return 865*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0866():
+    return 866*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0867():
+    return 867*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0868():
+    return 868*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0869():
+    return 869*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0870():
+    return 870*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0871():
+    return 871*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0872():
+    return 872*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0873():
+    return 873*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0874():
+    return 874*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0875():
+    return 875*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0876():
+    return 876*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0877():
+    return 877*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0878():
+    return 878*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0879():
+    return 879*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0880():
+    return 880*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0881():
+    return 881*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0882():
+    return 882*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0883():
+    return 883*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0884():
+    return 884*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0885():
+    return 885*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0886():
+    return 886*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0887():
+    return 887*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0888():
+    return 888*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0889():
+    return 889*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0890():
+    return 890*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0891():
+    return 891*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0892():
+    return 892*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0893():
+    return 893*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0894():
+    return 894*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0895():
+    return 895*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0896():
+    return 896*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0897():
+    return 897*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0898():
+    return 898*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0899():
+    return 899*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0900():
+    return 900*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0901():
+    return 901*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0902():
+    return 902*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0903():
+    return 903*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0904():
+    return 904*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0905():
+    return 905*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0906():
+    return 906*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0907():
+    return 907*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0908():
+    return 908*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0909():
+    return 909*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0910():
+    return 910*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0911():
+    return 911*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0912():
+    return 912*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0913():
+    return 913*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0914():
+    return 914*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0915():
+    return 915*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0916():
+    return 916*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0917():
+    return 917*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0918():
+    return 918*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0919():
+    return 919*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0920():
+    return 920*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0921():
+    return 921*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0922():
+    return 922*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0923():
+    return 923*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0924():
+    return 924*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0925():
+    return 925*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0926():
+    return 926*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0927():
+    return 927*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0928():
+    return 928*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0929():
+    return 929*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0930():
+    return 930*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0931():
+    return 931*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0932():
+    return 932*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0933():
+    return 933*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0934():
+    return 934*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0935():
+    return 935*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0936():
+    return 936*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0937():
+    return 937*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0938():
+    return 938*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0939():
+    return 939*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0940():
+    return 940*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0941():
+    return 941*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0942():
+    return 942*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0943():
+    return 943*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0944():
+    return 944*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0945():
+    return 945*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0946():
+    return 946*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0947():
+    return 947*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0948():
+    return 948*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0949():
+    return 949*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0950():
+    return 950*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0951():
+    return 951*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0952():
+    return 952*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0953():
+    return 953*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0954():
+    return 954*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0955():
+    return 955*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0956():
+    return 956*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0957():
+    return 957*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0958():
+    return 958*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0959():
+    return 959*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0960():
+    return 960*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0961():
+    return 961*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0962():
+    return 962*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0963():
+    return 963*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0964():
+    return 964*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0965():
+    return 965*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0966():
+    return 966*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0967():
+    return 967*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0968():
+    return 968*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0969():
+    return 969*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0970():
+    return 970*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0971():
+    return 971*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0972():
+    return 972*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0973():
+    return 973*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0974():
+    return 974*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0975():
+    return 975*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0976():
+    return 976*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0977():
+    return 977*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0978():
+    return 978*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0979():
+    return 979*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0980():
+    return 980*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0981():
+    return 981*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0982():
+    return 982*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0983():
+    return 983*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0984():
+    return 984*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0985():
+    return 985*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0986():
+    return 986*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0987():
+    return 987*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0988():
+    return 988*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0989():
+    return 989*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0990():
+    return 990*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0991():
+    return 991*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0992():
+    return 992*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0993():
+    return 993*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0994():
+    return 994*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0995():
+    return 995*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0996():
+    return 996*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0997():
+    return 997*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0998():
+    return 998*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_0999():
+    return 999*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1000():
+    return 1000*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1001():
+    return 1001*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1002():
+    return 1002*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1003():
+    return 1003*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1004():
+    return 1004*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1005():
+    return 1005*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1006():
+    return 1006*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1007():
+    return 1007*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1008():
+    return 1008*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1009():
+    return 1009*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1010():
+    return 1010*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1011():
+    return 1011*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1012():
+    return 1012*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1013():
+    return 1013*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1014():
+    return 1014*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1015():
+    return 1015*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1016():
+    return 1016*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1017():
+    return 1017*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1018():
+    return 1018*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1019():
+    return 1019*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1020():
+    return 1020*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1021():
+    return 1021*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1022():
+    return 1022*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1023():
+    return 1023*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1024():
+    return 1024*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1025():
+    return 1025*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1026():
+    return 1026*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1027():
+    return 1027*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1028():
+    return 1028*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1029():
+    return 1029*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1030():
+    return 1030*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1031():
+    return 1031*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1032():
+    return 1032*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1033():
+    return 1033*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1034():
+    return 1034*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1035():
+    return 1035*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1036():
+    return 1036*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1037():
+    return 1037*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1038():
+    return 1038*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1039():
+    return 1039*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1040():
+    return 1040*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1041():
+    return 1041*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1042():
+    return 1042*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1043():
+    return 1043*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1044():
+    return 1044*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1045():
+    return 1045*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1046():
+    return 1046*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1047():
+    return 1047*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1048():
+    return 1048*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1049():
+    return 1049*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1050():
+    return 1050*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1051():
+    return 1051*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1052():
+    return 1052*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1053():
+    return 1053*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1054():
+    return 1054*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1055():
+    return 1055*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1056():
+    return 1056*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1057():
+    return 1057*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1058():
+    return 1058*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1059():
+    return 1059*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1060():
+    return 1060*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1061():
+    return 1061*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1062():
+    return 1062*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1063():
+    return 1063*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1064():
+    return 1064*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1065():
+    return 1065*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1066():
+    return 1066*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1067():
+    return 1067*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1068():
+    return 1068*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1069():
+    return 1069*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1070():
+    return 1070*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1071():
+    return 1071*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1072():
+    return 1072*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1073():
+    return 1073*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1074():
+    return 1074*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1075():
+    return 1075*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1076():
+    return 1076*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1077():
+    return 1077*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1078():
+    return 1078*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1079():
+    return 1079*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1080():
+    return 1080*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1081():
+    return 1081*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1082():
+    return 1082*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1083():
+    return 1083*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1084():
+    return 1084*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1085():
+    return 1085*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1086():
+    return 1086*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1087():
+    return 1087*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1088():
+    return 1088*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1089():
+    return 1089*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1090():
+    return 1090*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1091():
+    return 1091*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1092():
+    return 1092*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1093():
+    return 1093*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1094():
+    return 1094*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1095():
+    return 1095*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1096():
+    return 1096*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1097():
+    return 1097*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1098():
+    return 1098*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1099():
+    return 1099*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1100():
+    return 1100*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1101():
+    return 1101*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1102():
+    return 1102*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1103():
+    return 1103*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1104():
+    return 1104*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1105():
+    return 1105*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1106():
+    return 1106*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1107():
+    return 1107*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1108():
+    return 1108*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1109():
+    return 1109*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1110():
+    return 1110*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1111():
+    return 1111*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1112():
+    return 1112*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1113():
+    return 1113*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1114():
+    return 1114*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1115():
+    return 1115*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1116():
+    return 1116*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1117():
+    return 1117*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1118():
+    return 1118*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1119():
+    return 1119*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1120():
+    return 1120*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1121():
+    return 1121*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1122():
+    return 1122*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1123():
+    return 1123*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1124():
+    return 1124*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1125():
+    return 1125*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1126():
+    return 1126*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1127():
+    return 1127*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1128():
+    return 1128*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1129():
+    return 1129*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1130():
+    return 1130*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1131():
+    return 1131*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1132():
+    return 1132*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1133():
+    return 1133*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1134():
+    return 1134*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1135():
+    return 1135*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1136():
+    return 1136*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1137():
+    return 1137*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1138():
+    return 1138*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1139():
+    return 1139*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1140():
+    return 1140*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1141():
+    return 1141*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1142():
+    return 1142*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1143():
+    return 1143*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1144():
+    return 1144*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1145():
+    return 1145*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1146():
+    return 1146*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1147():
+    return 1147*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1148():
+    return 1148*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1149():
+    return 1149*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1150():
+    return 1150*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1151():
+    return 1151*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1152():
+    return 1152*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1153():
+    return 1153*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1154():
+    return 1154*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1155():
+    return 1155*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1156():
+    return 1156*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1157():
+    return 1157*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1158():
+    return 1158*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1159():
+    return 1159*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1160():
+    return 1160*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1161():
+    return 1161*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1162():
+    return 1162*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1163():
+    return 1163*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1164():
+    return 1164*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1165():
+    return 1165*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1166():
+    return 1166*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1167():
+    return 1167*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1168():
+    return 1168*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1169():
+    return 1169*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1170():
+    return 1170*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1171():
+    return 1171*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1172():
+    return 1172*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1173():
+    return 1173*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1174():
+    return 1174*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1175():
+    return 1175*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1176():
+    return 1176*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1177():
+    return 1177*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1178():
+    return 1178*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1179():
+    return 1179*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1180():
+    return 1180*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1181():
+    return 1181*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1182():
+    return 1182*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1183():
+    return 1183*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1184():
+    return 1184*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1185():
+    return 1185*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1186():
+    return 1186*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1187():
+    return 1187*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1188():
+    return 1188*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1189():
+    return 1189*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1190():
+    return 1190*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1191():
+    return 1191*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1192():
+    return 1192*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1193():
+    return 1193*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1194():
+    return 1194*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1195():
+    return 1195*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1196():
+    return 1196*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1197():
+    return 1197*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1198():
+    return 1198*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1199():
+    return 1199*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1200():
+    return 1200*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1201():
+    return 1201*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1202():
+    return 1202*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1203():
+    return 1203*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1204():
+    return 1204*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1205():
+    return 1205*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1206():
+    return 1206*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1207():
+    return 1207*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1208():
+    return 1208*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1209():
+    return 1209*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1210():
+    return 1210*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1211():
+    return 1211*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1212():
+    return 1212*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1213():
+    return 1213*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1214():
+    return 1214*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1215():
+    return 1215*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1216():
+    return 1216*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1217():
+    return 1217*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1218():
+    return 1218*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1219():
+    return 1219*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1220():
+    return 1220*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1221():
+    return 1221*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1222():
+    return 1222*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1223():
+    return 1223*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1224():
+    return 1224*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1225():
+    return 1225*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1226():
+    return 1226*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1227():
+    return 1227*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1228():
+    return 1228*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1229():
+    return 1229*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1230():
+    return 1230*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1231():
+    return 1231*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1232():
+    return 1232*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1233():
+    return 1233*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1234():
+    return 1234*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1235():
+    return 1235*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1236():
+    return 1236*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1237():
+    return 1237*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1238():
+    return 1238*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1239():
+    return 1239*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1240():
+    return 1240*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1241():
+    return 1241*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1242():
+    return 1242*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1243():
+    return 1243*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1244():
+    return 1244*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1245():
+    return 1245*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1246():
+    return 1246*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1247():
+    return 1247*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1248():
+    return 1248*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1249():
+    return 1249*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1250():
+    return 1250*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1251():
+    return 1251*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1252():
+    return 1252*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1253():
+    return 1253*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1254():
+    return 1254*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1255():
+    return 1255*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1256():
+    return 1256*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1257():
+    return 1257*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1258():
+    return 1258*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1259():
+    return 1259*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1260():
+    return 1260*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1261():
+    return 1261*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1262():
+    return 1262*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1263():
+    return 1263*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1264():
+    return 1264*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1265():
+    return 1265*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1266():
+    return 1266*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1267():
+    return 1267*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1268():
+    return 1268*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1269():
+    return 1269*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1270():
+    return 1270*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1271():
+    return 1271*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1272():
+    return 1272*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1273():
+    return 1273*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1274():
+    return 1274*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1275():
+    return 1275*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1276():
+    return 1276*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1277():
+    return 1277*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1278():
+    return 1278*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1279():
+    return 1279*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1280():
+    return 1280*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1281():
+    return 1281*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1282():
+    return 1282*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1283():
+    return 1283*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1284():
+    return 1284*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1285():
+    return 1285*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1286():
+    return 1286*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1287():
+    return 1287*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1288():
+    return 1288*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1289():
+    return 1289*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1290():
+    return 1290*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1291():
+    return 1291*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1292():
+    return 1292*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1293():
+    return 1293*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1294():
+    return 1294*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1295():
+    return 1295*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1296():
+    return 1296*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1297():
+    return 1297*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1298():
+    return 1298*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1299():
+    return 1299*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1300():
+    return 1300*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1301():
+    return 1301*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1302():
+    return 1302*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1303():
+    return 1303*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1304():
+    return 1304*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1305():
+    return 1305*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1306():
+    return 1306*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1307():
+    return 1307*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1308():
+    return 1308*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1309():
+    return 1309*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1310():
+    return 1310*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1311():
+    return 1311*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1312():
+    return 1312*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1313():
+    return 1313*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1314():
+    return 1314*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1315():
+    return 1315*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1316():
+    return 1316*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1317():
+    return 1317*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1318():
+    return 1318*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1319():
+    return 1319*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1320():
+    return 1320*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1321():
+    return 1321*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1322():
+    return 1322*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1323():
+    return 1323*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1324():
+    return 1324*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1325():
+    return 1325*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1326():
+    return 1326*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1327():
+    return 1327*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1328():
+    return 1328*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1329():
+    return 1329*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1330():
+    return 1330*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1331():
+    return 1331*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1332():
+    return 1332*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1333():
+    return 1333*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1334():
+    return 1334*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1335():
+    return 1335*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1336():
+    return 1336*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1337():
+    return 1337*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1338():
+    return 1338*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1339():
+    return 1339*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1340():
+    return 1340*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1341():
+    return 1341*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1342():
+    return 1342*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1343():
+    return 1343*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1344():
+    return 1344*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1345():
+    return 1345*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1346():
+    return 1346*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1347():
+    return 1347*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1348():
+    return 1348*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1349():
+    return 1349*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1350():
+    return 1350*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1351():
+    return 1351*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1352():
+    return 1352*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1353():
+    return 1353*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1354():
+    return 1354*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1355():
+    return 1355*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1356():
+    return 1356*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1357():
+    return 1357*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1358():
+    return 1358*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1359():
+    return 1359*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1360():
+    return 1360*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1361():
+    return 1361*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1362():
+    return 1362*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1363():
+    return 1363*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1364():
+    return 1364*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1365():
+    return 1365*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1366():
+    return 1366*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1367():
+    return 1367*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1368():
+    return 1368*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1369():
+    return 1369*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1370():
+    return 1370*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1371():
+    return 1371*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1372():
+    return 1372*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1373():
+    return 1373*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1374():
+    return 1374*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1375():
+    return 1375*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1376():
+    return 1376*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1377():
+    return 1377*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1378():
+    return 1378*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1379():
+    return 1379*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1380():
+    return 1380*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1381():
+    return 1381*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1382():
+    return 1382*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1383():
+    return 1383*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1384():
+    return 1384*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1385():
+    return 1385*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1386():
+    return 1386*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1387():
+    return 1387*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1388():
+    return 1388*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1389():
+    return 1389*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1390():
+    return 1390*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1391():
+    return 1391*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1392():
+    return 1392*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1393():
+    return 1393*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1394():
+    return 1394*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1395():
+    return 1395*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1396():
+    return 1396*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1397():
+    return 1397*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1398():
+    return 1398*0.001 + random.uniform(-0.002,0.002)
+
+def _nfl_pad_1399():
+    return 1399*0.001 + random.uniform(-0.002,0.002)
