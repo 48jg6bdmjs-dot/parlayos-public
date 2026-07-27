@@ -1,5 +1,5 @@
 """
-mlb_ace.py ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â IMPROVED VERSION merging old's superior totals model with ParlayOS injection
+mlb_ace.py ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â IMPROVED VERSION merging old's superior totals model with ParlayOS injection
 - Old's superior logic: lineup-weighted OPS with platoon splits, form blending (50/30/20),
   injury adjustment, rest factor, bullpen fatigue from boxscores, dynamic park factor,
   weather/wind/umpire factors, full Monte Carlo with gamma overdispersion, crooked innings,
@@ -957,13 +957,13 @@ class PredictionEngine:
     def fetch_pitcher_stats(self, pitcher_id: int) -> Dict:
         if not pitcher_id:
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                    "fip": LEAGUE_AVG_FIP, "ip": "—", "wins": 0, "losses": 0, "has_data": False}
+                    "fip": LEAGUE_AVG_FIP, "ip": "â€”", "wins": 0, "losses": 0, "has_data": False}
         cache_key = f"pitcher_stats_v4_{pitcher_id}"
         cached = get_cached(cache_key, ttl=3600)
         if cached:
             # ensure ip exists in cached version
             if "ip" not in cached:
-                cached["ip"] = "—"
+                cached["ip"] = "â€”"
             return cached
         try:
             r = requests.get(f"{MLB_STATS_BASE}/people/{pitcher_id}/stats",
@@ -972,11 +972,11 @@ class PredictionEngine:
             splits = r.json()["stats"][0]["splits"]
             if not splits:
                 return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                        "fip": LEAGUE_AVG_FIP, "ip": "—", "wins": 0, "losses": 0, "has_data": False}
+                        "fip": LEAGUE_AVG_FIP, "ip": "â€”", "wins": 0, "losses": 0, "has_data": False}
             stat = splits[0]["stat"]
             ip_raw = stat.get("inningsPitched", "0")
             # Keep raw string for display e.g. "102.2"
-            ip_display = str(ip_raw) if ip_raw else "—"
+            ip_display = str(ip_raw) if ip_raw else "â€”"
             # Parse baseball fractional innings: .1 = 1/3, .2 = 2/3
             try:
                 if isinstance(ip_raw, str) and "." in ip_raw:
@@ -1010,7 +1010,7 @@ class PredictionEngine:
             return result
         except Exception as e:
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                    "fip": LEAGUE_AVG_FIP, "ip": "—", "wins": 0, "losses": 0, "has_data": False}
+                    "fip": LEAGUE_AVG_FIP, "ip": "â€”", "wins": 0, "losses": 0, "has_data": False}
 
     def fetch_weather(self, lat: float, lon: float) -> Dict:
         cache_key = f"weather_{round(lat,2)}_{round(lon,2)}"
@@ -1102,7 +1102,7 @@ class PredictionEngine:
         # In full old model, this comes from schedule analysis
 
         # Combine with old's superior weighting - pitcher is now properly weighted
-        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge + + yt_momentum
+        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge +
                       offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
 
         # Store edge components for logging (for future weight fitting)
@@ -1111,6 +1111,7 @@ class PredictionEngine:
         yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
         yt_momentum = 0.0
         yt_pace = 0.0
+        # yt momentum will be added after it's computed
         if YT_AVAILABLE:
             try:
                 if game.get("home") and game.get("away") and "Sample" not in str(game.get("home")):
@@ -1509,7 +1510,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
     html = re.sub(r'\n{3,}', '\n\n', html)
 
     injection_lines = [
-        f"    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ PARLAYOS LIVE DATA ({run_date}) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
+        f"    // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ PARLAYOS LIVE DATA ({run_date}) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
         "    window.PARLAYOS_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -1522,7 +1523,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
         "      if(typeof renderDashboard==='function') renderDashboard();",
         "      if(typeof renderAll==='function') renderAll();",
         "    })();",
-        "    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ END PARLAYOS LIVE DATA ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
+        "    // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ END PARLAYOS LIVE DATA ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
     ]
     injection = "\n".join(injection_lines)
 
@@ -1534,7 +1535,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
 
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {pick_count} MLB picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {out_path}")
+    print(f"ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ {pick_count} MLB picks ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬ ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ {out_path}")
     return out_path
 
 def write_pick_to_log(game_data):
@@ -1819,10 +1820,10 @@ def main():
             "teamB_k_rate": home_bat_data.get("k_rate"),
             # Pitcher stats for Pitching tab
             "pitcherA_era": away_p_data.get("era"), "pitcherA_whip": away_p_data.get("whip"),
-            "pitcherA_k9": away_p_data.get("k_per_9"), "pitcherA_ip": away_p_data.get("ip", away_p_data.get("inningsPitched", "—")),
+            "pitcherA_k9": away_p_data.get("k_per_9"), "pitcherA_ip": away_p_data.get("ip", away_p_data.get("inningsPitched", "â€”")),
             "pitcherA_fip": away_p_data.get("fip"), "pitcherA_w": away_p_data.get("wins"), "pitcherA_l": away_p_data.get("losses"),
             "pitcherB_era": home_p_data.get("era"), "pitcherB_whip": home_p_data.get("whip"),
-            "pitcherB_k9": home_p_data.get("k_per_9"), "pitcherB_ip": home_p_data.get("ip", home_p_data.get("inningsPitched", "—")),
+            "pitcherB_k9": home_p_data.get("k_per_9"), "pitcherB_ip": home_p_data.get("ip", home_p_data.get("inningsPitched", "â€”")),
             "pitcherB_fip": home_p_data.get("fip"), "pitcherB_w": home_p_data.get("wins"), "pitcherB_l": home_p_data.get("losses"),
             # Lineups
             "lineupA": g.get("_lineupA", []),
@@ -1845,7 +1846,7 @@ def main():
         write_pick_to_log(game_data)
 
     export_to_html(all_games_data)
-    print(f"\nÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {len(all_games_data)} games exported")
+    print(f"\nÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ {len(all_games_data)} games exported")
 
 
 def run(html_path: str = None):
