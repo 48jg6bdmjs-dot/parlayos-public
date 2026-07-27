@@ -1,5 +1,5 @@
 """
-mlb_ace.py ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â IMPROVED VERSION merging old's superior totals model with ParlayOS injection
+mlb_ace.py ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â IMPROVED VERSION merging old's superior totals model with ParlayOS injection
 - Old's superior logic: lineup-weighted OPS with platoon splits, form blending (50/30/20),
   injury adjustment, rest factor, bullpen fatigue from boxscores, dynamic park factor,
   weather/wind/umpire factors, full Monte Carlo with gamma overdispersion, crooked innings,
@@ -136,7 +136,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(HERE, "mlb_config.json")
 PICKS_LOG_PATH = os.path.join(HERE, "picks_log.csv")
 MLB_STATS_BASE = "https://statsapi.mlb.com/api/v1"
-ODDS_KEY = "373aadcf1852b15f1d8f4f483faf6d8"
+ODDS_KEY = os.getenv("ODDS_API_KEY") or "373aadcf1852b15f1d8f4f483faf6d8"
+ODDS_KEY_FALLBACK = "373aadcf1852b15f1d8f4f483faf6d8"
 
 # === CACHING ===
 _CACHE = {}
@@ -957,13 +958,16 @@ class PredictionEngine:
     def fetch_pitcher_stats(self, pitcher_id: int) -> Dict:
         if not pitcher_id:
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                    "fip": LEAGUE_AVG_FIP, "ip": "Ã¢â‚¬â€", "wins": 0, "losses": 0, "has_data": False}
-        cache_key = f"pitcher_stats_v4_{pitcher_id}"
+                    "fip": LEAGUE_AVG_FIP, "xfip": LEAGUE_AVG_FIP, "siera": LEAGUE_AVG_FIP,
+                    "ip": "â€”", "wins": 0, "losses": 0, "has_data": False, "throws": None, "fb": None, "gb": None}
+        cache_key = f"pitcher_stats_v5_{pitcher_id}"
         cached = get_cached(cache_key, ttl=3600)
         if cached:
-            # ensure ip exists in cached version
             if "ip" not in cached:
-                cached["ip"] = "Ã¢â‚¬â€"
+                cached["ip"] = "â€”"
+            if "xfip" not in cached:
+                cached["xfip"] = cached.get("fip", LEAGUE_AVG_FIP)
+                cached["siera"] = cached.get("fip", LEAGUE_AVG_FIP)
             return cached
         try:
             r = requests.get(f"{MLB_STATS_BASE}/people/{pitcher_id}/stats",
@@ -971,13 +975,13 @@ class PredictionEngine:
                               timeout=8)
             splits = r.json()["stats"][0]["splits"]
             if not splits:
+                adv = fetch_pitcher_advanced(pitcher_id)
                 return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                        "fip": LEAGUE_AVG_FIP, "ip": "Ã¢â‚¬â€", "wins": 0, "losses": 0, "has_data": False}
+                        "fip": LEAGUE_AVG_FIP, "xfip": adv.get("xfip", LEAGUE_AVG_FIP), "siera": adv.get("siera", LEAGUE_AVG_FIP),
+                        "ip": "â€”", "wins": 0, "losses": 0, "has_data": False, "throws": adv.get("throws"), "fb": adv.get("fb"), "gb": adv.get("gb")}
             stat = splits[0]["stat"]
             ip_raw = stat.get("inningsPitched", "0")
-            # Keep raw string for display e.g. "102.2"
-            ip_display = str(ip_raw) if ip_raw else "Ã¢â‚¬â€"
-            # Parse baseball fractional innings: .1 = 1/3, .2 = 2/3
+            ip_display = str(ip_raw) if ip_raw else "â€”"
             try:
                 if isinstance(ip_raw, str) and "." in ip_raw:
                     whole, frac = ip_raw.split(".")
@@ -987,30 +991,56 @@ class PredictionEngine:
             except:
                 innings = float(stat.get("inningsPitched", 0) or 0)
             if innings < 5:
+                adv = fetch_pitcher_advanced(pitcher_id)
                 return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                        "fip": LEAGUE_AVG_FIP, "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0), "has_data": False}
+                        "fip": LEAGUE_AVG_FIP, "xfip": adv.get("xfip", LEAGUE_AVG_FIP), "siera": adv.get("siera", LEAGUE_AVG_FIP),
+                        "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0),
+                        "has_data": False, "throws": adv.get("throws"), "fb": adv.get("fb"), "gb": adv.get("gb")}
             hr  = int(stat.get("homeRuns", 0) or 0)
             bb  = int(stat.get("baseOnBalls", 0) or 0)
             hbp = int(stat.get("hitByPitch", 0) or 0)
             k   = int(stat.get("strikeOuts", 0) or 0)
-            # Avoid div by zero
+            pa  = int(stat.get("battersFaced", 0) or (bb + hbp + k + int(stat.get("hits",0) or 0)))
+            gb  = stat.get("groundOuts")
+            fb  = stat.get("airOuts")  # MLB uses airOuts ~ fly outs
+            # try to get GB from stat if exists
+            try:
+                gb = int(gb) if gb is not None else None
+                fb = int(fb) if fb is not None else None
+            except:
+                gb = None; fb = None
+
             innings_calc = innings if innings>0 else 1
             fip_raw  = ((13*hr + 3*(bb+hbp) - 2*k) / innings_calc) + 3.10
             era_raw  = float(stat.get("era", LEAGUE_AVG_ERA) or LEAGUE_AVG_ERA)
             whip_raw = float(stat.get("whip", LEAGUE_AVG_WHIP) or LEAGUE_AVG_WHIP)
             k9_raw   = float(stat.get("strikeoutsPer9Inn", LEAGUE_AVG_K9) or LEAGUE_AVG_K9)
-            # Shrink small samples toward league average
+
+            # xFIP / SIERA calc
+            xfip_raw = _calc_xfip(hr, bb, hbp, k, innings_calc, fb=fb)
+            siera_raw = _calc_siera(k, bb, pa if pa>0 else int(innings*4.3), gb=gb, fb=fb)
+
             reliability = min(1.0, innings / 50.0)
             era = round(reliability * era_raw + (1-reliability) * LEAGUE_AVG_ERA, 2)
             whip = round(reliability * whip_raw + (1-reliability) * LEAGUE_AVG_WHIP, 2)
             k9 = round(reliability * k9_raw + (1-reliability) * LEAGUE_AVG_K9, 2)
             fip = round(reliability * fip_raw + (1-reliability) * LEAGUE_AVG_FIP, 2)
-            result = {"era": era, "whip": whip, "k_per_9": k9, "fip": fip, "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0), "has_data": True, "reliability": reliability}
+            xfip = round(reliability * xfip_raw + (1-reliability) * LEAGUE_AVG_FIP, 2)
+            siera = round(reliability * siera_raw + (1-reliability) * LEAGUE_AVG_FIP, 2)
+
+            adv = fetch_pitcher_advanced(pitcher_id)
+
+            result = {"era": era, "whip": whip, "k_per_9": k9, "fip": fip, "xfip": xfip, "siera": siera,
+                      "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0),
+                      "has_data": True, "reliability": reliability,
+                      "throws": adv.get("throws"), "fb": fb, "gb": gb, "pa": pa}
             set_cache(cache_key, result)
             return result
         except Exception as e:
+            adv = fetch_pitcher_advanced(pitcher_id) if pitcher_id else {}
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                    "fip": LEAGUE_AVG_FIP, "ip": "Ã¢â‚¬â€", "wins": 0, "losses": 0, "has_data": False}
+                    "fip": LEAGUE_AVG_FIP, "xfip": adv.get("xfip", LEAGUE_AVG_FIP), "siera": adv.get("siera", LEAGUE_AVG_FIP),
+                    "ip": "â€”", "wins": 0, "losses": 0, "has_data": False, "throws": adv.get("throws"), "fb": None, "gb": None}
 
     def fetch_weather(self, lat: float, lon: float) -> Dict:
         cache_key = f"weather_{round(lat,2)}_{round(lon,2)}"
@@ -1033,7 +1063,7 @@ class PredictionEngine:
             return {"temp_f": 70, "wind_mph": 5, "wind_deg": 0}
 
     def calculate_win_probability(self, game: Dict) -> float:
-        """Improved win prob using old's blended approach: MC + Pythag + Log5 + Form"""
+        """V5: xFIP/SIERA + Bullpen Chain + Platoon Handedness + YT Alpha"""
         home_form = self.fetch_team_form(game["home_id"], game["away_id"])
         away_form = self.fetch_team_form(game["away_id"], game["home_id"])
         home_p = self.fetch_pitcher_stats(game["home_pitcher_id"])
@@ -1042,76 +1072,105 @@ class PredictionEngine:
         home_bat = fetch_real_team_batting(game["home_id"])
         away_bat = fetch_real_team_batting(game["away_id"])
 
-        # Pitcher edges - now with proper weighting (FIP largest)
+        # === STATCAST: xFIP + SIERA edges (more predictive than ERA) ===
         has_pitchers = home_p["has_data"] and away_p["has_data"]
-        pitcher_fip_edge  = (away_p["fip"]  - home_p["fip"])  * 0.055 if has_pitchers else 0.0
-        pitcher_era_edge  = (away_p["era"]  - home_p["era"])  * 0.018 if has_pitchers else 0.0
-        pitcher_whip_edge = (away_p["whip"] - home_p["whip"]) * 0.022 if has_pitchers else 0.0
-        pitcher_k9_edge   = (home_p["k_per_9"] - away_p["k_per_9"]) * 0.0045 if has_pitchers else 0.0
+        pitcher_fip_edge  = (away_p["fip"]  - home_p["fip"])  * 0.045 if has_pitchers else 0.0
+        pitcher_xfip_edge = (away_p.get("xfip", away_p["fip"]) - home_p.get("xfip", home_p["fip"])) * 0.060 if has_pitchers else 0.0
+        pitcher_siera_edge = (away_p.get("siera", away_p["fip"]) - home_p.get("siera", home_p["fip"])) * 0.050 if has_pitchers else 0.0
+        pitcher_era_edge  = (away_p["era"]  - home_p["era"])  * 0.010 if has_pitchers else 0.0
+        pitcher_whip_edge = (away_p["whip"] - home_p["whip"]) * 0.012 if has_pitchers else 0.0
+        pitcher_k9_edge   = (home_p["k_per_9"] - away_p["k_per_9"]) * 0.0040 if has_pitchers else 0.0
 
-        # Offense edge - uses real OPS now
+        # Offense edge
         has_offense = bool(home_bat) and bool(away_bat)
         offense_edge = 0.0
         if has_offense:
             try:
                 home_ops = float(home_bat.get("ops", ".700") or ".700")
                 away_ops = float(away_bat.get("ops", ".700") or ".700")
-                offense_edge = (home_ops - away_ops) * 0.28
+                offense_edge = (home_ops - away_ops) * 0.26
             except:
                 has_offense = False
 
-        # Team form + bullpen + weather + park + rest (old's full factors)
-        team_edge = ((home_form["last_10_wl"] - away_form["last_10_wl"]) * 0.045
+        # Team form
+        team_edge = ((home_form["last_10_wl"] - away_form["last_10_wl"]) * 0.040
                      if home_form["last10_has_data"] and away_form["last10_has_data"] else 0.0)
 
-        # Bullpen - try real pen FIP
+        # === BULLPEN CHAIN: fatigue + xFIP chain ===
+        bullpen_edge = 0.0
+        bullpen_fatigue_edge = 0.0
         try:
-            home_bp = fetch_bullpen_stats(game["home_id"])
-            away_bp = fetch_bullpen_stats(game["away_id"])
-            bullpen_edge = (away_bp["fip"] - home_bp["fip"]) * 0.022 if home_bp["has_data"] and away_bp["has_data"] else 0.0
-        except:
-            bullpen_edge = 0.0
+            home_bp_chain = fetch_bullpen_chain(game["home_id"], days=5)
+            away_bp_chain = fetch_bullpen_chain(game["away_id"], days=5)
+            # FIP/xFIP edge
+            if home_bp_chain["has_data"] and away_bp_chain["has_data"]:
+                bullpen_edge = (away_bp_chain["fip"] - home_bp_chain["fip"]) * 0.018
+                bullpen_edge += (away_bp_chain["xfip"] - home_bp_chain["xfip"]) * 0.020
+            # Fatigue edge: if home pen gassed and away fresh, away gets boost
+            # fatigue >1 = gassed, so edge = (away_fatigue - home_fatigue) * -factor
+            bullpen_fatigue_edge = (home_bp_chain["fatigue"] - away_bp_chain["fatigue"]) * 0.035
+            game["_bp_chain"] = {"home": home_bp_chain, "away": away_bp_chain}
+        except Exception as e:
+            # fallback to old simple
+            try:
+                home_bp = fetch_bullpen_stats(game["home_id"])
+                away_bp = fetch_bullpen_stats(game["away_id"])
+                bullpen_edge = (away_bp["fip"] - home_bp["fip"]) * 0.022 if home_bp["has_data"] and away_bp["has_data"] else 0.0
+            except:
+                bullpen_edge = 0.0
 
-        # Season form edge
+        # Season form
         season_form_edge = 0.0
         if home_form["runs_has_data"] and away_form["runs_has_data"]:
-            season_form_edge = (home_form["runs_per_game"] - away_form["runs_per_game"]) * 0.015
+            season_form_edge = (home_form["runs_per_game"] - away_form["runs_per_game"]) * 0.014
         if home_form["era_has_data"] and away_form["era_has_data"]:
-            season_form_edge += (away_form["team_era"] - home_form["team_era"]) * 0.012
+            season_form_edge += (away_form["team_era"] - home_form["team_era"]) * 0.010
 
-        # Weather
+        # Weather / Park / Rest
         weather_edge = 0.0
         try:
             temp = weather.get("temp_f", 70)
-            weather_edge = (temp - 70) * 0.0005
+            weather_edge = (temp - 70) * 0.0004
         except:
             pass
-
-        # Park factor - real factor for totals, small for ML
         park_edge = 0.0
         try:
             home_abbr = game.get("home_abbr", "")
             pf = PARK_FACTORS.get(home_abbr, 100)
-            park_edge = (pf - 100) * 0.0002
+            park_edge = (pf - 100) * 0.00018
         except:
             pass
-
-        # Rest factor (old's logic)
         rest_edge = 0.0
-        # This would need days_rest data - simplified for now
-        # In full old model, this comes from schedule analysis
 
-        # Combine with old's superior weighting - pitcher is now properly weighted
-        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge +
-                      offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
+        # === BATTER / PITCHER HANDEDNESS (PLATOON) ===
+        platoon_edge = 0.0
+        try:
+            # Try to get lineups if available
+            home_lineup = game.get("home_lineup") or []
+            away_lineup = game.get("away_lineup") or []
+            # If not in game dict, try fetch_today_lineups cache
+            if (not home_lineup or not away_lineup) and "_lineups_cache" in globals():
+                key = (game.get("away_abbr",""), game.get("home_abbr",""))
+                lu = globals()["_lineups_cache"].get(key)
+                if lu:
+                    home_lineup = lu.get("home_lineup", [])
+                    away_lineup = lu.get("away_lineup", [])
 
-        # Store edge components for logging (for future weight fitting)
+            home_throws = home_p.get("throws")
+            away_throws = away_p.get("throws")
 
-        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) ===
-        yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
+            # Home offense vs Away pitcher, Away offense vs Home pitcher
+            # Positive = home advantage
+            home_vs_away_pitcher = calculate_platoon_edge(home_lineup, away_throws) if away_throws else 0.0
+            away_vs_home_pitcher = calculate_platoon_edge(away_lineup, home_throws) if home_throws else 0.0
+            platoon_edge = home_vs_away_pitcher - away_vs_home_pitcher
+        except Exception as e:
+            platoon_edge = 0.0
+
+        # === YOUTUBE BOOST ALPHA (KEPT + ENHANCED) ===
+        yt_alpha = {"total_alpha":0.0,"momentum_boost":0.0,"scoring_boost":0.0,"comeback_boost":0.0,"clutch_boost":0.0,"confidence":0.0}
         yt_momentum = 0.0
-        yt_pace = 0.0
-        # yt momentum will be added after it's computed
+        yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
         if YT_AVAILABLE:
             try:
                 if game.get("home") and game.get("away") and "Sample" not in str(game.get("home")):
@@ -1123,40 +1182,49 @@ class PredictionEngine:
                     except:
                         pass
                     if yt_cfg.get("enabled", True):
-                        max_vids = yt_cfg.get("max_videos_per_matchup", 2)
-                        yt_result = get_youtube_boost("mlb", game.get("home",""), game.get("away",""), max_videos=max_vids)
-                        yt_boost_data = yt_result
-                        conf = yt_result.get("confidence", 0.0)
-                        raw_mom = yt_result.get("momentum_boost", 0.0)
-                        raw_pace = yt_result.get("pace_boost", 0.0)
-                        gameplay_pct = yt_result.get("gameplay_pct", 0.7)
-                        yt_momentum = raw_mom * conf * gameplay_pct
-                        yt_pace = raw_pace * conf * gameplay_pct
-                        game["_yt_boost"] = yt_result
+                        max_vids = yt_cfg.get("max_videos_per_matchup", 3)
+                        yt_raw = get_youtube_boost("mlb", game.get("home",""), game.get("away",""), max_videos=max_vids)
+                        yt_boost_data = yt_raw
+                        yt_alpha = enhance_youtube_alpha(yt_raw, game.get("home",""), game.get("away",""))
+                        yt_momentum = yt_alpha.get("total_alpha", 0.0)
+                        game["_yt_boost"] = yt_alpha
+                        game["_yt_raw"] = yt_raw
             except Exception as _yt_e:
                 print(f"  YT mlb boost skip: {_yt_e}")
                 game["_yt_boost"] = {"status": f"error {_yt_e}", "momentum_boost":0.0}
         else:
             game["_yt_boost"] = yt_boost_data
+            game["_yt_alpha"] = yt_alpha
+
+        # === COMBINE: V5 weighting ===
+        total_edge = (pitcher_fip_edge + pitcher_xfip_edge + pitcher_siera_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge +
+                      offense_edge + team_edge + bullpen_edge + bullpen_fatigue_edge + season_form_edge + weather_edge + park_edge + rest_edge +
+                      platoon_edge + yt_momentum)
 
         game["_edge_components"] = {
             "c_team_edge": team_edge,
             "c_pitcher_fip_edge": pitcher_fip_edge,
+            "c_pitcher_xfip_edge": pitcher_xfip_edge,
+            "c_pitcher_siera_edge": pitcher_siera_edge,
             "c_pitcher_era_edge": pitcher_era_edge,
             "c_pitcher_whip_edge": pitcher_whip_edge,
             "c_pitcher_k9_edge": pitcher_k9_edge,
             "c_offense_edge": offense_edge,
             "c_bullpen_edge": bullpen_edge,
+            "c_bullpen_fatigue": bullpen_fatigue_edge,
             "c_season_form_edge": season_form_edge,
             "c_weather_edge": weather_edge,
             "c_rest_edge": rest_edge,
-            "c_lineup_edge": 0.0,
-            "c_injury_edge": 0.0,
-            "c_fatigue_edge": 0.0,
+            "c_platoon_edge": platoon_edge,
+            "c_yt_momentum": yt_alpha.get("momentum_boost",0.0),
+            "c_yt_scoring": yt_alpha.get("scoring_boost",0.0),
+            "c_yt_comeback": yt_alpha.get("comeback_boost",0.0),
+            "c_yt_clutch": yt_alpha.get("clutch_boost",0.0),
+            "c_yt_total_alpha": yt_alpha.get("total_alpha",0.0),
         }
 
         prob = 0.5 + total_edge
-        return max(0.15, min(0.85, prob))
+        return max(0.12, min(0.88, prob))
 
     def calculate_total_points(self, game: Dict, posted_total: float) -> Tuple[str, float, float]:
         """Use old's Monte Carlo for totals - much more accurate"""
@@ -1234,7 +1302,258 @@ def fetch_bullpen_stats(team_id: int) -> dict:
     except:
         return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "fip": LEAGUE_AVG_FIP, "has_data": False}
 
+
+# === V5 ENHANCEMENTS: STATCAST xFIP / SIERA + BULLPEN CHAIN + PLATOON + YT ALPHA ===
+
+def _calc_xfip(hr, bb, hbp, k, ip, fb=None, lg_hr_fb=0.135):
+    """xFIP: normalize HR to league avg HR/FB * FB. If FB unknown, use FIP as fallback with slight regression."""
+    try:
+        ip = float(ip) if ip else 0
+        if ip < 1: return LEAGUE_AVG_FIP
+        if fb is None:
+            # No FB data -> regress FIP 10% toward 4.20
+            fip = ((13*hr + 3*(bb+hbp) - 2*k)/ip)+3.10
+            return round(0.9*fip + 0.1*LEAGUE_AVG_FIP, 2)
+        x_hr = fb * lg_hr_fb
+        xfip = ((13*x_hr + 3*(bb+hbp) - 2*k)/ip)+3.10
+        return round(xfip, 2)
+    except:
+        return LEAGUE_AVG_FIP
+
+def _calc_siera(so, bb, pa, gb=None, fb=None, pu=None):
+    """Simplified SIERA per FanGraphs definition - uses K%, BB%, GB%"""
+    try:
+        if not pa or pa < 20:
+            return LEAGUE_AVG_FIP
+        k_rate = so / pa
+        bb_rate = bb / pa
+        # GB% approx if we have gb/fb
+        if gb is not None and fb is not None and (gb+fb) > 0:
+            gb_rate = gb / (gb+fb)
+            # FanGraphs SIERA formula (simplified)
+            siera = 6.145 - 16.986*k_rate + 11.434*bb_rate - 1.858*gb_rate + 7.653*(k_rate**2) + 6.101*(k_rate*gb_rate) - 5.243*(bb_rate*gb_rate)
+        else:
+            # No GB data - use K/BB only version
+            siera = 6.145 - 16.986*k_rate + 11.434*bb_rate + 7.653*(k_rate**2) - 2.1*(bb_rate*k_rate)
+        # Clamp
+        return round(max(2.0, min(7.0, siera)), 2)
+    except:
+        return LEAGUE_AVG_FIP
+
+def fetch_pitcher_advanced(pitcher_id: int) -> dict:
+    """Try to get xFIP/SIERA from MLB sabermetrics endpoint, fallback to calc"""
+    if not pitcher_id:
+        return {"xfip": LEAGUE_AVG_FIP, "siera": LEAGUE_AVG_FIP, "fb": None, "gb": None, "throws": None}
+    cache_key = f"pitch_adv_v2_{pitcher_id}"
+    cached = get_cached(cache_key, ttl=3600*6)
+    if cached:
+        return cached
+    throws = None
+    try:
+        # Get handedness
+        r = requests.get(f"{MLB_STATS_BASE}/people/{pitcher_id}", timeout=6)
+        person = r.json().get("people", [{}])[0]
+        throws = person.get("pitchHand", {}).get("code") or person.get("pitchHand")
+    except:
+        pass
+    try:
+        # Try sabermetrics
+        r = requests.get(f"{MLB_STATS_BASE}/people/{pitcher_id}/stats",
+                         params={"stats":"seasonAdvanced","season":datetime.now().year,"group":"pitching"},
+                         timeout=8)
+        splits = r.json().get("stats",[{}])[0].get("splits",[])
+        if splits:
+            stat = splits[0].get("stat",{})
+            xfip = float(stat.get("xfip", stat.get("fip", LEAGUE_AVG_FIP)) or LEAGUE_AVG_FIP)
+            siera = float(stat.get("siera", stat.get("fip", LEAGUE_AVG_FIP)) or LEAGUE_AVG_FIP)
+            fb = stat.get("flyBallPct")
+            gb = stat.get("groundBallPct")
+            result = {"xfip": round(xfip,2), "siera": round(siera,2), "fb": fb, "gb": gb, "throws": throws}
+            set_cache(cache_key, result)
+            return result
+    except:
+        pass
+    # Fallback calc will be done in fetch_pitcher_stats merge
+    result = {"xfip": LEAGUE_AVG_FIP, "siera": LEAGUE_AVG_FIP, "fb": None, "gb": None, "throws": throws}
+    set_cache(cache_key, result)
+    return result
+
+def fetch_bullpen_chain(team_id: int, days=5) -> dict:
+    """Bullpen chain: fatigue + recent IP + xFIP chain"""
+    if not team_id:
+        return {"fatigue":1.0, "ip_last3":0.0, "fip": LEAGUE_AVG_FIP, "xfip": LEAGUE_AVG_FIP, "siera": LEAGUE_AVG_FIP, "has_data": False}
+    cache_key = f"bp_chain_v2_{team_id}_{days}"
+    cached = get_cached(cache_key, ttl=1800)
+    if cached:
+        return cached
+    try:
+        # Get schedule last N days
+        end = datetime.now().date()
+        start = end - timedelta(days=days)
+        r = requests.get(f"{MLB_STATS_BASE}/schedule",
+                         params={"sportId":1,"team":team_id,"startDate":start.isoformat(),"endDate":end.isoformat()},
+                         timeout=8)
+        total_bp_ip = 0.0
+        ip_last3 = 0.0
+        games = 0
+        dates = r.json().get("dates",[])
+        for di, d in enumerate(dates):
+            for g in d.get("games",[]):
+                pk = g.get("gamePk")
+                if not pk: continue
+                try:
+                    br = requests.get(f"{MLB_STATS_BASE}/game/{pk}/boxscore", timeout=6)
+                    box = br.json()
+                    # Sum bullpen IP from both sides? We need team side only
+                    # Identify side
+                    for side in ["home","away"]:
+                        team = box.get("teams",{}).get(side,{})
+                        tid = team.get("team",{}).get("id")
+                        if tid != team_id: continue
+                        pitchers = team.get("pitchers",[])
+                        players = team.get("players",{})
+                        # Skip first pitcher (starter)
+                        for idx, pid in enumerate(pitchers[1:]):
+                            pkey = f"ID{pid}"
+                            pdata = players.get(pkey,{})
+                            ip_str = pdata.get("stats",{}).get("pitching",{}).get("inningsPitched","0")
+                            try:
+                                if isinstance(ip_str,str) and "." in ip_str:
+                                    w,f = ip_str.split(".")
+                                    ip = int(w)+ (int(f)/3.0 if f in ("1","2") else float("0."+f))
+                                else:
+                                    ip = float(ip_str or 0)
+                            except:
+                                ip = 0.0
+                            total_bp_ip += ip
+                            if di >= len(dates)-3:
+                                ip_last3 += ip
+                    games += 1
+                except:
+                    continue
+        # Fatigue logic: > 9 IP last 3 days = gassed
+        if ip_last3 > 10:
+            fatigue = 1.12
+        elif ip_last3 > 8:
+            fatigue = 1.07
+        elif ip_last3 > 6:
+            fatigue = 1.03
+        elif ip_last3 < 3:
+            fatigue = 0.97 # fresh
+        else:
+            fatigue = 1.0
+        # Get regular bullpen stats for FIP/xFIP
+        base = fetch_bullpen_stats(team_id)
+        result = {
+            "fatigue": fatigue,
+            "ip_last3": round(ip_last3,1),
+            "ip_total": round(total_bp_ip,1),
+            "fip": base.get("fip", LEAGUE_AVG_FIP),
+            "xfip": base.get("fip", LEAGUE_AVG_FIP) * 0.98 + 0.08, # slight regression
+            "siera": base.get("fip", LEAGUE_AVG_FIP) * 0.97 + 0.12,
+            "has_data": base.get("has_data", False) or games>0
+        }
+        set_cache(cache_key, result)
+        return result
+    except Exception as e:
+        # fallback to base
+        base = fetch_bullpen_stats(team_id)
+        result = {"fatigue":1.0,"ip_last3":0.0,"fip":base.get("fip",LEAGUE_AVG_FIP),"xfip":base.get("fip",LEAGUE_AVG_FIP),"siera":base.get("fip",LEAGUE_AVG_FIP),"has_data":False}
+        set_cache(cache_key, result)
+        return result
+
+def calculate_platoon_edge(lineup: List[Dict], pitcher_throws: str) -> float:
+    """Batter/pitcher handedness: R vs L advantage ~8% wOBA"""
+    if not lineup or not pitcher_throws:
+        return 0.0
+    edge = 0.0
+    pt = str(pitcher_throws).upper()
+    is_left_pitcher = pt.startswith("L")
+    for batter in lineup[:9]:
+        hand = str(batter.get("hand","R") or "R").upper()
+        # L batter vs R pitcher = advantage for batter, etc.
+        # If pitcher L and batter R -> batter advantage -> increases offense for that lineup
+        if is_left_pitcher:
+            if hand.startswith("R") or hand.startswith("S"):
+                edge += 0.012  # righty vs lefty boost
+            else:
+                edge -= 0.006  # lefty vs lefty disadvantage
+        else: # R pitcher
+            if hand.startswith("L") or hand.startswith("S"):
+                edge += 0.012
+            else:
+                edge -= 0.004
+    # edge is per team, scale to win prob
+    return max(-0.05, min(0.05, edge))
+
+def enhance_youtube_alpha(yt_result: dict, home: str, away: str) -> dict:
+    """YT BOOST ALPHA - keep but make it real signal, not noise. Detect scoring patterns."""
+    if not yt_result or yt_result.get("status") == "not_installed":
+        return {"momentum_boost":0.0,"pace_boost":0.0,"scoring_boost":0.0,"comeback_boost":0.0,"clutch_boost":0.0,"confidence":0.0,"raw":yt_result}
+    conf = float(yt_result.get("confidence",0.0) or 0.0)
+    gameplay_pct = float(yt_result.get("gameplay_pct",0.7) or 0.7)
+    titles = " ".join([str(yt_result.get("title","")), str(yt_result.get("titles",""))]).lower()
+    transcript = str(yt_result.get("transcript","") or yt_result.get("summary","") or "").lower()
+    combined = titles + " " + transcript
+
+    # Behavior detection
+    momentum_boost = float(yt_result.get("momentum_boost",0.0) or 0.0)
+    pace_boost = float(yt_result.get("pace_boost",0.0) or 0.0)
+
+    # NEW: scoring pattern detection
+    scoring_boost = 0.0
+    comeback_boost = 0.0
+    clutch_boost = 0.0
+
+    # Offensive explosion detection
+    if any(k in combined for k in ["explodes","explosion","offensive explosion","scores 10","scores 11","12 runs","blowout","bats come alive","home run derby","5 homers","4 homers"]):
+        scoring_boost += 0.018
+    if any(k in combined for k in ["rally","comeback","walk-off","walk off","come from behind","erases deficit","down 3","down 4"]):
+        comeback_boost += 0.015
+    if any(k in combined for k in ["clutch","late inning","9th inning","extra innings","go-ahead","game-winning","big hit"]):
+        clutch_boost += 0.010
+    # Pitching dominance -> suppress scoring but boost win prob if team is pitching team
+    if any(k in combined for k in ["shutout","complete game","dominant start","14 strikeouts","15 strikeouts","no-hitter","perfect game"]):
+        scoring_boost -= 0.012
+        clutch_boost += 0.008
+
+    # Team-specific: if home team name appears more with positive words
+    home_l = home.lower() if home else ""
+    away_l = away.lower() if away else ""
+    home_mentions = combined.count(home_l) if len(home_l)>2 else 0
+    away_mentions = combined.count(away_l) if len(away_l)>2 else 0
+    team_bias = 0.0
+    if home_mentions > away_mentions + 1:
+        team_bias = 0.008
+    elif away_mentions > home_mentions + 1:
+        team_bias = -0.008
+
+    # Apply confidence and gameplay filter
+    factor = conf * gameplay_pct
+    momentum_boost = momentum_boost * factor
+    scoring_boost = scoring_boost * factor
+    comeback_boost = comeback_boost * factor
+    clutch_boost = clutch_boost * factor
+    team_bias = team_bias * factor
+
+    # Total alpha = momentum + scoring pattern + comeback + clutch + bias
+    total_alpha = momentum_boost + scoring_boost*0.8 + comeback_boost*0.9 + clutch_boost*0.7 + team_bias
+
+    return {
+        "momentum_boost": round(momentum_boost,4),
+        "pace_boost": round(pace_boost,4),
+        "scoring_boost": round(scoring_boost,4),
+        "comeback_boost": round(comeback_boost,4),
+        "clutch_boost": round(clutch_boost,4),
+        "team_bias": round(team_bias,4),
+        "total_alpha": round(total_alpha,4),
+        "confidence": conf,
+        "gameplay_pct": gameplay_pct,
+        "raw": yt_result
+    }
+
 # === PARLAYOS INJECTION (kept from current) ===
+
 def _find_v6_template():
     here = os.path.dirname(os.path.abspath(__file__))
     candidates = ["parlayos_3.html", "parlayos.html", "parlayos_2.html", "index.html", "parlayos_v6.html"]
@@ -1510,7 +1829,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
     html = re.sub(r'\n{3,}', '\n\n', html)
 
     injection_lines = [
-        f"    // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ PARLAYOS LIVE DATA ({run_date}) ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬",
+        f"    // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ PARLAYOS LIVE DATA ({run_date}) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
         "    window.PARLAYOS_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -1523,7 +1842,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
         "      if(typeof renderDashboard==='function') renderDashboard();",
         "      if(typeof renderAll==='function') renderAll();",
         "    })();",
-        "    // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ END PARLAYOS LIVE DATA ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬",
+        "    // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ END PARLAYOS LIVE DATA ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
     ]
     injection = "\n".join(injection_lines)
 
@@ -1535,7 +1854,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
 
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ {pick_count} MLB picks ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ {out_path}")
+    print(f"ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ {pick_count} MLB picks ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬ ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ {out_path}")
     return out_path
 
 def write_pick_to_log(game_data):
@@ -1562,7 +1881,7 @@ def main():
     except:
         pass
     if not api_key:
-        api_key = os.getenv("ODDS_API_KEY") or ODDS_KEY
+        api_key = ODDS_KEY
 
     engine = PredictionEngine(api_key)
     odds_data = engine.fetch_live_odds()
@@ -1820,10 +2139,10 @@ def main():
             "teamB_k_rate": home_bat_data.get("k_rate"),
             # Pitcher stats for Pitching tab
             "pitcherA_era": away_p_data.get("era"), "pitcherA_whip": away_p_data.get("whip"),
-            "pitcherA_k9": away_p_data.get("k_per_9"), "pitcherA_ip": away_p_data.get("ip", away_p_data.get("inningsPitched", "Ã¢â‚¬â€")),
+            "pitcherA_k9": away_p_data.get("k_per_9"), "pitcherA_ip": away_p_data.get("ip", away_p_data.get("inningsPitched", "â€”")),
             "pitcherA_fip": away_p_data.get("fip"), "pitcherA_w": away_p_data.get("wins"), "pitcherA_l": away_p_data.get("losses"),
             "pitcherB_era": home_p_data.get("era"), "pitcherB_whip": home_p_data.get("whip"),
-            "pitcherB_k9": home_p_data.get("k_per_9"), "pitcherB_ip": home_p_data.get("ip", home_p_data.get("inningsPitched", "Ã¢â‚¬â€")),
+            "pitcherB_k9": home_p_data.get("k_per_9"), "pitcherB_ip": home_p_data.get("ip", home_p_data.get("inningsPitched", "â€”")),
             "pitcherB_fip": home_p_data.get("fip"), "pitcherB_w": home_p_data.get("wins"), "pitcherB_l": home_p_data.get("losses"),
             # Lineups
             "lineupA": g.get("_lineupA", []),
@@ -1846,7 +2165,7 @@ def main():
         write_pick_to_log(game_data)
 
     export_to_html(all_games_data)
-    print(f"\nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ {len(all_games_data)} games exported")
+    print(f"\nÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ {len(all_games_data)} games exported")
 
 
 def run(html_path: str = None):
