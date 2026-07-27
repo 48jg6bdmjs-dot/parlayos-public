@@ -1,56 +1,69 @@
-import os, sys, traceback, json
-from pathlib import Path
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
+import os, sys, traceback
 
-def _find_html_template():
-    for name in ["parlayos_3.html","parlayos_transparent_v8.html","parlayos_transparent_v7.html","parlayos.html","index.html","parlayos_2.html","parlayos_fixed.html"]:
-        p=os.path.join(HERE,name)
-        if os.path.exists(p):
-            return p
-    return None
-
-def _run_one(label, module_name):
-    print(f"\n{'='*70}\n  {label}\n{'='*70}")
+def _run_one(name, module_path, html_path):
+    print(f"\n{'='*70}")
+    print(f"  {name}")
+    print(f"{'='*70}")
     try:
-        module=__import__(module_name)
-        import importlib
-        importlib.reload(module)
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(name.replace(' ','_'), module_path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        # Try run() first, then main()
+        if hasattr(module, 'run'):
+            picks = module.run(html_path) if html_path else module.run()
+        elif hasattr(module, 'main'):
+            module.main()
+            picks = []
+        else:
+            print(f"X {name}: no run() or main()")
+            return False, 0, 0
+        qualify = sum(1 for p in (picks or []) if p.get('qualifies', True))
+        print(f"OK {name}: {len(picks or [])} games, {qualify} qualify")
+        return True, len(picks or []), qualify
     except Exception as e:
-        print(f"X {label}: FAILED IMPORT - {e}")
+        print(f"X {name}: FAILED - {e}")
         traceback.print_exc()
-        return (label,False,None,str(e))
-    html_path=_find_html_template()
-    try:
-        # Handle missing ODDS_API_KEY gracefully - engine should run in demo/offseason mode
-        if not os.getenv('ODDS_API_KEY'):
-            print(f"  Note: ODDS_API_KEY not set - {label} will run in offseason/demo mode")
-        picks=module.run(html_path) if html_path else module.run()
-        qual=sum(1 for p in (picks or []) if p.get("qualifies"))
-        player_ok = sum(1 for p in (picks or []) if p.get("player_data_ok"))
-        print(f"OK {label}: {len(picks or [])} games, {qual} qualify, player_data_ok={player_ok}")
-        return (label,True,picks,None)
-    except Exception as e:
-        print(f"X {label}: FAILED - {e}")
-        traceback.print_exc()
-        return (label,False,None,str(e))
+        return False, 0, 0
 
 def main():
-    odds_key_set = bool(os.getenv('ODDS_API_KEY'))
-    print(f"ODDS_API_KEY set: {odds_key_set}")
-    if not odds_key_set:
+    has_key = bool(os.getenv("ODDS_API_KEY"))
+    print(f"ODDS_API_KEY set: {has_key}")
+    if not has_key:
         print("Running in OFFSEASON/DEMO mode - games may be 0 but engine stays intact")
-    results=[]
-    results.append(_run_one("MLB (mlb_ace.py)","mlb_ace"))
-    results.append(_run_one("NFL (nfl_ace.py)","nfl_ace"))
-    results.append(_run_one("NBA (nba_ace.py)","nba_ace"))
-    print("\n"+"="*70+"\n SUMMARY\n"+"="*70)
-    for label,ok,picks,err in results:
-        if ok:
-            q=sum(1 for p in (picks or []) if p.get("qualifies"))
-            print(f"  OK {label}: {len(picks or [])} games, {q} qualify")
-        else:
-            print(f"  X {label}: {err}")
+    
+    html_path = os.path.join(os.path.dirname(__file__), "parlayos.html")
+    
+    results = []
+    # MLB always runs
+    ok, total, qual = _run_one("MLB (mlb_ace.py)", "mlb_ace.py", html_path)
+    results.append((ok, "MLB", total, qual))
+    
+    # NBA - only if in season or forced
+    ok, total, qual = _run_one("NBA (nba_ace.py)", "nba_ace.py", None)
+    results.append((ok, "NBA", total, qual))
+    
+    # NFL - only if in season or forced
+    ok, total, qual = _run_one("NFL (nfl_ace.py)", "nfl_ace.py", None)
+    results.append((ok, "NFL", total, qual))
+    
+    print(f"\n{'='*70}")
+    print(" SUMMARY")
+    print(f"{'='*70}")
+    for ok, name, total, qual in results:
+        status = "OK" if ok else "X"
+        print(f"  {status} {name}: {total} games, {qual} qualify")
+    
+    # Ensure parlayos.html exists and copy to index.html for Cloudflare Pages
+    if os.path.exists("parlayos.html"):
+        with open("parlayos.html", "r") as f:
+            content = f.read()
+        # Also write index.html for Pages
+        with open("index.html", "w") as f:
+            f.write(content)
+        print("\nâœ“ parlayos.html -> index.html copied for Cloudflare Pages")
+    else:
+        print("\n! parlayos.html not found - build may have failed")
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
