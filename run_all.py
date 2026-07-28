@@ -1,3 +1,4 @@
+
 import os, sys, traceback
 
 def _run_one(name, module_path, html_path):
@@ -9,19 +10,11 @@ def _run_one(name, module_path, html_path):
         spec = importlib.util.spec_from_file_location(name.replace(' ','_'), module_path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        # Try run() first, then main() - handle both signatures
         if hasattr(module, 'run'):
             try:
                 picks = module.run(html_path)
-            except TypeError as te:
-                # Fallback if run() requires no args or has different signature
-                if 'html_path' in str(te) or 'positional argument' in str(te):
-                    try:
-                        picks = module.run()
-                    except:
-                        picks = module.run(html_path or "parlayos.html")
-                else:
-                    raise
+            except TypeError:
+                picks = module.run()
         elif hasattr(module, 'main'):
             module.main()
             picks = []
@@ -38,23 +31,17 @@ def _run_one(name, module_path, html_path):
 
 def main():
     has_key = bool(os.getenv("ODDS_API_KEY"))
-    print(f"ODDS_API_KEY set: {has_key}")
+    print(f"ODDS_API_KEY env set: {has_key}")
     if not has_key:
-        print("Running in OFFSEASON/DEMO mode - games may be 0 but engine stays intact")
+        print("Using hardcoded fallback e357fcc2... (add Secret ODDS_API_KEY in GitHub Settings to hide this warning)")
     
     html_path = os.path.join(os.path.dirname(__file__), "parlayos.html")
-    
     results = []
-    # MLB always runs
     ok, total, qual = _run_one("MLB (mlb_ace.py)", "mlb_ace.py", html_path)
     results.append((ok, "MLB", total, qual))
-    
-    # NBA - only if in season or forced
-    ok, total, qual = _run_one("NBA (nba_ace.py)", "nba_ace.py", None)
+    ok, total, qual = _run_one("NBA (nba_ace.py)", "nba_ace.py", "parlayos.html")
     results.append((ok, "NBA", total, qual))
-    
-    # NFL - only if in season or forced
-    ok, total, qual = _run_one("NFL (nfl_ace.py)", "nfl_ace.py", None)
+    ok, total, qual = _run_one("NFL (nfl_ace.py)", "nfl_ace.py", "parlayos.html")
     results.append((ok, "NFL", total, qual))
     
     print(f"\n{'='*70}")
@@ -64,16 +51,14 @@ def main():
         status = "OK" if ok else "X"
         print(f"  {status} {name}: {total} games, {qual} qualify")
     
-    # Ensure parlayos.html exists and copy to index.html for Cloudflare Pages
     if os.path.exists("parlayos.html"):
-        with open("parlayos.html", "r") as f:
+        with open("parlayos.html", "r", encoding="utf-8", errors="ignore") as f:
             content = f.read()
-        # Also write index.html for Pages
-        with open("index.html", "w") as f:
-            f.write(content)
-        print("\n✓ parlayos.html -> index.html copied for Cloudflare Pages")
+        with open("index.html", "w", encoding="utf-8") as out:
+            out.write(content)
+        print("\n✓ parlayos.html -> index.html copied")
     else:
-        print("\n! parlayos.html not found - build may have failed")
+        print("\n! parlayos.html not found")
 
 if __name__ == "__main__":
     main()
