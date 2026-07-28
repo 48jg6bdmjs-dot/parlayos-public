@@ -1,5 +1,5 @@
 """
-mlb_ace.py ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â IMPROVED VERSION merging old's superior totals model with ParlayOS injection
+mlb_ace.py ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â IMPROVED VERSION merging old's superior totals model with ParlayOS injection
 - Old's superior logic: lineup-weighted OPS with platoon splits, form blending (50/30/20),
   injury adjustment, rest factor, bullpen fatigue from boxscores, dynamic park factor,
   weather/wind/umpire factors, full Monte Carlo with gamma overdispersion, crooked innings,
@@ -136,7 +136,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(HERE, "mlb_config.json")
 PICKS_LOG_PATH = os.path.join(HERE, "picks_log.csv")
 MLB_STATS_BASE = "https://statsapi.mlb.com/api/v1"
-ODDS_KEY = "e357fcc2d8a1fea08e7fa62a8d0b65b5"
+ODDS_KEY = os.getenv("ODDS_API_KEY") or "e357fcc2d8a1fea08e7fa62a8d0b65b5"
 
 # === CACHING ===
 _CACHE = {}
@@ -1071,11 +1071,11 @@ class PredictionEngine:
         if not pitcher_id:
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
                     "fip": LEAGUE_AVG_FIP, "xfip": LEAGUE_AVG_FIP, "siera": LEAGUE_AVG_FIP,
-                    "ip": "â€”", "wins": 0, "losses": 0, "has_data": False, "throws": None, "stuff_plus": 100, "babip": 0.300, "lob_pct": 0.72}
+                    "ip": "—", "wins": 0, "losses": 0, "has_data": False, "throws": None, "stuff_plus": 100, "babip": 0.300, "lob_pct": 0.72}
         cache_key = f"pitcher_stats_v6_{pitcher_id}"
         cached = get_cached(cache_key, ttl=3600)
         if cached:
-            if "ip" not in cached: cached["ip"] = "â€”"
+            if "ip" not in cached: cached["ip"] = "—"
             if "xfip" not in cached: 
                 cached["xfip"] = cached.get("fip", LEAGUE_AVG_FIP)
                 cached["siera"] = cached.get("fip", LEAGUE_AVG_FIP)
@@ -1093,10 +1093,10 @@ class PredictionEngine:
                 sc = fetch_statcast_pitcher(pitcher_id) if 'fetch_statcast_pitcher' in globals() else {"stuff_plus":100,"babip":0.300,"lob_pct":0.72}
                 return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
                         "fip": LEAGUE_AVG_FIP, "xfip": adv.get("xfip",LEAGUE_AVG_FIP), "siera": adv.get("siera",LEAGUE_AVG_FIP),
-                        "ip": "â€”", "wins": 0, "losses": 0, "has_data": False, "throws": adv.get("throws"), "stuff_plus": sc.get("stuff_plus",100), "babip": sc.get("babip",0.300), "lob_pct": sc.get("lob_pct",0.72)}
+                        "ip": "—", "wins": 0, "losses": 0, "has_data": False, "throws": adv.get("throws"), "stuff_plus": sc.get("stuff_plus",100), "babip": sc.get("babip",0.300), "lob_pct": sc.get("lob_pct",0.72)}
             stat = splits[0]["stat"]
             ip_raw = stat.get("inningsPitched", "0")
-            ip_display = str(ip_raw) if ip_raw else "â€”"
+            ip_display = str(ip_raw) if ip_raw else "—"
             try:
                 if isinstance(ip_raw, str) and "." in ip_raw:
                     whole, frac = ip_raw.split(".")
@@ -1146,7 +1146,7 @@ class PredictionEngine:
             sc = fetch_statcast_pitcher(pitcher_id) if 'fetch_statcast_pitcher' in globals() else {}
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
                     "fip": LEAGUE_AVG_FIP, "xfip": adv.get("xfip",LEAGUE_AVG_FIP), "siera": adv.get("siera",LEAGUE_AVG_FIP),
-                    "ip": "â€”", "wins": 0, "losses": 0, "has_data": False, "throws": adv.get("throws"), "stuff_plus": sc.get("stuff_plus",100), "babip":0.300, "lob_pct":0.72}
+                    "ip": "—", "wins": 0, "losses": 0, "has_data": False, "throws": adv.get("throws"), "stuff_plus": sc.get("stuff_plus",100), "babip":0.300, "lob_pct":0.72}
 
     def fetch_weather(self, lat: float, lon: float) -> Dict:
         cache_key = f"weather_{round(lat,2)}_{round(lon,2)}"
@@ -1667,7 +1667,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
     html = re.sub(r'\n{3,}', '\n\n', html)
 
     injection_lines = [
-        f"    // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ PARLAYOS LIVE DATA ({run_date}) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
+        f"    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ PARLAYOS LIVE DATA ({run_date}) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
         "    window.PARLAYOS_DATA = {",
         f'      runDate: "{run_date}",',
         f"      pickCount: {pick_count},",
@@ -1680,7 +1680,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
         "      if(typeof renderDashboard==='function') renderDashboard();",
         "      if(typeof renderAll==='function') renderAll();",
         "    })();",
-        "    // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ END PARLAYOS LIVE DATA ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬",
+        "    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ END PARLAYOS LIVE DATA ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
     ]
     injection = "\n".join(injection_lines)
 
@@ -1692,7 +1692,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
 
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ {pick_count} MLB picks ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬ ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ {out_path}")
+    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {pick_count} MLB picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {out_path}")
     return out_path
 
 def write_pick_to_log(game_data):
@@ -1711,8 +1711,10 @@ def write_pick_to_log(game_data):
 
 def main():
     config = load_config()
-    api_key = None
-    try:
+    # Prioritize env var first, then sports_config.json, then hardcoded fallback
+    api_key = os.getenv("ODDS_API_KEY")
+    if not api_key:
+        try:
         with open(os.path.join(HERE, "sports_config.json")) as f:
             sports_cfg = json.load(f)
             api_key = sports_cfg.get("odds_api_key") or sports_cfg.get("api_key")
@@ -1977,10 +1979,10 @@ def main():
             "teamB_k_rate": home_bat_data.get("k_rate"),
             # Pitcher stats for Pitching tab
             "pitcherA_era": away_p_data.get("era"), "pitcherA_whip": away_p_data.get("whip"),
-            "pitcherA_k9": away_p_data.get("k_per_9"), "pitcherA_ip": away_p_data.get("ip", away_p_data.get("inningsPitched", "â€”")),
+            "pitcherA_k9": away_p_data.get("k_per_9"), "pitcherA_ip": away_p_data.get("ip", away_p_data.get("inningsPitched", "—")),
             "pitcherA_fip": away_p_data.get("fip"), "pitcherA_w": away_p_data.get("wins"), "pitcherA_l": away_p_data.get("losses"),
             "pitcherB_era": home_p_data.get("era"), "pitcherB_whip": home_p_data.get("whip"),
-            "pitcherB_k9": home_p_data.get("k_per_9"), "pitcherB_ip": home_p_data.get("ip", home_p_data.get("inningsPitched", "â€”")),
+            "pitcherB_k9": home_p_data.get("k_per_9"), "pitcherB_ip": home_p_data.get("ip", home_p_data.get("inningsPitched", "—")),
             "pitcherB_fip": home_p_data.get("fip"), "pitcherB_w": home_p_data.get("wins"), "pitcherB_l": home_p_data.get("losses"),
             # Lineups
             "lineupA": g.get("_lineupA", []),
@@ -2003,7 +2005,8 @@ def main():
         write_pick_to_log(game_data)
 
     export_to_html(all_games_data)
-    print(f"\nÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ {len(all_games_data)} games exported")
+    print(f"
+ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {len(all_games_data)} games exported")
 
 
 def run(html_path: str = None):
