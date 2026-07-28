@@ -279,10 +279,63 @@ def export_to_html(picks,html_path=None):
     return out
 def main():
     eng=NFLPredictionEngine(ODDS_KEY)
-    odds=eng.fetch_live_odds()
-    print(f"NFL Odds {len(odds)} games")
-    picks=[{"home":"Kansas City Chiefs","away":"Buffalo Bills","home_abbr":"KC","away_abbr":"BUF","pick":"KC","odds":-110,"model_prob":55,"edge":3,"line":47.5,"qualifies":True}]
-    export_to_html(picks)
+    odds_data=eng.fetch_live_odds()
+    print(f"NFL Odds {len(odds_data)} games")
+    all_games=[]
+    seen=set()
+    for game in odds_data:
+        if not game.get("bookmakers"):
+            continue
+        h2h=next((m for m in game["bookmakers"][0]["markets"] if m["key"]=="h2h"), None)
+        if not h2h:
+            continue
+        home=game["home_team"]
+        away=game["away_team"]
+        if home not in TEAM_ABBR or away not in TEAM_ABBR:
+            continue
+        key=(away,home)
+        if key in seen:
+            continue
+        seen.add(key)
+        home_odds=next((o["price"] for o in h2h["outcomes"] if o["name"]==home), -110)
+        away_odds=next((o["price"] for o in h2h["outcomes"] if o["name"]==away), 100)
+        home_abbr=TEAM_ABBR.get(home, home[:3].upper())
+        away_abbr=TEAM_ABBR.get(away, away[:3].upper())
+        real_total=None
+        totals_mkt=next((m for m in game["bookmakers"][0]["markets"] if m["key"]=="totals"), None)
+        if totals_mkt:
+            over_o=next((o for o in totals_mkt["outcomes"] if o["name"]=="Over"), None)
+            if over_o and "point" in over_o:
+                try:
+                    real_total=float(over_o["point"])
+                except:
+                    real_total=44.5
+        g={"home":home,"away":away,"home_abbr":home_abbr,"away_abbr":away_abbr,"odds":{"home":home_odds,"away":away_odds},"real_total":real_total,"commence_time":game.get("commence_time")}
+        prob=eng.calculate_win_probability(g)
+        implied=0.5
+        try:
+            hi=_american_to_implied_prob(home_odds)
+            ai=_american_to_implied_prob(away_odds)
+            tot=hi+ai
+            home_true=hi/tot if tot>0 else 0.5
+            implied=home_true
+        except:
+            pass
+        if prob>=0.5:
+            pick, pick_prob=home, prob
+            pick_odds=home_odds
+        else:
+            pick, pick_prob=away, 1-prob
+            pick_odds=away_odds
+        pick_implied=implied if pick==home else (1-implied)
+        edge=pick_prob-pick_implied
+        game_data={"home":home,"away":away,"home_abbr":home_abbr,"away_abbr":away_abbr,"pick":pick,"odds":pick_odds,"model_prob":round(pick_prob*100,1),"edge":round(edge*100,1),"edge_pct":round(edge*100,1),"line":real_total or 44.5,"qualifies":True}
+        all_games.append(game_data)
+    if not all_games:
+        print("  [NFL] Off-season or no qualifying games, using 1 sample to keep hub alive")
+        all_games=[{"home":"Kansas City Chiefs","away":"Buffalo Bills","home_abbr":"KC","away_abbr":"BUF","pick":"KC","odds":-110,"model_prob":55,"edge":3,"line":47.5,"qualifies":True}]
+    export_to_html(all_games)
+    return all_games
 if __name__=="__main__": main()
 
 
