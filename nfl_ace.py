@@ -15,7 +15,7 @@ try:
 except:
     ET_ZONE = timezone.utc
 
-ODDS_KEY = os.getenv("ODDS_API_KEY") or "373aadcf1852b15f1d8f4f483faf6d8"
+ODDS_KEY = os.getenv("ODDS_API_KEY") or "e357fcc2d8a1fea08e7fa62a8d0b65b5"
 
 try:
     from youtube_highlight_engine import YouTubeHighlightAnalyzer, get_youtube_boost
@@ -180,7 +180,7 @@ class NFLPredictionEngine:
     def _load_secure_key(self):
         env=os.getenv("ODDS_API_KEY"); 
         if env: return env.strip()
-        return self.api_key or "373aadcf1852b15f1d8f4f483faf6d8"
+        return self.api_key or "e357fcc2d8a1fea08e7fa62a8d0b65b5"
     def fetch_live_odds(self):
         url="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds"
         params={"apiKey":self._load_secure_key(),"regions":"us","markets":"h2h,spreads,totals","oddsFormat":"american"}
