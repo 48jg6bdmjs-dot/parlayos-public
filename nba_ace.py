@@ -21,7 +21,7 @@ try:
 except:
     ET_ZONE = timezone.utc
 
-ODDS_KEY = os.getenv("ODDS_API_KEY") or "373aadcf1852b15f1d8f4f483faf6d8"
+ODDS_KEY = os.getenv("ODDS_API_KEY") or "e357fcc2d8a1fea08e7fa62a8d0b65b5"
 
 try:
     from youtube_highlight_engine import YouTubeHighlightAnalyzer, get_youtube_boost
