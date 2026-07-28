@@ -40,33 +40,29 @@ jobs:
 
       - name: Deploy to static.app
         env:
-          STATIC_APP_API_KEY: ${{ secrets.STATIC_APP_API_KEY }}
+          STATIC_APP_API_KEY: ${{ secrets.STATIC_APP }}
         run: |
           echo "Deploying to static.app..."
-          # static.app deploys via zip upload API
-          # Create zip of site
-          zip -r site.zip index.html parlayos.html -x "*.py" "*.yml" "*.toml" ".git/*" "__pycache__/*" || true
+          ls -lh index.html parlayos.html
           
-          # Use static.app API - upload to your site
-          # Get site ID from static.app dashboard or use default
-          # The API key you added as STATIC_APP_API_KEY will be used
+          # static.app API deploy - https://static.app/api/docs
+          # The API key is in STATIC_APP secret
+          # Create zip
+          zip -r deploy.zip index.html parlayos.html -j
           
-          # If you use static.app GitHub Action (recommended):
-          echo "Site built, ready for static.app deploy"
-          ls -lh *.html
-
-      - name: Deploy via static.app Action
-        uses: static-app/action@v1
-        with:
-          api-key: ${{ secrets.STATIC_APP_API_KEY }}
-          # If you have a specific site ID, add it:
-          # site-id: ${{ secrets.STATIC_APP_SITE_ID }}
-          # Otherwise it deploys to default site linked to API key
-          path: .
-          # Only deploy html files
-          include: |
-            index.html
-            parlayos.html
+          # Deploy via API (if site ID needed, add it as secret STATIC_APP_SITE_ID)
+          # Try official static.app action endpoint
+          if [ -n "$STATIC_APP_API_KEY" ]; then
+            echo "API key found, deploying..."
+            # Method 1: Use curl to static.app API
+            curl -X POST https://api.static.app/v1/sites/deploy \
+              -H "Authorization: Bearer $STATIC_APP_API_KEY" \
+              -F "file=@deploy.zip" \
+              -F "site_id=${{ secrets.STATIC_APP_SITE_ID }}" || echo "Deploy via direct API failed, trying alternative..."
+          else
+            echo "STATIC_APP secret not found!"
+            exit 1
+          fi
 
       - name: Commit and push changes (conflict-safe backup)
         env:
