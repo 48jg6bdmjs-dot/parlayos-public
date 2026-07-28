@@ -13,7 +13,7 @@ Critical fixes:
 import requests
 import json
 import os
-ODDS_KEY = "373aadcf1852b15f1d8f4f483faf6d8"
+ODDS_KEY = os.getenv("ODDS_API_KEY") or "e357fcc2d8a1fea08e7fa62a8d0b65b5"
 import re
 import math
 import random
@@ -622,12 +622,12 @@ def apply_platt_calibration(p): return p
 
 def run(html_path: str):
     config = load_config()
-    api_key = os.getenv("ODDS_API_KEY") or "e357fcc2d8a1fea08e7fa62a8d0b65b5"
+    api_key = None
     try:
         with open(os.path.join(os.path.dirname(__file__), "sports_config.json")) as f:
-            api_key = json.load(f).get("odds_api_key") or api_key
+            api_key = json.load(f).get("odds_api_key")
     except:
-        pass
+        api_key = "e357fcc2d8a1fea08e7fa62a8d0b65b5"
     engine = NBAPredictionEngine(api_key or "e357fcc2d8a1fea08e7fa62a8d0b65b5")
     odds_data = engine.fetch_live_odds()
     games = []
