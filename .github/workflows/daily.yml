@@ -38,7 +38,37 @@ jobs:
           python run_all.py || echo "::warning::run_all.py failed partially - continuing"
           ls -lh parlayos.html index.html || true
 
-      - name: Commit and push changes (conflict-safe)
+      - name: Deploy to static.app
+        env:
+          STATIC_APP_API_KEY: ${{ secrets.STATIC_APP_API_KEY }}
+        run: |
+          echo "Deploying to static.app..."
+          # static.app deploys via zip upload API
+          # Create zip of site
+          zip -r site.zip index.html parlayos.html -x "*.py" "*.yml" "*.toml" ".git/*" "__pycache__/*" || true
+          
+          # Use static.app API - upload to your site
+          # Get site ID from static.app dashboard or use default
+          # The API key you added as STATIC_APP_API_KEY will be used
+          
+          # If you use static.app GitHub Action (recommended):
+          echo "Site built, ready for static.app deploy"
+          ls -lh *.html
+
+      - name: Deploy via static.app Action
+        uses: static-app/action@v1
+        with:
+          api-key: ${{ secrets.STATIC_APP_API_KEY }}
+          # If you have a specific site ID, add it:
+          # site-id: ${{ secrets.STATIC_APP_SITE_ID }}
+          # Otherwise it deploys to default site linked to API key
+          path: .
+          # Only deploy html files
+          include: |
+            index.html
+            parlayos.html
+
+      - name: Commit and push changes (conflict-safe backup)
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
