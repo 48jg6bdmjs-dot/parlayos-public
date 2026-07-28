@@ -620,14 +620,16 @@ def _devig_probs(home_odds, away_odds):
 
 def apply_platt_calibration(p): return p
 
-def run(html_path: str):
+def run(html_path: str = None):
+    if html_path is None:
+        html_path = "parlayos.html"
     config = load_config()
-    api_key = None
+    api_key = os.getenv("ODDS_API_KEY") or "e357fcc2d8a1fea08e7fa62a8d0b65b5"
     try:
         with open(os.path.join(os.path.dirname(__file__), "sports_config.json")) as f:
-            api_key = json.load(f).get("odds_api_key")
+            api_key = json.load(f).get("odds_api_key") or api_key
     except:
-        api_key = "e357fcc2d8a1fea08e7fa62a8d0b65b5"
+        pass
     engine = NBAPredictionEngine(api_key or "e357fcc2d8a1fea08e7fa62a8d0b65b5")
     odds_data = engine.fetch_live_odds()
     games = []
