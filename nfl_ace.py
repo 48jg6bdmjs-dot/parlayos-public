@@ -1,3 +1,4 @@
+
 """
 nfl_ace.py V7 ULTIMATE - Substantially Higher Valuation Than Market
 - Real EPA: nflverse nflfastR data, CPOE, air yards, YAC, pressure, pass rush win, coverage
@@ -6,6 +7,7 @@ nfl_ace.py V7 ULTIMATE - Substantially Higher Valuation Than Market
 - Pricing model beats Pinnacle by 2.5% edge
 """
 
+import os
 import requests, json, os, re, math, random, time
 from datetime import datetime, timezone, timedelta
 from typing import List, Dict
