@@ -1098,15 +1098,8 @@ class PredictionEngine:
 
         # Rest factor (old's logic)
         rest_edge = 0.0
-        # This would need days_rest data - simplified for now
-        # In full old model, this comes from schedule analysis
 
-        # Combine with old's superior weighting - pitcher is now properly weighted
-        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge + yt_momentum + offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
-
-        # Store edge components for logging (for future weight fitting)
-
-        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) ===
+        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) - MUST be before total_edge ===
         yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
         yt_momentum = 0.0
         yt_pace = 0.0
@@ -1137,6 +1130,10 @@ class PredictionEngine:
         else:
             game["_yt_boost"] = yt_boost_data
 
+        # Combine with old's superior weighting - pitcher is now properly weighted (after YT)
+        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge + yt_momentum + offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
+
+        # Store edge components for logging (for future weight fitting)
         game["_edge_components"] = {
             "c_team_edge": team_edge,
             "c_pitcher_fip_edge": pitcher_fip_edge,
