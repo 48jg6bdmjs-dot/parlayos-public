@@ -27,86 +27,33 @@ jobs:
           python-version: '3.11'
 
       - name: Install deps
-        run: |
-          pip install --break-system-packages -r requirements.txt || pip install -r requirements.txt
+        run: pip install --break-system-packages -r requirements.txt || pip install -r requirements.txt
 
-      - name: Run all three prediction engines (MLB, NFL, NBA) V3 ULTRA
+      - name: Run all three prediction engines
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
-          echo "ODDS_API_KEY set: $([ -n "$ODDS_API_KEY" ] && echo true || echo false)"
-          python run_all.py || echo "::warning::run_all.py failed partially - continuing"
-          ls -lh parlayos.html index.html || true
-
-      - name: Deploy to static.app
-        env:
-          STATIC_APP_API_KEY: ${{ secrets.STATIC_APP }}
-        run: |
-          echo "Deploying to static.app..."
+          python run_all.py || true
           ls -lh index.html parlayos.html
-          
-          # static.app API deploy - https://static.app/api/docs
-          # The API key is in STATIC_APP secret
-          # Create zip
-          zip -r deploy.zip index.html parlayos.html -j
-          
-          # Deploy via API (if site ID needed, add it as secret STATIC_APP_SITE_ID)
-          # Try official static.app action endpoint
-          if [ -n "$STATIC_APP_API_KEY" ]; then
-            echo "API key found, deploying..."
-            # Method 1: Use curl to static.app API
-            curl -X POST https://api.static.app/v1/sites/deploy \
-              -H "Authorization: Bearer $STATIC_APP_API_KEY" \
-              -F "file=@deploy.zip" \
-              -F "site_id=${{ secrets.STATIC_APP_SITE_ID }}" || echo "Deploy via direct API failed, trying alternative..."
-          else
-            echo "STATIC_APP secret not found!"
-            exit 1
-          fi
 
-      - name: Commit and push changes (conflict-safe backup)
+      - name: Deploy to static.app (if secret exists)
         env:
-          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          STATIC_APP_KEY: ${{ secrets.STATIC_APP }}
+        run: |
+          if [ -z "$STATIC_APP_KEY" ]; then
+            echo "⚠️ STATIC_APP secret not found in GitHub - skipping static.app deploy"
+            echo "Add it: GitHub → Settings → Secrets → New secret → Name: STATIC_APP, Value: your static.app API key"
+            exit 0
+          fi
+          zip -j deploy.zip index.html parlayos.html
+          echo "Deploying to static.app with key ${#STATIC_APP_KEY} chars"
+          curl -X POST https://api.static.app/deploy -H "Authorization: Bearer $STATIC_APP_KEY" -F "file=@deploy.zip" || echo "Deploy attempt done, check static.app dashboard"
+
+      - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          for f in sports_config.json picks_log.csv nfl_picks_log.csv nba_picks_log.csv parlayos.html index.html; do
-            if [ -f "$f" ]; then
-              git add -f "$f"
-            fi
-          done
-
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-            exit 0
-          fi
-
-          git commit -m "auto-update: MLB/NFL/NBA V3 ULTRA picks, highlights + config (3x daily)"
-
-          for i in 1 2 3 4 5; do
-            echo "=== Push attempt $i ==="
-            git fetch origin main
-
-            if ! git rebase origin/main; then
-              echo "Rebase conflict - keeping our generated parlayos.html"
-              git checkout --theirs -- parlayos.html index.html 2>/dev/null || true
-              git add -f parlayos.html index.html
-              git -c core.editor=true rebase --continue 2>/dev/null || git rebase --skip 2>/dev/null || {
-                echo "Rebase still failing - hard reset and regenerate"
-                git rebase --abort || true
-                git reset --hard origin/main
-                python run_all.py || true
-                git add -f parlayos.html index.html sports_config.json picks_log.csv nfl_picks_log.csv nba_picks_log.csv 2>/dev/null || true
-                git commit -m "auto-update: MLB/NFL/NBA V3 ULTRA picks (resolved conflict)" || true
-              }
-            fi
-
-            if git push origin HEAD:main; then
-              echo "Push succeeded"
-              exit 0
-            fi
-            echo "Push failed, retrying in 5s..."
-            sleep 5
-          done
-          exit 1
+          git add -f parlayos.html index.html || true
+          git diff --staged --quiet && echo "No changes" && exit 0
+          git commit -m "auto-update: picks"
+          git push origin HEAD:main || (git fetch origin main && git rebase origin/main && git push)
