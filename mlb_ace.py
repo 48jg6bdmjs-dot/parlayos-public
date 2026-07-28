@@ -108,6 +108,40 @@ STARTER_INNINGS = 6.5
 LEAGUE_RPG_FALLBACK = 4.40
 SLOT_WEIGHTS = [1.103, 1.075, 1.049, 1.023, 0.997, 0.974, 0.950, 0.927, 0.903]
 
+# === TEAM BATTING FALLBACK (fixes NameError that broke updates since Jul 17) ===
+TEAM_BATTING_FALLBACK = {
+    'ARI': {'avg': .252, 'obp': .323, 'slg': .416, 'ops': .739, 'hr': 158, 'rbi': 680, 'sb': 98, 'k_rate': .219},
+    'ATL': {'avg': .259, 'obp': .333, 'slg': .443, 'ops': .776, 'hr': 198, 'rbi': 740, 'sb': 78, 'k_rate': .225},
+    'BAL': {'avg': .255, 'obp': .324, 'slg': .424, 'ops': .748, 'hr': 178, 'rbi': 710, 'sb': 88, 'k_rate': .218},
+    'BOS': {'avg': .261, 'obp': .331, 'slg': .432, 'ops': .763, 'hr': 172, 'rbi': 730, 'sb': 92, 'k_rate': .221},
+    'CHC': {'avg': .254, 'obp': .325, 'slg': .420, 'ops': .745, 'hr': 168, 'rbi': 700, 'sb': 85, 'k_rate': .223},
+    'CWS': {'avg': .240, 'obp': .307, 'slg': .388, 'ops': .695, 'hr': 142, 'rbi': 610, 'sb': 72, 'k_rate': .235},
+    'CIN': {'avg': .253, 'obp': .324, 'slg': .418, 'ops': .742, 'hr': 165, 'rbi': 690, 'sb': 102, 'k_rate': .220},
+    'CLE': {'avg': .250, 'obp': .317, 'slg': .401, 'ops': .718, 'hr': 148, 'rbi': 650, 'sb': 112, 'k_rate': .215},
+    'COL': {'avg': .262, 'obp': .326, 'slg': .438, 'ops': .764, 'hr': 175, 'rbi': 720, 'sb': 68, 'k_rate': .228},
+    'DET': {'avg': .248, 'obp': .314, 'slg': .405, 'ops': .719, 'hr': 152, 'rbi': 640, 'sb': 82, 'k_rate': .227},
+    'HOU': {'avg': .264, 'obp': .333, 'slg': .435, 'ops': .768, 'hr': 182, 'rbi': 750, 'sb': 75, 'k_rate': .210},
+    'KC':  {'avg': .253, 'obp': .316, 'slg': .408, 'ops': .724, 'hr': 145, 'rbi': 630, 'sb': 118, 'k_rate': .218},
+    'LAA': {'avg': .247, 'obp': .312, 'slg': .404, 'ops': .716, 'hr': 155, 'rbi': 640, 'sb': 78, 'k_rate': .232},
+    'LAD': {'avg': .266, 'obp': .340, 'slg': .450, 'ops': .790, 'hr': 210, 'rbi': 790, 'sb': 88, 'k_rate': .208},
+    'MIA': {'avg': .244, 'obp': .308, 'slg': .391, 'ops': .699, 'hr': 138, 'rbi': 600, 'sb': 95, 'k_rate': .230},
+    'MIL': {'avg': .250, 'obp': .322, 'slg': .413, 'ops': .735, 'hr': 162, 'rbi': 680, 'sb': 108, 'k_rate': .226},
+    'MIN': {'avg': .251, 'obp': .319, 'slg': .414, 'ops': .733, 'hr': 168, 'rbi': 690, 'sb': 72, 'k_rate': .224},
+    'NYM': {'avg': .255, 'obp': .327, 'slg': .421, 'ops': .748, 'hr': 172, 'rbi': 710, 'sb': 82, 'k_rate': .222},
+    'NYY': {'avg': .257, 'obp': .332, 'slg': .433, 'ops': .765, 'hr': 195, 'rbi': 760, 'sb': 68, 'k_rate': .219},
+    'OAK': {'avg': .235, 'obp': .301, 'slg': .378, 'ops': .679, 'hr': 135, 'rbi': 580, 'sb': 88, 'k_rate': .240},
+    'PHI': {'avg': .260, 'obp': .331, 'slg': .436, 'ops': .767, 'hr': 188, 'rbi': 750, 'sb': 85, 'k_rate': .220},
+    'PIT': {'avg': .245, 'obp': .312, 'slg': .396, 'ops': .708, 'hr': 142, 'rbi': 620, 'sb': 92, 'k_rate': .228},
+    'SD':  {'avg': .252, 'obp': .322, 'slg': .413, 'ops': .735, 'hr': 160, 'rbi': 680, 'sb': 98, 'k_rate': .212},
+    'SF':  {'avg': .246, 'obp': .317, 'slg': .398, 'ops': .715, 'hr': 148, 'rbi': 630, 'sb': 78, 'k_rate': .226},
+    'SEA': {'avg': .244, 'obp': .314, 'slg': .402, 'ops': .716, 'hr': 162, 'rbi': 650, 'sb': 88, 'k_rate': .235},
+    'STL': {'avg': .253, 'obp': .322, 'slg': .412, 'ops': .734, 'hr': 158, 'rbi': 680, 'sb': 75, 'k_rate': .216},
+    'TB':  {'avg': .251, 'obp': .324, 'slg': .410, 'ops': .734, 'hr': 155, 'rbi': 670, 'sb': 108, 'k_rate': .224},
+    'TEX': {'avg': .258, 'obp': .329, 'slg': .426, 'ops': .755, 'hr': 175, 'rbi': 730, 'sb': 72, 'k_rate': .218},
+    'TOR': {'avg': .257, 'obp': .328, 'slg': .422, 'ops': .750, 'hr': 168, 'rbi': 710, 'sb': 82, 'k_rate': .214},
+    'WSH': {'avg': .245, 'obp': .310, 'slg': .392, 'ops': .702, 'hr': 142, 'rbi': 610, 'sb': 102, 'k_rate': .225},
+}
+
 VENUE_META = {
     "Wrigley Field": (41.9484, -87.6553, 45), "Yankee Stadium": (40.8296, -73.9262, 90),
     "Fenway Park": (42.3467, -71.0972, 20), "Dodger Stadium": (34.0739, -118.240, 330),
@@ -1101,16 +1135,42 @@ class PredictionEngine:
         # This would need days_rest data - simplified for now
         # In full old model, this comes from schedule analysis
 
-        # Combine with old's superior weighting - pitcher is now properly weighted
-        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge + + yt_momentum
-                      offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
-
-        # Store edge components for logging (for future weight fitting)
-
-        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) ===
+        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) - FIXED: must be BEFORE total_edge ===
         yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
         yt_momentum = 0.0
         yt_pace = 0.0
+        if YT_AVAILABLE:
+            try:
+                if game.get("home") and game.get("away") and "Sample" not in str(game.get("home")):
+                    yt_cfg = {}
+                    try:
+                        import json as _js
+                        with open(os.path.join(os.path.dirname(__file__), "sports_config.json")) as _f:
+                            yt_cfg = _js.load(_f).get("youtube", {})
+                    except:
+                        pass
+                    if yt_cfg.get("enabled", True):
+                        max_vids = yt_cfg.get("max_videos_per_matchup", 2)
+                        yt_result = get_youtube_boost("mlb", game.get("home",""), game.get("away",""), max_videos=max_vids)
+                        yt_boost_data = yt_result
+                        conf = yt_result.get("confidence", 0.0)
+                        raw_mom = yt_result.get("momentum_boost", 0.0)
+                        raw_pace = yt_result.get("pace_boost", 0.0)
+                        gameplay_pct = yt_result.get("gameplay_pct", 0.7)
+                        yt_momentum = raw_mom * conf * gameplay_pct
+                        yt_pace = raw_pace * conf * gameplay_pct
+                        game["_yt_boost"] = yt_result
+            except Exception as _yt_e:
+                print(f"  YT mlb boost skip: {_yt_e}")
+                game["_yt_boost"] = {"status": f"error {_yt_e}", "momentum_boost":0.0}
+        else:
+            game["_yt_boost"] = yt_boost_data
+
+        # Combine with old's superior weighting - FIXED: single + and yt_momentum defined
+        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge + yt_momentum +
+                      offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
+
+        # Store edge components for logging (for future weight fitting)
         if YT_AVAILABLE:
             try:
                 if game.get("home") and game.get("away") and "Sample" not in str(game.get("home")):
@@ -1553,7 +1613,7 @@ def write_pick_to_log(game_data):
 
 def main():
     config = load_config()
-    api_key = os.getenv("ODDS_API_KEY")  # FIX: Use GitHub Secret env var first - fixes demo mode
+    api_key = os.getenv("ODDS_API_KEY")
     if not api_key:
         try:
             with open(os.path.join(HERE, "sports_config.json")) as f:
@@ -1563,7 +1623,7 @@ def main():
             pass
     if not api_key:
         api_key = ODDS_KEY
-    print(f"Using ODDS API key: {api_key[:8]}... (env var: {bool(os.getenv('ODDS_API_KEY'))})")
+    print(f"Using ODDS API key: {api_key[:8]}... (env: {bool(os.getenv('ODDS_API_KEY'))})")
 
     engine = PredictionEngine(api_key)
     odds_data = engine.fetch_live_odds()
