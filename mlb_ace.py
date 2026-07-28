@@ -136,7 +136,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(HERE, "mlb_config.json")
 PICKS_LOG_PATH = os.path.join(HERE, "picks_log.csv")
 MLB_STATS_BASE = "https://statsapi.mlb.com/api/v1"
-ODDS_KEY = os.getenv("ODDS_API_KEY") or "e357fcc2d8a1fea08e7fa62a8d0b65b5"
+ODDS_KEY = "c5258b13e74c8742cdcb8981b714bbc7"
 
 # === CACHING ===
 _CACHE = {}
@@ -1098,8 +1098,16 @@ class PredictionEngine:
 
         # Rest factor (old's logic)
         rest_edge = 0.0
+        # This would need days_rest data - simplified for now
+        # In full old model, this comes from schedule analysis
 
-        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) - MUST be before total_edge ===
+        # Combine with old's superior weighting - pitcher is now properly weighted
+        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge + + yt_momentum
+                      offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
+
+        # Store edge components for logging (for future weight fitting)
+
+        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) ===
         yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
         yt_momentum = 0.0
         yt_pace = 0.0
@@ -1130,10 +1138,6 @@ class PredictionEngine:
         else:
             game["_yt_boost"] = yt_boost_data
 
-        # Combine with old's superior weighting - pitcher is now properly weighted (after YT)
-        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge + yt_momentum + offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
-
-        # Store edge components for logging (for future weight fitting)
         game["_edge_components"] = {
             "c_team_edge": team_edge,
             "c_pitcher_fip_edge": pitcher_fip_edge,
@@ -1549,15 +1553,17 @@ def write_pick_to_log(game_data):
 
 def main():
     config = load_config()
-    api_key = None
-    try:
-        with open(os.path.join(HERE, "sports_config.json")) as f:
-            sports_cfg = json.load(f)
-            api_key = sports_cfg.get("odds_api_key") or sports_cfg.get("api_key")
-    except:
-        pass
+    api_key = os.getenv("ODDS_API_KEY")  # FIX: Use GitHub Secret env var first - fixes demo mode
+    if not api_key:
+        try:
+            with open(os.path.join(HERE, "sports_config.json")) as f:
+                sports_cfg = json.load(f)
+                api_key = sports_cfg.get("odds_api_key") or sports_cfg.get("api_key")
+        except:
+            pass
     if not api_key:
         api_key = ODDS_KEY
+    print(f"Using ODDS API key: {api_key[:8]}... (env var: {bool(os.getenv('ODDS_API_KEY'))})")
 
     engine = PredictionEngine(api_key)
     odds_data = engine.fetch_live_odds()
