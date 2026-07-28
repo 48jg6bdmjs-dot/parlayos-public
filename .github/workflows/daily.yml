@@ -29,31 +29,35 @@ jobs:
       - name: Install deps
         run: pip install --break-system-packages -r requirements.txt || pip install -r requirements.txt
 
-      - name: Run all three prediction engines
+      - name: Run all three prediction engines (FIXED SYNTAX + FALLBACK)
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
-          python run_all.py || true
-          ls -lh index.html parlayos.html
+          echo "ODDS_API_KEY set: $([ -n "$ODDS_API_KEY" ] && echo YES || echo NO)"
+          python run_all.py
+          ls -lh parlayos.html index.html
 
-      - name: Deploy to static.app (if secret exists)
+      - name: Deploy to static.app
+        if: always()
+        continue-on-error: true
         env:
           STATIC_APP_KEY: ${{ secrets.STATIC_APP }}
         run: |
           if [ -z "$STATIC_APP_KEY" ]; then
-            echo "⚠️ STATIC_APP secret not found in GitHub - skipping static.app deploy"
-            echo "Add it: GitHub → Settings → Secrets → New secret → Name: STATIC_APP, Value: your static.app API key"
+            echo "No STATIC_APP secret, skipping"
             exit 0
           fi
           zip -j deploy.zip index.html parlayos.html
-          echo "Deploying to static.app with key ${#STATIC_APP_KEY} chars"
-          curl -X POST https://api.static.app/deploy -H "Authorization: Bearer $STATIC_APP_KEY" -F "file=@deploy.zip" || echo "Deploy attempt done, check static.app dashboard"
+          curl -X POST https://api.static.app/deploy -H "Authorization: Bearer $STATIC_APP_KEY" -F "file=@deploy.zip" || true
 
       - name: Commit and push
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f parlayos.html index.html || true
+          git add -f parlayos.html index.html
           git diff --staged --quiet && echo "No changes" && exit 0
-          git commit -m "auto-update: picks"
-          git push origin HEAD:main || (git fetch origin main && git rebase origin/main && git push)
+          git commit -m "fix: syntax error + + yt_momentum + TEAM_BATTING_FALLBACK"
+          git fetch origin main
+          git rebase origin/main || (git rebase --abort; git reset --hard origin/main; python run_all.py || true; git add -f parlayos.html index.html; git commit -m "auto-update: resolved" || true)
+          git push origin HEAD:main
