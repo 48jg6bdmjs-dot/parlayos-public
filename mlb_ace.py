@@ -136,7 +136,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(HERE, "mlb_config.json")
 PICKS_LOG_PATH = os.path.join(HERE, "picks_log.csv")
 MLB_STATS_BASE = "https://statsapi.mlb.com/api/v1"
-ODDS_KEY = "c5258b13e74c8742cdcb8981b714bbc7"
+ODDS_KEY = "373aadcf1852b15f1d8f4f483faf6d8"
 
 # === CACHING ===
 _CACHE = {}
