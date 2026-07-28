@@ -1,21 +1,19 @@
 name: Daily ParlayOS Update
 
-# â”€â”€ ACE V3 ULTRA â€” 3x daily schedule â”€â”€
-# Runs every 6 hours to catch line movement + lineup confirmations + final highlights
-# 9:00 UTC  = 5:00 AM ET â€” overnight lines, early market
-# 15:00 UTC = 11:00 AM ET â€” injury reports, lineup hints
-# 21:00 UTC = 5:00 PM ET â€” final lineups, weather, closing highlights (most accurate)
+# ── ACE V3 ULTRA — 3x daily schedule ──
+# 9:00 UTC  = 5:00 AM ET — early market
+# 15:00 UTC = 11:00 AM ET — injury reports
+# 21:00 UTC = 5:00 PM ET — final close (most accurate)
 on:
   schedule:
-    - cron: '0 9 * * *'     # 9:00 UTC â€” early market scan
-    - cron: '0 15 * * *'    # 15:00 UTC â€” midday injury/lineup update
-    - cron: '0 21 * * *'    # 21:00 UTC â€” final close to game time (highest edge)
-  workflow_dispatch:         # Allows manual trigger from the GitHub UI
+    - cron: '0 9 * * *'
+    - cron: '0 15 * * *'
+    - cron: '0 21 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
-# Prevent two daily runs from colliding, queue them
 concurrency:
   group: parlayos-main
   cancel-in-progress: false
@@ -24,30 +22,40 @@ jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v4
+
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
-      - run: pip install -r requirements.txt
+          python-version: '3.11'
 
-      # â”€â”€ run_all.py V3 ULTRA â€” MLB + NBA + NFL with highlights â”€â”€
+      - name: Install deps
+        run: |
+          pip install --break-system-packages -r requirements.txt || pip install -r requirements.txt
+
+      # ── run_all.py V3 ULTRA ── MLB + NBA + NFL with highlights ──
       - name: Run all three prediction engines (MLB, NFL, NBA) V3 ULTRA
-        run: python run_all.py || echo "::warning::run_all.py reported at least one sport failed â€” see log above for which. Continuing to commit whatever succeeded."
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          echo "ODDS_API_KEY set: $([ -n \"$ODDS_API_KEY\" ] && echo true || echo false)"
+          python run_all.py || echo "::warning::run_all.py reported at least one sport failed — see log above. Continuing to commit whatever succeeded."
 
-      - run: python mlb_backtest.py || echo "::warning::mlb_backtest.py failed â€” see log above. Continuing to commit whatever picks succeeded this run."
+      - name: Run backtest (optional)
+        run: |
+          python mlb_backtest.py || echo "::warning::mlb_backtest.py failed — continuing"
 
-      - name: Commit and push changes
+      - name: Commit and push changes (conflict-safe)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          for f in sports_config.json picks_log.csv nfl_picks_log.csv nba_picks_log.csv parlayos.html; do
+          for f in sports_config.json picks_log.csv nfl_picks_log.csv nba_picks_log.csv parlayos.html index.html; do
             if [ -f "$f" ]; then
-              git add "$f"
+              git add -f "$f"
             else
-              echo "::notice::$f does not exist yet â€” skipping"
+              echo "::notice::$f does not exist yet — skipping"
             fi
           done
 
@@ -58,25 +66,36 @@ jobs:
 
           git commit -m "auto-update: MLB/NFL/NBA V3 ULTRA picks, highlights + config (3x daily)"
 
-          # FIX: Pull remote changes first to avoid [rejected] fetch first errors
-          # This handles race with live-scores.yml pushing at same time
-          echo "Pulling latest main with rebase..."
-          git pull --rebase --autostash origin main || {
-            echo "Rebase failed, trying merge strategy"
-            git rebase --abort || true
-            git pull --no-rebase origin main || true
-          }
+          # Push with retry, always keeping OUR generated parlayos.html on conflict
+          for i in 1 2 3 4 5; do
+            echo "=== Push attempt $i ==="
+            git fetch origin main
 
-          # Push with retry loop (3 attempts)
-          for i in 1 2 3; do
-            echo "Push attempt $i..."
-            if git push origin main; then
+            # Try rebase, but if parlayos.html conflicts, keep our version
+            if ! git rebase origin/main; then
+              echo "Rebase conflict detected — resolving by keeping generated file"
+              # During rebase, --theirs is OUR commit (the generated file)
+              git checkout --theirs -- parlayos.html index.html 2>/dev/null || true
+              git add -f parlayos.html index.html
+              # Continue or skip if other conflicts
+              git -c core.editor=true rebase --continue 2>/dev/null || git rebase --skip 2>/dev/null || {
+                echo "Rebase still failing, hard resetting and regenerating"
+                git rebase --abort || true
+                git reset --hard origin/main
+                # Re-generate with same key to ensure we have latest
+                ODDS_API_KEY="${{ secrets.ODDS_API_KEY }}" python run_all.py || true
+                git add -f parlayos.html index.html sports_config.json picks_log.csv nfl_picks_log.csv nba_picks_log.csv 2>/dev/null || true
+                git commit -m "auto-update: MLB/NFL/NBA V3 ULTRA picks (resolved conflict)" || true
+              }
+            fi
+
+            if git push origin HEAD:main; then
               echo "Push succeeded"
               exit 0
             fi
-            echo "Push failed, pulling again and retrying in 5s..."
+
+            echo "Push failed, retrying in 5s..."
             sleep 5
-            git pull --rebase --autostash origin main || true
           done
 
           echo "All push attempts failed"
