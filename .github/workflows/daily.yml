@@ -1,9 +1,5 @@
 name: Daily ParlayOS Update
 
-# ── ACE V3 ULTRA — 3x daily schedule ──
-# 9:00 UTC  = 5:00 AM ET — early market
-# 15:00 UTC = 11:00 AM ET — injury reports
-# 21:00 UTC = 5:00 PM ET — final close (most accurate)
 on:
   schedule:
     - cron: '0 9 * * *'
@@ -34,19 +30,17 @@ jobs:
         run: |
           pip install --break-system-packages -r requirements.txt || pip install -r requirements.txt
 
-      # ── run_all.py V3 ULTRA ── MLB + NBA + NFL with highlights ──
       - name: Run all three prediction engines (MLB, NFL, NBA) V3 ULTRA
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
-          echo "ODDS_API_KEY set: $([ -n \"$ODDS_API_KEY\" ] && echo true || echo false)"
-          python run_all.py || echo "::warning::run_all.py reported at least one sport failed — see log above. Continuing to commit whatever succeeded."
-
-      - name: Run backtest (optional)
-        run: |
-          python mlb_backtest.py || echo "::warning::mlb_backtest.py failed — continuing"
+          echo "ODDS_API_KEY set: $([ -n "$ODDS_API_KEY" ] && echo true || echo false)"
+          python run_all.py || echo "::warning::run_all.py failed partially - continuing"
+          ls -lh parlayos.html index.html || true
 
       - name: Commit and push changes (conflict-safe)
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -54,8 +48,6 @@ jobs:
           for f in sports_config.json picks_log.csv nfl_picks_log.csv nba_picks_log.csv parlayos.html index.html; do
             if [ -f "$f" ]; then
               git add -f "$f"
-            else
-              echo "::notice::$f does not exist yet — skipping"
             fi
           done
 
@@ -66,24 +58,19 @@ jobs:
 
           git commit -m "auto-update: MLB/NFL/NBA V3 ULTRA picks, highlights + config (3x daily)"
 
-          # Push with retry, always keeping OUR generated parlayos.html on conflict
           for i in 1 2 3 4 5; do
             echo "=== Push attempt $i ==="
             git fetch origin main
 
-            # Try rebase, but if parlayos.html conflicts, keep our version
             if ! git rebase origin/main; then
-              echo "Rebase conflict detected — resolving by keeping generated file"
-              # During rebase, --theirs is OUR commit (the generated file)
+              echo "Rebase conflict - keeping our generated parlayos.html"
               git checkout --theirs -- parlayos.html index.html 2>/dev/null || true
               git add -f parlayos.html index.html
-              # Continue or skip if other conflicts
               git -c core.editor=true rebase --continue 2>/dev/null || git rebase --skip 2>/dev/null || {
-                echo "Rebase still failing, hard resetting and regenerating"
+                echo "Rebase still failing - hard reset and regenerate"
                 git rebase --abort || true
                 git reset --hard origin/main
-                # Re-generate with same key to ensure we have latest
-                ODDS_API_KEY="${{ secrets.ODDS_API_KEY }}" python run_all.py || true
+                python run_all.py || true
                 git add -f parlayos.html index.html sports_config.json picks_log.csv nfl_picks_log.csv nba_picks_log.csv 2>/dev/null || true
                 git commit -m "auto-update: MLB/NFL/NBA V3 ULTRA picks (resolved conflict)" || true
               }
@@ -93,10 +80,7 @@ jobs:
               echo "Push succeeded"
               exit 0
             fi
-
             echo "Push failed, retrying in 5s..."
             sleep 5
           done
-
-          echo "All push attempts failed"
           exit 1
