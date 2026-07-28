@@ -1102,8 +1102,7 @@ class PredictionEngine:
         # In full old model, this comes from schedule analysis
 
         # Combine with old's superior weighting - pitcher is now properly weighted
-        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge + + yt_momentum
-                      offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
+        total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge + yt_momentum + offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
 
         # Store edge components for logging (for future weight fitting)
 
