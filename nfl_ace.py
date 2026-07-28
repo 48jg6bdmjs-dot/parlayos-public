@@ -1,4 +1,3 @@
-
 """
 nfl_ace.py V7 ULTIMATE - Substantially Higher Valuation Than Market
 - Real EPA: nflverse nflfastR data, CPOE, air yards, YAC, pressure, pass rush win, coverage
