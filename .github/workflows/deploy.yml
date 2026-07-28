@@ -13,6 +13,6 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Deploy to Static.app
-        uses: 48jg6bdmjs-dot/parlayos-main
+        uses: 48jg6bdmjs-dot/parlayos-main@main
         with:
           api-key: ${{ secrets.STATIC_APP }}
