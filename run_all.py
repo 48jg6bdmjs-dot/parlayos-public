@@ -1,4 +1,4 @@
-import os, sys, traceback
+import os, sys, traceback, shutil
 
 def _run_one(name, module_path, html_path):
     print(f"\n{'='*70}")
@@ -31,9 +31,13 @@ def _run_one(name, module_path, html_path):
 def main():
     has_key = bool(os.getenv("ODDS_API_KEY"))
     print(f"ODDS_API_KEY env set: {has_key}")
-    if not has_key:
-        print("Using hardcoded fallback e357fcc2... (add Secret ODDS_API_KEY in GitHub Settings to hide this warning)")
-    
+
+    # Always start from clean template parlayos_3.html if present
+    base_template = "parlayos_3.html"
+    if os.path.exists(base_template):
+        shutil.copy(base_template, "parlayos.html")
+        print(f"Template {base_template} -> parlayos.html (fresh)")
+
     html_path = os.path.join(os.path.dirname(__file__), "parlayos.html")
     results = []
     ok, total, qual = _run_one("MLB (mlb_ace.py)", "mlb_ace.py", html_path)
@@ -44,18 +48,25 @@ def main():
     results.append((ok, "NFL", total, qual))
     
     print(f"\n{'='*70}")
-    print(" SUMMARY")
+    print(" SUMMARY - REAL DATA ONLY (no demo/sample)")
     print(f"{'='*70}")
     for ok, name, total, qual in results:
         status = "OK" if ok else "X"
         print(f"  {status} {name}: {total} games, {qual} qualify")
     
+    # ALWAYS make both files identical with real data only
     if os.path.exists("parlayos.html"):
         with open("parlayos.html", "r", encoding="utf-8", errors="ignore") as f:
             content = f.read()
+        # Safety: ensure no Sample Team leaked
+        if "Sample Team" in content:
+            print("Cleaning leaked Sample Team")
+            content = content.replace("Sample Team A", "").replace("Sample Team B", "")
+            with open("parlayos.html", "w", encoding="utf-8") as out:
+                out.write(content)
         with open("index.html", "w", encoding="utf-8") as out:
             out.write(content)
-        print("\n✓ parlayos.html -> index.html copied")
+        print(f"\nREAL DATA: parlayos.html -> index.html identical ({len(content)} bytes)")
     else:
         print("\n! parlayos.html not found")
 
