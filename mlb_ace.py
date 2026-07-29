@@ -108,7 +108,7 @@ STARTER_INNINGS = 6.5
 LEAGUE_RPG_FALLBACK = 4.40
 SLOT_WEIGHTS = [1.103, 1.075, 1.049, 1.023, 0.997, 0.974, 0.950, 0.927, 0.903]
 
-# === TEAM BATTING FALLBACK (fixes NameError that broke updates since Jul 17) ===
+# === TEAM BATTING FALLBACK - FIXES NameError ===
 TEAM_BATTING_FALLBACK = {
     'ARI': {'avg': .252, 'obp': .323, 'slg': .416, 'ops': .739, 'hr': 158, 'rbi': 680, 'sb': 98, 'k_rate': .219},
     'ATL': {'avg': .259, 'obp': .333, 'slg': .443, 'ops': .776, 'hr': 198, 'rbi': 740, 'sb': 78, 'k_rate': .225},
@@ -1132,10 +1132,8 @@ class PredictionEngine:
 
         # Rest factor (old's logic)
         rest_edge = 0.0
-        # This would need days_rest data - simplified for now
-        # In full old model, this comes from schedule analysis
 
-        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) - FIXED: must be BEFORE total_edge ===
+        # === YOUTUBE HIGHLIGHT INTELLIGENCE (V4) - FIXED: moved BEFORE total_edge ===
         yt_boost_data = {"momentum_boost":0.0,"pace_boost":0.0,"confidence":0.0,"videos_analyzed":0}
         yt_momentum = 0.0
         yt_pace = 0.0
@@ -1166,37 +1164,9 @@ class PredictionEngine:
         else:
             game["_yt_boost"] = yt_boost_data
 
-        # Combine with old's superior weighting - FIXED: single + and yt_momentum defined
+        # Combine - FIXED: single + and yt_momentum defined
         total_edge = (pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge + pitcher_k9_edge + yt_momentum +
                       offense_edge + team_edge + bullpen_edge + season_form_edge + weather_edge + park_edge + rest_edge)
-
-        # Store edge components for logging (for future weight fitting)
-        if YT_AVAILABLE:
-            try:
-                if game.get("home") and game.get("away") and "Sample" not in str(game.get("home")):
-                    yt_cfg = {}
-                    try:
-                        import json as _js
-                        with open(os.path.join(os.path.dirname(__file__), "sports_config.json")) as _f:
-                            yt_cfg = _js.load(_f).get("youtube", {})
-                    except:
-                        pass
-                    if yt_cfg.get("enabled", True):
-                        max_vids = yt_cfg.get("max_videos_per_matchup", 2)
-                        yt_result = get_youtube_boost("mlb", game.get("home",""), game.get("away",""), max_videos=max_vids)
-                        yt_boost_data = yt_result
-                        conf = yt_result.get("confidence", 0.0)
-                        raw_mom = yt_result.get("momentum_boost", 0.0)
-                        raw_pace = yt_result.get("pace_boost", 0.0)
-                        gameplay_pct = yt_result.get("gameplay_pct", 0.7)
-                        yt_momentum = raw_mom * conf * gameplay_pct
-                        yt_pace = raw_pace * conf * gameplay_pct
-                        game["_yt_boost"] = yt_result
-            except Exception as _yt_e:
-                print(f"  YT mlb boost skip: {_yt_e}")
-                game["_yt_boost"] = {"status": f"error {_yt_e}", "momentum_boost":0.0}
-        else:
-            game["_yt_boost"] = yt_boost_data
 
         game["_edge_components"] = {
             "c_team_edge": team_edge,
