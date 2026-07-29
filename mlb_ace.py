@@ -570,51 +570,37 @@ def fetch_today_probable_pitchers():
     tid2abbr = {v: k for k, v in MLB_TEAM_IDS.items()}
     out = {}
     try:
-        # Use ET date and fetch 3-day window to catch late West Coast games (11:23 PM PT = next day UTC)
+        # Use ET date, and fetch today + tomorrow to catch late games
         try:
             from zoneinfo import ZoneInfo
             et_now = datetime.now(ZoneInfo("America/New_York"))
         except:
             et_now = datetime.now()
-        today_str = et_now.strftime("%Y-%m-%d")
-        # Fetch today + tomorrow + yesterday to ensure we get late games
-        from datetime import timedelta
-        dates = [(et_now - timedelta(days=1)).strftime("%Y-%m-%d"), today_str, (et_now + timedelta(days=1)).strftime("%Y-%m-%d")]
-        for date_str in dates:
-            try:
-                r = requests.get(f"{MLB_STATS_BASE}/schedule",
-                                  params={"sportId":1,"date":date_str,"hydrate":"probablePitcher"},
-                                  timeout=10)
-                for de in r.json().get("dates",[]):
-                    for gm in de.get("games",[]):
-                        h = gm["teams"]["home"]; a = gm["teams"]["away"]
-                        ha = tid2abbr.get(h["team"].get("id"))
-                        aa = tid2abbr.get(a["team"].get("id"))
-                        if not ha or not aa: continue
-                        hp = h.get("probablePitcher") or {}
-                        ap = a.get("probablePitcher") or {}
-                        # Skip if both TBD
-                        if not hp.get("id") and not ap.get("id"):
-                            continue
-                        entry = {
-                            "home_id": hp.get("id"),
-                            "home_name": hp.get("fullName") or "TBD",
-                            "away_id": ap.get("id"),
-                            "away_name": ap.get("fullName") or "TBD",
-                            "game_date": gm.get("gameDate"),
-                        }
-                        key = (aa,ha)
-                        # Only keep newest entry per matchup
-                        if key not in out:
-                            out[key] = []
-                        out[key].append(entry)
-            except:
+        dates_to_try = [et_now.strftime("%Y-%m-%d"), (et_now + timedelta(days=1)).strftime("%Y-%m-%d")]
+        for today in dates_to_try:
+            r = requests.get(f"{MLB_STATS_BASE}/schedule",
+                              params={"sportId":1,"date":today,"hydrate":"probablePitcher"},
+                              timeout=10)
+            if r.status_code != 200:
                 continue
+            for de in r.json().get("dates",[]):
+                for gm in de.get("games",[]):
+                    h = gm["teams"]["home"]; a = gm["teams"]["away"]
+                    ha = tid2abbr.get(h["team"].get("id"))
+                    aa = tid2abbr.get(a["team"].get("id"))
+                    if not ha or not aa: continue
+                    hp = h.get("probablePitcher") or {}
+                    ap = a.get("probablePitcher") or {}
+                    entry = {
+                        "home_id": hp.get("id"),
+                        "home_name": hp.get("fullName"),
+                        "away_id": ap.get("id"),
+                    "away_name": ap.get("fullName"),
+                    "game_date": gm.get("gameDate"),
+                }
+                out.setdefault((aa,ha), []).append(entry)
         for k in out:
             out[k] = sorted(out[k], key=lambda x: x.get("game_date") or "")
-            # Keep latest
-            if len(out[k]) > 1:
-                out[k] = out[k][-1:]
     except Exception as e:
         print(f"  Probable pitcher fetch failed: {e}")
     return out
@@ -1013,82 +999,77 @@ class PredictionEngine:
 
     def fetch_pitcher_stats(self, pitcher_id: int) -> Dict:
         if not pitcher_id:
-            return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                    "fip": LEAGUE_AVG_FIP, "ip": "—", "wins": 0, "losses": 0, "has_data": False, "is_tbd": True}
+            return {"era": 0.0, "whip": 0.0, "k_per_9": 0.0,
+                    "fip": 0.0, "ip": "TBD", "wins": 0, "losses": 0, "has_data": False, "is_tbd": True}
         cache_key = f"pitcher_stats_v5_{pitcher_id}"
         cached = get_cached(cache_key, ttl=3600)
         if cached:
             if "ip" not in cached:
-                cached["ip"] = "—"
+                cached["ip"] = "TBD"
             return cached
-        
-        def try_fetch_for_season(season_year):
+        def try_fetch(season_year):
             try:
                 r = requests.get(f"{MLB_STATS_BASE}/people/{pitcher_id}/stats",
                                   params={"stats": "season", "season": season_year, "group": "pitching"},
                                   timeout=8)
-                splits = r.json().get("stats", [{}])[0].get("splits", [])
+                j = r.json()
+                splits = j.get("stats", [{}])[0].get("splits", [])
                 if not splits:
                     return None
-                stat = splits[0].get("stat", {})
-                ip_raw = stat.get("inningsPitched", "0")
-                ip_display = str(ip_raw) if ip_raw else "—"
-                try:
-                    if isinstance(ip_raw, str) and "." in ip_raw:
-                        whole, frac = ip_raw.split(".")
-                        innings = int(whole) + (int(frac) / 3.0 if frac in ("1","2") else float("0."+frac))
-                    else:
-                        innings = float(ip_raw or 0)
-                except:
-                    innings = 0
-                if innings < 1:
-                    return None
-                hr  = int(stat.get("homeRuns", 0) or 0)
-                bb  = int(stat.get("baseOnBalls", 0) or 0)
-                hbp = int(stat.get("hitByPitch", 0) or 0)
-                k   = int(stat.get("strikeOuts", 0) or 0)
-                innings_calc = innings if innings>0 else 1
-                fip_raw  = ((13*hr + 3*(bb+hbp) - 2*k) / innings_calc) + 3.10
-                era_raw  = float(stat.get("era", LEAGUE_AVG_ERA) or LEAGUE_AVG_ERA)
-                whip_raw = float(stat.get("whip", LEAGUE_AVG_WHIP) or LEAGUE_AVG_WHIP)
-                k9_raw   = float(stat.get("strikeoutsPer9Inn", LEAGUE_AVG_K9) or LEAGUE_AVG_K9)
-                # Only shrink if <30 IP, otherwise use real
-                reliability = min(1.0, innings / 50.0) if innings < 50 else 1.0
-                if innings >= 20:
-                    era = round(era_raw,2)
-                    whip = round(whip_raw,2)
-                    k9 = round(k9_raw,2)
-                    fip = round(fip_raw,2)
-                else:
-                    era = round(reliability * era_raw + (1-reliability) * LEAGUE_AVG_ERA, 2)
-                    whip = round(reliability * whip_raw + (1-reliability) * LEAGUE_AVG_WHIP, 2)
-                    k9 = round(reliability * k9_raw + (1-reliability) * LEAGUE_AVG_K9, 2)
-                    fip = round(reliability * fip_raw + (1-reliability) * LEAGUE_AVG_FIP, 2)
-                return {"era": era, "whip": whip, "k_per_9": k9, "fip": fip, "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0), "has_data": True, "innings": innings, "season": season_year, "reliability": reliability, "is_tbd": False}
+                return splits[0].get("stat", {})
             except:
                 return None
-
-        # Try current year, then previous year
-        current_year = datetime.now().year
-        result = try_fetch_for_season(current_year)
-        if not result:
-            result = try_fetch_for_season(current_year-1)
-        if not result:
-            # No stats at all - true TBD/minor leaguer
+        stat = try_fetch(datetime.now().year)
+        used_year = datetime.now().year
+        if not stat or float(str(stat.get("inningsPitched","0")).split(".")[0] or 0) < 5:
+            # Try previous year for pitchers with low IP (call-ups, injured)
+            prev = try_fetch(datetime.now().year - 1)
+            if prev and float(str(prev.get("inningsPitched","0")).split(".")[0] or 0) >= 5:
+                stat = prev
+                used_year = datetime.now().year - 1
+        if not stat:
+            return {"era": 0.0, "whip": 0.0, "k_per_9": 0.0,
+                    "fip": 0.0, "ip": "TBD", "wins": 0, "losses": 0, "has_data": False, "is_tbd": True}
+        ip_raw = stat.get("inningsPitched", "0")
+        ip_display = str(ip_raw) if ip_raw else "TBD"
+        try:
+            if isinstance(ip_raw, str) and "." in ip_raw:
+                whole, frac = ip_raw.split(".")
+                innings = int(whole) + (int(frac) / 3.0 if frac in ("1","2") else float("0."+frac))
+            else:
+                innings = float(ip_raw or 0)
+        except:
+            innings = float(stat.get("inningsPitched", 0) or 0)
+        # If still very low IP, show real stats but mark as small sample
+        if innings < 5:
+            # Return actual stats, not league average, so UI doesn't show fake 4.25
+            era_raw = float(stat.get("era", 0.0) or 0.0)
+            whip_raw = float(stat.get("whip", 0.0) or 0.0)
+            k9_raw = float(stat.get("strikeoutsPer9Inn", 0.0) or 0.0)
+            return {"era": round(era_raw,2) if era_raw else 0.0, "whip": round(whip_raw,2) if whip_raw else 0.0, "k_per_9": round(k9_raw,1) if k9_raw else 0.0,
+                    "fip": 0.0, "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0), "has_data": False, "is_rookie": True, "season": used_year}
+            hr  = int(stat.get("homeRuns", 0) or 0)
+            bb  = int(stat.get("baseOnBalls", 0) or 0)
+            hbp = int(stat.get("hitByPitch", 0) or 0)
+            k   = int(stat.get("strikeOuts", 0) or 0)
+            # Avoid div by zero
+            innings_calc = innings if innings>0 else 1
+            fip_raw  = ((13*hr + 3*(bb+hbp) - 2*k) / innings_calc) + 3.10
+            era_raw  = float(stat.get("era", LEAGUE_AVG_ERA) or LEAGUE_AVG_ERA)
+            whip_raw = float(stat.get("whip", LEAGUE_AVG_WHIP) or LEAGUE_AVG_WHIP)
+            k9_raw   = float(stat.get("strikeoutsPer9Inn", LEAGUE_AVG_K9) or LEAGUE_AVG_K9)
+            # Shrink small samples toward league average
+            reliability = min(1.0, innings / 50.0)
+            era = round(reliability * era_raw + (1-reliability) * LEAGUE_AVG_ERA, 2)
+            whip = round(reliability * whip_raw + (1-reliability) * LEAGUE_AVG_WHIP, 2)
+            k9 = round(reliability * k9_raw + (1-reliability) * LEAGUE_AVG_K9, 2)
+            fip = round(reliability * fip_raw + (1-reliability) * LEAGUE_AVG_FIP, 2)
+            result = {"era": era, "whip": whip, "k_per_9": k9, "fip": fip, "ip": ip_display, "wins": int(stat.get("wins",0) or 0), "losses": int(stat.get("losses",0) or 0), "has_data": True, "reliability": reliability}
+            set_cache(cache_key, result)
+            return result
+        except Exception as e:
             return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
-                    "fip": LEAGUE_AVG_FIP, "ip": "0.0", "wins": 0, "losses": 0, "has_data": False, "is_tbd": True, "is_rookie": True}
-        
-        # If <5 IP in current year but we have previous year data, mark as small sample but keep real
-        if result.get("innings",0) < 5 and result.get("season")==current_year:
-            # Try previous year as fallback for display
-            prev = try_fetch_for_season(current_year-1)
-            if prev and prev.get("innings",0) > 10:
-                result["note"] = f"2026: {result['ip']} IP - using 2025"
-                # Keep current year IP but use blended? For now keep current but flag
-                pass
-        
-        set_cache(cache_key, result)
-        return result
+                    "fip": LEAGUE_AVG_FIP, "ip": "—", "wins": 0, "losses": 0, "has_data": False}
 
     def fetch_weather(self, lat: float, lon: float) -> Dict:
         cache_key = f"weather_{round(lat,2)}_{round(lon,2)}"
