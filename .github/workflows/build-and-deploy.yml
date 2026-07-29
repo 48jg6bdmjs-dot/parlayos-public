@@ -44,18 +44,34 @@ jobs:
           touch .nojekyll
           if grep -q "Sample Team" index.html; then echo "Sample leak!"; exit 1; fi
 
-      - name: Push to PUBLIC repo (Pages host)
+      - name: Push to PUBLIC repo (Pages host) - fixed newline issue
         env:
           PUBLIC_REPO_NAME: ${{ secrets.PUBLIC_REPO_NAME }}
           PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
         run: |
-          PUBLIC_REPO_NAME_TRIMMED=$(echo "$PUBLIC_REPO_NAME" | xargs)
-          echo "Public: $PUBLIC_REPO_NAME_TRIMMED"
+          # TRIM BOTH secrets - removes newlines that cause "credential url cannot be parsed"
+          PUBLIC_REPO_NAME_TRIMMED=$(echo "$PUBLIC_REPO_NAME" | tr -d '\r\n' | xargs)
+          PUBLIC_REPO_TOKEN_TRIMMED=$(echo "$PUBLIC_REPO_TOKEN" | tr -d '\r\n' | xargs | tr -d ' ')
+          
+          echo "Public repo: $PUBLIC_REPO_NAME_TRIMMED"
+          echo "Token length: ${#PUBLIC_REPO_TOKEN_TRIMMED}"
+          echo "Token set? $([ -n "$PUBLIC_REPO_TOKEN_TRIMMED" ] && echo YES || echo NO)"
+          
+          if [ -z "$PUBLIC_REPO_NAME_TRIMMED" ] || [ -z "$PUBLIC_REPO_TOKEN_TRIMMED" ]; then
+            echo "Missing secrets"
+            exit 0
+          fi
+          
           rm -rf public-repo
-          CLONE_URL="https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/${PUBLIC_REPO_NAME_TRIMMED}.git"
+          
+          # Build URL with trimmed token - quoted
+          CLONE_URL="https://x-access-token:${PUBLIC_REPO_TOKEN_TRIMMED}@github.com/${PUBLIC_REPO_NAME_TRIMMED}.git"
+          
+          echo "Cloning..."
           if git clone "$CLONE_URL" public-repo; then
-            echo "Clone OK"
+            echo "✅ Clone OK"
           else
+            echo "⚠️ Clone failed - init new repo"
             mkdir -p public-repo
             cd public-repo
             git init
@@ -63,6 +79,7 @@ jobs:
             git remote add origin "$CLONE_URL"
             cd ..
           fi
+          
           cp -f index.html public-repo/index.html
           cp -f .nojekyll public-repo/.nojekyll
           cd public-repo
@@ -70,8 +87,14 @@ jobs:
           git config user.email "bot@parlayos.com"
           git branch -M main
           git add -f index.html .nojekyll
-          git diff --staged --quiet && echo "No changes" && exit 0
+          
+          if git diff --staged --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          
           git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "Pushing..."
           git push origin main -f || git push origin HEAD:main
 
       - name: Backup to private main
