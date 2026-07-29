@@ -41,31 +41,36 @@ jobs:
           ls -lh parlayos.html index.html
           if [ ! -f index.html ]; then cp parlayos.html index.html; fi
 
-      - name: Deploy to PUBLIC repo (index.html ONLY - no checkout@v4 API)
+      - name: Deploy to PUBLIC repo (index.html ONLY)
         env:
           PUBLIC_REPO_NAME: ${{ secrets.PUBLIC_REPO_NAME }}
           PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
         run: |
-          echo "PUBLIC_REPO_NAME: $PUBLIC_REPO_NAME"
+          # Trim whitespace/newlines from repo name (fixes "Too many arguments")
+          PUBLIC_REPO_NAME_TRIMMED=$(echo "$PUBLIC_REPO_NAME" | xargs)
+          echo "PUBLIC_REPO_NAME: $PUBLIC_REPO_NAME_TRIMMED"
           echo "TOKEN set? $([ -n "$PUBLIC_REPO_TOKEN" ] && echo YES || echo NO)"
           
-          if [ -z "$PUBLIC_REPO_NAME" ] || [ -z "$PUBLIC_REPO_TOKEN" ]; then
+          if [ -z "$PUBLIC_REPO_NAME_TRIMMED" ] || [ -z "$PUBLIC_REPO_TOKEN" ]; then
             echo "❌ Secrets missing - skipping public deploy"
             exit 0
           fi
           
           rm -rf public-repo
-          mkdir public-repo
           
-          echo "=== Cloning public repo with token (bypasses API default-branch check) ==="
-          if git clone https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/${PUBLIC_REPO_NAME}.git public-repo; then
+          echo "=== Cloning public repo (quoted URL, no API check) ==="
+          # Use quoted URL to prevent shell splitting
+          CLONE_URL="https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/${PUBLIC_REPO_NAME_TRIMMED}.git"
+          
+          if git clone "$CLONE_URL" public-repo; then
             echo "✅ Clone succeeded"
           else
-            echo "⚠️ Clone failed - trying init empty repo"
+            echo "⚠️ Clone failed - init new repo"
+            mkdir -p public-repo
             cd public-repo
             git init
-            git remote add origin https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/${PUBLIC_REPO_NAME}.git
-            git checkout -b main
+            git branch -M main
+            git remote add origin "$CLONE_URL"
             cd ..
           fi
           
