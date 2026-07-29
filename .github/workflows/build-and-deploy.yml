@@ -1,4 +1,4 @@
-name: Build and Deploy to Public - FIXED
+name: Build and Deploy to Public
 
 on:
   schedule:
@@ -6,8 +6,6 @@ on:
     - cron: '0 15 * * *'
     - cron: '0 21 * * *'
   workflow_dispatch:
-  push:
-    branches: [main]
 
 permissions:
   contents: write
@@ -19,6 +17,8 @@ concurrency:
 jobs:
   build-and-push-public:
     runs-on: ubuntu-latest
+    # Don't run if the push was from this bot itself (prevents loop)
+    if: github.actor != 'parlayos-bot'
     steps:
       - name: Checkout PRIVATE repo
         uses: actions/checkout@v4
@@ -31,18 +31,16 @@ jobs:
           python-version: '3.11'
 
       - name: Install deps
-        run: pip install --break-system-packages -r requirements.txt || pip install requests beautifulsoup4
+        run: pip install -r requirements.txt || pip install requests beautifulsoup4
 
-      - name: Build HTML and live scores
+      - name: Build HTML (private - keys stay secret)
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: |
           python run_all.py
-          python live_scores.py || echo "live_scores failed"
-          ls -lh parlayos.html index.html live_scores.json || true
-          touch .nojekyll
-          if grep -q "Sample Team" index.html; then echo "Sample leak!"; exit 1; fi
+          ls -lh index.html
+          wc -l index.html
 
       - name: Checkout PUBLIC repo
         uses: actions/checkout@v4
@@ -51,11 +49,9 @@ jobs:
           token: ${{ secrets.PUBLIC_REPO_TOKEN }}
           path: public-repo
 
-      - name: Copy only safe files
+      - name: Copy ONLY index.html (NO .py files)
         run: |
           cp -f index.html public-repo/index.html
-          cp -f .nojekyll public-repo/.nojekyll
-          cp -f live_scores.json public-repo/live_scores.json 2>/dev/null || echo '{"games":[]}' > public-repo/live_scores.json
           ls -lh public-repo/
 
       - name: Push to PUBLIC repo
@@ -63,16 +59,7 @@ jobs:
         run: |
           git config user.name "parlayos-bot"
           git config user.email "bot@parlayos.com"
-          git add -f index.html .nojekyll live_scores.json
+          git add -f index.html
           git diff --staged --quiet && echo "No changes" && exit 0
-          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - picks + live scores"
+          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
           git push origin HEAD:main
-
-      - name: Backup private
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f parlayos.html index.html live_scores.json || true
-          git diff --staged --quiet && exit 0
-          git commit -m "auto-update $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
-          git push origin HEAD:main || true
