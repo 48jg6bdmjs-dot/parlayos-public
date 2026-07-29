@@ -1,3 +1,4 @@
+
 name: Build and Deploy to Public
 
 on:
@@ -31,64 +32,73 @@ jobs:
       - name: Install deps
         run: pip install --break-system-packages -r requirements.txt || pip install requests
 
-      - name: Build HTML (private engines run here, secrets stay private)
+      - name: Build HTML (private engines stay private)
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: |
           echo "Building with secret keys (never exposed to public repo)"
-          python run_all.py || echo "::warning:: partial failure"
+          python run_all.py || echo "::warning:: build partial"
           ls -lh parlayos.html index.html
-          # ensure index.html exists
-          if [ ! -f index.html ]; then cp parlayos.html index.html || cp parlayos_3.html index.html; fi
+          if [ ! -f index.html ]; then cp parlayos.html index.html; fi
 
-      - name: Debug secrets (safe check)
-        run: |
-          echo "PUBLIC_REPO_NAME set? $([ -n "${{ secrets.PUBLIC_REPO_NAME }}" ] && echo YES || echo NO)"
-          echo "PUBLIC_REPO_TOKEN set? $([ -n "${{ secrets.PUBLIC_REPO_TOKEN }}" ] && echo YES || echo NO)"
-          echo "PUBLIC_REPO_NAME value length: ${#PUBLIC_REPO_NAME}"
+      - name: Deploy to PUBLIC repo (index.html ONLY - no checkout@v4 API)
         env:
           PUBLIC_REPO_NAME: ${{ secrets.PUBLIC_REPO_NAME }}
-
-      - name: Checkout PUBLIC repo (host for index.html only)
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ secrets.PUBLIC_REPO_NAME }}
-          token: ${{ secrets.PUBLIC_REPO_TOKEN }}
-          path: public-repo
-
-      - name: Copy only index.html to public repo (NO CODE LEAKS)
+          PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
         run: |
-          echo "=== Private build files ==="
-          ls -lh *.html | head -20
-          echo "=== Public repo before ==="
-          ls -lh public-repo/
-          echo "Copying ONLY index.html - no .py files leak"
+          echo "PUBLIC_REPO_NAME: $PUBLIC_REPO_NAME"
+          echo "TOKEN set? $([ -n "$PUBLIC_REPO_TOKEN" ] && echo YES || echo NO)"
+          
+          if [ -z "$PUBLIC_REPO_NAME" ] || [ -z "$PUBLIC_REPO_TOKEN" ]; then
+            echo "❌ Secrets missing - skipping public deploy"
+            exit 0
+          fi
+          
+          rm -rf public-repo
+          mkdir public-repo
+          
+          echo "=== Cloning public repo with token (bypasses API default-branch check) ==="
+          if git clone https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/${PUBLIC_REPO_NAME}.git public-repo; then
+            echo "✅ Clone succeeded"
+          else
+            echo "⚠️ Clone failed - trying init empty repo"
+            cd public-repo
+            git init
+            git remote add origin https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/${PUBLIC_REPO_NAME}.git
+            git checkout -b main
+            cd ..
+          fi
+          
+          ls -lh public-repo/ || true
+          
+          echo "=== Copying ONLY index.html (no .py files) ==="
           cp -f index.html public-repo/index.html
-          # optional: if you use CNAME or _headers for Cloudflare Pages
           cp -f _headers public-repo/_headers 2>/dev/null || true
           cp -f _redirects public-repo/_redirects 2>/dev/null || true
-          echo "=== Public repo after ==="
-          ls -lh public-repo/
-
-      - name: Commit and push to PUBLIC repo
-        working-directory: public-repo
-        run: |
+          
+          cd public-repo
           git config user.name "parlayos-bot"
           git config user.email "bot@parlayos.com"
+          git branch -M main || true
           git add -f index.html
-          # only add hosting files if they exist, never add .py
           git add _headers _redirects 2>/dev/null || true
-          git diff --staged --quiet && echo "No changes in public" && exit 0
-          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - live scores + picks"
-          git push origin HEAD:main || git push origin HEAD:master
+          
+          if git diff --staged --quiet; then
+            echo "No changes to public repo"
+            exit 0
+          fi
+          
+          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - live picks"
+          echo "Pushing to public repo..."
+          git push origin main -f || git push origin HEAD:main
 
       - name: Also update private repo (backup)
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f parlayos.html index.html parlayos_3.html || true
+          git add -f parlayos.html index.html || true
           git diff --staged --quiet && echo "No private changes" && exit 0
-          git commit -m "auto-update private backup: $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
-          git push origin HEAD:main || git push origin HEAD:master || true
+          git commit -m "auto-update: $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
+          git push origin HEAD:main || true
