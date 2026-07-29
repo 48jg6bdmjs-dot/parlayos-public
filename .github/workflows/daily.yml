@@ -27,17 +27,15 @@ jobs:
           python-version: '3.11'
 
       - name: Install deps
-        run: pip install --break-system-packages -r requirements.txt || pip install requests
+        run: pip install --break-system-packages -r requirements.txt || pip install -r requirements.txt
 
-      - name: Run all three prediction engines (V3 ULTRA - yt_momentum fixed)
+      - name: Run all three prediction engines (FIXED SYNTAX + FALLBACK)
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
           echo "ODDS_API_KEY set: $([ -n "$ODDS_API_KEY" ] && echo YES || echo NO)"
-          python run_all.py || echo "::warning::run_all.py partial failure - continuing"
-          ls -lh parlayos.html index.html || true
-          echo "--- first 5 lines index.html ---"
-          head -5 index.html || true
+          python run_all.py
+          ls -lh parlayos.html index.html
 
       - name: Deploy to static.app
         if: always()
@@ -46,19 +44,20 @@ jobs:
           STATIC_APP_KEY: ${{ secrets.STATIC_APP }}
         run: |
           if [ -z "$STATIC_APP_KEY" ]; then
-            echo "No STATIC_APP secret, skipping deploy"
+            echo "No STATIC_APP secret, skipping"
             exit 0
           fi
-          zip -j deploy.zip index.html parlayos.html 2>/dev/null || zip -j deploy.zip index.html
-          curl -X POST https://api.static.app/deploy -H "Authorization: Bearer $STATIC_APP_KEY" -F "file=@deploy.zip" || echo "static.app deploy failed, continuing"
+          zip -j deploy.zip index.html parlayos.html
+          curl -X POST https://api.static.app/deploy -H "Authorization: Bearer $STATIC_APP_KEY" -F "file=@deploy.zip" || true
 
-      - name: Commit and push changes
+      - name: Commit and push
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f parlayos.html index.html || git add -f index.html || true
-          git diff --staged --quiet && echo "No changes to commit" && exit 0
-          git commit -m "auto-update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - mlb fix + scores"
-          git pull --rebase origin main || (git fetch origin main; git rebase origin/main || (git rebase --abort; git reset --hard origin/main; python run_all.py || true; git add -f parlayos.html index.html; git commit -m "auto-update: resolved after rebase" || true))
+          git add -f parlayos.html index.html
+          git diff --staged --quiet && echo "No changes" && exit 0
+          git commit -m "fix: syntax error + + yt_momentum + TEAM_BATTING_FALLBACK"
+          git fetch origin main
+          git rebase origin/main || (git rebase --abort; git reset --hard origin/main; python run_all.py || true; git add -f parlayos.html index.html; git commit -m "auto-update: resolved" || true)
           git push origin HEAD:main
