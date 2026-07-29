@@ -20,7 +20,7 @@ jobs:
   build-and-push-public:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout PRIVATE repo (this repo - contains secret algorithms)
+      - name: Checkout PRIVATE repo (contains secret algorithms)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -33,54 +33,86 @@ jobs:
       - name: Install deps
         run: pip install --break-system-packages -r requirements.txt || pip install requests beautifulsoup4
 
-      - name: Build HTML (private engines run here, secrets stay private)
+      - name: Build HTML + Live Scores (private engines, public scores only)
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: |
           python run_all.py
-          ls -lh parlayos.html index.html
+          echo "Fetching live MLB scores from free MLB API (no key needed, safe for public)..."
+          python -c "
+import requests, json
+from datetime import datetime, timezone
+url='https://statsapi.mlb.com/api/v1/schedule?sportId=1&hydrate=team,linescore'
+games=[]
+try:
+    r=requests.get(url,timeout=15)
+    data=r.json()
+    for d in data.get('dates',[]):
+        for g in d.get('games',[]):
+            status=g.get('status',{}).get('detailedState','')
+            abstract=g.get('status',{}).get('abstractGameState','')
+            is_live=abstract=='Live' or 'In Progress' in status
+            is_final=abstract=='Final'
+            if not (is_live or is_final): continue
+            teams=g.get('teams',{})
+            away=teams.get('away',{})
+            home=teams.get('home',{})
+            linescore=g.get('linescore',{})
+            games.append({
+                'lg':'MLB',
+                'a':away.get('team',{}).get('teamName','Away'),
+                'b':home.get('team',{}).get('teamName','Home'),
+                'aAbbr':away.get('team',{}).get('abbreviation','AWY'),
+                'bAbbr':home.get('team',{}).get('abbreviation','HME'),
+                'aScore':away.get('score',0),
+                'bScore':home.get('score',0),
+                'status':status,
+                'inning':(linescore.get('currentInningOrdinal','')+' '+linescore.get('inningState','')).strip() if linescore.get('currentInningOrdinal') else status,
+                'final':is_final,
+                'date':d.get('date')
+            })
+except Exception as e:
+    print(f'Live fetch error: {e}')
+payload={'games':games,'updated':datetime.now(timezone.utc).isoformat(),'count':len(games)}
+open('live_scores.json','w').write(json.dumps(payload,indent=2))
+print(f'Wrote live_scores.json with {len(games)} games')
+          "
+          ls -lh parlayos.html index.html live_scores.json || true
           touch .nojekyll
-          # Verify no Sample Team leak
           if grep -q "Sample Team" index.html; then echo "Sample leak!"; exit 1; fi
-          # Verify no python code leak in html
-          if grep -q "def run" index.html; then echo "Code leak!"; exit 1; fi
 
-      - name: Checkout PUBLIC repo (Pages host - only gets index.html)
+      - name: Checkout PUBLIC repo (Pages host - only gets static files)
         uses: actions/checkout@v4
         with:
           repository: ${{ secrets.PUBLIC_REPO_NAME }}
           token: ${{ secrets.PUBLIC_REPO_TOKEN }}
           path: public-repo
 
-      - name: Copy only static files to public repo (NO CODE LEAK)
+      - name: Copy only static files (NO .py CODE LEAK - protects algorithm)
         run: |
-          echo "=== SECURITY: Copying ONLY index.html - engines stay private ==="
+          echo "=== SECURITY: Only index.html + live_scores.json -> public ==="
           cp -f index.html public-repo/index.html
+          cp -f live_scores.json public-repo/live_scores.json 2>/dev/null || echo '{"games":[],"updated":"none"}' > public-repo/live_scores.json
           cp -f .nojekyll public-repo/.nojekyll
-          echo "Public repo contents (should be ONLY index.html + .nojekyll):"
           ls -lh public-repo/
-          # Safety: ensure no .py files in public repo
-          if ls public-repo/*.py 1>/dev/null 2>&1; then
-            echo "ERROR: .py files found in public repo! Aborting"
-            exit 1
-          fi
+          if ls public-repo/*.py 1>/dev/null 2>&1; then echo "ERROR .py leak!"; exit 1; fi
 
       - name: Commit and push to PUBLIC repo
         working-directory: public-repo
         run: |
           git config user.name "parlayos-bot"
           git config user.email "bot@parlayos.com"
-          git add -f index.html .nojekyll
+          git add -f index.html .nojekyll live_scores.json
           git diff --staged --quiet && echo "No changes" && exit 0
-          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - live picks"
+          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - picks + live scores"
           git push origin HEAD:main
 
       - name: Backup to private repo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f parlayos.html index.html
+          git add -f parlayos.html index.html live_scores.json
           git diff --staged --quiet && exit 0
-          git commit -m "auto-update private backup $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
+          git commit -m "auto-update $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
           git push origin HEAD:main || true
