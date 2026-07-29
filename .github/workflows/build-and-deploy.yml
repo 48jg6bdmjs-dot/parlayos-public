@@ -20,7 +20,7 @@ jobs:
   build-and-push-public:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout PRIVATE repo
+      - name: Checkout PRIVATE repo (this repo - contains secret algorithms)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -31,78 +31,56 @@ jobs:
           python-version: '3.11'
 
       - name: Install deps
-        run: pip install --break-system-packages -r requirements.txt || pip install requests beautifulsoup4 || true
+        run: pip install --break-system-packages -r requirements.txt || pip install requests beautifulsoup4
 
-      - name: Build - Real data only (no demo)
+      - name: Build HTML (private engines run here, secrets stay private)
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: |
           python run_all.py
           ls -lh parlayos.html index.html
-          cp -f parlayos.html index.html || true
           touch .nojekyll
+          # Verify no Sample Team leak
           if grep -q "Sample Team" index.html; then echo "Sample leak!"; exit 1; fi
+          # Verify no python code leak in html
+          if grep -q "def run" index.html; then echo "Code leak!"; exit 1; fi
 
-      - name: Push to PUBLIC repo (Pages host) - fixed newline issue
-        env:
-          PUBLIC_REPO_NAME: ${{ secrets.PUBLIC_REPO_NAME }}
-          PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
+      - name: Checkout PUBLIC repo (Pages host - only gets index.html)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.PUBLIC_REPO_NAME }}
+          token: ${{ secrets.PUBLIC_REPO_TOKEN }}
+          path: public-repo
+
+      - name: Copy only static files to public repo (NO CODE LEAK)
         run: |
-          # TRIM BOTH secrets - removes newlines that cause "credential url cannot be parsed"
-          PUBLIC_REPO_NAME_TRIMMED=$(echo "$PUBLIC_REPO_NAME" | tr -d '\r\n' | xargs)
-          PUBLIC_REPO_TOKEN_TRIMMED=$(echo "$PUBLIC_REPO_TOKEN" | tr -d '\r\n' | xargs | tr -d ' ')
-          
-          echo "Public repo: $PUBLIC_REPO_NAME_TRIMMED"
-          echo "Token length: ${#PUBLIC_REPO_TOKEN_TRIMMED}"
-          echo "Token set? $([ -n "$PUBLIC_REPO_TOKEN_TRIMMED" ] && echo YES || echo NO)"
-          
-          if [ -z "$PUBLIC_REPO_NAME_TRIMMED" ] || [ -z "$PUBLIC_REPO_TOKEN_TRIMMED" ]; then
-            echo "Missing secrets"
-            exit 0
-          fi
-          
-          rm -rf public-repo
-          
-          # Build URL with trimmed token - quoted
-          CLONE_URL="https://x-access-token:${PUBLIC_REPO_TOKEN_TRIMMED}@github.com/${PUBLIC_REPO_NAME_TRIMMED}.git"
-          
-          echo "Cloning..."
-          if git clone "$CLONE_URL" public-repo; then
-            echo "✅ Clone OK"
-          else
-            echo "⚠️ Clone failed - init new repo"
-            mkdir -p public-repo
-            cd public-repo
-            git init
-            git branch -M main
-            git remote add origin "$CLONE_URL"
-            cd ..
-          fi
-          
+          echo "=== SECURITY: Copying ONLY index.html - engines stay private ==="
           cp -f index.html public-repo/index.html
           cp -f .nojekyll public-repo/.nojekyll
-          cd public-repo
+          echo "Public repo contents (should be ONLY index.html + .nojekyll):"
+          ls -lh public-repo/
+          # Safety: ensure no .py files in public repo
+          if ls public-repo/*.py 1>/dev/null 2>&1; then
+            echo "ERROR: .py files found in public repo! Aborting"
+            exit 1
+          fi
+
+      - name: Commit and push to PUBLIC repo
+        working-directory: public-repo
+        run: |
           git config user.name "parlayos-bot"
           git config user.email "bot@parlayos.com"
-          git branch -M main
           git add -f index.html .nojekyll
-          
-          if git diff --staged --quiet; then
-            echo "No changes"
-            exit 0
-          fi
-          
-          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          echo "Pushing..."
-          git push origin main -f || git push origin HEAD:main
+          git diff --staged --quiet && echo "No changes" && exit 0
+          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - live picks"
+          git push origin HEAD:main
 
-      - name: Backup to private main
-        if: always()
+      - name: Backup to private repo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f parlayos.html index.html || true
+          git add -f parlayos.html index.html
           git diff --staged --quiet && exit 0
-          git commit -m "auto-update $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
+          git commit -m "auto-update private backup $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
           git push origin HEAD:main || true
