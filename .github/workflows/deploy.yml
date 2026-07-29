@@ -1,0 +1,84 @@
+name: Deploy to GitHub Pages
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+    - cron: '0 15 * * *'
+    - cron: '0 21 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: |
+          pip install --break-system-packages -r requirements.txt || pip install requests beautifulsoup4 || true
+
+      - name: Build - Real data only (no demo)
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          python run_all.py
+          ls -lh parlayos.html index.html
+          # Ensure both are identical real data
+          cp -f parlayos.html index.html || cp -f index.html parlayos.html
+          # GitHub Pages needs .nojekyll
+          touch .nojekyll
+          # Debug: no Sample Team should exist
+          if grep -q "Sample Team" index.html; then
+            echo "ERROR: Sample Team found!"
+            exit 1
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Commit updated HTML back to main (backup)
+        if: github.event_name != 'pull_request'
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f parlayos.html index.html || true
+          git diff --staged --quiet && echo "No changes to commit" && exit 0
+          git commit -m "auto-update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - real data"
+          git push origin HEAD:main || true
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
