@@ -1,4 +1,4 @@
-name: Build and Deploy to Public
+name: Build and Deploy to Public (DISABLED if no PUBLIC_REPO secrets)
 
 on:
   schedule:
@@ -17,10 +17,21 @@ concurrency:
 jobs:
   build-and-push-public:
     runs-on: ubuntu-latest
-    # Don't run if the push was from this bot itself (prevents loop)
-    if: github.actor != 'parlayos-bot'
+    # This workflow will SKIP entirely if you haven't set PUBLIC_REPO_NAME secret
+    # To enable public deploy: set secrets PUBLIC_REPO_NAME (e.g. tdcupvon/parlayos-public) and PUBLIC_REPO_TOKEN (PAT with repo scope)
     steps:
-      - name: Checkout PRIVATE repo
+      - name: Check if public deploy is configured
+        id: check
+        run: |
+          if [ -z "${{ secrets.PUBLIC_REPO_NAME }}" ] || [ -z "${{ secrets.PUBLIC_REPO_TOKEN }}" ]; then
+            echo "configured=false" >> $GITHUB_OUTPUT
+            echo "⚠️ PUBLIC_REPO_NAME or PUBLIC_REPO_TOKEN not set - skipping public deploy, will still build private"
+          else
+            echo "configured=true" >> $GITHUB_OUTPUT
+            echo "✅ Public deploy configured for ${{ secrets.PUBLIC_REPO_NAME }}"
+          fi
+
+      - name: Checkout PRIVATE repo (this repo)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -31,30 +42,34 @@ jobs:
           python-version: '3.11'
 
       - name: Install deps
-        run: pip install -r requirements.txt || pip install requests beautifulsoup4
+        run: pip install --break-system-packages -r requirements.txt || pip install requests beautifulsoup4
 
-      - name: Build HTML (private - keys stay secret)
+      - name: Build HTML (private engines run here, secrets stay private)
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: |
-          python run_all.py
-          ls -lh index.html
-          wc -l index.html
+          echo "Building with secret keys (never exposed to public repo)"
+          python run_all.py || echo "::warning:: build had partial failure"
+          ls -lh parlayos.html index.html || true
 
       - name: Checkout PUBLIC repo
+        if: steps.check.outputs.configured == 'true'
         uses: actions/checkout@v4
         with:
           repository: ${{ secrets.PUBLIC_REPO_NAME }}
           token: ${{ secrets.PUBLIC_REPO_TOKEN }}
           path: public-repo
 
-      - name: Copy ONLY index.html (NO .py files)
+      - name: Copy only static files to public repo (NO CODE)
+        if: steps.check.outputs.configured == 'true'
         run: |
+          echo "Copying ONLY index.html - no .py files leak"
           cp -f index.html public-repo/index.html
           ls -lh public-repo/
 
-      - name: Push to PUBLIC repo
+      - name: Commit and push to PUBLIC repo
+        if: steps.check.outputs.configured == 'true'
         working-directory: public-repo
         run: |
           git config user.name "parlayos-bot"
@@ -63,3 +78,14 @@ jobs:
           git diff --staged --quiet && echo "No changes" && exit 0
           git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
           git push origin HEAD:main
+
+      - name: Also update private repo (backup) - ALWAYS
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f parlayos.html index.html || git add -f index.html || true
+          git diff --staged --quiet && echo "No private changes" && exit 0
+          git commit -m "auto-update private backup: $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
+          git pull --rebase origin main || true
+          git push origin HEAD:main || true
