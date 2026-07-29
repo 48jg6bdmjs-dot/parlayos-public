@@ -13,7 +13,7 @@ Critical fixes:
 import requests
 import json
 import os
-ODDS_KEY = os.getenv("ODDS_API_KEY") or "e357fcc2d8a1fea08e7fa62a8d0b65b5"
+ODDS_KEY = "373aadcf1852b15f1d8f4f483faf6d8"
 import re
 import math
 import random
@@ -82,11 +82,6 @@ LEAGUE_AVG_OFF_RATING = 112.0
 LEAGUE_AVG_DEF_RATING = 112.0
 LEAGUE_AVG_PACE = 100.0
 
-
-# OFF-SEASON FALLBACK - ensures hub shows data even in July
-SAMPLE_FALLBACK = [
-    {"home":"Sample Team A","away":"Sample Team B","home_abbr":"LAL","away_abbr":"GSW","total":220.0},
-]
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(HERE, "nba_config.json")
@@ -166,7 +161,7 @@ class NBAPredictionEngine:
         try:
             r = requests.get(url, params=params, timeout=15)
             if r.status_code == 422:
-                print(f"NBA: Off-season (422) - 0 games expected in July")
+                print(f"NBA: API 422 - - 0 games expected in July")
                 return []
             data = r.json()
             if isinstance(data, dict) and data.get("message"):
@@ -620,17 +615,15 @@ def _devig_probs(home_odds, away_odds):
 
 def apply_platt_calibration(p): return p
 
-def run(html_path: str = None):
-    if html_path is None:
-        html_path = "parlayos.html"
+def run(html_path: str):
     config = load_config()
-    api_key = os.getenv("ODDS_API_KEY") or "e357fcc2d8a1fea08e7fa62a8d0b65b5"
+    api_key = None
     try:
         with open(os.path.join(os.path.dirname(__file__), "sports_config.json")) as f:
-            api_key = json.load(f).get("odds_api_key") or api_key
+            api_key = json.load(f).get("odds_api_key")
     except:
-        pass
-    engine = NBAPredictionEngine(api_key or "e357fcc2d8a1fea08e7fa62a8d0b65b5")
+        api_key = "test"
+    engine = NBAPredictionEngine(api_key or "test")
     odds_data = engine.fetch_live_odds()
     games = []
     seen = set()
@@ -660,7 +653,7 @@ def run(html_path: str = None):
             "real_total": real_total, "commence_time": game.get("commence_time"),
         })
     if not games:
-        print(f"  [NBA] Off-season, no live games - hub will show 0 but engine intact")
+        print(f"  [NBA] No games returned from API - 0 games (off-season is normal)")
     all_games_data = []
     for g in games:
         prob = engine.calculate_win_probability(g)
