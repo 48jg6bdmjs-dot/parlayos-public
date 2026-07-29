@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Build and Deploy to Public
 
 on:
   schedule:
@@ -10,19 +10,17 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: "pages"
+  group: parlayos-public-deploy
   cancel-in-progress: false
 
 jobs:
-  build:
+  build-and-push-public:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout PRIVATE repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -33,8 +31,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install deps
-        run: |
-          pip install --break-system-packages -r requirements.txt || pip install requests beautifulsoup4 || true
+        run: pip install --break-system-packages -r requirements.txt || pip install requests beautifulsoup4 || true
 
       - name: Build - Real data only (no demo)
         env:
@@ -43,42 +40,46 @@ jobs:
         run: |
           python run_all.py
           ls -lh parlayos.html index.html
-          # Ensure both are identical real data
-          cp -f parlayos.html index.html || cp -f index.html parlayos.html
-          # GitHub Pages needs .nojekyll
+          cp -f parlayos.html index.html || true
           touch .nojekyll
-          # Debug: no Sample Team should exist
-          if grep -q "Sample Team" index.html; then
-            echo "ERROR: Sample Team found!"
-            exit 1
+          if grep -q "Sample Team" index.html; then echo "Sample leak!"; exit 1; fi
+
+      - name: Push to PUBLIC repo (Pages host)
+        env:
+          PUBLIC_REPO_NAME: ${{ secrets.PUBLIC_REPO_NAME }}
+          PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
+        run: |
+          PUBLIC_REPO_NAME_TRIMMED=$(echo "$PUBLIC_REPO_NAME" | xargs)
+          echo "Public: $PUBLIC_REPO_NAME_TRIMMED"
+          rm -rf public-repo
+          CLONE_URL="https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/${PUBLIC_REPO_NAME_TRIMMED}.git"
+          if git clone "$CLONE_URL" public-repo; then
+            echo "Clone OK"
+          else
+            mkdir -p public-repo
+            cd public-repo
+            git init
+            git branch -M main
+            git remote add origin "$CLONE_URL"
+            cd ..
           fi
+          cp -f index.html public-repo/index.html
+          cp -f .nojekyll public-repo/.nojekyll
+          cd public-repo
+          git config user.name "parlayos-bot"
+          git config user.email "bot@parlayos.com"
+          git branch -M main
+          git add -f index.html .nojekyll
+          git diff --staged --quiet && echo "No changes" && exit 0
+          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push origin main -f || git push origin HEAD:main
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-
-      - name: Commit updated HTML back to main (backup)
-        if: github.event_name != 'pull_request'
-        continue-on-error: true
+      - name: Backup to private main
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f parlayos.html index.html || true
-          git diff --staged --quiet && echo "No changes to commit" && exit 0
-          git commit -m "auto-update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - real data"
+          git diff --staged --quiet && exit 0
+          git commit -m "auto-update $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
           git push origin HEAD:main || true
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
