@@ -1,0 +1,37 @@
+name: Update Live Scores
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'live_scores_fetcher.py'
+      - 'mlb_ace.py'
+      - 'nba_ace.py'
+      - 'nfl_ace.py'
+
+jobs:
+  update-scores:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install requests pyyaml
+      - env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          python live_scores_fetcher.py
+          python mlb_ace.py parlayos.html || echo "MLB fallback"
+          python nfl_ace.py parlayos.html || echo "NFL off-season"
+          python nba_ace.py parlayos.html || echo "NBA off-season"
+      - run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add live_scores.json data/live_scores.json parlayos.html 2>/dev/null || true
+          git diff --staged --quiet || (git commit -m "Update live scores - $(date -u)" && git push)
