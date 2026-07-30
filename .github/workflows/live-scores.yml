@@ -1,0 +1,84 @@
+name: Live Scores (Every 5 min 12pm-1am ET)
+
+on:
+  schedule:
+    # 12pm-11:55pm ET = 16:00-03:55 UTC (EDT, UTC-4) - every 5 min
+    - cron: '*/5 16-23 * * *'
+    # 12am-1am ET = 04:00-05:00 UTC next day - every 5 min (covers midnight to 1am ET)
+    - cron: '*/5 0-4 * * *'
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: parlayos-live-scores
+  cancel-in-progress: true
+
+jobs:
+  live-scores:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PRIVATE repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install --break-system-packages -r requirements.txt || pip install requests beautifulsoup4
+
+      - name: Update Live Scores
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          echo "Live score update - $(date -u) UTC / $(TZ='America/New_York' date) ET"
+          python run_all.py
+          ls -lh parlayos.html index.html
+          touch .nojekyll
+          # Verify no leak
+          if grep -q "Sample Team" index.html; then echo "Sample leak!"; exit 1; fi
+          if grep -q "^def run" index.html; then echo "Code leak!"; exit 1; fi
+
+      - name: Checkout PUBLIC repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.PUBLIC_REPO_NAME }}
+          token: ${{ secrets.PUBLIC_REPO_TOKEN }}
+          path: public-repo
+
+      - name: Copy to public repo
+        run: |
+          echo "=== LIVE: Copying index.html ==="
+          cp -f index.html public-repo/index.html
+          cp -f .nojekyll public-repo/.nojekyll
+          ls -lh public-repo/
+          if ls public-repo/*.py 1>/dev/null 2>&1; then
+            echo "ERROR: .py files in public repo!"
+            exit 1
+          fi
+
+      - name: Commit and push live scores
+        working-directory: public-repo
+        run: |
+          git config user.name "parlayos-bot"
+          git config user.email "bot@parlayos.com"
+          git add -f index.html .nojekyll
+          git diff --staged --quiet && echo "No changes - scores unchanged" && exit 0
+          git commit -m "live: $(date -u +%Y-%m-%dT%H:%M:%SZ) ET:$(TZ='America/New_York' date +%H:%M) - live scores"
+          git push origin HEAD:main
+
+      - name: Backup to private repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f parlayos.html index.html
+          git diff --staged --quiet && exit 0
+          git commit -m "live backup $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
+          git push origin HEAD:main || true
