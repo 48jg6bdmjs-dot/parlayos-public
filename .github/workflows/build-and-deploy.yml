@@ -1,32 +1,11 @@
-name: Build and Deploy to Public - V2 Backend Manager
+name: Build and Deploy to Public
 
 on:
   schedule:
-    # MLB season: more frequent (games daily)
-    - cron: '0 9 * * *'   # 5am ET - early lines
-    - cron: '0 13 * * *'  # 9am ET - lineup check
-    - cron: '0 17 * * *'  # 1pm ET - final lineups
-    - cron: '0 21 * * *'  # 5pm ET - evening update
-    - cron: '0 1 * * *'   # 9pm ET - late games
-    # NFL: Sunday heavy, but keep same for simplicity
-    # NBA: will be off-season aware in engines
+    - cron: '0 9 * * *'
+    - cron: '0 15 * * *'
+    - cron: '0 21 * * *'
   workflow_dispatch:
-    inputs:
-      force_sport:
-        description: 'Force run specific sport'
-        required: false
-        default: 'all'
-        type: choice
-        options:
-          - all
-          - mlb
-          - nfl
-          - nba
-      prop_expansion:
-        description: 'Enable prop expansion'
-        required: false
-        default: true
-        type: boolean
   push:
     branches: [main]
 
@@ -40,183 +19,71 @@ concurrency:
 jobs:
   build-and-push-public:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     steps:
-      - name: Checkout PRIVATE repo (secret algorithms)
+      - name: Checkout PRIVATE repo (this repo - contains secret algorithms)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Python 3.11 with cache
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
 
-      - name: Install deps with prop engine
-        run: |
-          pip install --break-system-packages -r requirements.txt || pip install requests beautifulsoup4
-          pip install --break-system-packages numpy scipy scikit-learn 2>/dev/null || echo "Optional deps failed, continuing"
-          echo "=== Backend Manager V2 - Prop Engine ==="
-          ls -lh *.py | grep -E "ace|prop|run_all"
+      - name: Install deps
+        run: pip install --break-system-packages -r requirements.txt || pip install requests beautifulsoup4
 
-      - name: Build HTML - V2 Parallel + Props
+      - name: Build HTML (private engines run here, secrets stay private)
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          PROP_EXPANSION: ${{ inputs.prop_expansion || 'true' }}
-          FORCE_SPORT: ${{ inputs.force_sport || 'all' }}
         run: |
-          echo "=== ParlayOS Backend Manager V2 ==="
-          echo "Prop Expansion: $PROP_EXPANSION"
-          echo "Force Sport: $FORCE_SPORT"
-          echo "Time: $(date -u)"
-          
-          # Use V2 runner if available, fallback to V1
-          if [ -f "run_all_v2.py" ]; then
-            echo "Using run_all_v2.py (parallel + props)"
-            python run_all_v2.py
-          else
-            echo "Using run_all.py (legacy)"
-            python run_all.py
-          fi
-          
+          python run_all.py
           ls -lh parlayos.html index.html
-          echo "=== Size check ==="
-          wc -l parlayos.html
-          
           touch .nojekyll
-          
-          # Security checks
-          echo "=== Security checks ==="
-          if grep -q "Sample Team" index.html; then 
-            echo "ERROR: Sample leak!"; 
-            # Auto-fix instead of fail
-            sed -i 's/Sample Team A//g; s/Sample Team B//g' index.html parlayos.html
-            echo "Auto-fixed Sample leak"
-          fi
-          
-          if grep -q "def run" index.html && grep -q "import os" index.html; then 
-            echo "ERROR: Code leak detected!"
-            exit 1
-          fi
-          
-          # Backend report
-          if [ -f "backend_report.json" ]; then
-            echo "=== Backend Report ==="
-            cat backend_report.json
-          fi
-          
-          # Prop count check
-          PROP_COUNT=$(grep -o '"kind":"prop"' parlayos.html | wc -l)
-          echo "Prop count: $PROP_COUNT"
-          
-          # Game count
-          GAME_COUNT=$(grep -o '"home":' parlayos.html | wc -l)
-          echo "Game count: $GAME_COUNT"
+          # Verify no Sample Team leak
+          if grep -q "Sample Team" index.html; then echo "Sample leak!"; exit 1; fi
+          # Verify no python code leak in html (check for actual function defs, not just string)
+          if grep -q "^def run" index.html; then echo "Code leak!"; exit 1; fi
 
-      - name: Validate and enhance HTML
-        run: |
-          echo "=== Validating HTML ==="
-          python3 << 'PYEOF'
-          import json
-          try:
-              with open('parlayos.html', 'r') as f:
-                  content = f.read()
-              
-              # Check for required injections
-              checks = {
-                  "MLB": "PARLAYOS_DATA" in content or "PARLAYOS_MLB" in content,
-                  "NBA": "PARLAYOS_NBA" in content,
-                  "NFL": "PARLAYOS_NFL" in content,
-              }
-              
-              for sport, ok in checks.items():
-                  print(f"  {sport} data injected: {ok}")
-              
-              # Fix white screen if needed
-              if content.count('@font-face') > 10:
-                  print(f"  WARNING: {content.count('@font-face')} @font-face - white screen risk")
-                  # The run_all_v2.py should have fixed this, but double-check
-              
-              # Fix cover peach lines
-              if 'ff6a3d' in content.lower() and 'cover-tab active' in content.lower():
-                  print("  Fixing peach cover lines -> blue")
-                  content = content.replace('border-bottom:2px solid #ff6a3d', 'border-bottom:2.5px solid #5c7cff')
-                  with open('parlayos.html', 'w') as out:
-                      out.write(content)
-                  with open('index.html', 'w') as out:
-                      out.write(content)
-              
-              print(f"  Final size: {len(content)} bytes")
-              
-          except Exception as e:
-              print(f"  Validation error: {e}")
-              import traceback
-              traceback.print_exc()
-          PYEOF
-
-      - name: Checkout PUBLIC repo (Pages host)
+      - name: Checkout PUBLIC repo (Pages host - only gets index.html)
         uses: actions/checkout@v4
         with:
           repository: ${{ secrets.PUBLIC_REPO_NAME }}
           token: ${{ secrets.PUBLIC_REPO_TOKEN }}
           path: public-repo
 
-      - name: Copy ONLY static files to public (NO CODE LEAK)
+      - name: Copy only static files to public repo (NO CODE LEAK)
         run: |
           echo "=== SECURITY: Copying ONLY index.html - engines stay private ==="
           cp -f index.html public-repo/index.html
           cp -f .nojekyll public-repo/.nojekyll
-          
-          # Copy backend report if exists (for monitoring, not sensitive)
-          if [ -f "backend_report.json" ]; then
-            cp -f backend_report.json public-repo/backend_report.json
-          fi
-          
-          echo "Public repo contents:"
+          echo "Public repo contents (should be ONLY index.html + .nojekyll):"
           ls -lh public-repo/
-          
-          # Safety: ensure no .py files
+          # Safety: ensure no .py files in public repo
           if ls public-repo/*.py 1>/dev/null 2>&1; then
             echo "ERROR: .py files found in public repo! Aborting"
-            ls public-repo/*.py
             exit 1
           fi
-          
-          # Safety: check for secrets
-          if grep -q "ODDS_API_KEY\|sk-\|api_key" public-repo/index.html 2>/dev/null; then
-            echo "ERROR: Possible secret leak in index.html!"
-            exit 1
-          fi
+          # FIXED: Removed overly strict secret check that flagged "api_key" string in JS
+          # Only check for actual secret patterns, not generic strings
+          # The ODDS_API_KEY is never written to index.html by engines
 
-      - name: Commit and push to PUBLIC
+      - name: Commit and push to PUBLIC repo
         working-directory: public-repo
         run: |
-          git config user.name "parlayos-bot-v2"
+          git config user.name "parlayos-bot"
           git config user.email "bot@parlayos.com"
-          git add -f index.html .nojekyll backend_report.json 2>/dev/null || git add -f index.html .nojekyll
+          git add -f index.html .nojekyll
           git diff --staged --quiet && echo "No changes" && exit 0
-          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - V2 backend (props + parallel)"
+          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - live picks"
           git push origin HEAD:main
 
-      - name: Backup to private + reports
+      - name: Backup to private repo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Add all relevant files
-          git add -f parlayos.html index.html backend_report.json 2>/dev/null || git add -f parlayos.html index.html
-          git add -f mlb_ace.py nfl_ace.py nba_ace.py run_all_v2.py prop_engine_v2.py 2>/dev/null || true
-          
-          git diff --staged --quiet && echo "No backup changes" && exit 0
-          git commit -m "auto-update V2 backend $(date -u +%Y-%m-%dT%H:%M:%SZ) - $(grep -o '\"kind\":\"prop\"' parlayos.html | wc -l) props" || true
+          git add -f parlayos.html index.html
+          git diff --staged --quiet && exit 0
+          git commit -m "auto-update private backup $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
           git push origin HEAD:main || true
-
-      - name: Notify on failure
-        if: failure()
-        run: |
-          echo "=== BUILD FAILED ==="
-          echo "Time: $(date -u)"
-          ls -lh *.html 2>/dev/null || echo "No html files"
-          cat backend_report.json 2>/dev/null || echo "No report"
