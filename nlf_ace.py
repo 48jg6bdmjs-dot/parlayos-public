@@ -1,4 +1,3 @@
-# nba_ace.py - NBA version with real weather/YT Vision (mirrors NFL enhanced logic)
 import os
 """
 nfl_ace.py ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬-Ã‚Â IMPROVED VERSION inspired by old MLB ace's superior model
@@ -860,125 +859,59 @@ def run(html_path: str):
     export_to_html(all_games_data, html_path)
     return all_games_data
 
+
+# === RIGHT PLAYER FETCH (NON-ODDS) ===
+import requests as _req2
+_NFL_CACHE={}
+def _get_cached2(k, ttl=3600):
+    import time
+    if k in _NFL_CACHE:
+        ts,v=_NFL_CACHE[k]
+        if time.time()-ts < ttl: return v
+    return None
+def _set_cache2(k,v):
+    import time
+    _NFL_CACHE[k]=(time.time(),v)
+
+def fetch_nfl_player_details(player_name: str, team_abbr: str):
+    if not player_name or player_name=='TBD': return {}
+    key=f"nfl_p_{team_abbr}_{player_name}"
+    c=_get_cached2(key,86400)
+    if c: return c
+    try:
+        ESPN_NFL_IDS={'ARI':22,'ATL':1,'BAL':33,'BUF':2,'CAR':29,'CHI':3,'CIN':4,'CLE':5,'DAL':6,'DEN':7,'DET':8,'GB':9,'HOU':34,'IND':11,'JAX':30,'KC':12,'LV':13,'LAC':24,'LAR':32,'MIA':15,'MIN':16,'NE':17,'NO':18,'NYG':19,'NYJ':20,'PHI':21,'PIT':23,'SF':25,'SEA':26,'TB':27,'TEN':10,'WSH':28}
+        eid=ESPN_NFL_IDS.get(team_abbr)
+        if not eid: return {}
+        r=_req2.get(f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{eid}/roster", timeout=10)
+        for grp in r.json().get('athletes',[]):
+            for it in grp.get('items',[]):
+                if player_name.lower() in it.get('fullName','').lower() or player_name.split()[-1].lower() in it.get('fullName','').lower():
+                    result={'name':it.get('fullName',player_name), 'jersey':it.get('jersey',''), 'pos':(it.get('position') or {}).get('abbreviation',''), 'team':team_abbr, 'age':it.get('age',''), 'height':it.get('displayHeight',''), 'weight':it.get('displayWeight',''), 'experience':(it.get('experience') or {}).get('years',''), 'college':(it.get('college') or {}).get('name','') if isinstance(it.get('college'), dict) else '', 'sport':'NFL', 'jerseyDisplay': f"#{it.get('jersey','')}" if it.get('jersey') else ''}
+                    _set_cache2(key,result)
+                    return result
+        return {}
+    except Exception as e:
+        print(f"NFL fetch error {player_name}: {e}")
+        return {}
+
+def fetch_nfl_team_roster(team_abbr: str):
+    key=f"nfl_roster_{team_abbr}"
+    c=_get_cached2(key,3600)
+    if c: return c
+    try:
+        ESPN_NFL_IDS={'ARI':22,'ATL':1,'BAL':33,'BUF':2,'CAR':29,'CHI':3,'CIN':4,'CLE':5,'DAL':6,'DEN':7,'DET':8,'GB':9,'HOU':34,'IND':11,'JAX':30,'KC':12,'LV':13,'LAC':24,'LAR':32,'MIA':15,'MIN':16,'NE':17,'NO':18,'NYG':19,'NYJ':20,'PHI':21,'PIT':23,'SF':25,'SEA':26,'TB':27,'TEN':10,'WSH':28}
+        eid=ESPN_NFL_IDS.get(team_abbr)
+        if not eid: return []
+        r=_req2.get(f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{eid}/roster", timeout=10)
+        athletes=[]
+        for grp in r.json().get('athletes',[]):
+            for it in grp.get('items',[]):
+                athletes.append({'name':it.get('fullName',''), 'jersey':it.get('jersey',''), 'pos':(it.get('position') or {}).get('abbreviation',''), 'team':team_abbr, 'sport':'NFL'})
+        _set_cache2(key,athletes)
+        return athletes
+    except: return []
+
 if __name__ == "__main__":
     import sys
     path = sys.argv[1] if len(sys.argv)>1 else "parlayos_3.html"
     run(path)
-
-
-"""
-NBA Ace V2 - With Prop Expansion
-"""
-import sys
-
-try:
-    import importlib.util
-    spec = importlib.util.spec_from_file_location("nba_ace_original", "nba_ace.py")
-    orig = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(orig)
-    ORIGINAL_AVAILABLE = True
-except Exception as e:
-    ORIGINAL_AVAILABLE = False
-    print(f"NBA Original not available: {e}")
-
-try:
-    from nfl_nba_props_v2 import improve_nfl_nba_with_props
-    PROP_AVAILABLE = True
-except ImportError:
-    PROP_AVAILABLE = False
-
-def run(html_path=None):
-    if html_path is None:
-        html_path = "parlayos.html"
-    print(f"\n=== NBA Ace V2 ===")
-    if not ORIGINAL_AVAILABLE:
-        return []
-    original_export = orig.export_to_html
-    captured = []
-    def cap(picks, hp=None):
-        nonlocal captured
-        captured = picks
-        return picks
-    orig.export_to_html = cap
-    try:
-        orig.main()
-    except:
-        try:
-            captured = orig.run(html_path)
-        except:
-            captured = []
-    orig.export_to_html = original_export
-    print(f"NBA Original: {len(captured)} games")
-    if PROP_AVAILABLE and captured:
-        try:
-            enhanced = improve_nfl_nba_with_props("NBA", captured)
-            prop_count = len([p for p in enhanced if p.get('kind')=='prop'])
-            print(f"NBA V2: {len(enhanced)} total ({len(captured)} games + {prop_count} props)")
-            original_export(enhanced, html_path)
-            return enhanced
-        except Exception as e:
-            print(f"Prop failed: {e}")
-            original_export(captured, html_path)
-            return captured
-    else:
-        if captured:
-            original_export(captured, html_path)
-        return captured
-
-def main():
-    html_path = sys.argv[1] if len(sys.argv)>1 else "parlayos.html"
-    return run(html_path)
-
-if __name__ == "__main__":
-    main()
-
-
-
-# === RIGHT PLAYER FETCH (NON-ODDS) FOR NBA GLASS WINDOWS ===
-import requests as _req3
-_NBA_CACHE={}
-def _get_cached3(k, ttl=3600):
-    import time
-    if k in _NBA_CACHE:
-        ts,v=_NBA_CACHE[k]
-        if time.time()-ts < ttl: return v
-    return None
-def _set_cache3(k,v):
-    import time
-    _NBA_CACHE[k]=(time.time(),v)
-
-def fetch_nba_player_details(player_name: str, team_abbr: str):
-    if not player_name or player_name=='TBD': return {}
-    key=f"nba_p_{team_abbr}_{player_name}"
-    c=_get_cached3(key,86400)
-    if c: return c
-    try:
-        ESPN_NBA_IDS={'ATL':1,'BOS':2,'BKN':3,'CHA':30,'CHI':4,'CLE':5,'DAL':7,'DEN':8,'DET':9,'GSW':10,'HOU':11,'IND':12,'LAC':13,'LAL':14,'MEM':29,'MIA':16,'MIL':17,'MIN':18,'NO':3,'NYK':20,'OKC':25,'ORL':22,'PHI':23,'PHX':24,'POR':25,'SAC':26,'SAS':24,'TOR':28,'UTA':26,'WSH':27}
-        eid=ESPN_NBA_IDS.get(team_abbr,20)
-        r=_req3.get(f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{eid}/roster", timeout=10)
-        for grp in r.json().get('athletes',[]):
-            for it in grp.get('items',[]):
-                if player_name.lower() in it.get('fullName','').lower() or player_name.split()[-1].lower() in it.get('fullName','').lower():
-                    result={'name':it.get('fullName',player_name), 'jersey':it.get('jersey',''), 'pos':(it.get('position') or {}).get('abbreviation',''), 'team':team_abbr, 'age':it.get('age',''), 'height':it.get('displayHeight',''), 'weight':it.get('displayWeight',''), 'college':(it.get('college') or {}).get('name','') if isinstance(it.get('college'), dict) else '', 'sport':'NBA', 'jerseyDisplay': f"#{it.get('jersey','')}" if it.get('jersey') else ''}
-                    _set_cache3(key,result)
-                    return result
-        return {}
-    except Exception as e:
-        print(f"NBA fetch error {player_name}: {e}")
-        return {}
-
-def fetch_nba_team_roster(team_abbr: str):
-    key=f"nba_roster_{team_abbr}"
-    c=_get_cached3(key,3600)
-    if c: return c
-    try:
-        ESPN_NBA_IDS={'ATL':1,'BOS':2,'BKN':3,'CHA':30,'CHI':4,'CLE':5,'DAL':7,'DEN':8,'DET':9,'GSW':10,'HOU':11,'IND':12,'LAC':13,'LAL':14,'MEM':29,'MIA':16,'MIL':17,'MIN':18,'NO':3,'NYK':20,'OKC':25,'ORL':22,'PHI':23,'PHX':24,'POR':25,'SAC':26,'SAS':24,'TOR':28,'UTA':26,'WSH':27}
-        eid=ESPN_NBA_IDS.get(team_abbr,20)
-        r=_req3.get(f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{eid}/roster", timeout=10)
-        athletes=[]
-        for grp in r.json().get('athletes',[]):
-            for it in grp.get('items',[]):
-                athletes.append({'name':it.get('fullName',''), 'jersey':it.get('jersey',''), 'pos':(it.get('position') or {}).get('abbreviation',''), 'team':team_abbr, 'sport':'NBA'})
-        _set_cache3(key,athletes)
-        return athletes
-    except: return []

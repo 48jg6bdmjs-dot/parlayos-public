@@ -1931,5 +1931,67 @@ def run(html_path: str = None):
         return []
 
 
+
+# === RIGHT PLAYER FETCH (NON-ODDS API) - ADDED FOR GLASS PLAYER WINDOWS ===
+import requests as _req
+_PLAYER_CACHE={}
+def _get_cached(k, ttl=3600):
+    import time
+    if k in _PLAYER_CACHE:
+        ts,v=_PLAYER_CACHE[k]
+        if time.time()-ts < ttl: return v
+    return None
+def _set_cache(k,v):
+    import time
+    _PLAYER_CACHE[k]=(time.time(),v)
+
+def fetch_mlb_player_details(player_name: str, team_abbr: str):
+    """RIGHT player from MLB Stats API (non-odds) - jersey, age, height, weight, throws, bats, ERA/WHIP/K9/IP/W-L"""
+    if not player_name or player_name=='TBD': return {}
+    key=f"mlb_p_{team_abbr}_{player_name}"
+    c=_get_cached(key,86400)
+    if c: return c
+    try:
+        r=_req.get(f"https://statsapi.mlb.com/api/v1/people/search?names={_req.utils.quote(player_name)}", timeout=8)
+        people=r.json().get('people',[])
+        if not people: return {}
+        pid=people[0].get('id')
+        r2=_req.get(f"https://statsapi.mlb.com/api/v1/people/{pid}?hydrate=stats(group=[pitching,hitting],type=[season])", timeout=8)
+        p=(r2.json().get('people') or [{}])[0]
+        result={
+            'id': pid, 'name': p.get('fullName', player_name), 'jersey': p.get('primaryNumber',''), 'pos': (p.get('primaryPosition') or {}).get('abbreviation',''),
+            'team': team_abbr, 'age': p.get('currentAge',''), 'height': p.get('height',''), 'weight': p.get('weight',''),
+            'bats': (p.get('batSide') or {}).get('description',''), 'throws': (p.get('pitchHand') or {}).get('description',''),
+            'sport': 'MLB', 'jerseyDisplay': f"#{p.get('primaryNumber','')}" if p.get('primaryNumber') else ''
+        }
+        for sg in p.get('stats',[]):
+            s=(sg.get('splits') or [{}])[0].get('stat',{})
+            if sg.get('group',{}).get('displayName')=='pitching':
+                result.update({'era':s.get('era',''), 'whip':s.get('whip',''), 'k9':s.get('strikeoutsPer9Inn',''), 'ip':s.get('inningsPitched',''), 'w':s.get('wins',''), 'l':s.get('losses',''), 'so':s.get('strikeOuts',''), 'bb':s.get('baseOnBalls',''), 'fip':s.get('fip','')})
+        _set_cache(key,result)
+        return result
+    except Exception as e:
+        print(f"MLB fetch error {player_name}: {e}")
+        return {}
+
+def fetch_mlb_team_roster(team_abbr: str):
+    key=f"mlb_roster_{team_abbr}"
+    c=_get_cached(key,3600)
+    if c: return c
+    try:
+        espn_ids={'ARI':29,'ATL':15,'BAL':3,'BOS':4,'CHC':16,'CHW':5,'CIN':17,'CLE':6,'COL':27,'DET':8,'HOU':18,'KC':9,'LAA':1,'LAD':14,'MIA':28,'MIL':19,'MIN':10,'NYM':21,'NYY':20,'OAK':11,'PHI':22,'PIT':23,'SD':24,'SF':25,'SEA':26,'STL':20,'TB':30,'TEX':13,'TOR':12,'WSH':32}
+        eid=espn_ids.get(team_abbr)
+        if not eid: return []
+        r=_req.get(f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/{eid}/roster", timeout=10)
+        athletes=[]
+        for grp in r.json().get('athletes',[]):
+            for it in grp.get('items',[]):
+                athletes.append({'name':it.get('fullName',''), 'jersey':it.get('jersey',''), 'pos':(it.get('position') or {}).get('abbreviation',''), 'team':team_abbr, 'sport':'MLB'})
+        _set_cache(key,athletes)
+        return athletes
+    except Exception as e:
+        print(f"MLB roster error {team_abbr}: {e}")
+        return []
+
 if __name__ == "__main__":
     main()
