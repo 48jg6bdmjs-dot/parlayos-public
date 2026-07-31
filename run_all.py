@@ -38,7 +38,7 @@ def _run_one(name, module_path, html_path):
 def main():
     has_key = bool(os.getenv("ODDS_API_KEY"))
     print(f"ODDS_API_KEY env set: {has_key}")
-    print("Backend Manager V2 - Parallel Fixed (No Recursion)")
+    print("Backend - Parallel")
 
     base_template = "parlayos_3.html"
     if os.path.exists(base_template):
@@ -82,7 +82,7 @@ def main():
     elapsed = time.time() - start
     
     print(f"\n{'='*70}")
-    print(f" SUMMARY - REAL DATA ONLY (V2 Parallel {elapsed:.1f}s)")
+    print(f" SUMMARY - REAL DATA ONLY (Parallel {elapsed:.1f}s)")
     print(f"{'='*70}")
     for ok, name, total, qual in results:
         status = "OK" if ok else "X"
