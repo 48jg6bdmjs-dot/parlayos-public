@@ -873,7 +873,7 @@ import sys
 
 try:
     import importlib.util
-    spec = importlib.util.spec_from_file_location("nba_ace_original", "nba_ace.py")
+    spec = importlib.util.spec_from_file_location("nba_ace.py")
     orig = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(orig)
     ORIGINAL_AVAILABLE = True
