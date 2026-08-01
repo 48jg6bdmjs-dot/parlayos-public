@@ -33098,7 +33098,34 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
 // Restore player sections for MLB/NFL/NBA with same layout
 (function(){
   // Player detail modal functions
+  // ---------------------------------------------------------------
+  // MLB pitchers now route through openPlayerCardModal (the new
+  // glassmorphic card with VS divider, STARTING PITCHER section,
+  // and TEAM DEFENSE section) so the window matches the pitcher
+  // pills / leaderboard opponent cells exactly. NFL/NBA players
+  // keep the legacy jersey-header card since the new card style
+  // only knows how to render MLB pitcher / MLB team offense stats.
+  // ---------------------------------------------------------------
   window.openPlayerDetail = function(playerData){
+    if(!playerData) playerData = {};
+    const name = playerData.name || 'Player';
+    const team = (playerData.team || playerData.abbr || '').toUpperCase();
+    const sport = playerData.sport || 'MLB';
+    const pos = playerData.pos || (sport==='MLB' ? 'SP' : '');
+    const isMLBPitcher = (sport === 'MLB') && (pos === 'SP' || playerData.era !== undefined);
+
+    // MLB pitcher → delegate to the new pitcher card modal (matches
+    // the rival-line / leaderboard opponent cell card exactly).
+    if(isMLBPitcher && typeof window.openPlayerCardModal === 'function'){
+      // Make sure the legacy #playerDetailModal isn't still open
+      const oldModal = document.getElementById('playerDetailModal');
+      if(oldModal) oldModal.classList.remove('open');
+      // Delegate (async — fetches team defense internally)
+      window.openPlayerDetailMLB(playerData);
+      return;
+    }
+
+    // Legacy path — NFL / NBA / fallback
     const modal = document.getElementById('playerDetailModal');
     const badge = document.getElementById('playerDetailBadge');
     const nameEl = document.getElementById('playerDetailName');
@@ -33106,13 +33133,11 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
     const statsEl = document.getElementById('playerDetailStats');
     const extraEl = document.getElementById('playerDetailExtra');
     if(!modal) return;
-    
+
     const isPitcher = playerData.era !== undefined || playerData.pos === 'SP' || playerData.sport === 'MLB';
-    const name = playerData.name || 'Player';
-    const team = playerData.team || playerData.abbr || 'MLB';
     const jerseyNum = playerData.jersey || Math.floor(Math.random()*40+10);
     const lastName = (name.split(' ').pop() || 'PLAYER').toUpperCase();
-    
+
     // Custom jersey with player name
     if(badge){
       badge.innerHTML = `<div class="custom-jersey"><div class="jersey-number">#${jerseyNum}</div><div class="jersey-team">${team}</div></div>`;
@@ -33165,12 +33190,133 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
     }
     modal.classList.add('open');
   };
-  
+
+  // ---------------------------------------------------------------
+  // NEW: MLB pitcher path — looks up the game this pitcher is in,
+  // builds rival (opposing team offense) data, fetches team defense
+  // stats, then opens the same glassmorphic pitcher card that the
+  // rival-line pills and leaderboard opponent cells use. This makes
+  // the player detail window visually identical to IMG_4092.
+  // ---------------------------------------------------------------
+  window.openPlayerDetailMLB = async function(playerData){
+    const name = playerData.name || 'Player';
+    const teamAbbr = String(playerData.team || playerData.abbr || '').toUpperCase().trim();
+
+    // Look up the game this pitcher is in (by name first, then by team)
+    let game = null;
+    const pools = [];
+    try{ if(typeof games!=='undefined' && Array.isArray(games)) pools.push(games); }catch(e){}
+    if(window.PARLAYOS_DATA?.games) pools.push(window.PARLAYOS_DATA.games);
+    for(const pool of pools){
+      game = pool.find(g => g.pitcherA===name || g.pitcherB===name);
+      if(game) break;
+    }
+    // Fallback: if no game has this pitcher by name, find the next game for the team
+    if(!game && teamAbbr && typeof window.findNextOpponent === 'function'){
+      const opp = window.findNextOpponent(teamAbbr, 'mlb');
+      if(opp && opp.game) game = opp.game;
+    }
+
+    const isA = !!(game && game.pitcherA === name);
+    // Determine which side of the game this pitcher is on. Prefer name
+    // match; if the name doesn't match either pitcherA or pitcherB
+    // (e.g. user clicked a different real-world pitcher from the
+    // leaderboard), fall back to matching by team abbreviation.
+    let sideKey, side;
+    if(game && game.pitcherA === name){
+      sideKey = 'A'; side = 'away';
+    } else if(game && game.pitcherB === name){
+      sideKey = 'B'; side = 'home';
+    } else if(game){
+      const gameAbbrA = String(game.abbrA||game.a||'').toUpperCase().trim();
+      const gameAbbrB = String(game.abbrB||game.b||'').toUpperCase().trim();
+      if(teamAbbr && teamAbbr === gameAbbrA){
+        sideKey = 'A'; side = 'away';
+      } else if(teamAbbr && teamAbbr === gameAbbrB){
+        sideKey = 'B'; side = 'home';
+      } else {
+        // Team not in this game either — default to away
+        sideKey = 'A'; side = 'away';
+      }
+    } else {
+      sideKey = 'A'; side = 'away';
+    }
+    const ourIsA = (sideKey === 'A');
+
+    // Build primary pitcher data — prefer values already in playerData,
+    // fall back to game data, then null.
+    const numOrStr = (v) => (v===''||v==null||v==='—') ? null : (isNaN(parseFloat(v)) ? v : parseFloat(v));
+    const data = {
+      name: name,
+      abbr: teamAbbr,
+      side: side,
+      era:  playerData.era  != null ? numOrStr(playerData.era)  : (game ? numOrStr(game[`pitcher${sideKey}_era`])  : null),
+      whip: playerData.whip != null ? numOrStr(playerData.whip) : (game ? numOrStr(game[`pitcher${sideKey}_whip`]) : null),
+      k9:   playerData.k9   != null ? numOrStr(playerData.k9)   : (game ? numOrStr(game[`pitcher${sideKey}_k9`])   : null),
+      ip:   playerData.ip   != null ? playerData.ip   : (game ? game[`pitcher${sideKey}_ip`]   : null),
+      w:    playerData.w    != null ? playerData.w    : (game ? game[`pitcher${sideKey}_w`]    : null),
+      l:    playerData.l    != null ? playerData.l    : (game ? game[`pitcher${sideKey}_l`]    : null),
+      fip:  playerData.fip  != null ? numOrStr(playerData.fip)  : (game ? numOrStr(game[`pitcher${sideKey}_fip`])  : null)
+    };
+
+    // Determine opponent
+    let oppAbbr = '';
+    if(game){
+      oppAbbr = ourIsA ? (game.abbrB||game.b||'') : (game.abbrA||game.a||'');
+      data.oppAbbr = String(oppAbbr).toUpperCase();
+    } else if(teamAbbr && typeof window.findNextOpponent === 'function'){
+      const opp = window.findNextOpponent(teamAbbr, 'mlb');
+      if(opp){
+        data.oppAbbr = String(opp.oppAbbr||'').toUpperCase();
+        data.side = opp.isHome ? 'home' : 'away';
+      }
+    }
+    if(!data.oppAbbr) data.oppAbbr = '—';
+
+    // Build rival data (opposing team's offense) from the game object
+    let rivalData = null;
+    if(game){
+      const rivalAbbrRaw = ourIsA ? (game.abbrB||game.b||'') : (game.abbrA||game.a||'');
+      const rivalSide = ourIsA ? 'home' : 'away';
+      const rivalName = ourIsA ? (game.cityB||game.b||rivalAbbrRaw) : (game.cityA||game.a||rivalAbbrRaw);
+      const avg = ourIsA ? game.teamB_avg : game.teamA_avg;
+      const obp = ourIsA ? game.teamB_obp : game.teamA_obp;
+      const slg = ourIsA ? game.teamB_slg : game.teamA_slg;
+      const ops = ourIsA ? game.teamB_ops : game.teamA_ops;
+      const hr  = ourIsA ? game.teamB_hr  : game.teamA_hr;
+      const rbi = ourIsA ? game.teamB_rbi : game.teamA_rbi;
+      const sb  = ourIsA ? game.teamB_sb  : game.teamA_sb;
+      if(avg != null || hr != null){
+        rivalData = {
+          name: rivalName,
+          abbr: String(rivalAbbrRaw).toUpperCase(),
+          oppAbbr: teamAbbr,
+          side: rivalSide,
+          avg: avg || '—', obp: obp || '—', slg: slg || '—', ops: ops || '—',
+          hr, rbi, sb
+        };
+      }
+    }
+
+    // Fetch team defense stats for the pitcher's team
+    let primaryTeamDef = null;
+    try{
+      if(teamAbbr && typeof window.getMLBTeamDefense === 'function'){
+        primaryTeamDef = await window.getMLBTeamDefense(teamAbbr);
+      }
+    }catch(e){ console.warn('[PLAYER DETAIL] team defense fetch failed:', e); }
+
+    // Open the new-style pitcher card modal — this is the SAME modal
+    // used by the rival-line pills and leaderboard opponent cells, so
+    // the window will look exactly like IMG_4092.
+    window.openPlayerCardModal('pitcher', data, rivalData, primaryTeamDef, null);
+  };
+
   window.closePlayerDetail = function(){
     const modal = document.getElementById('playerDetailModal');
     if(modal) modal.classList.remove('open');
   };
-  
+
   document.getElementById('playerDetailClose')?.addEventListener('click', window.closePlayerDetail);
   document.getElementById('playerDetailModal')?.addEventListener('click', e=>{ if(e.target.id==='playerDetailModal') window.closePlayerDetail(); });
 
@@ -33594,8 +33740,34 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
   // data: { name, team, abbr, oppAbbr, oppName, side: 'away'|'home',
   //         era, whip, k9, ip, w, l, fip,           // pitcher only
   //         avg, obp, slg, ops, hr, rbi, sb }       // batting team only
-  window.openPlayerCardModal = function(kind, data){
+  // rivalData (optional): same shape as data, but for the OPPOSING entity.
+  //   When provided, a secondary "VS" card is rendered underneath the primary
+  //   card so users can see both rivals at once.
+  window.openPlayerCardModal = function(kind, data, rivalData, primaryTeamDef, rivalTeamDef){
     if(!data) data = {};
+    const isPitcher = (kind === 'pitcher');
+
+    // ---- Primary card build ----
+    const primaryCardHTML = buildSingleCardHTML(kind, data, true, primaryTeamDef);
+
+    // ---- Rival card build (if provided) ----
+    let rivalCardHTML = '';
+    if(rivalData){
+      const rivalKind = isPitcher ? 'batting' : 'pitcher';
+      rivalCardHTML = `<div class="pc-rival-divider"><span>VS</span></div>` + buildSingleCardHTML(rivalKind, rivalData, false, rivalTeamDef);
+    }
+
+    const title = isPitcher ? `${data.name||'Pitcher'} • SP` : `${data.abbr||''} Offense`;
+    const fullHTML = primaryCardHTML + rivalCardHTML;
+    window.openSectionModal(title, fullHTML);
+  };
+
+  // Internal helper — builds ONE card (primary or rival) for either kind.
+  // isPrimary=true → full size + foot; isPrimary=false → compact "rival" variant.
+  // teamDef (optional): MLB team-level pitching stats. Only used for pitcher
+  //   cards, where it gets rendered as a "TEAM DEFENSE" sub-section so the
+  //   pitcher card parallels the offense card's "TEAM OFFENSE" stats.
+  function buildSingleCardHTML(kind, data, isPrimary, teamDef){
     const isPitcher = (kind === 'pitcher');
     const teamAbbr  = data.abbr || data.team || '—';
     const teamCity  = data.teamCity || '';
@@ -33610,7 +33782,7 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
     let badgeHTML = '';
     try{
       if(typeof teamBadge !== 'undefined' && teamAbbr){
-        badgeHTML = teamBadge(teamAbbr.toUpperCase(), 56);
+        badgeHTML = teamBadge(teamAbbr.toUpperCase(), isPrimary ? 56 : 44);
       }
     }catch(e){}
 
@@ -33626,12 +33798,15 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
       const fip  = (data.fip  != null && data.fip  !== '' && data.fip  !== '—') ? (typeof data.fip==='number'?data.fip.toFixed(2):data.fip) : '—';
       const record = (w !== '—' || l !== '—') ? `${w}-${l}` : '—';
       statsHTML = `
-        <div class="pc-stat-tile"><div class="pc-stat-label">ERA</div><div class="pc-stat-value">${era}</div></div>
-        <div class="pc-stat-tile"><div class="pc-stat-label">WHIP</div><div class="pc-stat-value">${whip}</div></div>
-        <div class="pc-stat-tile"><div class="pc-stat-label">K/9</div><div class="pc-stat-value">${k9}</div></div>
-        <div class="pc-stat-tile"><div class="pc-stat-label">FIP</div><div class="pc-stat-value">${fip}</div></div>
-        <div class="pc-stat-tile"><div class="pc-stat-label">IP</div><div class="pc-stat-value">${ip}</div></div>
-        <div class="pc-stat-tile"><div class="pc-stat-label">W-L</div><div class="pc-stat-value">${record}</div></div>
+        <div class="pc-section-label">STARTING PITCHER</div>
+        <div class="pc-stats">
+          <div class="pc-stat-tile"><div class="pc-stat-label">ERA</div><div class="pc-stat-value">${era}</div></div>
+          <div class="pc-stat-tile"><div class="pc-stat-label">WHIP</div><div class="pc-stat-value">${whip}</div></div>
+          <div class="pc-stat-tile"><div class="pc-stat-label">K/9</div><div class="pc-stat-value">${k9}</div></div>
+          <div class="pc-stat-tile"><div class="pc-stat-label">FIP</div><div class="pc-stat-value">${fip}</div></div>
+          <div class="pc-stat-tile"><div class="pc-stat-label">IP</div><div class="pc-stat-value">${ip}</div></div>
+          <div class="pc-stat-tile"><div class="pc-stat-label">W-L</div><div class="pc-stat-value">${record}</div></div>
+        </div>
       `;
     } else {
       const avg = data.avg || '—';
@@ -33642,13 +33817,51 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
       const rbi = (data.rbi != null && data.rbi !== '') ? data.rbi : '—';
       const sb  = (data.sb  != null && data.sb  !== '') ? data.sb  : '—';
       statsHTML = `
-        <div class="pc-stat-tile"><div class="pc-stat-label">AVG</div><div class="pc-stat-value">${avg}</div></div>
-        <div class="pc-stat-tile"><div class="pc-stat-label">OBP</div><div class="pc-stat-value">${obp}</div></div>
-        <div class="pc-stat-tile"><div class="pc-stat-label">SLG</div><div class="pc-stat-value">${slg}</div></div>
-        <div class="pc-stat-tile"><div class="pc-stat-label">OPS</div><div class="pc-stat-value">${ops}</div></div>
-        <div class="pc-stat-tile"><div class="pc-stat-label">HR</div><div class="pc-stat-value">${hr}</div></div>
-        <div class="pc-stat-tile"><div class="pc-stat-label">RBI</div><div class="pc-stat-value">${rbi}</div></div>
-        <div class="pc-stat-tile"><div class="pc-stat-label">SB</div><div class="pc-stat-value">${sb}</div></div>
+        <div class="pc-section-label">TEAM OFFENSE</div>
+        <div class="pc-stats">
+          <div class="pc-stat-tile"><div class="pc-stat-label">AVG</div><div class="pc-stat-value">${avg}</div></div>
+          <div class="pc-stat-tile"><div class="pc-stat-label">OBP</div><div class="pc-stat-value">${obp}</div></div>
+          <div class="pc-stat-tile"><div class="pc-stat-label">SLG</div><div class="pc-stat-value">${slg}</div></div>
+          <div class="pc-stat-tile"><div class="pc-stat-label">OPS</div><div class="pc-stat-value">${ops}</div></div>
+          <div class="pc-stat-tile"><div class="pc-stat-label">HR</div><div class="pc-stat-value">${hr}</div></div>
+          <div class="pc-stat-tile"><div class="pc-stat-label">RBI</div><div class="pc-stat-value">${rbi}</div></div>
+          <div class="pc-stat-tile"><div class="pc-stat-label">SB</div><div class="pc-stat-value">${sb}</div></div>
+        </div>
+      `;
+    }
+
+    // NEW: TEAM DEFENSE sub-section — only for pitcher cards, when we have
+    // team-level pitching stats from the MLB API. Mirrors the offense card's
+    // team offense stats so the pitcher card has both individual AND
+    // team-level defense info. If the fetch failed (teamDef is null), we
+    // simply omit the section instead of showing empty placeholders.
+    let teamDefHTML = '';
+    if(isPitcher && teamDef){
+      const tEra  = (teamDef.era  != null && teamDef.era  !== '' && teamDef.era  !== '—') ? (typeof teamDef.era ==='number'?teamDef.era.toFixed(2) :teamDef.era)  : '—';
+      const tWhip = (teamDef.whip != null && teamDef.whip !== '' && teamDef.whip !== '—') ? (typeof teamDef.whip==='number'?teamDef.whip.toFixed(2):teamDef.whip) : '—';
+      const tK9   = (teamDef.k9   != null && teamDef.k9   !== '' && teamDef.k9   !== '—') ? (typeof teamDef.k9  ==='number'?teamDef.k9.toFixed(2) :teamDef.k9)  : '—';
+      const tBaa  = teamDef.baa || '—';
+      const tSv   = (teamDef.sv  != null && teamDef.sv  !== '') ? teamDef.sv  : '—';
+      const tHd   = (teamDef.hd  != null && teamDef.hd  !== '') ? teamDef.hd  : '—';
+      const tW    = (teamDef.w   != null && teamDef.w   !== '') ? teamDef.w   : '—';
+      const tL    = (teamDef.l   != null && teamDef.l   !== '') ? teamDef.l   : '—';
+      const tRecord = (tW !== '—' || tL !== '—') ? `${tW}-${tL}` : '—';
+      teamDefHTML = `
+        <div class="pc-team-def">
+          <div class="pc-section-label pc-section-label-def">
+            <span class="pc-section-icon">🛡️</span>TEAM DEFENSE
+            <span class="pc-section-source">${teamAbbr} • season</span>
+          </div>
+          <div class="pc-stats pc-stats-def">
+            <div class="pc-stat-tile pc-stat-tile-def"><div class="pc-stat-label">ERA</div><div class="pc-stat-value">${tEra}</div></div>
+            <div class="pc-stat-tile pc-stat-tile-def"><div class="pc-stat-label">WHIP</div><div class="pc-stat-value">${tWhip}</div></div>
+            <div class="pc-stat-tile pc-stat-tile-def"><div class="pc-stat-label">K/9</div><div class="pc-stat-value">${tK9}</div></div>
+            <div class="pc-stat-tile pc-stat-tile-def"><div class="pc-stat-label">BAA</div><div class="pc-stat-value">${tBaa}</div></div>
+            <div class="pc-stat-tile pc-stat-tile-def"><div class="pc-stat-label">SV</div><div class="pc-stat-value">${tSv}</div></div>
+            <div class="pc-stat-tile pc-stat-tile-def"><div class="pc-stat-label">HLD</div><div class="pc-stat-value">${tHd}</div></div>
+            <div class="pc-stat-tile pc-stat-tile-def"><div class="pc-stat-label">W-L</div><div class="pc-stat-value">${tRecord}</div></div>
+          </div>
+        </div>
       `;
     }
 
@@ -33657,26 +33870,13 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
     const vsLabel   = isPitcher ? `FACING: ${oppAbbr} OFFENSE` : `FACING: ${oppAbbr} STARTING PITCHER`;
     const roleIcon  = isPitcher ? '⚾' : '🏏';
 
+    // Card variant class — primary vs compact rival
+    const cardClass = isPrimary ? 'pc-card pc-card-primary' : 'pc-card pc-card-rival';
+    const sizeStyle = isPrimary ? '' : 'style="padding:14px;"';
+
     // Compose card body
-    const cardHTML = `
-      <style>
-        .pc-card{ background:linear-gradient(165deg,rgba(255,255,255,0.10) 0%,rgba(255,255,255,0.04) 60%,rgba(255,255,255,0.08) 100%); border:1px solid rgba(255,255,255,0.14); border-radius:18px; padding:18px; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
-        .pc-head{ display:flex; align-items:center; gap:14px; }
-        .pc-head .pc-badge{ flex:0 0 auto; }
-        .pc-head .pc-id{ min-width:0; flex:1; }
-        .pc-head .pc-name{ font-size:20px; font-weight:900; color:#f8fafc; letter-spacing:-0.02em; line-height:1.15; word-break:break-word; }
-        .pc-head .pc-role{ font-size:10px; font-weight:800; letter-spacing:0.12em; color:rgba(255,255,255,0.62); margin-top:4px; text-transform:uppercase; }
-        .pc-head .pc-side{ display:inline-block; margin-left:6px; padding:2px 8px; border-radius:6px; font-size:9px; font-weight:800; letter-spacing:0.08em; background:${sideBg}; color:${sideColor}; }
-        .pc-vs{ margin:14px 0 10px; padding:9px 12px; border-radius:10px; background:rgba(0,0,0,0.18); border:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; gap:8px; font-size:11px; font-weight:700; color:rgba(255,255,255,0.78); letter-spacing:0.04em; }
-        .pc-vs .pc-vs-icon{ font-size:14px; }
-        .pc-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-        .pc-stat-tile{ background:rgba(0,0,0,0.22); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px 8px; text-align:center; }
-        .pc-stat-label{ font-size:9px; font-weight:800; letter-spacing:0.10em; color:rgba(255,255,255,0.50); margin-bottom:4px; }
-        .pc-stat-value{ font-size:17px; font-weight:900; color:#eef2ff; letter-spacing:-0.01em; line-height:1; }
-        .pc-foot{ margin-top:14px; font-size:10px; color:rgba(255,255,255,0.45); text-align:center; letter-spacing:0.05em; font-weight:600; }
-        @media(max-width:380px){ .pc-stats{ grid-template-columns:repeat(2,1fr); } .pc-head .pc-name{ font-size:18px; } }
-      </style>
-      <div class="pc-card">
+    return `
+      <div class="${cardClass}" ${sizeStyle}>
         <div class="pc-head">
           <div class="pc-badge">${badgeHTML}</div>
           <div class="pc-id">
@@ -33685,14 +33885,12 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
           </div>
         </div>
         <div class="pc-vs"><span class="pc-vs-icon">⚡</span><span>${vsLabel}</span></div>
-        <div class="pc-stats">${statsHTML}</div>
-        <div class="pc-foot">Season stats • Source: loaded game data</div>
+        ${statsHTML}
+        ${teamDefHTML}
+        ${isPrimary ? '<div class="pc-foot">Season stats • Source: loaded game data + statsapi.mlb.com</div>' : ''}
       </div>
     `;
-
-    const title = isPitcher ? `${playerName} • SP` : `${teamAbbr} Offense`;
-    window.openSectionModal(title, cardHTML);
-  };
+  }
 
     function wireStatsButtons(){
     return; // DISABLED: chips now show inline content
@@ -34112,6 +34310,8 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
       game: g
     };
   }
+  // Expose globally so openPlayerDetailMLB (in another <script>) can call it
+  window.findNextOpponent = findNextOpponent;
 
   // ============================================================
   // PART 3: REAL STANDINGS FETCHERS
@@ -34305,13 +34505,103 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
   }
 
   // ============================================================
+  // PART 4b: MLB TEAM-LEVEL PITCHING FETCHER (team defense stats)
+  // Used to add a "TEAM DEFENSE" section to the pitcher card so it
+  // parallels the offense card's "TEAM OFFENSE" stats.
+  // Endpoint: /api/v1/teams/{id}/stats?group=pitching&season=Y&stats=season
+  // ============================================================
+  const MLB_TEAM_ID_MAP = {
+    'ARI':109, 'AZ':109,
+    'ATL':144, 'BAL':110, 'BOS':111, 'CHC':112, 'CWS':145,
+    'CIN':113, 'CLE':114, 'COL':115, 'DET':116, 'HOU':117,
+    'KC':118,  'LAA':108, 'LAD':119, 'MIA':146, 'MIL':158,
+    'MIN':142, 'NYM':121, 'NYY':147,
+    'ATH':133, 'OAK':133,
+    'PHI':143, 'PIT':134, 'SD':135,  'SF':137,  'SEA':136,
+    'STL':138, 'TB':139,  'TEX':140, 'TOR':141, 'WSH':120
+  };
+
+  async function fetchMLBTeamPitching(teamAbbr){
+    try{
+      const id = MLB_TEAM_ID_MAP[String(teamAbbr||'').toUpperCase().trim()];
+      if(!id) return null;
+      // Check cache first
+      if(window.PARLAYOS_REAL_STATS?.mlb?.teamPitching?.[id]){
+        return window.PARLAYOS_REAL_STATS.mlb.teamPitching[id];
+      }
+      const url = `https://statsapi.mlb.com/api/v1/teams/${id}/stats?group=pitching&season=${SEASON}&stats=season`;
+      const r = await fetch(url, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json();
+      const splits = j.stats?.[0]?.splits || [];
+      if(!splits.length) return null;
+      const st = splits[0].stat || {};
+      const out = {
+        abbr: teamAbbr.toUpperCase(),
+        teamName: (splits[0].team?.name) || teamAbbr,
+        era:    st.era    || null,
+        whip:   st.whip   || null,
+        k9:     st.strikeoutsPer9Inn || null,
+        ip:     st.inningsPitched || null,
+        w:      st.wins   != null ? Number(st.wins)   : null,
+        l:      st.losses != null ? Number(st.losses) : null,
+        sv:     st.saves  != null ? Number(st.saves)  : null,
+        hd:     st.holds  != null ? Number(st.holds)  : null,
+        baa:    st.avg    || null,
+        so:     st.strikeOuts  != null ? Number(st.strikeOuts)  : null,
+        bb:     st.baseOnBalls != null ? Number(st.baseOnBalls) : null,
+        ha:     st.hits   != null ? Number(st.hits)   : null,
+        er:     st.earnedRuns != null ? Number(st.earnedRuns) : null,
+        r:      st.runs   != null ? Number(st.runs)   : null,
+        hra:    st.homeRuns != null ? Number(st.homeRuns) : null,
+        cg:     st.completeGames != null ? Number(st.completeGames) : null,
+        sho:    st.shutouts != null ? Number(st.shutouts) : null,
+        bf:     st.battersFaced != null ? Number(st.battersFaced) : null
+      };
+      // Cache it
+      if(!window.PARLAYOS_REAL_STATS) window.PARLAYOS_REAL_STATS = {mlb:{},nfl:{},nba:{}};
+      if(!window.PARLAYOS_REAL_STATS.mlb) window.PARLAYOS_REAL_STATS.mlb = {};
+      if(!window.PARLAYOS_REAL_STATS.mlb.teamPitching) window.PARLAYOS_REAL_STATS.mlb.teamPitching = {};
+      window.PARLAYOS_REAL_STATS.mlb.teamPitching[id] = out;
+      console.log('[REAL STATS] MLB team pitching for', teamAbbr, ':', out);
+      return out;
+    }catch(e){
+      console.warn('[REAL STATS] MLB team pitching fetch failed for', teamAbbr, ':', e.message);
+      return null;
+    }
+  }
+  // Expose globally so the click handler in another <script> can call it
+  window.fetchMLBTeamPitching = fetchMLBTeamPitching;
+
+  // Async lookup with a tiny in-flight dedupe so concurrent clicks don't
+  // double-fetch the same team.
+  const _teamDefInflight = {};
+  window.getMLBTeamDefense = async function(abbr){
+    const a = String(abbr||'').toUpperCase().trim();
+    if(!a) return null;
+    // If cached, return immediately
+    const id = MLB_TEAM_ID_MAP[a];
+    if(!id) return null;
+    if(window.PARLAYOS_REAL_STATS?.mlb?.teamPitching?.[id]){
+      return window.PARLAYOS_REAL_STATS.mlb.teamPitching[id];
+    }
+    // Dedupe in-flight fetches
+    if(_teamDefInflight[id]) return _teamDefInflight[id];
+    _teamDefInflight[id] = fetchMLBTeamPitching(a).finally(()=>{ delete _teamDefInflight[id]; });
+    return _teamDefInflight[id];
+  };
+
+  // ============================================================
   // PART 5: GLOBAL CACHE + HTML BUILDERS FOR CHIP MODALS
   // ============================================================
   window.PARLAYOS_REAL_STATS = window.PARLAYOS_REAL_STATS || {
-    mlb: { standings:null, pitching:[], batting:[] },
+    mlb: { standings:null, pitching:[], batting:[], teamPitching:{} },
     nfl: { standings:null },
     nba: { standings:null }
   };
+  // Backfill the teamPitching cache field if a previous load is missing it
+  if(!window.PARLAYOS_REAL_STATS.mlb) window.PARLAYOS_REAL_STATS.mlb = {standings:null, pitching:[], batting:[], teamPitching:{}};
+  if(!window.PARLAYOS_REAL_STATS.mlb.teamPitching) window.PARLAYOS_REAL_STATS.mlb.teamPitching = {};
 
   function statCell(v, decimals){
     if(v===null || v===undefined || v==='') return '—';
@@ -35779,15 +36069,226 @@ html body .lb-opp-clickable .lb-opp-team{
   font-weight:900 !important;
   color:#eef2ff !important;
 }
+
+/* ============================================================
+   PLAYER / TEAM CARD MODAL — primary + rival card styling
+   Used by openPlayerCardModal() to render two stacked cards.
+   ============================================================ */
+html body #sectionModalBody .pc-card{
+  background:linear-gradient(165deg,rgba(255,255,255,0.10) 0%,rgba(255,255,255,0.04) 60%,rgba(255,255,255,0.08) 100%) !important;
+  border:1px solid rgba(255,255,255,0.14) !important;
+  border-radius:18px !important;
+  padding:18px !important;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+html body #sectionModalBody .pc-card .pc-head{ display:flex; align-items:center; gap:14px; }
+html body #sectionModalBody .pc-card .pc-head .pc-badge{ flex:0 0 auto; }
+html body #sectionModalBody .pc-card .pc-head .pc-id{ min-width:0; flex:1; }
+html body #sectionModalBody .pc-card .pc-head .pc-name{
+  font-size:20px; font-weight:900; color:#f8fafc; letter-spacing:-0.02em; line-height:1.15; word-break:break-word;
+}
+html body #sectionModalBody .pc-card .pc-head .pc-role{
+  font-size:10px; font-weight:800; letter-spacing:0.12em; color:rgba(255,255,255,0.62); margin-top:4px; text-transform:uppercase;
+}
+html body #sectionModalBody .pc-card .pc-head .pc-side{
+  display:inline-block; margin-left:6px; padding:2px 8px; border-radius:6px; font-size:9px; font-weight:800; letter-spacing:0.08em;
+}
+html body #sectionModalBody .pc-card .pc-vs{
+  margin:14px 0 10px; padding:9px 12px; border-radius:10px; background:rgba(0,0,0,0.18); border:1px solid rgba(255,255,255,0.06);
+  display:flex; align-items:center; gap:8px; font-size:11px; font-weight:700; color:rgba(255,255,255,0.78); letter-spacing:0.04em;
+}
+html body #sectionModalBody .pc-card .pc-vs .pc-vs-icon{ font-size:14px; }
+html body #sectionModalBody .pc-card .pc-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+html body #sectionModalBody .pc-card .pc-stat-tile{
+  background:rgba(0,0,0,0.22); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px 8px; text-align:center;
+}
+html body #sectionModalBody .pc-card .pc-stat-label{
+  font-size:9px; font-weight:800; letter-spacing:0.10em; color:rgba(255,255,255,0.50); margin-bottom:4px;
+}
+html body #sectionModalBody .pc-card .pc-stat-value{
+  font-size:17px; font-weight:900; color:#eef2ff; letter-spacing:-0.01em; line-height:1;
+}
+html body #sectionModalBody .pc-card .pc-foot{
+  margin-top:14px; font-size:10px; color:rgba(255,255,255,0.45); text-align:center; letter-spacing:0.05em; font-weight:600;
+}
+
+/* The "VS" divider between primary and rival cards */
+html body #sectionModalBody .pc-rival-divider{
+  display:flex; align-items:center; justify-content:center;
+  margin:14px 0 10px; gap:10px;
+}
+html body #sectionModalBody .pc-rival-divider::before,
+html body #sectionModalBody .pc-rival-divider::after{
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.20) 50%, transparent 100%);
+}
+html body #sectionModalBody .pc-rival-divider span{
+  font-size:11px; font-weight:900; letter-spacing:0.20em;
+  color:rgba(255,255,255,0.55);
+  background:rgba(255,255,255,0.06);
+  padding:3px 12px; border-radius:8px;
+  border:1px solid rgba(255,255,255,0.10);
+}
+
+/* Compact rival card variant — slightly smaller, accent border */
+html body #sectionModalBody .pc-card-rival{
+  background:linear-gradient(165deg,rgba(92,124,255,0.10) 0%,rgba(147,130,255,0.06) 60%,rgba(92,124,255,0.08) 100%) !important;
+  border:1px solid rgba(92,124,255,0.30) !important;
+  padding:14px !important;
+}
+html body #sectionModalBody .pc-card-rival .pc-head .pc-name{ font-size:17px; }
+html body #sectionModalBody .pc-card-rival .pc-stat-value{ font-size:15px; }
+html body #sectionModalBody .pc-card-rival .pc-stat-tile{ padding:8px 6px; }
+
+/* ============================================================
+   TEAM DEFENSE sub-section — appears under the starting
+   pitcher's individual stats. Mirrors the offense card's
+   "TEAM OFFENSE" stats so the pitcher card has both
+   individual AND team-level defense info.
+   ============================================================ */
+/* Section label — small caps header above each stats grid */
+html body #sectionModalBody .pc-card .pc-section-label{
+  display:flex; align-items:center; gap:6px;
+  margin:6px 0 8px;
+  font-size:10px; font-weight:900; letter-spacing:0.14em;
+  color:rgba(255,255,255,0.55); text-transform:uppercase;
+}
+html body #sectionModalBody .pc-card .pc-section-label:first-of-type{ margin-top:0; }
+html body #sectionModalBody .pc-card .pc-section-label .pc-section-icon{ font-size:13px; }
+
+/* Defense label gets a distinct green-tinted accent so it reads as a separate group */
+html body #sectionModalBody .pc-card .pc-section-label-def{
+  color:#7ee4b6;
+  margin-top:14px;
+}
+html body #sectionModalBody .pc-card .pc-section-label-def .pc-section-source{
+  margin-left:auto;
+  font-size:9px; font-weight:700; letter-spacing:0.06em;
+  color:rgba(255,255,255,0.40);
+  background:rgba(255,255,255,0.04);
+  padding:2px 8px; border-radius:6px;
+  border:1px solid rgba(255,255,255,0.06);
+  text-transform:none;
+}
+
+/* Wrapper around the team defense stats grid — subtle separator above */
+html body #sectionModalBody .pc-card .pc-team-def{
+  margin-top:6px;
+  padding-top:10px;
+  border-top:1px dashed rgba(126,228,182,0.18);
+}
+
+/* Defense stat tiles get a green-tinted background to distinguish from primary stats */
+html body #sectionModalBody .pc-card .pc-stat-tile-def{
+  background:rgba(34,197,94,0.07) !important;
+  border:1px solid rgba(34,197,94,0.18) !important;
+}
+html body #sectionModalBody .pc-card .pc-stat-tile-def .pc-stat-label{
+  color:rgba(126,228,182,0.65);
+}
+html body #sectionModalBody .pc-card .pc-stat-tile-def .pc-stat-value{
+  color:#d8ffe8;
+}
+
+/* Compact rival card — slightly smaller defense tiles */
+html body #sectionModalBody .pc-card-rival .pc-stat-tile-def{ padding:8px 6px; }
+html body #sectionModalBody .pc-card-rival .pc-stat-tile-def .pc-stat-value{ font-size:15px; }
+html body #sectionModalBody .pc-card-rival .pc-section-label-def{ margin-top:10px; }
+
+@media(max-width:380px){
+  html body #sectionModalBody .pc-card .pc-stats{ grid-template-columns:repeat(2,1fr) !important; }
+  html body #sectionModalBody .pc-card .pc-head .pc-name{ font-size:18px; }
+  html body #sectionModalBody .pc-card-rival .pc-head .pc-name{ font-size:15px; }
+}
 </style>
 
 <script id="RIVAL_LINE_CLICK_HANDLER_V1">
 // Delegated click handler — any .rival-line OR .lb-opp-clickable anywhere on
 // the page opens the corresponding pitcher card or team offense card modal.
+// ALSO looks up the rival's stats from loaded game data and passes them as
+// rivalData so the modal can show BOTH cards (primary + rival) at once.
 (function(){
   function num(v){ return (v===''||v==null||v==='—')? null : (isNaN(parseFloat(v))? v : parseFloat(v)); }
   function str(v){ return (v==null)? '' : String(v); }
   function unescapeHTML(s){ return String(s).replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>'); }
+
+  // Look up the live game where `ourAbbr` is playing `oppAbbr`.
+  // Returns the game object or null.
+  function findGameByMatchup(ourAbbr, oppAbbr){
+    if(!ourAbbr || !oppAbbr) return null;
+    const a = String(ourAbbr).toUpperCase().trim();
+    const b = String(oppAbbr).toUpperCase().trim();
+    let pool = [];
+    try{ if(typeof games!=='undefined' && Array.isArray(games)) pool = pool.concat(games); }catch(e){}
+    if(window.PARLAYOS_DATA?.games) pool = pool.concat(window.PARLAYOS_DATA.games);
+    if(window.PARLAYOS_NFL_DATA?.games) pool = pool.concat(window.PARLAYOS_NFL_DATA.games);
+    if(window.PARLAYOS_NBA_DATA?.games) pool = pool.concat(window.PARLAYOS_NBA_DATA.games);
+    return pool.find(g=>{
+      const ga = String(g.abbrA||g.a||'').toUpperCase().trim();
+      const gb = String(g.abbrB||g.b||'').toUpperCase().trim();
+      return (ga===a && gb===b) || (ga===b && gb===a);
+    }) || null;
+  }
+
+  // Build rival data based on the primary click.
+  // If primary is a pitcher → rival is the opposing team's offense (batting)
+  // If primary is a batting team → rival is the opposing team's pitcher
+  function buildRivalData(primaryKind, primaryData){
+    const game = findGameByMatchup(primaryData.abbr, primaryData.oppAbbr);
+    if(!game) return null;
+    const ourAbbr   = String(primaryData.abbr).toUpperCase().trim();
+    const abbrA     = String(game.abbrA||game.a||'').toUpperCase().trim();
+    const abbrB     = String(game.abbrB||game.b||'').toUpperCase().trim();
+    // ourIsA: is our team the away team in this game?
+    const ourIsA    = (ourAbbr === abbrA);
+    // The rival is the OTHER team in the game
+    const rivalAbbr = ourIsA ? abbrB : abbrA;
+    const rivalSide = ourIsA ? 'home' : 'away';
+    // For the rival's team display name, use the game's cityB / cityA
+    const rivalName = ourIsA ? (game.cityB||game.b||rivalAbbr) : (game.cityA||game.a||rivalAbbr);
+
+    if(primaryKind === 'pitcher'){
+      // Rival = opposing team's offense
+      // If we are A (away pitcher), opposing offense = teamB_*; if we are B, opposing = teamA_*
+      const avg = ourIsA ? game.teamB_avg : game.teamA_avg;
+      const obp = ourIsA ? game.teamB_obp : game.teamA_obp;
+      const slg = ourIsA ? game.teamB_slg : game.teamA_slg;
+      const ops = ourIsA ? game.teamB_ops : game.teamA_ops;
+      const hr  = ourIsA ? game.teamB_hr  : game.teamA_hr;
+      const rbi = ourIsA ? game.teamB_rbi : game.teamA_rbi;
+      const sb  = ourIsA ? game.teamB_sb  : game.teamA_sb;
+      // Only return rival data if we actually have stats
+      if(avg == null && hr == null) return null;
+      return {
+        name: rivalName,
+        abbr: rivalAbbr,
+        oppAbbr: ourAbbr,
+        side: rivalSide,
+        avg: avg || '—', obp: obp || '—', slg: slg || '—', ops: ops || '—',
+        hr, rbi, sb
+      };
+    } else {
+      // Rival = opposing team's pitcher
+      // If we are A (away offense), opposing pitcher = pitcherB; if we are B, opposing = pitcherA
+      const pName = ourIsA ? game.pitcherB : game.pitcherA;
+      if(!pName || pName === 'TBD') return null;
+      const era  = ourIsA ? game.pitcherB_era  : game.pitcherA_era;
+      const whip = ourIsA ? game.pitcherB_whip : game.pitcherA_whip;
+      const k9   = ourIsA ? game.pitcherB_k9   : game.pitcherA_k9;
+      const ip   = ourIsA ? game.pitcherB_ip   : game.pitcherA_ip;
+      const w    = ourIsA ? game.pitcherB_w    : game.pitcherA_w;
+      const l    = ourIsA ? game.pitcherB_l    : game.pitcherA_l;
+      const fip  = ourIsA ? game.pitcherB_fip  : game.pitcherA_fip;
+      return {
+        name: pName,
+        abbr: rivalAbbr,
+        oppAbbr: ourAbbr,
+        side: rivalSide,
+        era, whip, k9, ip, w, l, fip
+      };
+    }
+  }
 
   function buildDataFromElement(el){
     const kind = el.getAttribute('data-pc-kind') || 'pitcher';
@@ -35817,7 +36318,7 @@ html body .lb-opp-clickable .lb-opp-team{
     return { kind: kind, data: data };
   }
 
-  document.addEventListener('click', function(e){
+  document.addEventListener('click', async function(e){
     // Match EITHER .rival-line[data-pc-kind] OR .lb-opp-clickable[data-pc-kind]
     const el = e.target.closest ? e.target.closest('.rival-line[data-pc-kind], .lb-opp-clickable[data-pc-kind]') : null;
     if(!el) return;
@@ -35826,8 +36327,30 @@ html body .lb-opp-clickable .lb-opp-team{
     e.preventDefault();
     e.stopPropagation();
     const { kind, data } = buildDataFromElement(el);
+    // Look up rival stats from loaded games so we can show both cards together
+    const rivalData = buildRivalData(kind, data);
+
+    // NEW: fetch team defense stats for the pitcher's team so the pitcher
+    // card can show a "TEAM DEFENSE" section mirroring the offense card's
+    // "TEAM OFFENSE" section. Also fetch for the rival team (which is a
+    // pitcher) when the primary click is a batting team, so the rival
+    // pitcher card shows team defense too.
+    let primaryTeamDef = null;
+    let rivalTeamDef   = null;
+    try{
+      if(kind === 'pitcher' && data.abbr && typeof window.getMLBTeamDefense === 'function'){
+        primaryTeamDef = await window.getMLBTeamDefense(data.abbr);
+      }
+      // If rival is a pitcher (primary was batting), fetch rival's team defense
+      if(rivalData && kind === 'batting' && rivalData.abbr && typeof window.getMLBTeamDefense === 'function'){
+        rivalTeamDef = await window.getMLBTeamDefense(rivalData.abbr);
+      }
+    }catch(err){
+      console.warn('[RIVAL-LINE] team defense fetch failed:', err);
+    }
+
     if(typeof window.openPlayerCardModal === 'function'){
-      window.openPlayerCardModal(kind, data);
+      window.openPlayerCardModal(kind, data, rivalData, primaryTeamDef, rivalTeamDef);
     } else {
       console.warn('[RIVAL-LINE] openPlayerCardModal not available');
     }
