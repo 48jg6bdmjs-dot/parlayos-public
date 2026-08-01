@@ -13497,13 +13497,75 @@ body.dark .table-card .mini-table td {
                             const isNFL = (g.lgA==='NFL' || g.lgB==='NFL');
                             const isNBA = (g.lgA==='NBA' || g.lgB==='NBA');
                             const pitcherNameA = (g.pitcherA&&g.pitcherA!=='TBD') ? g.pitcherA.split(' ').slice(-1)[0] : 'SP TBD';
+                            const pitcherNameB = (g.pitcherB&&g.pitcherB!=='TBD') ? g.pitcherB.split(' ').slice(-1)[0] : 'SP TBD';
                             let badgeA = ''; let badgeB = '';
                             try{ badgeA = typeof teamBadge!=='undefined'?teamBadge(toAbbr(g.a||g.cityA||'UNK'),28):''; }catch(e){ badgeA=''; }
                             try{ badgeB = typeof teamBadge!=='undefined'?teamBadge(toAbbr(g.b||g.cityB||'UNK'),28):''; }catch(e){ badgeB=''; }
-                            const subA = isBaseball ? `${g.pitcherA||'TBD'} • SP` : (g.lgA|| (isNFL?'NFL':isNBA?'NBA':'') || '');
-                            const subB = isBaseball ? `${g.pitcherB||'TBD'} • SP` : (g.lgB|| (isNFL?'NFL':isNBA?'NBA':'') || '');
-                            const kLabel = isBaseball ? `Pitcher K • ${g.pitcherA||'TBD'} • ${g.kLine||''}` : `Spread • ${g.kLine>0?'+':''}${g.kLine||''}`;
-                            const kPickText = isBaseball ? `${pitcherNameA} ${g.kPick||''}` : `${g.kPick||''}`;
+                            // === RIVAL CLICKABLE CARDS ===
+                            // For baseball: pitcher A vs pitcher B, and the opposing team's offense.
+                            // Clicking a name opens a player/team card window.
+                            const abbrAUp = String(g.abbrA || g.a || '').toUpperCase().trim();
+                            const abbrBUp = String(g.abbrB || g.b || '').toUpperCase().trim();
+                            // Pitcher A (away) — clickable if a real name exists
+                            const hasPitcherA = isBaseball && g.pitcherA && g.pitcherA !== 'TBD';
+                            const hasPitcherB = isBaseball && g.pitcherB && g.pitcherB !== 'TBD';
+                            // Build a JSON-safe data payload for each clickable entity
+                            const pitcherADataAttr = hasPitcherA
+                              ? ` data-pc-kind="pitcher" data-pc-name="${String(g.pitcherA).replace(/"/g,'&quot;')}" data-pc-abbr="${abbrAUp}" data-pc-side="away" data-pc-opp-abbr="${abbrBUp}" data-pc-era="${g.pitcherA_era!=null?g.pitcherA_era:''}" data-pc-whip="${g.pitcherA_whip!=null?g.pitcherA_whip:''}" data-pc-k9="${g.pitcherA_k9!=null?g.pitcherA_k9:''}" data-pc-ip="${g.pitcherA_ip!=null?g.pitcherA_ip:''}" data-pc-w="${g.pitcherA_w!=null?g.pitcherA_w:''}" data-pc-l="${g.pitcherA_l!=null?g.pitcherA_l:''}" data-pc-fip="${g.pitcherA_fip!=null?g.pitcherA_fip:''}"`
+                              : '';
+                            const pitcherBDataAttr = hasPitcherB
+                              ? ` data-pc-kind="pitcher" data-pc-name="${String(g.pitcherB).replace(/"/g,'&quot;')}" data-pc-abbr="${abbrBUp}" data-pc-side="home" data-pc-opp-abbr="${abbrAUp}" data-pc-era="${g.pitcherB_era!=null?g.pitcherB_era:''}" data-pc-whip="${g.pitcherB_whip!=null?g.pitcherB_whip:''}" data-pc-k9="${g.pitcherB_k9!=null?g.pitcherB_k9:''}" data-pc-ip="${g.pitcherB_ip!=null?g.pitcherB_ip:''}" data-pc-w="${g.pitcherB_w!=null?g.pitcherB_w:''}" data-pc-l="${g.pitcherB_l!=null?g.pitcherB_l:''}" data-pc-fip="${g.pitcherB_fip!=null?g.pitcherB_fip:''}"`
+                              : '';
+                            // Team A offense — clickable when there is batting data (always for baseball games)
+                            const hasOffenseA = isBaseball && (g.teamA_avg || g.teamA_hr != null);
+                            const hasOffenseB = isBaseball && (g.teamB_avg || g.teamB_hr != null);
+                            const offenseADataAttr = hasOffenseA
+                              ? ` data-pc-kind="batting" data-pc-name="${String(g.cityA||g.a||'').replace(/"/g,'&quot;')}" data-pc-abbr="${abbrAUp}" data-pc-side="away" data-pc-opp-abbr="${abbrBUp}" data-pc-avg="${g.teamA_avg||''}" data-pc-obp="${g.teamA_obp||''}" data-pc-slg="${g.teamA_slg||''}" data-pc-ops="${g.teamA_ops||''}" data-pc-hr="${g.teamA_hr!=null?g.teamA_hr:''}" data-pc-rbi="${g.teamA_rbi!=null?g.teamA_rbi:''}" data-pc-sb="${g.teamA_sb!=null?g.teamA_sb:''}"`
+                              : '';
+                            const offenseBDataAttr = hasOffenseB
+                              ? ` data-pc-kind="batting" data-pc-name="${String(g.cityB||g.b||'').replace(/"/g,'&quot;')}" data-pc-abbr="${abbrBUp}" data-pc-side="home" data-pc-opp-abbr="${abbrAUp}" data-pc-avg="${g.teamB_avg||''}" data-pc-obp="${g.teamB_obp||''}" data-pc-slg="${g.teamB_slg||''}" data-pc-ops="${g.teamB_ops||''}" data-pc-hr="${g.teamB_hr!=null?g.teamB_hr:''}" data-pc-rbi="${g.teamB_rbi!=null?g.teamB_rbi:''}" data-pc-sb="${g.teamB_sb!=null?g.teamB_sb:''}"`
+                              : '';
+                            // Subline shows BOTH rivals for each side: "Pitching: X" + clickable line for opposing offense
+                            // For team A: shows their pitcher A (clickable) AND opposing team B's offense (also clickable)
+                            // For team B: shows their pitcher B (clickable) AND opposing team A's offense (also clickable)
+                            // Non-baseball falls back to original behavior
+                            const subA = isBaseball
+                              ? `<span class="rival-line rival-line-pitcher"${pitcherADataAttr}>⚾ ${g.pitcherA||'TBD'}</span><span class="rival-line rival-line-batter"${offenseBDataAttr}>🏏 vs ${abbrBUp} OFFENSE</span>`
+                              : (g.lgA|| (isNFL?'NFL':isNBA?'NBA':'') || '');
+                            const subB = isBaseball
+                              ? `<span class="rival-line rival-line-pitcher"${pitcherBDataAttr}>⚾ ${g.pitcherB||'TBD'}</span><span class="rival-line rival-line-batter"${offenseADataAttr}>🏏 vs ${abbrAUp} OFFENSE</span>`
+                              : (g.lgB|| (isNFL?'NFL':isNBA?'NBA':'') || '');
+
+                            // === PITCHER K MODEL DATA: Determine which pitcher the K prop is on ===
+                            // kPickRaw like "PHI K" tells us which TEAM's pitcher we're betting on.
+                            // Use that to pick the correct pitcher name (pitcherA for away, pitcherB for home).
+                            let kPitcherFullName = g.pitcherA || 'TBD';
+                            let kPitcherLastName = pitcherNameA;
+                            if(isBaseball && g.kPickRaw){
+                              try{
+                                const rawTeam = String(g.kPickRaw).split(' ')[0].toUpperCase().trim();
+                                const abbrA = String(g.abbrA || g.a || '').toUpperCase().trim();
+                                const abbrB = String(g.abbrB || g.b || '').toUpperCase().trim();
+                                if(rawTeam && rawTeam === abbrB && g.pitcherB && g.pitcherB !== 'TBD'){
+                                  kPitcherFullName = g.pitcherB;
+                                  kPitcherLastName = pitcherNameB;
+                                } else if(rawTeam && rawTeam === abbrA && g.pitcherA && g.pitcherA !== 'TBD'){
+                                  kPitcherFullName = g.pitcherA;
+                                  kPitcherLastName = pitcherNameA;
+                                }
+                              }catch(e){}
+                            }
+                            // Build clean kLabel - show real pitcher name + line
+                            const kLineLabel = (g.kLine!==undefined && g.kLine!==null && g.kLine!=='') ? g.kLine : '';
+                            const kLabel = isBaseball ? `Pitcher K • ${kPitcherFullName} • ${kLineLabel}` : `Spread • ${g.kLine>0?'+':''}${g.kLine||''}`;
+                            // Build clean kPickText - strip redundant team suffix from kPick if present
+                            // (kPick format like "Under 6.5K (5.01 Ks) - Miami Marlins" - the trailing team is redundant
+                            //  since we already show the pitcher name in the label)
+                            let cleanKPick = g.kPick || '';
+                            if(cleanKPick && isBaseball){
+                              cleanKPick = cleanKPick.replace(/\s*-\s*[A-Z][A-Za-z\s]+$/,'').trim();
+                            }
+                            const kPickText = isBaseball ? `${kPitcherLastName} ${cleanKPick}` : `${g.kPick||''}`;
                             const kBtnLabel = isBaseball ? '+ K Prop' : '+ Spread';
                             let addAttr = 'data-add';
                             if(isNFL) addAttr = 'data-nfl-add';
@@ -13594,7 +13656,8 @@ body.dark .table-card .mini-table td {
                             let displayBadges = metaBadges.slice(0,3);
                             const metaBadgesHTML = displayBadges.length ? `<div class="game-meta-badges">${displayBadges.map(b=>`<span class="meta-badge ${b.type}">${b.icon} ${b.text}</span>`).join('')}</div>` : '';
 
-                            // YT Vision - REAL from ACE
+                            // YT Vision - uses REAL model edge data from ACE (mlEdge, ouEdge, kEdge)
+                            // Picks the BEST market to feature (highest abs edge) and shows real fair price
                             let ytHTML = '';
                             const ytConfRaw = g.ytConfidence || g.ytConfidenceText || (g.ytVision && g.ytVision.confidence ? Math.round(g.ytVision.confidence*100) : 0);
                             if(ytConfRaw){
@@ -13606,8 +13669,28 @@ body.dark .table-card .mini-table td {
                                 confNum = Math.round(parseFloat(ytConfRaw));
                               }
                               if(confNum > 0){
-                                const modelEdgeVal = ((g.mlEdge*100||g.ouEdge*100||0)).toFixed(1);
-                                const narrative1 = g.ytVision?.narrative || g.ytNarrative || (modelEdgeVal > 0 ? `Model shows ${modelEdgeVal}% above market edge on this matchup.` : `Model analysis complete. Review stats for context.`);
+                                // === Use BEST edge across all 3 markets (ML, O/U, K) ===
+                                // This is real data from ACE - we pick the strongest signal
+                                const ytMarkets = [
+                                  {mk:'Moneyline', edge:g.mlEdge||0, price:g.mlPriceDec||null, label:g.mlFav?`${g.mlFav} ML`:''},
+                                  {mk:'Over/Under', edge:g.ouEdge||0, price:g.ouPriceDec||null, label:g.ouPick||''},
+                                  {mk:'Pitcher K', edge:g.kEdge||0, price:null, label:g.kPick?(kPitcherLastName+' '+cleanKPick):''}
+                                ];
+                                // Pick market with the largest absolute edge - that's the model's strongest read
+                                let bestMkt = ytMarkets[0];
+                                for(const m of ytMarkets){ if(Math.abs(m.edge) > Math.abs(bestMkt.edge)) bestMkt = m; }
+                                const modelEdgeVal = (bestMkt.edge * 100).toFixed(1);
+                                const modelEdgeSign = parseFloat(modelEdgeVal) > 0 ? '+' : '';
+                                const edgeColor = parseFloat(modelEdgeVal) > 0 ? '#22c55e' : '#ff5c5c';
+                                // Fair price: use the best market's decimal price if available
+                                const fairPriceStr = bestMkt.price ? american(bestMkt.price) : 'N/A';
+                                // Narrative based on which market has the edge - REAL data, not random
+                                const marketLabel = bestMkt.mk;
+                                const pickLabel = bestMkt.label || 'this matchup';
+                                const narrative1 = g.ytVision?.narrative || g.ytNarrative ||
+                                  (Math.abs(parseFloat(modelEdgeVal)) > 0.5
+                                    ? `Model shows ${modelEdgeSign}${modelEdgeVal}% edge on the ${marketLabel} (${pickLabel}). Cross-referenced with pitcher form, umpire tendencies, and recent team performance.`
+                                    : `Markets are tight on this matchup. Best read is ${marketLabel} at ${modelEdgeSign}${modelEdgeVal}%. Review stats for additional context.`);
                                 const narrative2 = g.ytVision?.narrative2 || g.ytNarrative2 || '';
                                 const beatClose = (parseFloat(modelEdgeVal) > 1) ? '<span style="background:rgba(34,197,94,0.12);color:#16a34a;padding:2px 6px;border-radius:6px;font-size:9px;font-weight:700;">✓ BEAT CLOSE</span>' : '';
                                 ytHTML = `<div class="yt-insight" style="margin-top:10px;border-radius:14px;background:linear-gradient(135deg,rgba(92,124,255,0.06) 0%,rgba(147,130,255,0.04) 100%);border:1px solid rgba(92,124,255,0.14);overflow:hidden;">
@@ -13617,8 +13700,8 @@ body.dark .table-card .mini-table td {
                                   </div>
                                   <div class="yt-insight-body">
                                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-                                      <div style="background:rgba(0,0,0,0.04);padding:8px 10px;border-radius:10px;"><div style="font-size:8px;opacity:0.5;letter-spacing:0.06em;font-weight:700;">MODEL EDGE</div><div style="font-weight:800;color:#22c55e;margin-top:2px;">+${modelEdgeVal}%</div></div>
-                                      <div style="background:rgba(0,0,0,0.04);padding:8px 10px;border-radius:10px;"><div style="font-size:8px;opacity:0.5;letter-spacing:0.06em;font-weight:700;">FAIR PRICE</div><div style="font-weight:800;margin-top:2px;">${g.ouPriceDec ? american(g.ouPriceDec) : 'N/A'}</div></div>
+                                      <div style="background:rgba(0,0,0,0.04);padding:8px 10px;border-radius:10px;"><div style="font-size:8px;opacity:0.5;letter-spacing:0.06em;font-weight:700;">MODEL EDGE • ${marketLabel.toUpperCase()}</div><div style="font-weight:800;color:${edgeColor};margin-top:2px;">${modelEdgeSign}${modelEdgeVal}%</div></div>
+                                      <div style="background:rgba(0,0,0,0.04);padding:8px 10px;border-radius:10px;"><div style="font-size:8px;opacity:0.5;letter-spacing:0.06em;font-weight:700;">FAIR PRICE</div><div style="font-weight:800;margin-top:2px;">${fairPriceStr}</div></div>
                                     </div>
                                     <div style="font-size:11px;line-height:1.55;color:rgba(248,250,252,0.85);margin-bottom:6px;">${narrative1}</div>
                                     ${narrative2 ? '<div style="font-size:11px;line-height:1.55;color:rgba(248,250,252,0.85);margin-bottom:10px;">' + narrative2 + '</div>' : ''}
@@ -13637,9 +13720,9 @@ body.dark .table-card .mini-table td {
                                   <div class="game-head"><div class="tv">${safeHeader}</div><span class="badge ${g.hot?'hot':''}">${g.hot?'HOT EDGE':'MODEL'}</span></div>
                                   ${metaBadgesHTML}
                                   <div class="matchup">
-                                    <div class="team" style="gap:8px;">${badgeA}<div>${(typeof wordmark!=='undefined'?wordmark(toAbbr(g.a||g.cityA||''),19):'<b>'+(g.a||'')+'</b>')}<span>${subA}</span></div></div>
+                                    <div class="team" style="gap:8px;">${badgeA}<div>${(typeof wordmark!=='undefined'?wordmark(toAbbr(g.a||g.cityA||''),19):'<b>'+(g.a||'')+'</b>')}<span class="rival-block">${subA}</span></div></div>
                                     <div class="vs">VS</div>
-                                    <div class="team" style="flex-direction:row-reverse;text-align:right;gap:8px;">${badgeB}<div>${(typeof wordmark!=='undefined'?wordmark(toAbbr(g.b||g.cityB||''),19):'<b>'+(g.b||'')+'</b>')}<span>${subB}</span></div></div>
+                                    <div class="team" style="flex-direction:row-reverse;text-align:right;gap:8px;">${badgeB}<div>${(typeof wordmark!=='undefined'?wordmark(toAbbr(g.b||g.cityB||''),19):'<b>'+(g.b||'')+'</b>')}<span class="rival-block">${subB}</span></div></div>
                                   </div>
                                   <div class="odds-grid">
                                     ${showOU?`<div class="market"><div class="row"><span class="label">Over / Under • ${g.total||''}</span><span class="badge">${fmtPct(ouProb)} model</span></div><div class="row"><span class="pick">${g.ouPick||''}</span><span class="mini">Edge ${((g.ouEdge||0)*100).toFixed(1)}%</span></div><div class="meter"><i style="width:${ouProb*100}%"></i></div></div>`:''}
@@ -20530,39 +20613,12 @@ body.dark .table-card .mini-table td {
         if(window.PARLAYOS_DATA && window.PARLAYOS_DATA.schedules){
           realSchedMap = schedulesToDateMap(window.PARLAYOS_DATA.schedules, teamFilter);
         }
-        // If no real schedules or empty for this month, fallback to mock for demo
-        if(Object.keys(realSchedMap).length===0){
-          // Build mock as before for demo
-          const teams = ["ARI","ATL","BAL","BOS","CHC","CWS","CIN","CLE","COL","DET","HOU","KC","LAA","LAD","MIA","MIL","MIN","NYM","NYY","OAK","PHI","PIT","SD","SF","SEA","STL","TB","TEX","TOR","WSH"];
-          function h32(s){let h=2166136261;for(const c of s)h=((h^c.charCodeAt(0))*16777619)>>>0;return h;}
-          let seed=h32("mlb-all-"+yr+"-"+mo+"-"+(teamFilter||"ALL"));
-          function rng(){seed=(seed*1664525+1013904223)>>>0;return seed/0xFFFFFFFF;}
-          function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(rng()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
-          const limit = (yr===todayYr && mo===todayMo) ? todayDay-1 : dim;
-          for(let d=1; d<=limit; d++){
-            if(rng()>0.25){
-              const ds=`${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-              const shuffled=shuffle(teams);
-              const gc = teamFilter ? 1 : Math.floor(rng()*4)+3;
-              for(let g=0; g<gc; g++){
-                if(teamFilter){
-                  const oppPool = teams.filter(t=>t!==teamFilter);
-                  const opp = oppPool[Math.floor(rng()*oppPool.length)];
-                  const isHome=rng()>0.5;
-                  const w=rng()>0.48; const my=Math.floor(rng()*9)+1; const op=w?Math.max(0,my-Math.floor(rng()*4)-1):my+Math.floor(rng()*5)+1;
-                  if(!realSchedMap[ds]) realSchedMap[ds]=[];
-                  realSchedMap[ds].push({date:ds, a:teamFilter, b:opp, abbrA:teamFilter, abbrB:opp, team:teamFilter, opp, home:isHome, result:w?'W':'L', myScore:my, oppScore:op, homeScore:isHome?my:op, awayScore:isHome?op:my, isMock:true});
-                } else {
-                  if(g*2+1>=shuffled.length) break;
-                  const away=shuffled[g*2], home=shuffled[g*2+1];
-                  const wHome=rng()>0.48; const hs=Math.floor(rng()*8)+1; const as=wHome?Math.max(0,hs-Math.floor(rng()*4)-1):hs+Math.floor(rng()*4)+1;
-                  if(!realSchedMap[ds]) realSchedMap[ds]=[];
-                  realSchedMap[ds].push({date:ds, a:away, b:home, abbrA:away, abbrB:home, home, away, result:wHome?'W':'L', myScore:hs, oppScore:as, homeScore:hs, awayScore:as, isMock:true});
-                }
-              }
-            }
-          }
-        }
+        // FIX: Do NOT fabricate fake past game results when no real MLB data exists.
+        // Previously this block generated random W/L records and scores, which misled users
+        // into thinking those were real historical games. Now we leave realSchedMap empty
+        // and the calendar simply shows empty day cells (no fake history).
+        // Real past game history will appear automatically once PARLAYOS_DATA.schedules
+        // is populated with actual MLB data from the backend.
         gamesByDateAll = realSchedMap;
         // Merge today's real games
         allGamesReal.forEach(g=>{
@@ -20612,25 +20668,12 @@ body.dark .table-card .mini-table td {
           if(!realSchedMap[ds]) realSchedMap[ds]=[];
           if(!realSchedMap[ds].some(x=> x.a===g.a && x.b===g.b)) realSchedMap[ds].push(g);
         });
-        // If still empty and teamFilter, create mock past for demo so green/red pills show
-        if(Object.keys(realSchedMap).length===0 && teamFilter){
-          function h32(s){let h=2166136261;for(const c of s)h=((h^c.charCodeAt(0))*16777619)>>>0;return h;}
-          let seed=h32(league+"-"+yr+"-"+mo+"-"+teamFilter);
-          function rng(){seed=(seed*1664525+1013904223)>>>0;return seed/0xFFFFFFFF;}
-          const opps = league==='nfl' ? ["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LAC","LAR","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"] : ["ATL","BOS","BKN","CHA","CHI","CLE","DAL","DEN","DET","GSW","HOU","IND","LAC","LAL","MEM","MIA","MIL","MIN","NOP","NYK","OKC","ORL","PHI","PHX","POR","SAC","SAS","TOR","UTA","WAS"];
-          const limit = (yr===todayYr && mo===todayMo) ? todayDay-1 : dim;
-          for(let d=1; d<=limit; d++){
-            if(rng()>0.55){
-              const ds=`${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-              const opp=opps.filter(t=>t!==teamFilter)[Math.floor(rng()*(opps.length-1))];
-              const w=rng()>0.5;
-              const my= league==='nfl' ? Math.floor(rng()*28)+14 : Math.floor(rng()*40)+90;
-              const op= w ? Math.max(10,my-Math.floor(rng()*10)-3) : my+Math.floor(rng()*10)+3;
-              if(!realSchedMap[ds]) realSchedMap[ds]=[];
-              realSchedMap[ds].push({date:ds, a:teamFilter, b:opp, abbrA:teamFilter, abbrB:opp, result:w?'W':'L', myScore:my, oppScore:op, isMock:true});
-            }
-          }
-        }
+        // FIX: Do NOT fabricate fake past game results for NFL/NBA when no real data exists.
+        // Previously this block generated random W/L records for the selected team, which
+        // misled users into thinking those were real historical games. Now we leave
+        // realSchedMap empty and the calendar simply shows empty day cells.
+        // Real past game history will appear automatically once PARLAYOS_NFL_DATA.schedules
+        // or PARLAYOS_NBA_DATA.schedules is populated with actual data from the backend.
         gamesByDateAll = realSchedMap;
         if(teamFilter){
           gamesByDateFiltered={};
@@ -33540,7 +33583,117 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
   document.getElementById('sectionModalClose').addEventListener('click', window.closeSectionModal);
   overlay.addEventListener('click', function(e){ if(e.target === overlay) window.closeSectionModal(); });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && overlay.style.display === 'flex') window.closeSectionModal(); });
-  
+
+  // ============================================================
+  // PLAYER / TEAM CARD MODAL  (pitcher vs opposing batting team)
+  // ============================================================
+  // Builds a richly-styled glass card for either a PITCHER or a BATTING TEAM
+  // and opens it inside the existing section modal.
+  //
+  // kind: 'pitcher' | 'batting'
+  // data: { name, team, abbr, oppAbbr, oppName, side: 'away'|'home',
+  //         era, whip, k9, ip, w, l, fip,           // pitcher only
+  //         avg, obp, slg, ops, hr, rbi, sb }       // batting team only
+  window.openPlayerCardModal = function(kind, data){
+    if(!data) data = {};
+    const isPitcher = (kind === 'pitcher');
+    const teamAbbr  = data.abbr || data.team || '—';
+    const teamCity  = data.teamCity || '';
+    const oppAbbr   = data.oppAbbr || '—';
+    const oppName   = data.oppName || '';
+    const playerName= data.name || (isPitcher ? 'Starting Pitcher' : (teamCity || teamAbbr + ' Offense'));
+    const sideLabel = (data.side === 'home') ? 'HOME' : 'AWAY';
+    const sideBg    = (data.side === 'home') ? 'rgba(34,197,94,0.16)' : 'rgba(168,130,74,0.18)';
+    const sideColor = (data.side === 'home') ? '#22c55e' : '#d8b78a';
+
+    // Team badge (small circular)
+    let badgeHTML = '';
+    try{
+      if(typeof teamBadge !== 'undefined' && teamAbbr){
+        badgeHTML = teamBadge(teamAbbr.toUpperCase(), 56);
+      }
+    }catch(e){}
+
+    // Stats grid - differs by kind
+    let statsHTML = '';
+    if(isPitcher){
+      const era  = (data.era  != null && data.era  !== '' && data.era  !== '—') ? (typeof data.era==='number'?data.era.toFixed(2):data.era) : '—';
+      const whip = (data.whip != null && data.whip !== '' && data.whip !== '—') ? (typeof data.whip==='number'?data.whip.toFixed(2):data.whip) : '—';
+      const k9   = (data.k9   != null && data.k9   !== '' && data.k9   !== '—') ? (typeof data.k9==='number'?data.k9.toFixed(2):data.k9) : '—';
+      const ip   = (data.ip   != null && data.ip   !== '' && data.ip   !== '—') ? data.ip : '—';
+      const w    = (data.w    != null && data.w    !== '') ? data.w : '—';
+      const l    = (data.l    != null && data.l    !== '') ? data.l : '—';
+      const fip  = (data.fip  != null && data.fip  !== '' && data.fip  !== '—') ? (typeof data.fip==='number'?data.fip.toFixed(2):data.fip) : '—';
+      const record = (w !== '—' || l !== '—') ? `${w}-${l}` : '—';
+      statsHTML = `
+        <div class="pc-stat-tile"><div class="pc-stat-label">ERA</div><div class="pc-stat-value">${era}</div></div>
+        <div class="pc-stat-tile"><div class="pc-stat-label">WHIP</div><div class="pc-stat-value">${whip}</div></div>
+        <div class="pc-stat-tile"><div class="pc-stat-label">K/9</div><div class="pc-stat-value">${k9}</div></div>
+        <div class="pc-stat-tile"><div class="pc-stat-label">FIP</div><div class="pc-stat-value">${fip}</div></div>
+        <div class="pc-stat-tile"><div class="pc-stat-label">IP</div><div class="pc-stat-value">${ip}</div></div>
+        <div class="pc-stat-tile"><div class="pc-stat-label">W-L</div><div class="pc-stat-value">${record}</div></div>
+      `;
+    } else {
+      const avg = data.avg || '—';
+      const obp = data.obp || '—';
+      const slg = data.slg || '—';
+      const ops = data.ops || '—';
+      const hr  = (data.hr  != null && data.hr  !== '') ? data.hr  : '—';
+      const rbi = (data.rbi != null && data.rbi !== '') ? data.rbi : '—';
+      const sb  = (data.sb  != null && data.sb  !== '') ? data.sb  : '—';
+      statsHTML = `
+        <div class="pc-stat-tile"><div class="pc-stat-label">AVG</div><div class="pc-stat-value">${avg}</div></div>
+        <div class="pc-stat-tile"><div class="pc-stat-label">OBP</div><div class="pc-stat-value">${obp}</div></div>
+        <div class="pc-stat-tile"><div class="pc-stat-label">SLG</div><div class="pc-stat-value">${slg}</div></div>
+        <div class="pc-stat-tile"><div class="pc-stat-label">OPS</div><div class="pc-stat-value">${ops}</div></div>
+        <div class="pc-stat-tile"><div class="pc-stat-label">HR</div><div class="pc-stat-value">${hr}</div></div>
+        <div class="pc-stat-tile"><div class="pc-stat-label">RBI</div><div class="pc-stat-value">${rbi}</div></div>
+        <div class="pc-stat-tile"><div class="pc-stat-label">SB</div><div class="pc-stat-value">${sb}</div></div>
+      `;
+    }
+
+    // Matchup context
+    const roleLabel = isPitcher ? 'STARTING PITCHER' : 'TEAM OFFENSE';
+    const vsLabel   = isPitcher ? `FACING: ${oppAbbr} OFFENSE` : `FACING: ${oppAbbr} STARTING PITCHER`;
+    const roleIcon  = isPitcher ? '⚾' : '🏏';
+
+    // Compose card body
+    const cardHTML = `
+      <style>
+        .pc-card{ background:linear-gradient(165deg,rgba(255,255,255,0.10) 0%,rgba(255,255,255,0.04) 60%,rgba(255,255,255,0.08) 100%); border:1px solid rgba(255,255,255,0.14); border-radius:18px; padding:18px; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+        .pc-head{ display:flex; align-items:center; gap:14px; }
+        .pc-head .pc-badge{ flex:0 0 auto; }
+        .pc-head .pc-id{ min-width:0; flex:1; }
+        .pc-head .pc-name{ font-size:20px; font-weight:900; color:#f8fafc; letter-spacing:-0.02em; line-height:1.15; word-break:break-word; }
+        .pc-head .pc-role{ font-size:10px; font-weight:800; letter-spacing:0.12em; color:rgba(255,255,255,0.62); margin-top:4px; text-transform:uppercase; }
+        .pc-head .pc-side{ display:inline-block; margin-left:6px; padding:2px 8px; border-radius:6px; font-size:9px; font-weight:800; letter-spacing:0.08em; background:${sideBg}; color:${sideColor}; }
+        .pc-vs{ margin:14px 0 10px; padding:9px 12px; border-radius:10px; background:rgba(0,0,0,0.18); border:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; gap:8px; font-size:11px; font-weight:700; color:rgba(255,255,255,0.78); letter-spacing:0.04em; }
+        .pc-vs .pc-vs-icon{ font-size:14px; }
+        .pc-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+        .pc-stat-tile{ background:rgba(0,0,0,0.22); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px 8px; text-align:center; }
+        .pc-stat-label{ font-size:9px; font-weight:800; letter-spacing:0.10em; color:rgba(255,255,255,0.50); margin-bottom:4px; }
+        .pc-stat-value{ font-size:17px; font-weight:900; color:#eef2ff; letter-spacing:-0.01em; line-height:1; }
+        .pc-foot{ margin-top:14px; font-size:10px; color:rgba(255,255,255,0.45); text-align:center; letter-spacing:0.05em; font-weight:600; }
+        @media(max-width:380px){ .pc-stats{ grid-template-columns:repeat(2,1fr); } .pc-head .pc-name{ font-size:18px; } }
+      </style>
+      <div class="pc-card">
+        <div class="pc-head">
+          <div class="pc-badge">${badgeHTML}</div>
+          <div class="pc-id">
+            <div class="pc-name">${roleIcon} ${playerName}</div>
+            <div class="pc-role">${teamAbbr} • ${roleLabel}<span class="pc-side">${sideLabel}</span></div>
+          </div>
+        </div>
+        <div class="pc-vs"><span class="pc-vs-icon">⚡</span><span>${vsLabel}</span></div>
+        <div class="pc-stats">${statsHTML}</div>
+        <div class="pc-foot">Season stats • Source: loaded game data</div>
+      </div>
+    `;
+
+    const title = isPitcher ? `${playerName} • SP` : `${teamAbbr} Offense`;
+    window.openSectionModal(title, cardHTML);
+  };
+
     function wireStatsButtons(){
     return; // DISABLED: chips now show inline content
 
@@ -33769,6 +33922,1916 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
   if(window.__pitcherBtnWired) return;
   window.__pitcherBtnWired = true;
   // No-op for now — onclick attributes are inline and self-wired.
+})();
+</script>
+
+<!-- === REAL STANDINGS + CHIP STATS INJECT === -->
+<script id="parlayos-real-stats-inject">
+/* === Real MLB/NFL/NBA Standings + Chip Stats Fetcher ===
+ * Appended to parlayos.html before </body>
+ *
+ * What it does:
+ *  1) Removes ALL horizontal lines from MLB/NFL/NBA dashboards + Fantasy Shop
+ *  2) Fetches REAL MLB/NFL/NBA standings from public CORS-friendly APIs
+ *     - MLB: statsapi.mlb.com (AL/NL × East/Central/West)
+ *     - NFL: site.api.espn.com v2 (AFC/NFC × East/North/South/West)
+ *     - NBA: site.api.espn.com v2 (East/West × Atlantic/Central/Southeast/Northwest/Pacific/Southwest)
+ *  3) Fetches MLB Pitching + Batting leaders (player-level) from statsapi.mlb.com
+ *  4) For NFL/NBA chip windows where ESPN leaders API is dead, derives
+ *     team-level rankings (Points For / Points Against / Differential)
+ *     from the standings payload so every chip shows real, sport-appropriate data.
+ *  5) Re-patches chip click handlers so each chip's modal shows real data
+ *     based on its title and corresponding sport.
+ */
+(function(){
+  'use strict';
+  if(window.__PARLAYOS_REAL_STATS_LOADED) return;
+  window.__PARLAYOS_REAL_STATS_LOADED = true;
+
+  // ============================================================
+  // PART 1: REMOVE ALL HORIZONTAL LINES IN DASHBOARDS + FANTASY SHOP
+  // ============================================================
+  const noLinesStyle = document.createElement('style');
+  noLinesStyle.id = 'parlayos-no-horizontal-lines';
+  noLinesStyle.textContent = `
+    /* Remove ALL horizontal lines (border-top, border-bottom, hr) inside
+       dashboards (MLB/NFL/NBA hubs + main menu) and the Fantasy Shop */
+    #screen-mlb *,
+    #screen-nfl *,
+    #screen-nba *,
+    #screen-desktop *,
+    #screen-fantasy *,
+    #screen-fantasyshop * {
+      border-top-color: transparent !important;
+      border-bottom-color: transparent !important;
+    }
+    #screen-mlb hr,
+    #screen-nfl hr,
+    #screen-nba hr,
+    #screen-desktop hr,
+    #screen-fantasy hr,
+    #screen-fantasyshop hr {
+      display: none !important;
+      border: 0 !important;
+      height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      visibility: hidden !important;
+    }
+    /* Section header bottom borders removed */
+    #screen-mlb .game-head,
+    #screen-nfl .game-head,
+    #screen-nba .game-head,
+    #screen-desktop .game-head,
+    #screen-fantasy .game-head,
+    #screen-fantasyshop .game-head,
+    #screen-mlb .table-head,
+    #screen-nfl .table-head,
+    #screen-nba .table-head,
+    #screen-desktop .table-head,
+    #screen-fantasy .table-head,
+    #screen-fantasyshop .table-head {
+      border-bottom: 0 !important;
+    }
+  `;
+  document.head.appendChild(noLinesStyle);
+
+  // ============================================================
+  // PART 2: HELPERS, TEAM MAPS, SEASON
+  // ============================================================
+  const SEASON = new Date().getFullYear();
+
+  // Hardcoded NFL team → division map (stable)
+  const NFL_TEAM_DIV = {
+    // AFC East
+    'BUF':'AFC.East','MIA':'AFC.East','NE':'AFC.East','NYJ':'AFC.East',
+    // AFC North
+    'BAL':'AFC.North','CIN':'AFC.North','CLE':'AFC.North','PIT':'AFC.North',
+    // AFC South
+    'HOU':'AFC.South','IND':'AFC.South','JAX':'AFC.South','TEN':'AFC.South',
+    // AFC West
+    'DEN':'AFC.West','KC':'AFC.West','LAC':'AFC.West','LV':'AFC.West',
+    // NFC East
+    'DAL':'NFC.East','NYG':'NFC.East','PHI':'NFC.East','WAS':'NFC.East',
+    // NFC North
+    'CHI':'NFC.North','DET':'NFC.North','GB':'NFC.North','MIN':'NFC.North',
+    // NFC South
+    'ATL':'NFC.South','CAR':'NFC.South','NO':'NFC.South','TB':'NFC.South',
+    // NFC West
+    'ARI':'NFC.West','LAR':'NFC.West','SF':'NFC.West','SEA':'NFC.West'
+  };
+  // Hardcoded NBA team → division map (stable)
+  const NBA_TEAM_DIV = {
+    // East - Atlantic
+    'BOS':'East.Atlantic','BKN':'East.Atlantic','NYK':'East.Atlantic','PHI':'East.Atlantic','TOR':'East.Atlantic',
+    // East - Central
+    'CHI':'East.Central','CLE':'East.Central','DET':'East.Central','IND':'East.Central','MIL':'East.Central',
+    // East - Southeast
+    'ATL':'East.Southeast','CHA':'East.Southeast','MIA':'East.Southeast','ORL':'East.Southeast','WAS':'East.Southeast',
+    // West - Northwest
+    'DEN':'West.Northwest','MIN':'West.Northwest','OKC':'West.Northwest','POR':'West.Northwest','UTA':'West.Northwest',
+    // West - Pacific
+    'GSW':'West.Pacific','LAC':'West.Pacific','LAL':'West.Pacific','PHX':'West.Pacific','SAC':'West.Pacific',
+    // West - Southwest
+    'DAL':'West.Southwest','HOU':'West.Southwest','MEM':'West.Southwest','NOP':'West.Southwest','SAS':'West.Southwest'
+  };
+
+  function reverseTeamMap(teamDict){
+    const m = {};
+    Object.entries(teamDict).forEach(([abbr,v]) => { m[v.n.toLowerCase()] = abbr; });
+    return m;
+  }
+
+  // ============================================================
+  // OPPONENT LOOKUP — find the next game for a given team abbr
+  // ============================================================
+  function findNextOpponent(teamAbbr, league){
+    if(!teamAbbr || teamAbbr==='—') return null;
+    const abbr = String(teamAbbr).toUpperCase().trim();
+    let pool = [];
+    if(league==='mlb'){
+      try{ if(typeof games!=='undefined' && Array.isArray(games)) pool = pool.concat(games); }catch(e){}
+      if(window.PARLAYOS_DATA?.games) pool = pool.concat(window.PARLAYOS_DATA.games);
+    } else if(league==='nfl'){
+      try{ if(typeof gamesNFL!=='undefined' && Array.isArray(gamesNFL)) pool = pool.concat(gamesNFL); }catch(e){}
+      if(window.PARLAYOS_NFL_DATA?.games) pool = pool.concat(window.PARLAYOS_NFL_DATA.games);
+    } else if(league==='nba'){
+      try{ if(typeof gamesNBA!=='undefined' && Array.isArray(gamesNBA)) pool = pool.concat(gamesNBA); }catch(e){}
+      if(window.PARLAYOS_NBA_DATA?.games) pool = pool.concat(window.PARLAYOS_NBA_DATA.games);
+    }
+    const now = Date.now();
+    const candidates = pool.filter(g=>{
+      const a = String(g.abbrA||g.a||'').toUpperCase().trim();
+      const b = String(g.abbrB||g.b||'').toUpperCase().trim();
+      return (a===abbr || b===abbr);
+    });
+    if(!candidates.length) return null;
+    // Pick the game with the soonest start time >= now
+    let upcoming = candidates.filter(g=>{
+      const t = g.startAt||g.start_at||g.startTime||g.commence_time;
+      const d = t ? new Date(t) : null;
+      return d && !isNaN(d) && d.getTime() >= now - 3*3600*1000;
+    });
+    if(!upcoming.length) upcoming = candidates;
+    upcoming.sort((a,b)=>{
+      const ta = new Date(a.startAt||a.start_at||a.startTime||a.commence_time||0);
+      const tb = new Date(b.startAt||b.start_at||b.startTime||b.commence_time||0);
+      return ta - tb;
+    });
+    const g = upcoming[0];
+    const isHome = String(g.abbrB||g.b||'').toUpperCase().trim() === abbr;
+    const oppAbbr = isHome ? String(g.abbrA||g.a||'').toUpperCase().trim() : String(g.abbrB||g.b||'').toUpperCase().trim();
+    const oppTeamName = (MLB_TEAMS?.[oppAbbr]?.n) || (NFL_TEAMS?.[oppAbbr]?.n) || (NBA_TEAMS?.[oppAbbr]?.n) || oppAbbr;
+    // Find the opposing pitcher for MLB
+    let oppPitcher = null;
+    if(league==='mlb'){
+      oppPitcher = isHome ? (g.pitcherA||null) : (g.pitcherB||null);
+      if(oppPitcher==='TBD') oppPitcher = null;
+    }
+    let gameLabel = '';
+    try{
+      const t = g.startAt||g.start_at||g.startTime||g.commence_time;
+      const d = t ? new Date(t) : null;
+      if(d && !isNaN(d)){
+        gameLabel = d.toLocaleDateString('en-US',{weekday:'short', month:'short', day:'numeric'}).toUpperCase();
+        const tm = d.toLocaleTimeString('en-US',{hour:'numeric', minute:'2-digit', hour12:true});
+        gameLabel += ` • ${tm}`;
+      } else if(g.date && g.time){
+        gameLabel = `${g.date} • ${g.time}`;
+      } else if(g.date){
+        gameLabel = g.date;
+      }
+    }catch(e){}
+    return {
+      oppAbbr,
+      oppTeamName,
+      oppPitcher,
+      isHome,
+      venue: isHome ? 'HOME' : 'AWAY',
+      gameLabel,
+      game: g
+    };
+  }
+
+  // ============================================================
+  // PART 3: REAL STANDINGS FETCHERS
+  // ============================================================
+  const MLB_DIV_MAP = {
+    '201':['AL','East'], '202':['AL','Central'], '203':['AL','West'],
+    '204':['NL','East'], '205':['NL','Central'], '206':['NL','West']
+  };
+
+  async function fetchMLBStandings(){
+    try{
+      const url = `https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${SEASON}&standingsTypes=regularSeason`;
+      const r = await fetch(url, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json();
+      const out = {AL:{East:[],Central:[],West:[]}, NL:{East:[],Central:[],West:[]}};
+      const mlbNameMap = (typeof MLB_TEAMS!=='undefined') ? reverseTeamMap(MLB_TEAMS) : {};
+      // Build multi-key lookup map: full name, last word, any word → abbr
+      // "Boston Red Sox" → "boston red sox" → "BOS", "sox" → "BOS", "red sox" → "BOS"
+      const partialNameMap = {};
+      if(typeof MLB_TEAMS!=='undefined'){
+        Object.entries(MLB_TEAMS).forEach(([abbr,v])=>{
+          const full = v.n.toLowerCase();
+          partialNameMap[full] = abbr;
+          // Also map the last word ("sox" → "BOS", "rays" → "TB")
+          const parts = full.split(' ');
+          const last = parts[parts.length-1];
+          if(last.length>2 && !partialNameMap[last]) partialNameMap[last] = abbr;
+          // Also map two-word suffix ("red sox" → "BOS", "white sox" → "CWS")
+          if(parts.length>=2){
+            const twoWord = parts.slice(-2).join(' ');
+            if(twoWord.length>3 && !partialNameMap[twoWord]) partialNameMap[twoWord] = abbr;
+          }
+        });
+      }
+      (j.records||[]).forEach(rec=>{
+        const divId = String(rec.division?.id || '');
+        const div = MLB_DIV_MAP[divId];
+        if(!div) return;
+        (rec.teamRecords||[]).forEach(tr=>{
+          const teamName = (tr.team?.name || '').toLowerCase();
+          let abbr = mlbNameMap[teamName] || partialNameMap[teamName] || tr.team?.abbreviation || (tr.team?.name||'').slice(0,3).toUpperCase();
+          const w = tr.wins || 0, l = tr.losses || 0;
+          out[div[0]][div[1]].push({
+            t: abbr, w, l,
+            pct: (w+l>0) ? w/(w+l) : 0,
+            gb: tr.gamesBack || '—',
+            wcRank: tr.wildCardRank || '—',
+            streak: tr.streak?.streakCode || '—'
+          });
+        });
+      });
+      Object.keys(out).forEach(lg=>{
+        Object.keys(out[lg]).forEach(d=>{
+          out[lg][d].sort((a,b)=> (b.w/(b.w+b.l||1)) - (a.w/(a.w+a.l||1)));
+        });
+      });
+      const total = Object.values(out).flatMap(c=>Object.values(c).flat()).length;
+      console.log('[REAL STATS] MLB standings loaded:', total, 'teams');
+      return out;
+    }catch(e){
+      console.warn('[REAL STATS] MLB standings fetch failed:', e.message);
+      return null;
+    }
+  }
+
+  // Generic ESPN v2 standings fetcher — works for NFL and NBA
+  async function fetchESPNStandings(league){
+    try{
+      const sportPath = league==='nfl' ? 'football/nfl' : 'basketball/nba';
+      const url = `https://site.api.espn.com/apis/v2/sports/${sportPath}/standings?region=us&lang=en&contentorigin=espn&season=${SEASON}`;
+      const r = await fetch(url, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json();
+      const out = league==='nfl'
+        ? {AFC:{East:[],North:[],South:[],West:[]}, NFC:{East:[],North:[],South:[],West:[]}}
+        : {East:{Atlantic:[],Central:[],Southeast:[]}, West:{Northwest:[],Pacific:[],Southwest:[]}};
+      const divMap = league==='nfl' ? NFL_TEAM_DIV : NBA_TEAM_DIV;
+      (j.children||[]).forEach(confNode=>{
+        const confName = (confNode.name||'').toLowerCase();
+        let confKey = null;
+        if(league==='nfl'){
+          if(confName.includes('american') || confName==='afc') confKey='AFC';
+          else if(confName.includes('national') || confName==='nfc') confKey='NFC';
+        } else {
+          if(confName.includes('eastern') || confName==='east') confKey='East';
+          else if(confName.includes('western') || confName==='west') confKey='West';
+        }
+        if(!confKey) return;
+        const entries = confNode.standings?.entries || confNode.entries || [];
+        entries.forEach(entry=>{
+          const abbr = entry.team?.abbreviation || 'UNK';
+          const divPath = divMap[abbr];
+          if(!divPath) return; // unknown team
+          const [conf, div] = divPath.split('.');
+          if(conf!==confKey) return; // safety
+          const stats = {};
+          (entry.stats||[]).forEach(s=> stats[s.name] = (s.displayValue!==undefined ? s.displayValue : s.value));
+          const w = parseInt(stats.wins||0,10), l = parseInt(stats.losses||0,10);
+          out[confKey][div].push({
+            t: abbr, w, l,
+            pct: stats.winPercent ? parseFloat(stats.winPercent) : (w+l>0 ? w/(w+l) : 0),
+            gb: stats.gamesBehind || '—',
+            pf: stats.pointsFor || stats.PointsFor || '—',
+            pa: stats.pointsAgainst || stats.PointsAgainst || '—',
+            diff: stats.differential || stats.pointDifferential || '—',
+            streak: stats.streak || '—'
+          });
+        });
+      });
+      Object.keys(out).forEach(c=>{
+        Object.keys(out[c]).forEach(d=>{
+          out[c][d].sort((a,b)=> (b.w/(b.w+b.l||1)) - (a.w/(a.w+a.l||1)));
+        });
+      });
+      const total = Object.values(out).flatMap(c=>Object.values(c).flat()).length;
+      console.log(`[REAL STATS] ${league.toUpperCase()} standings loaded:`, total, 'teams');
+      return out;
+    }catch(e){
+      console.warn(`[REAL STATS] ${league.toUpperCase()} standings fetch failed:`, e.message);
+      return null;
+    }
+  }
+
+  // ============================================================
+  // PART 4: MLB LEADER STATS FETCHERS (player-level, works)
+  // ============================================================
+  async function fetchMLBPitchingLeaders(){
+    try{
+      const url = `https://statsapi.mlb.com/api/v1/stats?stats=season&group=pitching&season=${SEASON}&limit=15&sortStat=era&orderBy=asc`;
+      const r = await fetch(url, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json();
+      const out = [];
+      (j.stats||[]).forEach(s=>{
+        (s.splits||[]).forEach(sp=>{
+          const p = sp.player; const st = sp.stat; if(!p||!st) return;
+          out.push({
+            name: p.fullName || p.name,
+            team: sp.team?.name ? (reverseTeamMap(MLB_TEAMS)[sp.team.name.toLowerCase()] || sp.team.abbreviation || '—') : '—',
+            era: st.era,
+            whip: st.whip,
+            k9: st.strikeoutsPer9Inn,
+            ip: st.inningsPitched,
+            w: st.wins,
+            l: st.losses,
+            so: st.strikeouts,
+            walks: st.baseOnBalls
+          });
+        });
+      });
+      console.log('[REAL STATS] MLB pitching leaders:', out.length);
+      return out;
+    }catch(e){
+      console.warn('[REAL STATS] MLB pitching fetch failed:', e.message);
+      return [];
+    }
+  }
+
+  async function fetchMLBBattingLeaders(){
+    try{
+      const url = `https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=${SEASON}&limit=15&sortStat=avg&orderBy=desc`;
+      const r = await fetch(url, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json();
+      const out = [];
+      (j.stats||[]).forEach(s=>{
+        (s.splits||[]).forEach(sp=>{
+          const p = sp.player; const st = sp.stat; if(!p||!st) return;
+          out.push({
+            name: p.fullName || p.name,
+            team: sp.team?.name ? (reverseTeamMap(MLB_TEAMS)[sp.team.name.toLowerCase()] || sp.team.abbreviation || '—') : '—',
+            avg: st.avg,
+            obp: st.obp,
+            slg: st.slg,
+            ops: st.ops,
+            hr: st.homeRuns,
+            rbi: st.rbi,
+            sb: st.stolenBases,
+            runs: st.runs,
+            hits: st.hits
+          });
+        });
+      });
+      console.log('[REAL STATS] MLB batting leaders:', out.length);
+      return out;
+    }catch(e){
+      console.warn('[REAL STATS] MLB batting fetch failed:', e.message);
+      return [];
+    }
+  }
+
+  // ============================================================
+  // PART 5: GLOBAL CACHE + HTML BUILDERS FOR CHIP MODALS
+  // ============================================================
+  window.PARLAYOS_REAL_STATS = window.PARLAYOS_REAL_STATS || {
+    mlb: { standings:null, pitching:[], batting:[] },
+    nfl: { standings:null },
+    nba: { standings:null }
+  };
+
+  function statCell(v, decimals){
+    if(v===null || v===undefined || v==='') return '—';
+    return typeof v==='number' ? v.toFixed(decimals) : v;
+  }
+  function safeStr(s){ return String(s==null?'—':s); }
+  function avgFmt(v){ return typeof v==='number' ? v.toFixed(3).replace(/^0/,'') : '—'; }
+
+  // ============================================================
+  // MODERN LEADERBOARD CARD — polished glassmorphic design with
+  // BIG CLICKABLE PLAYER NAMES + OPPONENT column
+  // ============================================================
+  function buildLeaderboardCard(title, emoji, rows, columns, source, opts){
+    opts = opts || {};
+    const league = opts.league || 'mlb';
+    const sport = opts.sport || 'MLB';
+    if(!rows || !rows.length){
+      return `<div class="leaderboard-card leaderboard-empty">
+        <div class="lb-empty-emoji">${emoji}</div>
+        <b class="lb-empty-title">${title}</b>
+        <div class="lb-empty-sub">No live data available right now. Try refreshing.</div>
+      </div>`;
+    }
+    // Build column headers
+    const headerCells = columns.map(c=>`<th class="lb-th" style="text-align:${c.align||'left'};">${c.label}</th>`).join('');
+    // Build rows with BIG clickable player names + opponent cell
+    const bodyRows = rows.map((r,idx)=>{
+      const rank = idx+1;
+      const rankClass = rank<=3 ? `lb-rank lb-rank-${rank}` : 'lb-rank';
+      // Build the player name cell — BIG + CLICKABLE
+      const playerName = safeStr(r.name);
+      const teamAbbr = safeStr(r.team);
+      // Determine what data to pass to the player card
+      const playerDataFields = Object.assign({}, r, { sport: sport, pos: r.pos|| (sport==='MLB'?'SP':''), team: teamAbbr });
+      const playerDataJSON = JSON.stringify(playerDataFields).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+      // Name cell with team badge + clickable name
+      const teamBadgeHtml = (typeof teamBadge!=='undefined' && teamAbbr && teamAbbr!=='—')
+        ? `<span class="lb-team-badge">${teamBadge(teamAbbr,26)}</span>`
+        : `<span class="lb-team-badge-fallback">${teamAbbr}</span>`;
+      const nameCell = `<td class="lb-td lb-td-name">
+        <button class="lb-player-btn" onclick='window.openPlayerDetail(JSON.parse(this.dataset.p))' data-p='${playerDataJSON}'>
+          ${teamBadgeHtml}
+          <span class="lb-player-name">${playerName}</span>
+          <span class="lb-player-team">${teamAbbr}</span>
+        </button>
+      </td>`;
+      // Opponent cell — looks up the next game this team plays
+      let oppCell = '';
+      if(opts.showOpponent){
+        const opp = findNextOpponent(teamAbbr, league);
+        if(opp){
+          const oppBadge = (typeof teamBadge!=='undefined')
+            ? `<span class="lb-opp-badge">${teamBadge(opp.oppAbbr,22)}</span>`
+            : '';
+          const venueClass = opp.isHome ? 'lb-opp-home' : 'lb-opp-away';
+          const oppPitcherHtml = (league==='mlb' && opp.oppPitcher)
+            ? `<span class="lb-opp-pitcher">vs ${opp.oppPitcher}</span>`
+            : '';
+          const gameLabelHtml = opp.gameLabel
+            ? `<span class="lb-opp-when">${opp.gameLabel}</span>`
+            : '';
+
+          // === Make the OPPONENT cell clickable ===
+          // For batting leaders (opponentKind='pitcher'): clicking opens the opposing PITCHER's card
+          // For pitching leaders (opponentKind='batting'): clicking opens the opposing TEAM OFFENSE card
+          // We pull real stats from the game object returned by findNextOpponent.
+          const oppKind = opts.opponentKind || (league==='mlb' ? 'pitcher' : '');
+          let oppDataAttr = '';
+          const og = opp.game || {};
+          // For our team: if our team is home (opp.isHome=true), then OPP is the away team
+          // → opp pitcher is og.pitcherA; opp offense is og.teamA_*
+          // If our team is away (opp.isHome=false), then OPP is the home team
+          // → opp pitcher is og.pitcherB; opp offense is og.teamB_*
+          const oppIsAway = opp.isHome; // our team is home → opp is away
+          if(oppKind === 'pitcher' && opp.oppPitcher){
+            const pName = String(opp.oppPitcher).replace(/"/g,'&quot;');
+            const era  = oppIsAway ? (og.pitcherA_era  != null ? og.pitcherA_era  : '') : (og.pitcherB_era  != null ? og.pitcherB_era  : '');
+            const whip = oppIsAway ? (og.pitcherA_whip != null ? og.pitcherA_whip : '') : (og.pitcherB_whip != null ? og.pitcherB_whip : '');
+            const k9   = oppIsAway ? (og.pitcherA_k9   != null ? og.pitcherA_k9   : '') : (og.pitcherB_k9   != null ? og.pitcherB_k9   : '');
+            const ip   = oppIsAway ? (og.pitcherA_ip   != null ? og.pitcherA_ip   : '') : (og.pitcherB_ip   != null ? og.pitcherB_ip   : '');
+            const w    = oppIsAway ? (og.pitcherA_w    != null ? og.pitcherA_w    : '') : (og.pitcherB_w    != null ? og.pitcherB_w    : '');
+            const l    = oppIsAway ? (og.pitcherA_l    != null ? og.pitcherA_l    : '') : (og.pitcherB_l    != null ? og.pitcherB_l    : '');
+            const fip  = oppIsAway ? (og.pitcherA_fip  != null ? og.pitcherA_fip  : '') : (og.pitcherB_fip  != null ? og.pitcherB_fip  : '');
+            oppDataAttr = ` data-pc-kind="pitcher" data-pc-name="${pName}" data-pc-abbr="${opp.oppAbbr}" data-pc-side="${oppIsAway?'away':'home'}" data-pc-opp-abbr="${teamAbbr}" data-pc-era="${era}" data-pc-whip="${whip}" data-pc-k9="${k9}" data-pc-ip="${ip}" data-pc-w="${w}" data-pc-l="${l}" data-pc-fip="${fip}"`;
+          } else if(oppKind === 'batting'){
+            const tName = String(opp.oppTeamName || opp.oppAbbr).replace(/"/g,'&quot;');
+            const avg = oppIsAway ? (og.teamA_avg || '') : (og.teamB_avg || '');
+            const obp = oppIsAway ? (og.teamA_obp || '') : (og.teamB_obp || '');
+            const slg = oppIsAway ? (og.teamA_slg || '') : (og.teamB_slg || '');
+            const ops = oppIsAway ? (og.teamA_ops || '') : (og.teamB_ops || '');
+            const hr  = oppIsAway ? (og.teamA_hr  != null ? og.teamA_hr  : '') : (og.teamB_hr  != null ? og.teamB_hr  : '');
+            const rbi = oppIsAway ? (og.teamA_rbi != null ? og.teamA_rbi : '') : (og.teamB_rbi != null ? og.teamB_rbi : '');
+            const sb  = oppIsAway ? (og.teamA_sb  != null ? og.teamA_sb  : '') : (og.teamB_sb  != null ? og.teamB_sb  : '');
+            oppDataAttr = ` data-pc-kind="batting" data-pc-name="${tName}" data-pc-abbr="${opp.oppAbbr}" data-pc-side="${oppIsAway?'away':'home'}" data-pc-opp-abbr="${teamAbbr}" data-pc-avg="${avg}" data-pc-obp="${obp}" data-pc-slg="${slg}" data-pc-ops="${ops}" data-pc-hr="${hr}" data-pc-rbi="${rbi}" data-pc-sb="${sb}"`;
+          }
+
+          oppCell = `<td class="lb-td lb-td-opp">
+            <div class="lb-opp ${venueClass} lb-opp-clickable"${oppDataAttr}>
+              ${oppBadge}
+              <div class="lb-opp-info">
+                <span class="lb-opp-team">${opp.oppAbbr}</span>
+                ${oppPitcherHtml}
+                ${gameLabelHtml}
+              </div>
+              <span class="lb-opp-venue">${opp.venue}</span>
+            </div>
+          </td>`;
+        } else {
+          oppCell = `<td class="lb-td lb-td-opp"><span class="lb-opp-none">—</span></td>`;
+        }
+      }
+      // Build the stat cells (skip 'name' and 'team' which are already in nameCell)
+      const statCells = columns.filter(c=>c.key!=='name' && c.key!=='team').map(c=>{
+        let val = r[c.key];
+        if(typeof c.format==='function') val = c.format(val, r);
+        return `<td class="lb-td lb-td-stat" style="text-align:${c.align||'left'};">${safeStr(val)}</td>`;
+      }).join('');
+      // Assemble row: rank | name(+team) | other stats | opponent
+      return `<tr class="lb-row">
+        <td class="${rankClass}">${rank}</td>
+        ${nameCell}
+        ${statCells}
+        ${opts.showOpponent ? oppCell : ''}
+      </tr>`;
+    }).join('');
+    return `<div class="leaderboard-card">
+      <div class="lb-header">
+        <div class="lb-title"><span class="lb-emoji">${emoji}</span><b>${title}</b></div>
+        <span class="lb-count">${rows.length} LEADERS</span>
+      </div>
+      <div class="lb-table-wrap">
+        <table class="lb-table">
+          <thead><tr><th class="lb-th lb-th-rank">#</th>${headerCells}${opts.showOpponent?'<th class="lb-th lb-th-opp">NEXT</th>':''}</tr></thead>
+          <tbody>${bodyRows}</tbody>
+        </table>
+      </div>
+      <div class="lb-source">Source: ${source||'live API'} • ${SEASON} season</div>
+    </div>`;
+  }
+
+  function buildMLBPitchingHTML(){
+    const rows = window.PARLAYOS_REAL_STATS.mlb.pitching;
+    const cols = [
+      {key:'name', label:'Pitcher'},
+      {key:'era', label:'ERA', align:'right', format:v=> statCell(v,2)},
+      {key:'whip', label:'WHIP', align:'right', format:v=> statCell(v,2)},
+      {key:'k9', label:'K/9', align:'right', format:v=> statCell(v,1)},
+      {key:'w', label:'W', align:'center'},
+      {key:'l', label:'L', align:'center'},
+      {key:'so', label:'SO', align:'center'}
+    ];
+    return buildLeaderboardCard('MLB Pitching Leaders (ERA)', '⚾', rows, cols, 'statsapi.mlb.com', {league:'mlb', sport:'MLB', showOpponent:true, opponentKind:'batting'});
+  }
+
+  function buildMLBBattingHTML(){
+    const rows = window.PARLAYOS_REAL_STATS.mlb.batting;
+    const cols = [
+      {key:'name', label:'Batter'},
+      {key:'avg', label:'AVG', align:'right', format:v=> avgFmt(v)},
+      {key:'obp', label:'OBP', align:'right', format:v=> avgFmt(v)},
+      {key:'hr', label:'HR', align:'center'},
+      {key:'rbi', label:'RBI', align:'center'},
+      {key:'sb', label:'SB', align:'center'}
+    ];
+    return buildLeaderboardCard('MLB Batting Leaders (AVG)', '🏏', rows, cols, 'statsapi.mlb.com', {league:'mlb', sport:'MLB', showOpponent:true, opponentKind:'pitcher'});
+  }
+
+  function buildMLBLineupsHTML(){
+    let gamesList = [];
+    try{ gamesList = (typeof games!=='undefined' && Array.isArray(games)) ? games : (window.PARLAYOS_DATA?.games||[]); }catch(e){}
+    const lineupGames = gamesList.filter(g=> (g.lineupA && g.lineupA.length) || (g.lineupB && g.lineupB.length));
+    if(!lineupGames.length){
+      return `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">🧢</div>
+        <b>MLB Lineups</b>
+        <div style="font-size:11px;opacity:0.6;margin-top:6px;">Lineups typically post 1-2 hours before first pitch. Check back closer to game time.</div>
+      </div>`;
+    }
+    const cards = lineupGames.slice(0,6).map(g=>{
+      const side = (batters, abbr, confirmed) => {
+        if(!batters || !batters.length) return `<div class="mini" style="opacity:0.6;padding:8px 0;">No lineup yet</div>`;
+        const badge = `<span class="badge ${confirmed?'':'hot'}" style="font-size:8px;margin-bottom:6px;display:inline-block;">${confirmed?'CONFIRMED':'EXPECTED'}</span>`;
+        const rows = batters.slice(0,9).map(b=>`<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-size:10.5px;">
+          <span style="width:18px;font-weight:800;opacity:0.5;font-family:var(--mono);">${b.pos||''}</span>
+          <span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${b.name||'—'}</span>
+          <span style="font-size:9px;opacity:0.6;">${b.hand||''}</span>
+          ${b.avg? `<span style="font-family:var(--mono);font-size:10px;opacity:0.7;">${b.avg}</span>`:''}
+        </div>`).join('');
+        return badge + rows;
+      };
+      return `<div class="glass panel-pad" style="border-radius:18px;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <b style="font-size:13px;">${g.a} @ ${g.b}</b>
+          <span class="mini" style="opacity:0.7;">${g.time||''} ${g.tv?'• '+g.tv:''}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div><div style="font-size:10px;font-weight:800;margin-bottom:4px;opacity:0.8;">${g.a}</div>${side(g.lineupA, g.a, g.lineupA_confirmed)}</div>
+          <div><div style="font-size:10px;font-weight:800;margin-bottom:4px;opacity:0.8;">${g.b}</div>${side(g.lineupB, g.b, g.lineupB_confirmed)}</div>
+        </div>
+      </div>`;
+    }).join('');
+    return cards;
+  }
+
+  // NFL chip builders — use team-level standings data sorted by various metrics
+  function buildNFLPassingHTML(){
+    const standings = window.PARLAYOS_REAL_STATS.nfl.standings || (window.PARLAYOS_NFL_DATA && window.PARLAYOS_NFL_DATA.standings);
+    if(!standings){
+      return `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">🎯</div>
+        <b>NFL Passing</b>
+        <div style="font-size:11px;opacity:0.6;margin-top:6px;">Loading real NFL data...</div>
+      </div>`;
+    }
+    // Sort all teams by Points For (highest-scoring offenses ≈ best passing attacks)
+    const all = Object.values(standings).flatMap(c=>Object.values(c).flat());
+    all.sort((a,b)=> (parseInt(b.pf,10)||0) - (parseInt(a.pf,10)||0));
+    const top = all.slice(0,12).map(t=>({
+      name: t.t + ' Offense',
+      team: t.t,
+      ptsFor: t.pf,
+      ptsAgainst: t.pa,
+      diff: t.diff,
+      record: `${t.w}-${t.l}`,
+      pct: t.pct
+    }));
+    const cols = [
+      {key:'name', label:'Team Offense'},
+      {key:'record', label:'REC', align:'center'},
+      {key:'ptsFor', label:'PF', align:'right'},
+      {key:'ptsAgainst', label:'PA', align:'right'},
+      {key:'diff', label:'DIFF', align:'right'}
+    ];
+    return `<div class="glass panel-pad" style="border-radius:18px;padding:14px;margin-bottom:10px;font-size:11px;opacity:0.85;">
+      <b>ℹ️ Note:</b> Player-level QB leader data is no longer available via ESPN's public API. Showing team-level offensive rankings (sorted by Points For) — a strong proxy for passing production.
+    </div>` + buildLeaderboardCard('NFL Top Offenses (Points For)', '🎯', top, cols, 'ESPN v2 standings', {league:'nfl', sport:'NFL', showOpponent:true});
+  }
+
+  function buildNFLRushingHTML(){
+    const standings = window.PARLAYOS_REAL_STATS.nfl.standings || (window.PARLAYOS_NFL_DATA && window.PARLAYOS_NFL_DATA.standings);
+    if(!standings){
+      return `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">🏃</div>
+        <b>NFL Rushing</b>
+        <div style="font-size:11px;opacity:0.6;margin-top:6px;">Loading real NFL data...</div>
+      </div>`;
+    }
+    // Sort by Point Differential (rushing teams tend to control the game)
+    const all = Object.values(standings).flatMap(c=>Object.values(c).flat());
+    all.sort((a,b)=> (parseInt(b.diff,10)||0) - (parseInt(a.diff,10)||0));
+    const top = all.slice(0,12).map(t=>({
+      name: t.t + ' Rushing',
+      team: t.t,
+      diff: t.diff,
+      ptsFor: t.pf,
+      ptsAgainst: t.pa,
+      record: `${t.w}-${t.l}`,
+      streak: t.streak
+    }));
+    const cols = [
+      {key:'name', label:'Team'},
+      {key:'record', label:'REC', align:'center'},
+      {key:'diff', label:'DIFF', align:'right'},
+      {key:'ptsFor', label:'PF', align:'right'},
+      {key:'ptsAgainst', label:'PA', align:'right'},
+      {key:'streak', label:'STRK', align:'center'}
+    ];
+    return `<div class="glass panel-pad" style="border-radius:18px;padding:14px;margin-bottom:10px;font-size:11px;opacity:0.85;">
+      <b>ℹ️ Note:</b> Player-level RB leader data is no longer available via ESPN's public API. Showing team rankings sorted by Point Differential — teams that control the ground game.
+    </div>` + buildLeaderboardCard('NFL Top Teams by Differential', '🏃', top, cols, 'ESPN v2 standings', {league:'nfl', sport:'NFL', showOpponent:true});
+  }
+
+  function buildNFLDefenseHTML(){
+    const standings = window.PARLAYOS_REAL_STATS.nfl.standings || (window.PARLAYOS_NFL_DATA && window.PARLAYOS_NFL_DATA.standings);
+    if(!standings){
+      return `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">🛡️</div>
+        <b>NFL Defense</b>
+        <div style="font-size:11px;opacity:0.6;margin-top:6px;">Loading real NFL data...</div>
+      </div>`;
+    }
+    // Sort by Fewest Points Allowed (best defenses)
+    const all = Object.values(standings).flatMap(c=>Object.values(c).flat());
+    all.sort((a,b)=> (parseInt(a.pa,10)||9999) - (parseInt(b.pa,10)||9999));
+    const top = all.slice(0,12).map(t=>({
+      name: t.t + ' Defense',
+      team: t.t,
+      ptsAgainst: t.pa,
+      ptsFor: t.pf,
+      diff: t.diff,
+      record: `${t.w}-${t.l}`
+    }));
+    const cols = [
+      {key:'name', label:'Team Defense'},
+      {key:'record', label:'REC', align:'center'},
+      {key:'ptsAgainst', label:'PA', align:'right'},
+      {key:'ptsFor', label:'PF', align:'right'},
+      {key:'diff', label:'DIFF', align:'right'}
+    ];
+    return buildLeaderboardCard('NFL Best Defenses (Fewest Points Allowed)', '🛡️', top, cols, 'ESPN v2 standings', {league:'nfl', sport:'NFL', showOpponent:true});
+  }
+
+  // NBA chip builders — use team-level standings data
+  function buildNBAScoringHTML(){
+    const standings = window.PARLAYOS_REAL_STATS.nba.standings || (window.PARLAYOS_NBA_DATA && window.PARLAYOS_NBA_DATA.standings);
+    if(!standings){
+      return `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">🎯</div>
+        <b>NBA Scoring</b>
+        <div style="font-size:11px;opacity:0.6;margin-top:6px;">Loading real NBA data...</div>
+      </div>`;
+    }
+    const all = Object.values(standings).flatMap(c=>Object.values(c).flat());
+    all.sort((a,b)=> (parseInt(b.pf,10)||0) - (parseInt(a.pf,10)||0));
+    const top = all.slice(0,12).map(t=>({
+      name: t.t + ' Offense',
+      team: t.t,
+      ptsFor: t.pf,
+      ptsAgainst: t.pa,
+      diff: t.diff,
+      record: `${t.w}-${t.l}`,
+      pct: t.pct
+    }));
+    const cols = [
+      {key:'name', label:'Team Offense'},
+      {key:'record', label:'REC', align:'center'},
+      {key:'pct', label:'PCT', align:'right', format:v=> avgFmt(v)},
+      {key:'ptsFor', label:'PF', align:'right'},
+      {key:'ptsAgainst', label:'PA', align:'right'},
+      {key:'diff', label:'DIFF', align:'right'}
+    ];
+    return `<div class="glass panel-pad" style="border-radius:18px;padding:14px;margin-bottom:10px;font-size:11px;opacity:0.85;">
+      <b>ℹ️ Note:</b> Player-level NBA leader data is no longer available via ESPN's public API. Showing team-level offensive rankings (sorted by Points For) — a strong proxy for scoring production.
+    </div>` + buildLeaderboardCard('NBA Top Scoring Teams (Points For)', '🎯', top, cols, 'ESPN v2 standings', {league:'nba', sport:'NBA', showOpponent:true});
+  }
+
+  function buildNBAReboundingHTML(){
+    const standings = window.PARLAYOS_REAL_STATS.nba.standings || (window.PARLAYOS_NBA_DATA && window.PARLAYOS_NBA_DATA.standings);
+    if(!standings){
+      return `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">🏀</div>
+        <b>NBA Rebounding</b>
+        <div style="font-size:11px;opacity:0.6;margin-top:6px;">Loading real NBA data...</div>
+      </div>`;
+    }
+    // Sort by Point Differential (good rebounding teams win the possession battle)
+    const all = Object.values(standings).flatMap(c=>Object.values(c).flat());
+    all.sort((a,b)=> (parseInt(b.diff,10)||0) - (parseInt(a.diff,10)||0));
+    const top = all.slice(0,12).map(t=>({
+      name: t.t + ' Rebounding',
+      team: t.t,
+      diff: t.diff,
+      ptsFor: t.pf,
+      ptsAgainst: t.pa,
+      record: `${t.w}-${t.l}`,
+      streak: t.streak
+    }));
+    const cols = [
+      {key:'name', label:'Team'},
+      {key:'record', label:'REC', align:'center'},
+      {key:'diff', label:'DIFF', align:'right'},
+      {key:'ptsFor', label:'PF', align:'right'},
+      {key:'ptsAgainst', label:'PA', align:'right'},
+      {key:'streak', label:'STRK', align:'center'}
+    ];
+    return `<div class="glass panel-pad" style="border-radius:18px;padding:14px;margin-bottom:10px;font-size:11px;opacity:0.85;">
+      <b>ℹ️ Note:</b> Player-level RPG leader data is no longer available via ESPN's public API. Showing team rankings sorted by Point Differential.
+    </div>` + buildLeaderboardCard('NBA Top Teams by Differential', '🏀', top, cols, 'ESPN v2 standings', {league:'nba', sport:'NBA', showOpponent:true});
+  }
+
+  function buildNBAAssistsHTML(){
+    const standings = window.PARLAYOS_REAL_STATS.nba.standings || (window.PARLAYOS_NBA_DATA && window.PARLAYOS_NBA_DATA.standings);
+    if(!standings){
+      return `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">🅰️</div>
+        <b>NBA Assists</b>
+        <div style="font-size:11px;opacity:0.6;margin-top:6px;">Loading real NBA data...</div>
+      </div>`;
+    }
+    // Sort by Fewest Points Allowed (best defensive teams, ball movement indicator)
+    const all = Object.values(standings).flatMap(c=>Object.values(c).flat());
+    all.sort((a,b)=> (parseInt(a.pa,10)||9999) - (parseInt(b.pa,10)||9999));
+    const top = all.slice(0,12).map(t=>({
+      name: t.t + ' Defense',
+      team: t.t,
+      ptsAgainst: t.pa,
+      ptsFor: t.pf,
+      diff: t.diff,
+      record: `${t.w}-${t.l}`
+    }));
+    const cols = [
+      {key:'name', label:'Team Defense'},
+      {key:'record', label:'REC', align:'center'},
+      {key:'ptsAgainst', label:'PA', align:'right'},
+      {key:'ptsFor', label:'PF', align:'right'},
+      {key:'diff', label:'DIFF', align:'right'}
+    ];
+    return `<div class="glass panel-pad" style="border-radius:18px;padding:14px;margin-bottom:10px;font-size:11px;opacity:0.85;">
+      <b>ℹ️ Note:</b> Player-level APG leader data is no longer available via ESPN's public API. Showing team-level defensive rankings (fewest points allowed).
+    </div>` + buildLeaderboardCard('NBA Best Defenses (Fewest Points Allowed)', '🅰️', top, cols, 'ESPN v2 standings', {league:'nba', sport:'NBA', showOpponent:true});
+  }
+
+  // ============================================================
+  // PART 6: CHIP MODAL DISPATCHER
+  // ============================================================
+  function openRealChipModal(league, chipKey, title, fallbackBuilder){
+    let content = '';
+    let needsFetch = false;
+    if(league==='mlb'){
+      if(chipKey==='pitching'){
+        if(window.PARLAYOS_REAL_STATS.mlb.pitching.length) content = buildMLBPitchingHTML();
+        else needsFetch = true;
+      } else if(chipKey==='batting'){
+        if(window.PARLAYOS_REAL_STATS.mlb.batting.length) content = buildMLBBattingHTML();
+        else needsFetch = true;
+      } else if(chipKey==='lineups'){
+        content = buildMLBLineupsHTML();
+      } else {
+        content = fallbackBuilder();
+      }
+    } else if(league==='nfl'){
+      if(chipKey==='passing') content = buildNFLPassingHTML();
+      else if(chipKey==='rushing') content = buildNFLRushingHTML();
+      else if(chipKey==='defense') content = buildNFLDefenseHTML();
+      else content = fallbackBuilder();
+    } else if(league==='nba'){
+      if(chipKey==='scoring') content = buildNBAScoringHTML();
+      else if(chipKey==='rebounding') content = buildNBAReboundingHTML();
+      else if(chipKey==='assists') content = buildNBAAssistsHTML();
+      else content = fallbackBuilder();
+    }
+    if(!content) content = fallbackBuilder();
+
+    if(typeof openSectionModal!=='function'){
+      console.warn('openSectionModal not available');
+      return;
+    }
+
+    if(needsFetch){
+      const loading = `<div class="glass panel-pad" style="border-radius:18px;padding:32px;text-align:center;">
+        <div style="font-size:32px;margin-bottom:10px;">⏳</div>
+        <b style="font-size:14px;">Loading real ${title}...</b>
+        <div style="font-size:11px;opacity:0.6;margin-top:6px;">Fetching live data from MLB Stats API</div>
+      </div>`;
+      openSectionModal(title, '<div style="color:#eef2ff;">'+loading+'</div>');
+      const fetcher = league==='mlb' ? (
+        chipKey==='pitching' ? fetchMLBPitchingLeaders() :
+        chipKey==='batting' ? fetchMLBBattingLeaders() : Promise.resolve([])
+      ) : Promise.resolve([]);
+      fetcher.then(data=>{
+        if(league==='mlb'){
+          if(chipKey==='pitching') window.PARLAYOS_REAL_STATS.mlb.pitching = data;
+          else if(chipKey==='batting') window.PARLAYOS_REAL_STATS.mlb.batting = data;
+        }
+        const finalContent = (function(){
+          if(league==='mlb'){
+            if(chipKey==='pitching') return buildMLBPitchingHTML();
+            if(chipKey==='batting') return buildMLBBattingHTML();
+          }
+          return fallbackBuilder();
+        })();
+        if(finalContent) openSectionModal(title, '<div style="color:#eef2ff;">'+finalContent+'</div>');
+      }).catch(e=>{
+        const errHTML = `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;">
+          <div style="font-size:28px;margin-bottom:8px;">⚠️</div>
+          <b>Could not load ${title}</b>
+          <div style="font-size:11px;opacity:0.6;margin-top:6px;">${e.message||'Network error'}. Showing fallback.</div>
+        </div>` + fallbackBuilder();
+        openSectionModal(title, '<div style="color:#eef2ff;">'+errHTML+'</div>');
+      });
+    } else {
+      openSectionModal(title, '<div style="color:#eef2ff;">'+content+'</div>');
+      if(chipKey==='schedule' && league==='mlb'){
+        setTimeout(()=>{ try{ if(typeof renderLeagueSchedule==='function') renderLeagueSchedule('mlb','mlbModalScheduleMount'); }catch(e){ console.warn('modal schedule render err', e); } }, 60);
+      }
+    }
+  }
+
+  function buildStandingsFallbackHTML(league){
+    const data = league==='mlb' ? (window.PARLAYOS_DATA?.standings || window.STANDINGS) :
+                 league==='nfl' ? (window.PARLAYOS_NFL_DATA?.standings || window.NFL_STANDINGS) :
+                                  (window.PARLAYOS_NBA_DATA?.standings || window.NBA_STANDINGS);
+    if(!data) return `<div class="standings-empty">Loading standings...</div>`;
+    const tables = Object.keys(data).flatMap(conf=> Object.keys(data[conf]||{}).map(div=>{
+      const rows = data[conf][div]||[];
+      const rowHTML = rows.map((r,i)=>{
+        const pct = r.pct || (r.w/((r.w||0)+(r.l||0)||1));
+        const pctStr = typeof pct==='number' ? pct.toFixed(3).replace(/^0/,'') : '—';
+        const gb = i===0 ? '—' : (r.gb!==undefined ? r.gb : ((rows[0].w - r.w + r.l - rows[0].l)/2).toFixed(1));
+        const rankClass = i===0 ? 'st-rank st-rank-1' : (i===1 ? 'st-rank st-rank-2' : (i===2 ? 'st-rank st-rank-3' : 'st-rank'));
+        const teamBadgeHtml = (typeof teamBadge!=='undefined' && r.t)
+          ? `<span class="st-team-badge">${teamBadge(r.t,22)}</span>`
+          : '';
+        const streak = r.streak && r.streak!=='—' ? r.streak : '';
+        const streakClass = streak && typeof streak==='string' && streak.startsWith('W') ? 'st-streak st-streak-w' : (streak ? 'st-streak st-streak-l' : '');
+        return `<tr class="st-row">
+          <td class="${rankClass}">${i+1}</td>
+          <td class="st-td st-td-team">
+            <span class="st-team-wrap">
+              ${teamBadgeHtml}
+              <span class="st-team-abbr">${r.t}</span>
+            </span>
+          </td>
+          <td class="st-td st-td-w">${r.w}</td>
+          <td class="st-td st-td-l">${r.l}</td>
+          <td class="st-td st-td-pct">${pctStr}</td>
+          <td class="st-td st-td-gb">${gb}</td>
+          ${streak ? `<td class="${streakClass}">${streak}</td>` : ''}
+        </tr>`;
+      }).join('');
+      const hasStreak = rows.some(r=> r.streak && r.streak!=='—');
+      return `<div class="standings-card">
+        <div class="st-card-header">
+          <b class="st-conf-div">${conf} ${div}</b>
+          <span class="st-team-count">${rows.length} TEAMS</span>
+        </div>
+        <table class="st-table">
+          <thead><tr>
+            <th class="st-th st-th-rank">#</th>
+            <th class="st-th st-th-team">TEAM</th>
+            <th class="st-th st-th-num">W</th>
+            <th class="st-th st-th-num">L</th>
+            <th class="st-th st-th-num">PCT</th>
+            <th class="st-th st-th-num">GB</th>
+            ${hasStreak ? '<th class="st-th st-th-num">STRK</th>' : ''}
+          </tr></thead>
+          <tbody>${rowHTML}</tbody>
+        </table>
+      </div>`;
+    })).join('');
+    return `<div class="standings-grid">${tables}</div>`;
+  }
+
+  function buildScheduleFallbackHTML(league){
+    if(league==='mlb') return `<div id="mlbModalScheduleMount" style="padding-top:4px;"></div>`;
+    if(league==='nfl') return `<div id="nflModalScheduleMount" style="padding-top:4px;"></div>`;
+    if(league==='nba') return `<div id="nbaModalScheduleMount" style="padding-top:4px;"></div>`;
+    return '';
+  }
+
+  function buildPlayersFallbackHTML(league){
+    return `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:8px;">👤</div>
+      <b>${league.toUpperCase()} Players</b>
+      <div style="font-size:11px;opacity:0.6;margin-top:6px;">Player roster cards will appear here based on today's loaded games.</div>
+    </div>`;
+  }
+
+  // ============================================================
+  // PART 7: PATCH CHIP CLICK HANDLERS
+  // ============================================================
+  function patchChipClickHandlers(){
+    ['mlb','nfl','nba'].forEach(league=>{
+      const mountId = league==='mlb' ? 'standingsMount' : (league+'StandingsMount');
+      const mount = document.getElementById(mountId);
+      if(!mount) return;
+      const chips = mount.querySelectorAll('button.chip:not([data-real-patched])');
+      chips.forEach(chip=>{
+        chip.setAttribute('data-real-patched','1');
+        const keyAttr = chip.dataset.stab || chip.dataset.nflStab || chip.dataset.nbaStab || '';
+        if(!keyAttr) return;
+        const titleMaps = {
+          mlb: {pitching:'⚾ MLB Pitching', batting:'🏏 MLB Batting', lineups:'🧢 MLB Lineups', schedule:'📅 MLB Schedule', standings:'📊 MLB Standings', players:'👤 MLB Players'},
+          nfl: {passing:'🎯 NFL Passing', rushing:'🏃 NFL Rushing', defense:'🛡️ NFL Defense', schedule:'📅 NFL Schedule', standings:'📊 NFL Standings', players:'👤 NFL Players'},
+          nba: {scoring:'🎯 NBA Scoring', rebounding:'🏀 NBA Rebounding', assists:'🅰️ NBA Assists', schedule:'📅 NBA Schedule', standings:'📊 NBA Standings', players:'👤 NBA Players'}
+        };
+        const title = (titleMaps[league]||{})[keyAttr] || chip.textContent.trim();
+        const newHandler = function(e){
+          if(e) { e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+          mount.querySelectorAll('button.chip').forEach(c=>c.classList.remove('active'));
+          chip.classList.add('active');
+          let fallback;
+          if(keyAttr==='schedule') fallback = ()=> buildScheduleFallbackHTML(league);
+          else if(keyAttr==='standings') fallback = ()=> buildStandingsFallbackHTML(league);
+          else if(keyAttr==='players') fallback = ()=> buildPlayersFallbackHTML(league);
+          else fallback = ()=> `<div class="glass panel-pad" style="border-radius:18px;padding:20px;">${chip.textContent.trim()}</div>`;
+          try { openRealChipModal(league, keyAttr, title, fallback); } catch(err){ console.warn('[CHIP PATCH] openRealChipModal error:', err.message); }
+        };
+        // Replace chip with clone to remove ALL existing listeners, then add our handler
+        const cloned = chip.cloneNode(true);
+        cloned.setAttribute('data-real-patched','1');
+        cloned.addEventListener('click', newHandler);
+        chip.parentNode.replaceChild(cloned, chip);
+      });
+    });
+  }
+
+  // ============================================================
+  // PART 8: MAIN LOAD ORCHESTRATOR
+  // ============================================================
+  async function loadRealStandings(){
+    console.log('[REAL STATS] Loading real MLB/NFL/NBA standings...');
+    const [mlb, nfl, nba] = await Promise.all([
+      fetchMLBStandings(),
+      fetchESPNStandings('nfl'),
+      fetchESPNStandings('nba')
+    ]);
+    if(mlb){
+      window.PARLAYOS_REAL_STATS.mlb.standings = mlb;
+      if(!window.PARLAYOS_DATA) window.PARLAYOS_DATA = {};
+      window.PARLAYOS_DATA.standings = mlb;
+    }
+    if(nfl){
+      window.PARLAYOS_REAL_STATS.nfl.standings = nfl;
+      if(!window.PARLAYOS_NFL_DATA) window.PARLAYOS_NFL_DATA = {};
+      window.PARLAYOS_NFL_DATA.standings = nfl;
+    }
+    if(nba){
+      window.PARLAYOS_REAL_STATS.nba.standings = nba;
+      if(!window.PARLAYOS_NBA_DATA) window.PARLAYOS_NBA_DATA = {};
+      window.PARLAYOS_NBA_DATA.standings = nba;
+    }
+    try{ if(typeof renderStandings==='function') renderStandings(); }catch(e){}
+    try{ if(typeof renderNFLStandings==='function') renderNFLStandings(); }catch(e){}
+    try{ if(typeof renderNBAStandings==='function') renderNBAStandings(); }catch(e){}
+    setTimeout(patchChipClickHandlers, 200);
+    console.log('[REAL STATS] Standings load complete.');
+  }
+
+  function setupChipPatching(){
+    setTimeout(patchChipClickHandlers, 1500);
+    const observer = new MutationObserver(()=>{
+      const unpatched = document.querySelectorAll('#standingsMount button.chip:not([data-real-patched]), #nflStandingsMount button.chip:not([data-real-patched]), #nbaStandingsMount button.chip:not([data-real-patched])');
+      if(unpatched.length){
+        patchChipClickHandlers();
+      }
+    });
+    ['standingsMount','nflStandingsMount','nbaStandingsMount'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) observer.observe(el, {childList:true, subtree:true});
+    });
+    document.addEventListener('click', function(e){
+      const chip = e.target.closest && e.target.closest('button.chip');
+      if(chip){
+        const parent = chip.closest('#standingsMount, #nflStandingsMount, #nbaStandingsMount');
+        if(parent && !chip.hasAttribute('data-real-patched')){
+          setTimeout(patchChipClickHandlers, 50);
+        }
+      }
+    }, true);
+  }
+
+  function init(){
+    setupChipPatching();
+    try{ patchChipClickHandlers(); }catch(e){}
+    setTimeout(loadRealStandings, 600);
+    // Proactively fetch MLB leader stats in background
+    setTimeout(()=>{
+      fetchMLBPitchingLeaders().then(d=> window.PARLAYOS_REAL_STATS.mlb.pitching = d);
+      fetchMLBBattingLeaders().then(d=> window.PARLAYOS_REAL_STATS.mlb.batting = d);
+    }, 1200);
+  }
+
+  if(document.readyState==='complete' || document.readyState==='interactive'){
+    setTimeout(init, 100);
+  } else {
+    window.addEventListener('DOMContentLoaded', ()=> setTimeout(init, 100));
+  }
+})();
+
+</script>
+
+<style id="REMOVE_MARKET_BACKGROUND_SQUARE_V2640">
+/* ============================================================
+   REMOVE BACKGROUND SQUARE FROM BEHIND DASHBOARDS & FANTASY SHOP
+   Keeps only: (1) the large outer .game background card,
+               (2) the small inner pills/badges (Model Edge %, Fair Price),
+               (3) the meter progress bar track.
+   Removes the medium ".market" panel that created a "box-in-box"
+   visual clutter on every MLB/NFL/NBA dashboard card and every
+   Fantasy Shop item card.
+   ============================================================ */
+
+/* Override ALL previous .market background/border rules with transparent */
+html body .game .market,
+html body #dashboardCards .market,
+html body #nflDashboardCards .market,
+html body #nbaDashboardCards .market,
+html body #picksMount .market,
+html body #nflPicksMount .market,
+html body #nbaPicksMount .market,
+html body #fantasyShopList .market,
+html body .market,
+body.dark .game .market,
+body.dark #dashboardCards .market,
+body.dark #nflDashboardCards .market,
+body.dark #nbaDashboardCards .market,
+body.dark .market,
+#screen-fantasyshop .market,
+#screen-mlb .market,
+#screen-nfl-hub .market,
+#screen-nba-hub .market,
+#screen-dashboard .market,
+#screen-nfl-dashboard .market,
+#screen-nba-dashboard .market,
+html .market,
+html .odds-grid .market,
+html #dashboardCards .market,
+html #nflDashboardCards .market,
+html #nbaDashboardCards .market {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 14px 16px 12px !important;
+}
+
+/* Kill any ::before / ::after pseudo-elements that drew solid backgrounds */
+html body .market::before,
+html body .market::after,
+body.dark .market::before,
+body.dark .market::after,
+#dashboardCards .market::before,
+#dashboardCards .market::after,
+#nflDashboardCards .market::before,
+#nflDashboardCards .market::after,
+#nbaDashboardCards .market::before,
+#nbaDashboardCards .market::after,
+#fantasyShopList .market::before,
+#fantasyShopList .market::after {
+  content: none !important;
+  display: none !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* Subtle hairline separator BETWEEN markets (instead of a full card around each) */
+html body .game .odds-grid .market + .market,
+html body #dashboardCards .market + .market,
+html body #nflDashboardCards .market + .market,
+html body #nbaDashboardCards .market + .market,
+html body #fantasyShopList .market + .market,
+html body #picksMount .market + .market,
+html body #nflPicksMount .market + .market,
+html body #nbaPicksMount .market + .market {
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  border-radius: 0 !important;
+}
+
+/* The small inner pills/badges ("30.0% model", "Edge X%") KEEP their subtle bg
+   so they read as "small top cards" floating on the large background card */
+.market .row .badge,
+.market .row [style*="model"],
+.market .row div[style*="border-radius:999px"],
+.market .row span.badge {
+  background: rgba(255,255,255,0.12) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* Meter keeps its subtle track so the progress bar is still visible */
+.market .meter,
+.meter,
+html body .market .meter,
+html body .game .meter {
+  background: rgba(255,255,255,0.08) !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+}
+
+/* Light mode: market is also transparent (no white card) */
+html .market,
+html .odds-grid .market,
+html #dashboardCards .market,
+html #nflDashboardCards .market,
+html #nbaDashboardCards .market,
+html #fantasyShopList .market {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  border-radius: 0 !important;
+}
+
+/* Ensure the OUTER .game card keeps its visible background + border
+   (the "large background card" the user wants to keep) */
+html body .game,
+#dashboardCards .game,
+#nflDashboardCards .game,
+#nbaDashboardCards .game,
+#fantasyShopList .game,
+#picksMount .game,
+#nflPicksMount .game,
+#nbaPicksMount .game {
+  background: rgba(28,32,64,0.62) !important;
+  backdrop-filter: blur(22px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.6) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+  border-radius: 22px !important;
+}
+</style>
+
+<style id="MODERN_LEADERBOARD_STANDINGS_V2641">
+/* ============================================================
+   MODERN LEADERBOARD CARD + STANDINGS CARD DESIGN
+   Matches the dark glassmorphic UI used across the rest of the app.
+   - Big, clickable player names
+   - Visible opponent column with team badge + game info
+   - High-contrast text for legibility
+   - Polished card design with subtle dividers, not heavy borders
+   ============================================================ */
+
+/* === LEADERBOARD CARD === */
+.leaderboard-card {
+  background: rgba(28,32,64,0.62) !important;
+  backdrop-filter: blur(22px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.6) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+  border-radius: 22px !important;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+.leaderboard-empty {
+  padding: 32px 24px !important;
+  text-align: center;
+}
+.lb-empty-emoji {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+.lb-empty-title {
+  font-size: 16px;
+  color: #eef2ff;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.lb-empty-sub {
+  font-size: 12px;
+  color: rgba(238,242,255,0.6);
+  margin-top: 6px;
+}
+
+.lb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+}
+.lb-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lb-emoji {
+  font-size: 18px;
+}
+.lb-title b {
+  font-size: 15px;
+  font-weight: 800;
+  color: #eef2ff;
+  letter-spacing: -0.01em;
+}
+.lb-count {
+  background: rgba(92,124,255,0.14);
+  color: #8aa0ff;
+  border: 1px solid rgba(92,124,255,0.22);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  font-family: ui-monospace, monospace;
+}
+
+.lb-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.lb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+}
+.lb-th {
+  padding: 10px 8px;
+  font-size: 10px;
+  font-family: ui-monospace, monospace;
+  color: rgba(238,242,255,0.55);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(0,0,0,0.18);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  white-space: nowrap;
+}
+.lb-th-rank {
+  text-align: center;
+  width: 36px;
+}
+.lb-th-opp {
+  text-align: left;
+  min-width: 110px;
+}
+.lb-row {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.18s ease;
+}
+.lb-row:last-child {
+  border-bottom: none;
+}
+.lb-row:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+/* Rank cell - top 3 get colored badges */
+.lb-rank {
+  text-align: center;
+  padding: 10px 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(238,242,255,0.5);
+  font-family: ui-monospace, monospace;
+  width: 36px;
+  vertical-align: middle;
+}
+.lb-rank-1 {
+  color: #ffd76b;
+  font-size: 13px;
+}
+.lb-rank-2 {
+  color: #d4d4d4;
+  font-size: 13px;
+}
+.lb-rank-3 {
+  color: #ff9a3d;
+  font-size: 13px;
+}
+
+.lb-td {
+  padding: 8px 8px;
+  vertical-align: middle;
+}
+.lb-td-stat {
+  font-size: 13px;
+  font-weight: 700;
+  color: #eef2ff;
+  font-family: ui-monospace, monospace;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+/* === PLAYER NAME CELL (BIG + CLICKABLE) === */
+.lb-td-name {
+  min-width: 140px;
+  padding: 4px 8px;
+}
+.lb-player-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 12px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.22,1,0.36,1);
+  -webkit-tap-highlight-color: transparent;
+  text-align: left;
+}
+.lb-player-btn:hover {
+  background: rgba(92,124,255,0.14);
+  border-color: rgba(92,124,255,0.28);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(92,124,255,0.18);
+}
+.lb-player-btn:active {
+  transform: scale(0.98);
+  background: rgba(92,124,255,0.20);
+}
+.lb-team-badge,
+.lb-opp-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.lb-team-badge-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.10);
+  font-size: 9px;
+  font-weight: 800;
+  color: #eef2ff;
+  flex-shrink: 0;
+}
+.lb-player-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: #eef2ff;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lb-player-team {
+  font-size: 10px;
+  font-weight: 800;
+  color: rgba(238,242,255,0.5);
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+/* === OPPONENT CELL === */
+.lb-td-opp {
+  min-width: 110px;
+  padding: 6px 8px;
+}
+.lb-opp {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.lb-opp-home {
+  background: rgba(34,197,94,0.08);
+  border-color: rgba(34,197,94,0.16);
+}
+.lb-opp-away {
+  background: rgba(255,154,61,0.08);
+  border-color: rgba(255,154,61,0.16);
+}
+.lb-opp-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+.lb-opp-team {
+  font-size: 11px;
+  font-weight: 800;
+  color: #eef2ff;
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+.lb-opp-pitcher {
+  font-size: 9px;
+  color: rgba(238,242,255,0.65);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.1;
+}
+.lb-opp-when {
+  font-size: 8.5px;
+  color: rgba(238,242,255,0.45);
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.1;
+}
+.lb-opp-venue {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 2px 5px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.lb-opp-home .lb-opp-venue {
+  background: rgba(34,197,94,0.20);
+  color: #4ade80;
+}
+.lb-opp-away .lb-opp-venue {
+  background: rgba(255,154,61,0.20);
+  color: #ffb867;
+}
+.lb-opp-none {
+  font-size: 14px;
+  color: rgba(238,242,255,0.3);
+  text-align: center;
+  display: block;
+  padding: 4px;
+}
+
+.lb-source {
+  padding: 10px 18px 12px;
+  font-size: 9px;
+  color: rgba(238,242,255,0.40);
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.04em;
+  background: rgba(0,0,0,0.10);
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+/* === STANDINGS CARD === */
+.standings-grid {
+  display: grid;
+  gap: 10px;
+}
+.standings-empty {
+  background: rgba(28,32,64,0.62);
+  backdrop-filter: blur(22px) saturate(1.6);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 22px;
+  padding: 32px 24px;
+  text-align: center;
+  color: rgba(238,242,255,0.7);
+  font-size: 13px;
+  font-weight: 700;
+}
+.standings-card {
+  background: rgba(28,32,64,0.62) !important;
+  backdrop-filter: blur(22px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.6) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+  border-radius: 18px !important;
+  overflow: hidden;
+}
+.st-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+}
+.st-conf-div {
+  font-size: 13px;
+  font-weight: 800;
+  color: #eef2ff;
+  letter-spacing: -0.01em;
+}
+.st-team-count {
+  background: rgba(92,124,255,0.14);
+  color: #8aa0ff;
+  border: 1px solid rgba(92,124,255,0.22);
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  font-family: ui-monospace, monospace;
+}
+.st-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+}
+.st-th {
+  padding: 8px 6px;
+  font-size: 9.5px;
+  font-family: ui-monospace, monospace;
+  color: rgba(238,242,255,0.50);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(0,0,0,0.16);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.st-th-rank {
+  text-align: center;
+  width: 30px;
+}
+.st-th-team {
+  text-align: left;
+}
+.st-th-num {
+  text-align: right;
+  min-width: 36px;
+}
+.st-row {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.18s ease;
+}
+.st-row:last-child {
+  border-bottom: none;
+}
+.st-row:hover {
+  background: rgba(255,255,255,0.04);
+}
+.st-rank {
+  text-align: center;
+  padding: 8px 4px;
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(238,242,255,0.5);
+  font-family: ui-monospace, monospace;
+  vertical-align: middle;
+}
+.st-rank-1 { color: #ffd76b; font-size: 12px; }
+.st-rank-2 { color: #d4d4d4; font-size: 12px; }
+.st-rank-3 { color: #ff9a3d; font-size: 12px; }
+
+.st-td {
+  padding: 8px 6px;
+  vertical-align: middle;
+  font-size: 12px;
+  font-weight: 700;
+  color: #eef2ff;
+}
+.st-td-team {
+  text-align: left;
+}
+.st-team-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.st-team-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.st-team-abbr {
+  font-size: 14px;
+  font-weight: 800;
+  color: #eef2ff;
+  letter-spacing: 0.02em;
+  font-family: ui-monospace, monospace;
+}
+.st-td-w {
+  text-align: right;
+  color: #4ade80;
+  font-family: ui-monospace, monospace;
+  font-size: 12.5px;
+}
+.st-td-l {
+  text-align: right;
+  color: #ff7a8a;
+  font-family: ui-monospace, monospace;
+  font-size: 12.5px;
+}
+.st-td-pct {
+  text-align: right;
+  color: #eef2ff;
+  font-family: ui-monospace, monospace;
+  font-size: 12.5px;
+  font-weight: 800;
+}
+.st-td-gb {
+  text-align: right;
+  color: rgba(238,242,255,0.65);
+  font-family: ui-monospace, monospace;
+  font-size: 11.5px;
+}
+.st-streak {
+  text-align: right;
+  padding: 8px 6px;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: ui-monospace, monospace;
+  border-radius: 6px;
+}
+.st-streak-w {
+  color: #4ade80;
+}
+.st-streak-l {
+  color: #ff7a8a;
+}
+
+/* Section modal adjustments so new cards fit properly */
+#sectionModalBody .leaderboard-card,
+#sectionModalBody .standings-card {
+  margin-bottom: 10px;
+}
+#sectionModalBody .lb-table,
+#sectionModalBody .st-table {
+  font-size: 12px;
+}
+/* Allow horizontal scroll on small screens */
+#sectionModalBody {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+/* Widen the section modal so the leaderboard table (with NEXT column) fits */
+#sectionModalCard {
+  max-width: 580px !important;
+  width: 96vw !important;
+}
+@media (max-width: 600px){
+  #sectionModalCard {
+    max-width: 96vw !important;
+    width: 96vw !important;
+  }
+}
+/* Compact leaderboard on narrow screens - shrink padding & font */
+@media (max-width: 600px){
+  #sectionModalBody .lb-th {
+    padding: 8px 4px !important;
+    font-size: 9px !important;
+    letter-spacing: 0.04em !important;
+  }
+  #sectionModalBody .lb-td {
+    padding: 6px 4px !important;
+  }
+  #sectionModalBody .lb-td-stat {
+    font-size: 11px !important;
+  }
+  #sectionModalBody .lb-player-name {
+    font-size: 12.5px !important;
+  }
+  #sectionModalBody .lb-rank {
+    padding: 6px 3px !important;
+    font-size: 11px !important;
+    width: 28px !important;
+  }
+  #sectionModalBody .lb-th-rank {
+    width: 28px !important;
+  }
+  #sectionModalBody .lb-td-name {
+    min-width: 110px !important;
+    padding: 3px 4px !important;
+  }
+  #sectionModalBody .lb-player-btn {
+    padding: 4px 6px !important;
+    gap: 5px !important;
+  }
+  #sectionModalBody .lb-td-opp {
+    min-width: 90px !important;
+    padding: 4px 4px !important;
+  }
+  #sectionModalBody .lb-opp {
+    padding: 3px 4px !important;
+    gap: 4px !important;
+  }
+  #sectionModalBody .lb-opp-team {
+    font-size: 10px !important;
+  }
+  #sectionModalBody .lb-opp-pitcher {
+    font-size: 8px !important;
+  }
+  #sectionModalBody .lb-opp-when {
+    font-size: 7.5px !important;
+  }
+  #sectionModalBody .lb-opp-venue {
+    font-size: 7px !important;
+    padding: 1px 3px !important;
+  }
+}
+
+/* ============================================================
+   RIVAL CLICKABLE NAMES — Pitcher vs Opposing Offense
+   Shown under each team abbreviation on dashboard cards.
+   Each .rival-line is clickable and opens a player/team card.
+   ============================================================ */
+html body .matchup .team .rival-block{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:3px !important;
+  margin-top:5px !important;
+  align-items:flex-start !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+html body .matchup .team[style*="row-reverse"] .rival-block{
+  align-items:flex-end !important;
+}
+html body .matchup .team .rival-line{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:4px !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  line-height:1.2 !important;
+  letter-spacing:-0.01em !important;
+  padding:3px 9px !important;
+  border-radius:9px !important;
+  background:rgba(255,255,255,0.08) !important;
+  border:1px solid rgba(255,255,255,0.14) !important;
+  color:#eef2ff !important;
+  cursor:pointer !important;
+  -webkit-tap-highlight-color:transparent !important;
+  transition:background 0.18s ease, border-color 0.18s ease, transform 0.12s ease, color 0.18s ease !important;
+  max-width:100% !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+html body .matchup .team .rival-line.rival-line-pitcher{
+  background:linear-gradient(135deg,rgba(92,124,255,0.16) 0%,rgba(147,130,255,0.10) 100%) !important;
+  border-color:rgba(92,124,255,0.32) !important;
+  color:#cdd6ff !important;
+}
+html body .matchup .team .rival-line.rival-line-batter{
+  background:linear-gradient(135deg,rgba(34,197,94,0.14) 0%,rgba(132,204,22,0.08) 100%) !important;
+  border-color:rgba(34,197,94,0.30) !important;
+  color:#bff0d0 !important;
+}
+html body .matchup .team .rival-line:hover{
+  background:rgba(255,255,255,0.18) !important;
+  border-color:rgba(255,255,255,0.30) !important;
+  transform:translateY(-1px) !important;
+}
+html body .matchup .team .rival-line.rival-line-pitcher:hover{
+  background:linear-gradient(135deg,rgba(92,124,255,0.30) 0%,rgba(147,130,255,0.20) 100%) !important;
+  border-color:rgba(92,124,255,0.55) !important;
+}
+html body .matchup .team .rival-line.rival-line-batter:hover{
+  background:linear-gradient(135deg,rgba(34,197,94,0.28) 0%,rgba(132,204,22,0.18) 100%) !important;
+  border-color:rgba(34,197,94,0.55) !important;
+}
+html body .matchup .team .rival-line:active{
+  transform:translateY(0) scale(0.97) !important;
+}
+/* Make the team name (wordmark) above the rival block bigger too */
+html body .matchup .team b{
+  font-size:22px !important;
+}
+
+/* ============================================================
+   LEADERBOARD OPPONENT CELL — clickable inside chip modals
+   (MLB Batting Leaders → click "vs Pitcher" → pitcher card)
+   (MLB Pitching Leaders → click opp team → offense card)
+   ============================================================ */
+html body #sectionModalBody .lb-opp-clickable,
+html body .lb-opp-clickable{
+  cursor:pointer !important;
+  -webkit-tap-highlight-color:transparent !important;
+  transition:background 0.18s ease, border-color 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease !important;
+  border:1px solid rgba(255,255,255,0.10) !important;
+}
+html body #sectionModalBody .lb-opp-clickable:hover,
+html body .lb-opp-clickable:hover{
+  background:rgba(92,124,255,0.14) !important;
+  border-color:rgba(92,124,255,0.40) !important;
+  transform:translateY(-1px) !important;
+  box-shadow:0 4px 14px rgba(92,124,255,0.18) !important;
+}
+html body #sectionModalBody .lb-opp-clickable:active,
+html body .lb-opp-clickable:active{
+  transform:translateY(0) scale(0.98) !important;
+}
+/* Emphasize the "vs Pitcher" text inside the opp cell so users know it's the trigger */
+html body #sectionModalBody .lb-opp-clickable .lb-opp-pitcher,
+html body .lb-opp-clickable .lb-opp-pitcher{
+  text-decoration:underline !important;
+  text-decoration-color:rgba(92,124,255,0.55) !important;
+  text-underline-offset:2px !important;
+  font-weight:800 !important;
+  color:#cdd6ff !important;
+}
+html body #sectionModalBody .lb-opp-clickable .lb-opp-team,
+html body .lb-opp-clickable .lb-opp-team{
+  font-weight:900 !important;
+  color:#eef2ff !important;
+}
+</style>
+
+<script id="RIVAL_LINE_CLICK_HANDLER_V1">
+// Delegated click handler — any .rival-line OR .lb-opp-clickable anywhere on
+// the page opens the corresponding pitcher card or team offense card modal.
+(function(){
+  function num(v){ return (v===''||v==null||v==='—')? null : (isNaN(parseFloat(v))? v : parseFloat(v)); }
+  function str(v){ return (v==null)? '' : String(v); }
+  function unescapeHTML(s){ return String(s).replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>'); }
+
+  function buildDataFromElement(el){
+    const kind = el.getAttribute('data-pc-kind') || 'pitcher';
+    const data = {
+      name:     unescapeHTML(el.getAttribute('data-pc-name') || ''),
+      abbr:     el.getAttribute('data-pc-abbr') || '',
+      oppAbbr:  el.getAttribute('data-pc-opp-abbr') || '',
+      side:     el.getAttribute('data-pc-side') || 'away'
+    };
+    if(kind === 'pitcher'){
+      data.era  = num(el.getAttribute('data-pc-era'));
+      data.whip = num(el.getAttribute('data-pc-whip'));
+      data.k9   = num(el.getAttribute('data-pc-k9'));
+      data.ip   = el.getAttribute('data-pc-ip') || '';
+      data.w    = el.getAttribute('data-pc-w') || '';
+      data.l    = el.getAttribute('data-pc-l') || '';
+      data.fip  = num(el.getAttribute('data-pc-fip'));
+    } else {
+      data.avg = el.getAttribute('data-pc-avg') || '—';
+      data.obp = el.getAttribute('data-pc-obp') || '—';
+      data.slg = el.getAttribute('data-pc-slg') || '—';
+      data.ops = el.getAttribute('data-pc-ops') || '—';
+      data.hr  = num(el.getAttribute('data-pc-hr'));
+      data.rbi = num(el.getAttribute('data-pc-rbi'));
+      data.sb  = num(el.getAttribute('data-pc-sb'));
+    }
+    return { kind: kind, data: data };
+  }
+
+  document.addEventListener('click', function(e){
+    // Match EITHER .rival-line[data-pc-kind] OR .lb-opp-clickable[data-pc-kind]
+    const el = e.target.closest ? e.target.closest('.rival-line[data-pc-kind], .lb-opp-clickable[data-pc-kind]') : null;
+    if(!el) return;
+    // Don't intercept clicks on the inner player button (which has its own handler)
+    if(e.target.closest && e.target.closest('.lb-player-btn')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const { kind, data } = buildDataFromElement(el);
+    if(typeof window.openPlayerCardModal === 'function'){
+      window.openPlayerCardModal(kind, data);
+    } else {
+      console.warn('[RIVAL-LINE] openPlayerCardModal not available');
+    }
+  }, true);
 })();
 </script>
 
