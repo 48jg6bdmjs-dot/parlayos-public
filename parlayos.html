@@ -33887,7 +33887,7 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
         <div class="pc-vs"><span class="pc-vs-icon">⚡</span><span>${vsLabel}</span></div>
         ${statsHTML}
         ${teamDefHTML}
-        ${isPrimary ? '<div class="pc-foot">Season stats • Source: loaded game data</div>' : ''}
+        ${isPrimary ? '<div class="pc-foot">Season stats • Source: loaded game data + statsapi.mlb.com</div>' : ''}
       </div>
     `;
   }
@@ -34126,7 +34126,307 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
 <!-- === REAL STANDINGS + CHIP STATS INJECT === -->
 <script id="parlayos-real-stats-inject">
 /* === Real MLB/NFL/NBA Standings + Chip Stats Fetcher ===
+ * Appended to parlayos.html before 
+
+<script>
+/* === Live MLB Schedule Fetcher v2 ===
  * Appended to parlayos.html before </body>
+ *
+ * What it does:
+ *  1) When the MLB schedule calendar renders for a team+month that has no
+ *     inline PARLAYOS_DATA.schedules coverage, fetches the team's real
+ *     schedule for that month from statsapi.mlb.com (CORS-friendly).
+ *  2) Normalizes the response into the same shape used by the inline data:
+ *       { date, opp, home, result, myScore, oppScore, time }
+ *  3) Merges into window.PARLAYOS_DATA.schedules[teamAbbr] (de-duped by date+opp)
+ *     so subsequent renders use the cached data.
+ *  4) Triggers a re-render of the visible calendar mount(s).
+ *
+ * Implementation note: setCalState is defined inside an IIFE in the page,
+ * so we cannot hook window.setCalState. Instead, we listen for click events
+ * on .cal-nav and .tappable-team elements (capture phase, runs before the
+ * page's own handler), record the click target, then after the page's handler
+ * finishes (setTimeout 0), check if data is missing and fetch if needed.
+ */
+(function(){
+  'use strict';
+  if(window.__PARLAYOS_LIVE_SCHED_FETCHER) return;
+  window.__PARLAYOS_LIVE_SCHED_FETCHER = true;
+
+  // MLB team abbreviation -> statsapi teamId
+  const MLB_TEAM_IDS = {
+    ARI:109, ATL:144, BAL:110, BOS:111, CHC:112, CWS:145, CIN:113, CLE:114,
+    COL:115, DET:116, HOU:117, KC:118, LAA:108, LAD:119, MIA:146, MIL:158,
+    MIN:142, NYM:121, NYY:147, OAK:133, PHI:143, PIT:134, SD:135, SF:137,
+    SEA:136, STL:138, TB:139, TEX:140, TOR:141, WSH:120
+  };
+
+  // Track in-flight requests to avoid duplicate fetches
+  const inflight = new Set(); // keys: "STL-2026-07"
+
+  function monthBounds(yr, mo){
+    // mo is 0-indexed
+    const start = new Date(yr, mo, 1);
+    const end = new Date(yr, mo + 1, 0); // last day of month
+    const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    return { startDate: fmt(start), endDate: fmt(end) };
+  }
+
+  function normalizeOppName(name){
+    if(!name) return '';
+    const map = {
+      'Diamondbacks':'ARI','D-backs':'ARI','Braves':'ATL','Orioles':'BAL',
+      'Red Sox':'BOS','Cubs':'CHC','White Sox':'CWS','Reds':'CIN','Guardians':'CLE',
+      'Rockies':'COL','Tigers':'DET','Astros':'HOU','Royals':'KC','Angels':'LAA',
+      'Dodgers':'LAD','Marlins':'MIA','Brewers':'MIL','Twins':'MIN','Mets':'NYM',
+      'Yankees':'NYY','Athletics':'OAK','A\'s':'OAK','Phillies':'PHI','Pirates':'PIT',
+      'Padres':'SD','Giants':'SF','Mariners':'SEA','Cardinals':'STL','Rays':'TB',
+      'Rangers':'TEX','Blue Jays':'TOR','Nationals':'WSH'
+    };
+    for(const [full, abbr] of Object.entries(map)){
+      if(name.includes(full)) return abbr;
+    }
+    return name.split(' ').slice(-1)[0].slice(0,3).toUpperCase();
+  }
+
+  function buildScheduleEntry(gameDate, teamAbbr, game){
+    try{
+      const awayId = game.teams?.away?.team?.id;
+      const homeId = game.teams?.home?.team?.id;
+      const teamId = MLB_TEAM_IDS[teamAbbr];
+      if(!teamId) return null;
+      const isHome = homeId === teamId;
+      const oppId = isHome ? awayId : homeId;
+      if(!oppId) return null;
+      const oppName = isHome ? (game.teams?.away?.team?.name||'') : (game.teams?.home?.team?.name||'');
+      let opp = normalizeOppName(oppName);
+      if(!opp || opp.length > 3){
+        for(const [abbr, id] of Object.entries(MLB_TEAM_IDS)){
+          if(id === oppId){ opp = abbr; break; }
+        }
+      }
+
+      const status = game.status?.detailedState || game.status?.statusCode || '';
+      const isFinal = /final|game over|completed/i.test(status);
+      const isPostponed = /postponed|suspended|cancelled|canceled/i.test(status);
+      const isInProgress = /in progress|live|warmup|pre-game/i.test(status);
+
+      const linescore = game.linescore || {};
+      let myScore = null, oppScore = null;
+      if(isFinal || isInProgress){
+        const awayRuns = parseInt(linescore.teams?.away?.runs ?? game.teams?.away?.score ?? '', 10);
+        const homeRuns = parseInt(linescore.teams?.home?.runs ?? game.teams?.home?.score ?? '', 10);
+        if(!isNaN(awayRuns) && !isNaN(homeRuns)){
+          if(isHome){
+            myScore = homeRuns;
+            oppScore = awayRuns;
+          } else {
+            myScore = awayRuns;
+            oppScore = homeRuns;
+          }
+        }
+      }
+
+      let result = null;
+      if(isFinal && myScore !== null && oppScore !== null){
+        if(myScore > oppScore) result = 'W';
+        else if(myScore < oppScore) result = 'L';
+        else result = 'T';
+      }
+
+      let time = '';
+      if(!isFinal && !isPostponed && game.gameDate){
+        try{
+          const d = new Date(game.gameDate);
+          time = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/New_York'});
+        }catch(e){}
+      }
+
+      if(isPostponed){
+        return { date: gameDate, opp, home: isHome, result: null, myScore: null, oppScore: null, time: '', postponed: true };
+      }
+
+      return { date: gameDate, opp, home: isHome, result, myScore, oppScore, time };
+    }catch(e){
+      console.warn('[LiveSched] buildScheduleEntry err', e);
+      return null;
+    }
+  }
+
+  async function fetchTeamMonth(teamAbbr, yr, mo){
+    const teamId = MLB_TEAM_IDS[teamAbbr];
+    if(!teamId) return [];
+    const key = `${teamAbbr}-${yr}-${String(mo+1).padStart(2,'0')}`;
+    if(inflight.has(key)) return [];
+    inflight.add(key);
+    try{
+      const { startDate, endDate } = monthBounds(yr, mo);
+      const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId=${teamId}&startDate=${startDate}&endDate=${endDate}&hydrate=team,linescore,probablePitcher`;
+      const res = await fetch(url);
+      if(!res.ok){ console.warn('[LiveSched] fetch failed', res.status); return []; }
+      const data = await res.json();
+      const dates = data.dates || [];
+      const out = [];
+      dates.forEach(d => {
+        const gameDate = d.date;
+        (d.games || []).forEach(g => {
+          const entry = buildScheduleEntry(gameDate, teamAbbr, g);
+          if(entry) out.push(entry);
+        });
+      });
+      console.log(`[LiveSched] Fetched ${out.length} games for ${teamAbbr} ${yr}-${mo+1}`);
+      return out;
+    }catch(e){
+      console.warn('[LiveSched] fetch error', e);
+      return [];
+    }finally{
+      inflight.delete(key);
+    }
+  }
+
+  function mergeIntoSchedules(teamAbbr, newGames){
+    try{
+      if(!window.PARLAYOS_DATA) window.PARLAYOS_DATA = {};
+      if(!window.PARLAYOS_DATA.schedules) window.PARLAYOS_DATA.schedules = {};
+      const existing = window.PARLAYOS_DATA.schedules[teamAbbr] || [];
+      const byKey = new Map();
+      existing.forEach(g => {
+        const k = `${g.date}|${g.opp}|${g.home?1:0}`;
+        byKey.set(k, g);
+      });
+      newGames.forEach(g => {
+        const k = `${g.date}|${g.opp}|${g.home?1:0}`;
+        const cur = byKey.get(k);
+        if(!cur){
+          byKey.set(k, g);
+        } else if((!cur.result && g.result) || (cur.myScore === null && g.myScore !== null)){
+          byKey.set(k, g);
+        }
+      });
+      const merged = Array.from(byKey.values()).sort((a,b) => (a.date||'').localeCompare(b.date||''));
+      window.PARLAYOS_DATA.schedules[teamAbbr] = merged;
+      return merged;
+    }catch(e){
+      console.warn('[LiveSched] merge error', e);
+      return [];
+    }
+  }
+
+  function hasDataForMonth(teamAbbr, yr, mo){
+    try{
+      const sched = window.PARLAYOS_DATA?.schedules?.[teamAbbr] || [];
+      if(!sched.length) return false;
+      const moStr = String(mo + 1).padStart(2, '0');
+      const prefix = `${yr}-${moStr}`;
+      return sched.some(g => String(g.date||'').startsWith(prefix));
+    }catch(e){ return false; }
+  }
+
+  // Re-render the visible calendar mount(s)
+  function rerenderCalendar(league){
+    try{
+      if(typeof renderLeagueSchedule !== 'function') return;
+      const mounts = [
+        league + 'ScheduleMount',
+        league + 'ModalScheduleMount',
+        league + 'InlineScheduleMount'
+      ];
+      mounts.forEach(id => {
+        const el = document.getElementById(id);
+        if(el && el.offsetParent !== null){
+          try{ renderLeagueSchedule(league, id); }catch(e){}
+        }
+      });
+    }catch(e){ console.warn('[LiveSched] rerender err', e); }
+  }
+
+  // Check the current MLB calendar state and fetch missing data if needed
+  function checkAndFetchMissing(){
+    try{
+      const st = window.parlayosCalendarState?.mlb;
+      if(!st) return;
+      const teamFilter = st.team;
+      const yr = st.year;
+      const mo = st.month;
+      if(!teamFilter || !MLB_TEAM_IDS[teamFilter]) return;
+      if(!yr || mo === undefined || mo === null) return;
+      if(hasDataForMonth(teamFilter, yr, mo)) return;
+
+      console.log(`[LiveSched] No data for ${teamFilter} ${yr}-${mo+1}, fetching...`);
+      fetchTeamMonth(teamFilter, yr, mo).then(games => {
+        if(games.length){
+          mergeIntoSchedules(teamFilter, games);
+          rerenderCalendar('mlb');
+        }
+      }).catch(e => console.warn('[LiveSched] checkAndFetch err', e));
+    }catch(e){ console.warn('[LiveSched] checkAndFetchMissing err', e); }
+  }
+
+  // Public API
+  window.PARLAYOS_LIVE_SCHED = {
+    fetchTeamMonth,
+    mergeIntoSchedules,
+    hasDataForMonth,
+    rerenderCalendar,
+    checkAndFetchMissing,
+    MLB_TEAM_IDS
+  };
+
+  // Listen for clicks on calendar nav buttons and tappable teams.
+  // Use capture phase so we run BEFORE the page's own handler, then
+  // schedule the check for after the page's handler updates the state.
+  document.addEventListener('click', function(e){
+    const nav = e.target.closest && e.target.closest('.cal-nav');
+    if(nav){
+      const league = nav.getAttribute('data-league') || 'mlb';
+      if(league === 'mlb'){
+        // After the page's click handler updates state + re-renders, check for missing data
+        setTimeout(checkAndFetchMissing, 50);
+        setTimeout(checkAndFetchMissing, 300); // second check in case render is slow
+      }
+      return;
+    }
+    const teamEl = e.target.closest && e.target.closest('.tappable-team');
+    if(teamEl){
+      const league = teamEl.getAttribute('data-league') || 'mlb';
+      if(league === 'mlb'){
+        setTimeout(checkAndFetchMissing, 50);
+        setTimeout(checkAndFetchMissing, 300);
+      }
+      return;
+    }
+    const clearBtn = e.target.closest && e.target.closest('.clear-team-btn');
+    if(clearBtn){
+      // Clear filter - no fetch needed, just let page re-render
+      return;
+    }
+  }, true); // capture phase
+
+  // Also hook the modal open by observing DOM mutations.
+  // When mlbModalScheduleMount appears (modal opens), check for missing data.
+  const observer = new MutationObserver(function(mutations){
+    for(const mut of mutations){
+      mut.addedNodes.forEach(node => {
+        if(node.nodeType !== 1) return;
+        if(node.id === 'mlbModalScheduleMount' || (node.querySelector && node.querySelector('#mlbModalScheduleMount'))){
+          // Modal mount appeared - check after a brief delay for state to settle
+          setTimeout(checkAndFetchMissing, 100);
+          setTimeout(checkAndFetchMissing, 500);
+        }
+      });
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  // Initial sweep: for the currently visible MLB calendar (if any), fetch missing data
+  setTimeout(checkAndFetchMissing, 1500);
+  setTimeout(checkAndFetchMissing, 3000);
+
+  console.log('[LiveSched v2] MLB Live Schedule Fetcher initialized (click + observer based)');
+})();
+
+</script>
+</body>
  *
  * What it does:
  *  1) Removes ALL horizontal lines from MLB/NFL/NBA dashboards + Fantasy Shop
