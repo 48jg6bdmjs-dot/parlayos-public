@@ -84,6 +84,27 @@
 :where(code, pre, kbd, samp) {
   font-family: "Optimistic Mono", ui-monospace, monospace;
 }
+</style><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
 </style>
 
 <script id="yt-complete-scrub-v2">
@@ -12247,8 +12268,10 @@ div:has(> span:has-text("00:10")), div:has-text("00:10") {
   
   themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
   
-  // Fix ticker every 10 seconds
-  setInterval(fixTicker, 10000);
+  // NOTE: periodic ticker rebuild removed (was causing the scroll to
+  // restart/stutter every 10s by fighting with the other ticker fixers).
+  // See TICKER_FINAL_FIX_JS at the bottom of the file for the single
+  // authoritative ticker-scroll owner.
   
   // Expose
   window.fixTicker = fixTicker;
@@ -12870,7 +12893,7 @@ body.cover-lock {
   setTimeout(fixTicker, 1500);
   setTimeout(fixTicker, 3000);
   
-  setInterval(fixTicker, 10000);
+  // (repeating fixTicker interval removed - see TICKER_FINAL_FIX_JS)
   
   // Watch for tab changes
   const observer = new MutationObserver(() => {
@@ -13268,7 +13291,7 @@ body.cover-lock {
   setTimeout(fixTickerAlways, 2000);
   setTimeout(fixTickerAlways, 3000);
   
-  setInterval(fixTickerAlways, 8000);
+  // (repeating fixTickerAlways interval removed - see TICKER_FINAL_FIX_JS)
   setInterval(fixHalfCirclesWhite, 2000);
   
   // Watch for changes
@@ -20062,37 +20085,17 @@ body.dark .table-card .mini-table td {
                             }, 280);
                           }
 
-                          // Attach to calendar cells
-                          function attachDateTaps(){
-                            document.querySelectorAll('.cal-cell').forEach(cell=>{
-                              if(cell.dataset.dateTapAttached) return;
-                              cell.dataset.dateTapAttached='1';
-                              cell.addEventListener('click', (e)=>{
-                                // Don't trigger if already handling tap glow
-                                const dayEl = cell.querySelector('.cal-day');
-                                const day = dayEl ? dayEl.textContent.trim() : '18';
-                                const now = new Date();
-                                const yr = now.getFullYear();
-                                const mo = String(now.getMonth()+1).padStart(2,'0');
-                                const dateStr = `${yr}-${mo}-${String(day).padStart(2,'0')}`;
-
-                                // Try to get team from cell
-                                const oppEl = cell.querySelector('.cal-opp');
-                                let teamAbbr = null;
-                                if(oppEl){
-                                  const txt = oppEl.textContent || '';
-                                  const match = txt.match(/@?([A-Z]{2,4})/);
-                                  if(match) teamAbbr = match[1];
-                                }
-
-                                showDateModal(dateStr, teamAbbr);
-                              });
-                            });
-                          }
-
-                          attachDateTaps();
-                          const obs = new MutationObserver(attachDateTaps);
-                          obs.observe(document.body, {childList:true, subtree:true});
+                          // NOTE: the old attachDateTaps()/MutationObserver combo that used to
+                          // live here was removed. It derived the clicked date from the REAL
+                          // current month (ignoring whichever month the calendar was actually
+                          // showing) and, because MutationObserver callbacks fire asynchronously,
+                          // it ended up attaching its click listener *after* the correct
+                          // per-render listener (the one using each cell's real data-date
+                          // attribute) — so on every click it fired second and silently
+                          // overwrote the modal with the wrong date (always resolving to the
+                          // same date, e.g. "July 31"). The later, per-render click handlers
+                          // (`mnt.querySelectorAll('.cal-cell').forEach(...data-date...)`)
+                          // are the correct, sole source of truth for date clicks now.
 
                           document.getElementById('dateModalClose')?.addEventListener('click', hideDateModal);
                           document.getElementById('dateDetailOverlay')?.addEventListener('click', (e)=>{
@@ -27838,8 +27841,16 @@ body.dark .yt-insight-body { color: rgba(255,255,255,0.65); }
         </div>`;
       });
       const doubled = [...items, ...items];
-      track.innerHTML = doubled.join('');
-      track.style.animationDuration = Math.max(30, liveGames.length * 8) + 's';
+      const newHTML = doubled.join('');
+      const newDuration = Math.max(30, liveGames.length * 8) + 's';
+      // Only touch the DOM/animation if the content actually changed -
+      // rewriting innerHTML or animationDuration every cycle restarts the
+      // CSS animation from 0, which is what caused the visible stutter.
+      if(track.dataset.tickerSig !== newHTML){
+        track.innerHTML = newHTML;
+        track.style.animationDuration = newDuration;
+        track.dataset.tickerSig = newHTML;
+      }
       console.log(`[TICKER] Showing ${liveGames.length} live/final scores`);
       return;
     }
@@ -27884,8 +27895,13 @@ body.dark .yt-insight-body { color: rgba(255,255,255,0.65); }
       </div>
     `);
     const doubled = [...items, ...items];
-    track.innerHTML = doubled.join('');
-    track.style.animationDuration = Math.max(40, props.length * 10) + 's';
+    const newHTML2 = doubled.join('');
+    const newDuration2 = Math.max(40, props.length * 10) + 's';
+    if(track.dataset.tickerSig !== newHTML2){
+      track.innerHTML = newHTML2;
+      track.style.animationDuration = newDuration2;
+      track.dataset.tickerSig = newHTML2;
+    }
     console.log(`[TICKER] Showing ${props.length} props (no live scores)`);
   }
 
@@ -36543,6 +36559,359 @@ body.theme-summer .theme-summer-emoji.realistic {
 }
 </style>
 
+
+<script id="FINAL_FIX_INCORRECT_CALENDAR_WINDOW_V1">
+(function(){
+  'use strict';
+  console.log('[FINAL FIX] Applying correct calendar window fix');
+
+  // Ensure state
+  window.parlayosCalendarState = window.parlayosCalendarState || {};
+  function ensureCalState(league){
+    league = (league||'mlb').toLowerCase();
+    const now=new Date();
+    if(!window.parlayosCalendarState[league]){
+      window.parlayosCalendarState[league]={year:now.getFullYear(), month:now.getMonth(), team:null};
+    }
+    return window.parlayosCalendarState[league];
+  }
+  window.ensureCalState = ensureCalState;
+
+  // Close final scores when changing calendar
+  function closeFinalScoresIfOpen(){
+    try{
+      const overlay=document.getElementById('dateDetailOverlay');
+      if(overlay && overlay.classList.contains('show')){
+        overlay.classList.remove('show');
+        document.body.style.overflow='';
+        setTimeout(()=>{ if(!overlay.classList.contains('show')) overlay.style.display='none'; }, 280);
+      }
+    }catch(e){}
+  }
+
+  // Override setCalState to always close final scores modal
+  const origSetCalState = window.setCalState;
+  window.setCalState = function(league, updates){
+    try{ closeFinalScoresIfOpen(); }catch(e){}
+    const st=ensureCalState(league);
+    Object.assign(st, updates);
+    while(st.month<0){ st.month+=12; st.year--; }
+    while(st.month>11){ st.month-=12; st.year++; }
+    try{ if(typeof window.renderLeagueSchedule==='function') window.renderLeagueSchedule(league); }catch(e){}
+    try{
+      const inlineId = league+'InlineScheduleMount';
+      if(document.getElementById(inlineId)) window.renderLeagueSchedule(league, inlineId);
+    }catch(e){}
+    try{
+      const modalId = league+'ModalScheduleMount';
+      if(document.getElementById(modalId)) window.renderLeagueSchedule(league, modalId);
+    }catch(e){}
+  };
+
+  // Correct renderLeagueSchedule
+  window.renderLeagueSchedule = function(league, mountId){
+    try{
+      const targetId = mountId || (league+'ScheduleMount');
+      let mnt = document.getElementById(targetId) || document.getElementById('mlbInlineScheduleMount') || document.getElementById(league+'ScheduleMount');
+      if(!mnt) return;
+      const st = ensureCalState(league);
+      const yr=st.year, mo=st.month;
+      const teamFilter = st.team; // snapshot for rendering pills, but click will read live
+      const now=new Date(), todayYr=now.getFullYear(), todayMo=now.getMonth(), todayDay=now.getDate();
+      const isCur = (yr===todayYr && mo===todayMo);
+      const monthName=new Date(yr,mo,1).toLocaleString('en-US',{month:'long',year:'numeric'});
+      const displayMonth = monthName+' • '+league.toUpperCase();
+      const fDay=new Date(yr,mo,1).getDay(), dim=new Date(yr,mo+1,0).getDate();
+      const empty=Array(fDay).fill('<div></div>').join('');
+
+      function toMap(dict){
+        const map={};
+        if(!dict) return map;
+        Object.entries(dict).forEach(([team,games])=>{
+          (games||[]).forEach(g=>{
+            if(!g.date) return;
+            const d=new Date(g.date+'T12:00:00');
+            if(d.getFullYear()!==yr||d.getMonth()!==mo) return;
+            if(!map[g.date]) map[g.date]=[];
+            if(map[g.date].some(x=> x.team===team && x.opp===g.opp)) return;
+            map[g.date].push({...g, team});
+          });
+        });
+        return map;
+      }
+
+      let allMap = {};
+      if(league==='mlb' && window.PARLAYOS_DATA && window.PARLAYOS_DATA.schedules) allMap = toMap(window.PARLAYOS_DATA.schedules);
+      const srcGames = (window.PARLAYOS_DATA && window.PARLAYOS_DATA.games) ? window.PARLAYOS_DATA.games : (window.games||[]);
+      srcGames.forEach(g=>{
+        let ds = window.normalizeGameDate ? window.normalizeGameDate(g.date) : (g.date?String(g.date).slice(0,10):null);
+        if(!ds) return;
+        const d=new Date(ds+'T12:00:00');
+        if(d.getFullYear()!==yr||d.getMonth()!==mo) return;
+        if(!allMap[ds]) allMap[ds]=[];
+        if(!allMap[ds].some(x=> x.a===g.a && x.b===g.b)) allMap[ds].push(g);
+      });
+
+      let filtMap = {};
+      if(teamFilter){
+        Object.keys(allMap).forEach(ds=>{
+          const f = allMap[ds].filter(g=>{
+            const a=g.a||g.abbrA||g.team, b=g.b||g.abbrB||g.opp;
+            return a===teamFilter||b===teamFilter||g.team===teamFilter;
+          });
+          if(f.length) filtMap[ds]=f;
+        });
+      }else filtMap=allMap;
+
+      let todayList=[];
+      try{ let s = (window.games&&window.games.length)?window.games:(window.PARLAYOS_DATA&&window.PARLAYOS_DATA.games?window.PARLAYOS_DATA.games:[]); todayList = typeof filterTodayGames==='function'?filterTodayGames(s):s; if(!todayList.length) todayList=s; }catch(e){ todayList=window.games?window.games.slice():[]; }
+      const todayCount=todayList.length;
+      const monthCount=Object.values(filtMap).reduce((s,a)=>s+a.length,0);
+
+      const dayCells=Array.from({length:dim},(_,i)=>{
+        const day=i+1, ds=`${yr}-${String(mo+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        const isToday = isCur && day===todayDay;
+        const isPast = (yr<todayYr)||(yr===todayYr&&mo<todayMo)||(isCur&&day<todayDay);
+        const dGames = filtMap[ds]||[];
+        let cls='cal-cell'; if(dGames.length) cls+=' has-games'; if(isToday) cls+=' today';
+        let pill='';
+        if(dGames.length){
+          if(teamFilter){
+            const tg = dGames.find(g=> (g.a===teamFilter||g.b===teamFilter||g.team===teamFilter||g.abbrA===teamFilter||g.abbrB===teamFilter)) || dGames[0];
+            if(tg){
+              const my = tg.myScore, oppS = tg.oppScore;
+              const won = tg.result ? tg.result==='W' : (my!=null&&oppS!=null?my>oppS:false);
+              const bg = won?'rgba(122,255,154,.32)':'rgba(255,107,107,.32)';
+              const bd = won?'rgba(122,255,154,.55)':'rgba(255,107,107,.55)';
+              const col = won?'#7aff9a':'#ff8a8a';
+              const opp = tg.opp || (tg.team===teamFilter ? (tg.a===teamFilter?tg.b:tg.a) : '') || '';
+              if(isPast && my!=null){
+                pill=`<div style="margin-top:4px;padding:4px 6px;border-radius:12px;background:${bg};border:1.5px solid ${bd};color:${col};font-size:8px;font-weight:900;line-height:1.1;text-align:center;width:100%">${won?'W':'L'} ${my}-${oppS}<div style="font-size:6px;font-weight:700;opacity:.9;margin-top:1px">vs ${opp}</div></div>`;
+              }else{
+                pill=`<div style="margin-top:4px;padding:3px 5px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);font-size:8px;font-weight:700;text-align:center">vs ${opp}<div style="font-size:6px;opacity:.7">${tg.time||''}</div></div>`;
+              }
+            }
+          }else{
+            if(isPast){
+              const fg = dGames[0];
+              const aS = fg.awayScore!=null?fg.awayScore:fg.myScore;
+              const hS = fg.homeScore!=null?fg.homeScore:fg.oppScore;
+              if(aS!=null&&hS!=null){
+                const away = fg.a||fg.away||fg.abbrA||'AWY';
+                const home = fg.b||fg.home||fg.abbrB||'HOME';
+                pill=`<div style="margin-top:3px;padding:3px 4px;border-radius:8px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);font-size:7px;font-weight:700;line-height:1.1;text-align:center;width:100%"><div>${away} ${aS}</div><div>${home} ${hS}</div><div style="font-size:5px;opacity:.6;margin-top:1px">FINAL</div></div>`;
+              }else{
+                pill=`<div style="margin-top:3px;font-size:7px;text-align:center;opacity:.7">${dGames.length}G</div>`;
+              }
+            }else if(isToday){
+              pill=`<span style="width:5px;height:5px;border-radius:50%;background:#fff;display:block;margin:4px auto"></span><span style="font-size:7px;opacity:.8">${dGames.length} today</span>`;
+            }else{
+              pill=`<div style="margin-top:4px;font-size:7px;text-align:center;background:rgba(122,255,154,.15);border-radius:6px;padding:2px 4px">${dGames.length} GM</div>`;
+            }
+          }
+        }
+        return `<div class="${cls}" data-date="${ds}" data-league="${league}" style="min-height:74px;padding:5px 4px;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;overflow:hidden;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);cursor:pointer"><span class="cal-day" style="font-size:11px;font-weight:800;margin-bottom:2px">${day}</span>${pill}</div>`;
+      }).join('');
+
+      const dowHead = ['S','M','T','W','T','F','S'].map(d=>`<div style="text-align:center;font-size:10px;opacity:.5;font-weight:700;padding:4px 0">${d}</div>`).join('');
+      const teamChip = teamFilter ? `<span class="badge clear-team-btn" data-league="${league}" style="background:rgba(122,255,154,.22);border:1px solid rgba(122,255,154,.35);cursor:pointer">${teamFilter} ✕</span>` : `<span class="mini" style="opacity:.5">tap team to filter • below stays today</span>`;
+
+      mnt.innerHTML=`
+        <div class="glass glass-blur panel-pad" style="border-radius:22px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button class="btn cal-nav" data-league="${league}" data-dir="-1" style="width:30px;height:30px;border-radius:50%;padding:0;display:grid;place-items:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);font-weight:900">‹</button>
+              <b style="font-size:14px;letter-spacing:-0.02em;">${displayMonth}</b>
+              <button class="btn cal-nav" data-league="${league}" data-dir="1" style="width:30px;height:30px;border-radius:50%;padding:0;display:grid;place-items:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);font-weight:900">›</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              ${teamChip}
+              <span class="badge" style="font-size:10px;">${todayCount} TODAY • ${monthCount} THIS MONTH</span>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px;">${dowHead}</div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;">${empty}${dayCells}</div>
+        </div>
+      `;
+
+      // FIX: Click handler reads LIVE team filter at click time, not closure
+      mnt.querySelectorAll('.cal-cell').forEach(c=>{
+        c.addEventListener('click', (e)=>{
+          e.preventDefault(); e.stopPropagation();
+          const ds=c.getAttribute('data-date');
+          const lg=c.getAttribute('data-league')||league;
+          const currentSt = window.parlayosCalendarState && window.parlayosCalendarState[lg];
+          const liveTeam = currentSt ? currentSt.team : null;
+          if(ds && window.showDateModal) window.showDateModal(ds, liveTeam);
+        });
+      });
+
+      // Wire nav
+      mnt.querySelectorAll('.cal-nav').forEach(btn=>{
+        btn.addEventListener('click', (e)=>{
+          e.preventDefault(); e.stopPropagation();
+          const dir=parseInt(btn.getAttribute('data-dir')||'0',10);
+          const lg=btn.getAttribute('data-league')||league;
+          window.setCalState(lg, {month: ensureCalState(lg).month + dir});
+        });
+      });
+
+      // Wire clear team
+      const clearBtn = mnt.querySelector('.clear-team-btn');
+      if(clearBtn){
+        clearBtn.addEventListener('click', (e)=>{
+          e.preventDefault(); e.stopPropagation();
+          const lg=clearBtn.getAttribute('data-league')||league;
+          window.setCalState(lg, {team:null});
+        });
+      }
+
+    }catch(e){ console.warn('[FINAL FIX] cal err',e); }
+  };
+
+  // Correct showDateModal - always respects live team filter and shows correct window
+  window.showDateModal = function(dateStr, teamAbbr){
+    try{
+      const overlay=document.getElementById('dateDetailOverlay'), title=document.getElementById('dateModalTitle'), body=document.getElementById('dateModalBody');
+      if(!overlay||!title||!body) return;
+      function fmt(ds){ try{ const d=new Date(ds+'T12:00:00'); return d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});}catch{return ds;}}
+      const display=fmt(dateStr);
+
+      // FIX: If teamAbbr is null but calendar has a filter, use that filter for title and data
+      // This prevents showing all-team window when ATL is filtered
+      let effectiveTeam = teamAbbr;
+      // If no team passed, check if any MLB calendar has a team filter active - use it
+      if(!effectiveTeam){
+        // Prefer mlb state, fallback to any league state
+        const st = window.parlayosCalendarState && (window.parlayosCalendarState.mlb || window.parlayosCalendarState[Object.keys(window.parlayosCalendarState)[0]]);
+        if(st && st.team) effectiveTeam = st.team;
+      }
+
+      // Title reflects effective filter
+      title.textContent = effectiveTeam ? `${effectiveTeam} • ${display} • Final Scores` : `${display} • Final Scores`;
+
+      let finals=[];
+      const scheds=window.PARLAYOS_DATA&&window.PARLAYOS_DATA.schedules?window.PARLAYOS_DATA.schedules:{};
+
+      if(!effectiveTeam){
+        const seen = new Set();
+        Object.entries(scheds).forEach(([team, games])=>{
+          (games||[]).forEach(g=>{
+            if(g.date !== dateStr) return;
+            const opp = g.opp;
+            const isHome = !!g.home;
+            const away = isHome ? opp : team;
+            const home = isHome ? team : opp;
+            const key = `${away}@${home}-${dateStr}`;
+            const rev = `${home}@${away}-${dateStr}`;
+            if(seen.has(key) || seen.has(rev)) return;
+            seen.add(key);
+            finals.push({
+              away:{abbr:away, score:isHome?g.oppScore:g.myScore, hits:'', err:''},
+              home:{abbr:home, score:isHome?g.myScore:g.oppScore, hits:'', err:''},
+              status:g.result?`${g.result} ${g.myScore}-${g.oppScore}`:(g.myScore!=null?'Final':'Scheduled'),
+              detail:g.time||'',
+              isReal:true
+            });
+          });
+        });
+        finals.sort((a,b)=> a.away.abbr.localeCompare(b.away.abbr));
+      }else{
+        const teamGames = scheds[effectiveTeam] || [];
+        teamGames.forEach(g=>{
+          if(g.date !== dateStr) return;
+          const opp = g.opp;
+          const isHome = !!g.home;
+          const away = isHome ? opp : effectiveTeam;
+          const home = isHome ? effectiveTeam : opp;
+          finals.push({
+            away:{abbr:away, score:isHome?g.oppScore:g.myScore},
+            home:{abbr:home, score:isHome?g.myScore:g.oppScore},
+            status:g.result?`${g.result} ${g.myScore}-${g.oppScore}`:'Final',
+            detail:g.time||`vs ${opp}`,
+            isReal:true
+          });
+        });
+      }
+
+      if(!finals.length){
+        body.innerHTML = `<div style="padding:24px;text-align:center;"><div style="font-size:32px;margin-bottom:8px;">⚾</div><div style="font-weight:700;">No games</div><div style="opacity:0.6;font-size:12px;margin-top:4px;">No ${effectiveTeam||'MLB'} games on ${display}</div></div>`;
+      }else{
+        body.innerHTML = finals.map(g=>{
+          const awayWin = (g.away.score||0) > (g.home.score||0);
+          const homeWin = (g.home.score||0) > (g.away.score||0);
+          return `
+            <div class="final-score-card" style="background: rgba(255,255,255,0.07) !important; border:1px solid rgba(255,255,255,0.10) !important; border-radius:20px !important; padding:16px !important; margin-bottom:12px;">
+              <div class="final-score-top" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <div style="font-size:10px;opacity:0.6;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;">⚾ MLB • REGULAR SEASON</div>
+                <div style="font-size:10px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.14);padding:3px 8px;border-radius:999px;font-weight:700;">${g.status||'Final'}</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <div style="display:flex;align-items:center;gap:10px;"><div style="width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);display:grid;place-items:center;font-weight:800;font-size:12px;">${g.away.abbr.slice(0,3)}</div><div><div style="font-style:italic;font-weight:600;font-size:13px;">${g.away.abbr}</div><div style="font-size:11px;opacity:0.5;">Away</div></div></div><div style="font-size:22px;font-weight:800;${awayWin?'color:#7aff9a;text-shadow:0 0 12px rgba(122,255,154,0.4)':''}">${g.away.score!=null?g.away.score:'—'}</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <div style="display:flex;align-items:center;gap:10px;"><div style="width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);display:grid;place-items:center;font-weight:800;font-size:12px;">${g.home.abbr.slice(0,3)}</div><div><div style="font-style:italic;font-weight:600;font-size:13px;">${g.home.abbr}</div><div style="font-size:11px;opacity:0.5;">Home</div></div></div><div style="font-size:22px;font-weight:800;${homeWin?'color:#7aff9a;text-shadow:0 0 12px rgba(122,255,154,0.4)':''}">${g.home.score!=null?g.home.score:'—'}</div>
+                </div>
+              </div>
+              <div style="margin-top:12px;border-top:1px solid rgba(255,255,255,0.06);padding-top:8px;">
+                ${g.detail?`<div style="font-size:11px;opacity:0.6;padding-top:6px;white-space:normal;line-height:1.4;">${g.detail}</div>`:''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      overlay.classList.add('show');
+      overlay.style.display='flex';
+      overlay.style.opacity='1';
+      overlay.style.visibility='visible';
+      overlay.style.pointerEvents='auto';
+      document.body.style.overflow='hidden';
+
+      // Ensure calendar window behind is hidden when final scores is open
+      // This prevents showing incorrect calendar when different team is shown
+      try{
+        const mlbScheduleModal = document.getElementById('mlbModalScheduleMount');
+        if(mlbScheduleModal){
+          // Keep it but dim? Actually we want final scores on top, so no action needed
+        }
+      }catch(e){}
+
+    }catch(e){
+      console.error('[FINAL FIX] showDateModal err', e);
+    }
+  };
+
+  window.hideDateModal=function(){
+    const o=document.getElementById('dateDetailOverlay');
+    if(!o) return;
+    o.classList.remove('show');
+    document.body.style.overflow='';
+    setTimeout(()=>{ if(!o.classList.contains('show')) o.style.display='none'; },280);
+  };
+  document.getElementById('dateModalClose')?.addEventListener('click', window.hideDateModal);
+  document.getElementById('dateDetailOverlay')?.addEventListener('click', e=>{ if(e.target.id==='dateDetailOverlay') window.hideDateModal(); });
+
+  // Also close final scores when tapping calendar nav or team filter - prevents stale window
+  document.addEventListener('click', function(e){
+    const nav = e.target.closest && e.target.closest('.cal-nav');
+    const teamEl = e.target.closest && e.target.closest('.tappable-team');
+    const clearBtn = e.target.closest && e.target.closest('.clear-team-btn');
+    if(nav || teamEl || clearBtn){
+      // If final scores is open, close it first, then let setCalState handle month change
+      const overlay=document.getElementById('dateDetailOverlay');
+      if(overlay && overlay.classList.contains('show')){
+        // Don't prevent default, just close
+        closeFinalScoresIfOpen();
+      }
+    }
+  }, true);
+
+  console.log('[FINAL FIX] Done - calendar window now correctly respects team filter');
+})();
+</script>
+
 </body>
  *
  * What it does:
@@ -38577,6 +38946,15 @@ body.theme-summer .theme-summer-emoji.realistic {
   // PART 7: PATCH CHIP CLICK HANDLERS
   // ============================================================
   function patchChipClickHandlers(){
+    // DISABLED: this used to clone the chip buttons rendered by the real
+    // renderStandings()/renderNFLStandings()/renderNBAStandings() (which show
+    // real, populated pitching/batting/lineups/standings/players data inline)
+    // and replace them with handlers that opened a separate floating modal
+    // showing only static placeholder content ("Loading standings...",
+    // empty player/lineup cards, etc). Those chips already work correctly
+    // via their native click handlers, so this patch is now a no-op.
+    return;
+    // eslint-disable-next-line no-unreachable
     ['mlb','nfl','nba'].forEach(league=>{
       const mountId = league==='mlb' ? 'standingsMount' : (league+'StandingsMount');
       const mount = document.getElementById(mountId);
@@ -40551,6 +40929,6 @@ body.theme-summer .theme-summer-emoji.realistic {
 }
 </style>
 
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 
 </html>
