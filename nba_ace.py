@@ -459,8 +459,14 @@ def fetch_nba_odds_multi():
 
 
 
+
+
+
+
+
+
 def _find_v6_template():
-    here = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else '.'
+    here = HERE_DIR if 'HERE_DIR' in globals() else os.path.dirname(os.path.abspath(__file__))
     candidates = ["parlayos.html", "index.html"]
     for c in candidates:
         p = os.path.join(here, c)
@@ -468,12 +474,10 @@ def _find_v6_template():
             return p
     return os.path.join(here, "parlayos.html")
 
-def export_to_html(games, html_path=None):
-    """Export to BOTH parlayos.html and index.html ONLY (lowercase)"""
-    if games is None:
-        games = []
-    # Handle both simple list and already v6 format
-    v_games = games
+def export_to_html(all_games_data, html_path=None):
+    if all_games_data is None:
+        all_games_data = []
+    v_games = all_games_data
     try:
         if v_games and isinstance(v_games, list) and len(v_games)>0:
             first = v_games[0]
@@ -490,19 +494,13 @@ def export_to_html(games, html_path=None):
         "games": v_games
     }
     payload_json = json.dumps(payload)
-    
-    here = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else '.'
-    
-    # Save JSONs
+    here = HERE_DIR if 'HERE_DIR' in globals() else os.path.dirname(os.path.abspath(__file__))
     try:
-        base = "last_nba_slate.json"
-        with open(os.path.join(here, base), "w") as f:
+        with open(os.path.join(here, "last_nba_slate.json"), "w") as f:
             json.dump(payload, f, indent=2)
         with open(os.path.join(here, "last_slate.json"), "w") as f:
             json.dump(v_games, f, indent=2)
-        print(f"[Export] JSON {base} ({len(v_games)} games)")
-    except Exception as e:
-        print(f"[Export] JSON fail {e}")
+    except: pass
 
     template_path = html_path or _find_v6_template()
     tmpl_content = None
@@ -510,12 +508,12 @@ def export_to_html(games, html_path=None):
         try:
             with open(template_path, "r", encoding="utf-8", errors="ignore") as f:
                 tmpl_content = f.read()
-        except:
-            pass
+        except: pass
     if tmpl_content is None:
         tmpl_content = f"<!doctype html><html><head><meta charset='utf-8'><title>parlayos</title></head><body><script>window.PARLAYOS_DATA = {payload_json};</script></body></html>"
 
     try:
+        import re
         if "window.PARLAYOS_DATA" in tmpl_content:
             tmpl_content = re.sub(r"window\.PARLAYOS_DATA\s*=\s*\{.*?\}\s*;", f"window.PARLAYOS_DATA = {payload_json};", tmpl_content, flags=re.DOTALL)
             if payload_json not in tmpl_content:
@@ -525,16 +523,14 @@ def export_to_html(games, html_path=None):
                 tmpl_content = tmpl_content.replace("</head>", f"<script>window.PARLAYOS_DATA = {payload_json};</script></head>")
             else:
                 tmpl_content = tmpl_content.replace("</body>", f"<script>window.PARLAYOS_DATA = {payload_json};</script></body>")
-    except Exception as e:
-        print(f"[Export] inject fail {e}")
+    except: pass
 
-    # ONLY write to parlayos.html and index.html
     for fname in ["parlayos.html", "index.html"]:
         out_path = os.path.join(here, fname)
         try:
             with open(out_path, "w", encoding="utf-8") as out:
                 out.write(tmpl_content)
-            print(f"[ParlayOS] Updated {fname} ({len(v_games)} games) -> {out_path}")
+            print(f"[ParlayOS] Updated {fname} ({len(v_games)} games)")
         except Exception as e:
             print(f"Failed {out_path}: {e}")
     return v_games

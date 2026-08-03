@@ -1315,46 +1315,7 @@ def _american_to_decimal(american):
 def fetch_today_probable_pitchers_v2():
     return fetch_today_probable_pitchers()
 
-def _picks_to_v6_games(picks: List) -> List:
-    v_games=[]
-    probables=fetch_today_probable_pitchers()
-    for idx,p in enumerate(picks):
-        away=p.get('away','Away'); home=p.get('home','Home')
-        pick_team=p.get('pick',home); odds=p.get('odds',-110)
-        model_prob=p.get('model_prob',50)/100.0; edge=p.get('edge',0)/100.0
-        ml_price_dec=_american_to_decimal(odds) or 1.91
-        abbr_a=TEAM_ABBR.get(away, away[:3].upper()); abbr_b=TEAM_ABBR.get(home, home[:3].upper())
-        matchup_key=(abbr_a,abbr_b); prob_list=probables.get(matchup_key,[])
-        if prob_list:
-            away_pitcher=prob_list[0].get("away_name","TBD"); home_pitcher=prob_list[0].get("home_name","TBD")
-        else:
-            away_pitcher=p.get("away_pitcher","TBD"); home_pitcher=p.get("home_pitcher","TBD")
-        game_date_str=p.get('commence_time'); start_at_ms=None; time_display='TBD'; date_display=''
-        if game_date_str:
-            try:
-                dt_utc=datetime.strptime(game_date_str, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
-                start_at_ms=int(dt_utc.timestamp()*1000)
-                dt_local=dt_utc.astimezone(ET_ZONE)
-                time_display=dt_local.strftime('%-I:%M %p'); date_display=dt_local.strftime('%a %b %-d')
-            except:
-                pass
-        if start_at_ms is None:
-            start_at_ms=int(time.time()*1000)
-        total=p.get('line') or p.get('total') or 8.5
-        ml_fav=TEAM_ABBR.get(pick_team, pick_team[:3].upper()) if pick_team else abbr_b
-        hot=edge>0.03
-        k_line=p.get('kLine',6.5); k_proj=p.get('kProj',5.5); k_pitcher=p.get('kPitcher',away_pitcher); k_over_prob=p.get('kOverProb',0.5); k_edge_val=p.get('kEdge',0.0)
-        if p.get('kPick') and 'Ks' in str(p.get('kPick')):
-            k_pick_str=p.get('kPick')
-        else:
-            side_str="Over" if k_over_prob>0.5 else "Under"
-            k_pick_str=f"{side_str} {k_line}K ({k_proj} Ks)" if k_proj is not None else f"{side_str} {k_line}K"
-        game={'id':f'mlb_live_{idx}_{int(datetime.now().timestamp())}','a':abbr_a,'b':abbr_b,'cityA':away,'cityB':home,'lgA':'MLB','lgB':'MLB','total':total,'ouPick':f'OVER {total}' if edge>0 else f'UNDER {total}','kLine':k_line,'kPick':k_pick_str,'kProj':k_proj,'kPitcher':k_pitcher,'kOverProb':k_over_prob,'mlFav':ml_fav,'mlPriceDec':ml_price_dec,'ouEdge':round(edge*0.5,4),'kEdge':round(k_edge_val,4) if k_edge_val is not None else 0.0,'mlEdge':round(edge,4),'model':round(model_prob,4),'tv':'ESPN+','hot':hot,'startAt':start_at_ms,'start_at':start_at_ms,'commence_time':p.get('commence_time') or game_date_str,'time':time_display,'date':date_display,'time_et':time_display,'date_et':date_display,'status':'live','modelProb':round(model_prob,3),'mlPriceAmerican':odds,'marketProb':round(1/ml_price_dec,3) if ml_price_dec>0 else 0.5,'qualifies':bool(p.get('qualifies',True)),'away_pitcher':away_pitcher,'home_pitcher':home_pitcher,'pitcherA':away_pitcher,'pitcherB':home_pitcher}
-        for col in ["c_team_edge","c_pitcher_fip_edge","c_pitcher_era_edge","c_offense_edge","c_bullpen_edge"]:
-            if col in p:
-                game[col]=p[col]
-        v_games.append(game)
-    return v_games
+
 
 def export_to_html(all_games_data, html_path=None):
     if html_path is None:
@@ -1387,6 +1348,202 @@ def export_to_html(all_games_data, html_path=None):
         print(f"[Export] {len(all_games_data)} games -> {out_path}")
     except Exception as e:
         print(f"Export failed: {e}")
+
+
+
+def _picks_to_v6_games(picks: List) -> List:
+    v_games=[]
+    probables={}
+    try:
+        probables=fetch_today_probable_pitchers()
+    except:
+        probables={}
+    for idx,p in enumerate(picks):
+        away=p.get('away','Away'); home=p.get('home','Home')
+        # --- FIX: separate total pick and ML team ---
+        # Total pick could be Over/Under, ML team is actual team name
+        total_pick_raw = p.get('ou_pick') or p.get('pick') or ''
+        ml_team_raw = p.get('ml_team') or p.get('ml_pick') or ''
+        
+        # Detect if total_pick_raw is actually a team (old mlb_ace.py schema where pick = team)
+        # If it contains OVER/UNDER, it's a total pick, not a team
+        is_total_pick = False
+        if isinstance(total_pick_raw, str) and ('OVER' in total_pick_raw.upper() or 'UNDER' in total_pick_raw.upper()):
+            is_total_pick = True
+        # In mlb_ace.py old schema, pick = team, so total_pick_raw would be team, not OVER
+        # In mlb_ace_2 schema, pick = OVER/UNDER, ml_team = team
+        if is_total_pick:
+            ou_pick_raw = total_pick_raw
+            # ML team is separate
+            ml_team = ml_team_raw or home
+        else:
+            # total_pick_raw might be team name (mlb_ace.py case) - then ml_team = team, ou_pick needs to be built from edge
+            if total_pick_raw and total_pick_raw not in (away, home) and 'OVER' not in str(total_pick_raw).upper() and 'UNDER' not in str(total_pick_raw).upper():
+                # Could be team? Check if it's in TEAM_ABBR values or full names
+                # If it's a team, treat as ML team
+                if ml_team_raw == '' or ml_team_raw == home or ml_team_raw == away:
+                    ml_team = total_pick_raw
+                    ou_pick_raw = p.get('ou_pick') or f"OVER {p.get('line') or p.get('total') or 8.5}"
+                else:
+                    ml_team = ml_team_raw or total_pick_raw
+                    ou_pick_raw = p.get('ou_pick') or f"OVER {p.get('line') or p.get('total') or 8.5}"
+            else:
+                ml_team = ml_team_raw or home
+                ou_pick_raw = total_pick_raw or f"OVER {p.get('line') or p.get('total') or 8.5}"
+
+        # Now resolve abbreviations
+        abbr_a=TEAM_ABBR.get(away, away[:3].upper()); abbr_b=TEAM_ABBR.get(home, home[:3].upper())
+        
+        # ML Fav - MUST be team abbr, never OVER/UNDER
+        # ml_team could be full name like "St. Louis Cardinals" or abbr like "STL"
+        if ml_team:
+            # Try full name lookup first
+            ml_fav_abbr = TEAM_ABBR.get(ml_team, None)
+            if not ml_fav_abbr:
+                # Maybe it's already abbr?
+                if isinstance(ml_team, str) and len(ml_team) <= 4 and ml_team.upper() in TEAM_ABBR.values():
+                    ml_fav_abbr = ml_team.upper()
+                else:
+                    # Fallback: first 3 letters, but ensure not OVE/UND
+                    maybe = ml_team[:3].upper()
+                    if maybe in ('OVE','UND'):
+                        # It's a total pick, fallback to home team
+                        ml_fav_abbr = abbr_b
+                    else:
+                        ml_fav_abbr = maybe
+        else:
+            ml_fav_abbr = abbr_b
+
+        odds=p.get('odds', p.get('ml_odds', -110))
+        # If odds is string like OVER 9.0, use ml_odds
+        if isinstance(odds, str) and ('OVER' in odds.upper() or 'UNDER' in odds.upper()):
+            odds = p.get('ml_odds', -110)
+        model_prob=p.get('model_prob',50)/100.0; edge=p.get('edge', p.get('ml_edge',0))/100.0
+        
+        try:
+            ml_price_dec=_american_to_decimal(odds) or 1.91
+        except:
+            ml_price_dec=1.91
+
+        matchup_key=(abbr_a,abbr_b)
+        prob_list=probables.get(matchup_key,[]) if isinstance(probables, dict) else []
+        if prob_list:
+            away_pitcher=prob_list[0].get("away_name","TBD"); home_pitcher=prob_list[0].get("home_name","TBD")
+        else:
+            away_pitcher=p.get("away_pitcher","TBD"); home_pitcher=p.get("home_pitcher","TBD")
+
+        game_date_str=p.get('commence_time'); start_at_ms=None; time_display='TBD'; date_display=''
+        if game_date_str:
+            try:
+                from datetime import datetime as dt
+                dt_utc=dt.strptime(game_date_str, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
+                start_at_ms=int(dt_utc.timestamp()*1000)
+                dt_local=dt_utc.astimezone(ET_ZONE)
+                time_display=dt_local.strftime('%-I:%M %p'); date_display=dt_local.strftime('%a %b %-d')
+            except:
+                pass
+        if start_at_ms is None:
+            import time as _t
+            start_at_ms=int(_t.time()*1000)
+
+        total=p.get('line') or p.get('total') or 8.5
+        
+        # OU Pick - ensure it says OVER X.X or UNDER X.X
+        if isinstance(ou_pick_raw, str) and ('OVER' in ou_pick_raw.upper() or 'UNDER' in ou_pick_raw.upper()):
+            ou_pick_str = ou_pick_raw
+        else:
+            # Build from edge or total
+            ou_pick_str = f"OVER {total}" if edge>0 else f"UNDER {total}"
+            if p.get('ou_pick'):
+                ou_pick_str = p.get('ou_pick')
+
+        hot=edge>0.03
+        k_line=p.get('kLine',6.5); k_proj=p.get('kProj',5.5); k_pitcher=p.get('kPitcher',away_pitcher); k_over_prob=p.get('kOverProb',0.5); k_edge_val=p.get('kEdge',0.0)
+        if p.get('kPick') and 'Ks' in str(p.get('kPick')):
+            k_pick_str=p.get('kPick')
+        else:
+            side_str="Over" if k_over_prob>0.5 else "Under"
+            k_pick_str=f"{side_str} {k_line}K ({k_proj} Ks)" if k_proj is not None else f"{side_str} {k_line}K"
+
+        game={'id':f'mlb_live_{idx}_{int(datetime.now().timestamp())}','a':abbr_a,'b':abbr_b,'cityA':away,'cityB':home,'lgA':'MLB','lgB':'MLB','total':total,'ouPick':ou_pick_str,'kLine':k_line,'kPick':k_pick_str,'kProj':k_proj,'kPitcher':k_pitcher,'kOverProb':k_over_prob,'mlFav':ml_fav_abbr,'mlPriceDec':ml_price_dec,'ouEdge':round(edge*0.5,4),'kEdge':round(k_edge_val,4) if k_edge_val is not None else 0.0,'mlEdge':round(edge,4),'model':round(model_prob,4),'tv':'ESPN+','hot':hot,'startAt':start_at_ms,'start_at':start_at_ms,'commence_time':p.get('commence_time') or game_date_str,'time':time_display,'date':date_display,'time_et':time_display,'date_et':date_display,'status':'live','modelProb':round(model_prob,3),'mlPriceAmerican':odds,'marketProb':round(1/ml_price_dec,3) if ml_price_dec>0 else 0.5,'qualifies':bool(p.get('qualifies',True)),'away_pitcher':away_pitcher,'home_pitcher':home_pitcher,'pitcherA':away_pitcher,'pitcherB':home_pitcher}
+        for col in ["c_team_edge","c_pitcher_fip_edge","c_pitcher_era_edge","c_offense_edge","c_bullpen_edge"]:
+            if col in p:
+                game[col]=p[col]
+        v_games.append(game)
+    return v_games
+
+
+
+def _find_v6_template():
+    here = HERE_DIR if 'HERE_DIR' in globals() else os.path.dirname(os.path.abspath(__file__))
+    candidates = ["parlayos.html", "index.html"]
+    for c in candidates:
+        p = os.path.join(here, c)
+        if os.path.exists(p):
+            return p
+    return os.path.join(here, "parlayos.html")
+
+def export_to_html(all_games_data, html_path=None):
+    if all_games_data is None:
+        all_games_data = []
+    v_games = all_games_data
+    try:
+        if v_games and isinstance(v_games, list) and len(v_games)>0:
+            first = v_games[0]
+            if isinstance(first, dict) and 'a' not in first and ('away' in first or 'home' in first):
+                if '_picks_to_v6_games' in globals():
+                    v_games = _picks_to_v6_games(v_games)
+    except Exception as e:
+        print(f"[Export] v6 conversion warn: {e}")
+
+    from datetime import datetime
+    payload = {
+        "runDate": datetime.now().strftime("%b %d %Y %I:%M %p"),
+        "pickCount": len(v_games),
+        "games": v_games
+    }
+    payload_json = json.dumps(payload)
+    here = HERE_DIR if 'HERE_DIR' in globals() else os.path.dirname(os.path.abspath(__file__))
+    try:
+        with open(os.path.join(here, "last_mlb_slate.json"), "w") as f:
+            json.dump(payload, f, indent=2)
+        with open(os.path.join(here, "last_slate.json"), "w") as f:
+            json.dump(v_games, f, indent=2)
+    except: pass
+
+    template_path = html_path or _find_v6_template()
+    tmpl_content = None
+    if template_path and os.path.exists(template_path):
+        try:
+            with open(template_path, "r", encoding="utf-8", errors="ignore") as f:
+                tmpl_content = f.read()
+        except: pass
+    if tmpl_content is None:
+        tmpl_content = f"<!doctype html><html><head><meta charset='utf-8'><title>parlayos</title></head><body><script>window.PARLAYOS_DATA = {payload_json};</script></body></html>"
+
+    try:
+        import re
+        if "window.PARLAYOS_DATA" in tmpl_content:
+            tmpl_content = re.sub(r"window\.PARLAYOS_DATA\s*=\s*\{.*?\}\s*;", f"window.PARLAYOS_DATA = {payload_json};", tmpl_content, flags=re.DOTALL)
+            if payload_json not in tmpl_content:
+                tmpl_content = re.sub(r"window\.PARLAYOS_DATA\s*=\s*.*?;", f"window.PARLAYOS_DATA = {payload_json};", tmpl_content, flags=re.DOTALL)
+        else:
+            if "</head>" in tmpl_content:
+                tmpl_content = tmpl_content.replace("</head>", f"<script>window.PARLAYOS_DATA = {payload_json};</script></head>")
+            else:
+                tmpl_content = tmpl_content.replace("</body>", f"<script>window.PARLAYOS_DATA = {payload_json};</script></body>")
+    except: pass
+
+    for fname in ["parlayos.html", "index.html"]:
+        out_path = os.path.join(here, fname)
+        try:
+            with open(out_path, "w", encoding="utf-8") as out:
+                out.write(tmpl_content)
+            print(f"[ParlayOS] Updated {fname} ({len(v_games)} games)")
+        except Exception as e:
+            print(f"Failed {out_path}: {e}")
+    return v_games
+
 
 # === PLAYER DETAILS (kept) ===
 _PLAYER_CACHE={}
@@ -1445,89 +1602,6 @@ def fetch_mlb_team_roster(team_abbr: str):
         return []
 
 # === MAIN ===
-
-
-def _find_v6_template():
-    here = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else '.'
-    candidates = ["parlayos.html", "index.html"]
-    for c in candidates:
-        p = os.path.join(here, c)
-        if os.path.exists(p):
-            return p
-    return os.path.join(here, "parlayos.html")
-
-def export_to_html(games, html_path=None):
-    """Export to BOTH parlayos.html and index.html ONLY (lowercase)"""
-    if games is None:
-        games = []
-    # Handle both simple list and already v6 format
-    v_games = games
-    try:
-        if v_games and isinstance(v_games, list) and len(v_games)>0:
-            first = v_games[0]
-            if isinstance(first, dict) and 'a' not in first and ('away' in first or 'home' in first):
-                if '_picks_to_v6_games' in globals():
-                    v_games = _picks_to_v6_games(v_games)
-    except Exception as e:
-        print(f"[Export] v6 conversion warn: {e}")
-
-    from datetime import datetime
-    payload = {
-        "runDate": datetime.now().strftime("%b %d %Y %I:%M %p"),
-        "pickCount": len(v_games),
-        "games": v_games
-    }
-    payload_json = json.dumps(payload)
-    
-    here = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else '.'
-    
-    # Save JSONs
-    try:
-        base = "last_mlb_slate.json"
-        with open(os.path.join(here, base), "w") as f:
-            json.dump(payload, f, indent=2)
-        with open(os.path.join(here, "last_slate.json"), "w") as f:
-            json.dump(v_games, f, indent=2)
-        print(f"[Export] JSON {base} ({len(v_games)} games)")
-    except Exception as e:
-        print(f"[Export] JSON fail {e}")
-
-    template_path = html_path or _find_v6_template()
-    tmpl_content = None
-    if template_path and os.path.exists(template_path):
-        try:
-            with open(template_path, "r", encoding="utf-8", errors="ignore") as f:
-                tmpl_content = f.read()
-        except:
-            pass
-    if tmpl_content is None:
-        tmpl_content = f"<!doctype html><html><head><meta charset='utf-8'><title>parlayos</title></head><body><script>window.PARLAYOS_DATA = {payload_json};</script></body></html>"
-
-    try:
-        if "window.PARLAYOS_DATA" in tmpl_content:
-            tmpl_content = re.sub(r"window\.PARLAYOS_DATA\s*=\s*\{.*?\}\s*;", f"window.PARLAYOS_DATA = {payload_json};", tmpl_content, flags=re.DOTALL)
-            if payload_json not in tmpl_content:
-                tmpl_content = re.sub(r"window\.PARLAYOS_DATA\s*=\s*.*?;", f"window.PARLAYOS_DATA = {payload_json};", tmpl_content, flags=re.DOTALL)
-        else:
-            if "</head>" in tmpl_content:
-                tmpl_content = tmpl_content.replace("</head>", f"<script>window.PARLAYOS_DATA = {payload_json};</script></head>")
-            else:
-                tmpl_content = tmpl_content.replace("</body>", f"<script>window.PARLAYOS_DATA = {payload_json};</script></body>")
-    except Exception as e:
-        print(f"[Export] inject fail {e}")
-
-    # ONLY write to parlayos.html and index.html
-    for fname in ["parlayos.html", "index.html"]:
-        out_path = os.path.join(here, fname)
-        try:
-            with open(out_path, "w", encoding="utf-8") as out:
-                out.write(tmpl_content)
-            print(f"[ParlayOS] Updated {fname} ({len(v_games)} games) -> {out_path}")
-        except Exception as e:
-            print(f"Failed {out_path}: {e}")
-    return v_games
-
-
 def main():
     cfg=load_config()
     today=date.today().isoformat()
@@ -1715,13 +1789,13 @@ def main():
 
     json_data=_build_dashboard_json(games_eval, today)
     html_out=render_html_dashboard(games_eval, cfg_loaded, league_rpg, today, json_data)
-    for path in (os.path.join(HERE_DIR, "dashboard.html"), LEGACY_OUTPUT_PATH):
+    for path in (OUTPUT_PATH, LEGACY_OUTPUT_PATH):
         try:
             with open(path,"w", encoding="utf-8") as f:
                 f.write(html_out)
         except:
             pass
-    print(f"✅ {len(games_eval)} game(s) -> dashboard.html (statcast={HAS_STATCAST})")
+    print(f"✅ {len(games_eval)} game(s) -> {OUTPUT_PATH} (statcast={HAS_STATCAST})")
     export_to_html(all_games_data)
     print(f"\n✅ {len(all_games_data)} games exported for ParlayOS")
 
