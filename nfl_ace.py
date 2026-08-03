@@ -552,14 +552,90 @@ def _american_to_decimal(american):
     except: return None
     return round((o/100)+1,3) if o>0 else round((100/abs(o))+1,3)
 
+
+
+
+
+def _find_v6_template():
+    here = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else '.'
+    candidates = ["parlayos.html", "index.html"]
+    for c in candidates:
+        p = os.path.join(here, c)
+        if os.path.exists(p):
+            return p
+    return os.path.join(here, "parlayos.html")
+
 def export_to_html(games, html_path=None):
-    print(f"[NFL Improved] Exporting {len(games)} games (no hardcoded key)")
+    """Export to BOTH parlayos.html and index.html ONLY (lowercase)"""
+    if games is None:
+        games = []
+    # Handle both simple list and already v6 format
+    v_games = games
     try:
-        out_path=os.path.join(os.path.dirname(os.path.abspath(__file__)),"last_nfl_slate.json")
-        with open(out_path,"w") as f:
-            json.dump(games,f,indent=2)
-    except: pass
-    return games
+        if v_games and isinstance(v_games, list) and len(v_games)>0:
+            first = v_games[0]
+            if isinstance(first, dict) and 'a' not in first and ('away' in first or 'home' in first):
+                if '_picks_to_v6_games' in globals():
+                    v_games = _picks_to_v6_games(v_games)
+    except Exception as e:
+        print(f"[Export] v6 conversion warn: {e}")
+
+    from datetime import datetime
+    payload = {
+        "runDate": datetime.now().strftime("%b %d %Y %I:%M %p"),
+        "pickCount": len(v_games),
+        "games": v_games
+    }
+    payload_json = json.dumps(payload)
+    
+    here = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else '.'
+    
+    # Save JSONs
+    try:
+        base = "last_nfl_slate.json"
+        with open(os.path.join(here, base), "w") as f:
+            json.dump(payload, f, indent=2)
+        with open(os.path.join(here, "last_slate.json"), "w") as f:
+            json.dump(v_games, f, indent=2)
+        print(f"[Export] JSON {base} ({len(v_games)} games)")
+    except Exception as e:
+        print(f"[Export] JSON fail {e}")
+
+    template_path = html_path or _find_v6_template()
+    tmpl_content = None
+    if template_path and os.path.exists(template_path):
+        try:
+            with open(template_path, "r", encoding="utf-8", errors="ignore") as f:
+                tmpl_content = f.read()
+        except:
+            pass
+    if tmpl_content is None:
+        tmpl_content = f"<!doctype html><html><head><meta charset='utf-8'><title>parlayos</title></head><body><script>window.PARLAYOS_DATA = {payload_json};</script></body></html>"
+
+    try:
+        if "window.PARLAYOS_DATA" in tmpl_content:
+            tmpl_content = re.sub(r"window\.PARLAYOS_DATA\s*=\s*\{.*?\}\s*;", f"window.PARLAYOS_DATA = {payload_json};", tmpl_content, flags=re.DOTALL)
+            if payload_json not in tmpl_content:
+                tmpl_content = re.sub(r"window\.PARLAYOS_DATA\s*=\s*.*?;", f"window.PARLAYOS_DATA = {payload_json};", tmpl_content, flags=re.DOTALL)
+        else:
+            if "</head>" in tmpl_content:
+                tmpl_content = tmpl_content.replace("</head>", f"<script>window.PARLAYOS_DATA = {payload_json};</script></head>")
+            else:
+                tmpl_content = tmpl_content.replace("</body>", f"<script>window.PARLAYOS_DATA = {payload_json};</script></body>")
+    except Exception as e:
+        print(f"[Export] inject fail {e}")
+
+    # ONLY write to parlayos.html and index.html
+    for fname in ["parlayos.html", "index.html"]:
+        out_path = os.path.join(here, fname)
+        try:
+            with open(out_path, "w", encoding="utf-8") as out:
+                out.write(tmpl_content)
+            print(f"[ParlayOS] Updated {fname} ({len(v_games)} games) -> {out_path}")
+        except Exception as e:
+            print(f"Failed {out_path}: {e}")
+    return v_games
+
 
 def run(html_path=None):
     cfg={}

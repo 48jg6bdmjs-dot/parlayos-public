@@ -1299,15 +1299,6 @@ def _auto_log_picks(games_eval, date_str):
     return 0
 
 # === PARLAYOS INJECTION (from mlb_ace_2.py) ===
-def _find_v6_template():
-    here=os.path.dirname(os.path.abspath(__file__))
-    candidates=["parlayos_3.html","parlayos.html","parlayos_2.html","index.html","parlayos_v6.html"]
-    for c in candidates:
-        p=os.path.join(here,c)
-        if os.path.exists(p):
-            return p
-    return os.path.join(here,"parlayos_3.html")
-PARLAYOS_TEMPLATE_PATH=_find_v6_template()
 
 def _american_to_decimal(american):
     if american is None:
@@ -1454,6 +1445,89 @@ def fetch_mlb_team_roster(team_abbr: str):
         return []
 
 # === MAIN ===
+
+
+def _find_v6_template():
+    here = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else '.'
+    candidates = ["parlayos.html", "index.html"]
+    for c in candidates:
+        p = os.path.join(here, c)
+        if os.path.exists(p):
+            return p
+    return os.path.join(here, "parlayos.html")
+
+def export_to_html(games, html_path=None):
+    """Export to BOTH parlayos.html and index.html ONLY (lowercase)"""
+    if games is None:
+        games = []
+    # Handle both simple list and already v6 format
+    v_games = games
+    try:
+        if v_games and isinstance(v_games, list) and len(v_games)>0:
+            first = v_games[0]
+            if isinstance(first, dict) and 'a' not in first and ('away' in first or 'home' in first):
+                if '_picks_to_v6_games' in globals():
+                    v_games = _picks_to_v6_games(v_games)
+    except Exception as e:
+        print(f"[Export] v6 conversion warn: {e}")
+
+    from datetime import datetime
+    payload = {
+        "runDate": datetime.now().strftime("%b %d %Y %I:%M %p"),
+        "pickCount": len(v_games),
+        "games": v_games
+    }
+    payload_json = json.dumps(payload)
+    
+    here = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else '.'
+    
+    # Save JSONs
+    try:
+        base = "last_mlb_slate.json"
+        with open(os.path.join(here, base), "w") as f:
+            json.dump(payload, f, indent=2)
+        with open(os.path.join(here, "last_slate.json"), "w") as f:
+            json.dump(v_games, f, indent=2)
+        print(f"[Export] JSON {base} ({len(v_games)} games)")
+    except Exception as e:
+        print(f"[Export] JSON fail {e}")
+
+    template_path = html_path or _find_v6_template()
+    tmpl_content = None
+    if template_path and os.path.exists(template_path):
+        try:
+            with open(template_path, "r", encoding="utf-8", errors="ignore") as f:
+                tmpl_content = f.read()
+        except:
+            pass
+    if tmpl_content is None:
+        tmpl_content = f"<!doctype html><html><head><meta charset='utf-8'><title>parlayos</title></head><body><script>window.PARLAYOS_DATA = {payload_json};</script></body></html>"
+
+    try:
+        if "window.PARLAYOS_DATA" in tmpl_content:
+            tmpl_content = re.sub(r"window\.PARLAYOS_DATA\s*=\s*\{.*?\}\s*;", f"window.PARLAYOS_DATA = {payload_json};", tmpl_content, flags=re.DOTALL)
+            if payload_json not in tmpl_content:
+                tmpl_content = re.sub(r"window\.PARLAYOS_DATA\s*=\s*.*?;", f"window.PARLAYOS_DATA = {payload_json};", tmpl_content, flags=re.DOTALL)
+        else:
+            if "</head>" in tmpl_content:
+                tmpl_content = tmpl_content.replace("</head>", f"<script>window.PARLAYOS_DATA = {payload_json};</script></head>")
+            else:
+                tmpl_content = tmpl_content.replace("</body>", f"<script>window.PARLAYOS_DATA = {payload_json};</script></body>")
+    except Exception as e:
+        print(f"[Export] inject fail {e}")
+
+    # ONLY write to parlayos.html and index.html
+    for fname in ["parlayos.html", "index.html"]:
+        out_path = os.path.join(here, fname)
+        try:
+            with open(out_path, "w", encoding="utf-8") as out:
+                out.write(tmpl_content)
+            print(f"[ParlayOS] Updated {fname} ({len(v_games)} games) -> {out_path}")
+        except Exception as e:
+            print(f"Failed {out_path}: {e}")
+    return v_games
+
+
 def main():
     cfg=load_config()
     today=date.today().isoformat()
@@ -1641,13 +1715,13 @@ def main():
 
     json_data=_build_dashboard_json(games_eval, today)
     html_out=render_html_dashboard(games_eval, cfg_loaded, league_rpg, today, json_data)
-    for path in (OUTPUT_PATH, LEGACY_OUTPUT_PATH):
+    for path in (os.path.join(HERE_DIR, "dashboard.html"), LEGACY_OUTPUT_PATH):
         try:
             with open(path,"w", encoding="utf-8") as f:
                 f.write(html_out)
         except:
             pass
-    print(f"✅ {len(games_eval)} game(s) -> {OUTPUT_PATH} (statcast={HAS_STATCAST})")
+    print(f"✅ {len(games_eval)} game(s) -> dashboard.html (statcast={HAS_STATCAST})")
     export_to_html(all_games_data)
     print(f"\n✅ {len(all_games_data)} games exported for ParlayOS")
 
