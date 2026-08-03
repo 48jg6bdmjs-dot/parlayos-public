@@ -1,15 +1,3 @@
-{
-  "youtube_api_key": null,
-  "youtube": {
-    "enabled": true,
-    "max_videos_per_matchup": 2,
-    "cache_hours": 12,
-    "skip_ads": true,
-    "gameplay_only": true,
-    "weight_mlb": 0.08,
-    "weight_nba": 0.07,
-    "weight_nfl": 0.06
-  },
   "mlb": {
     "min_edge": 0.035,
     "min_total_line": 6.5,
@@ -29,7 +17,7 @@
     "max_stake_pct": 0.05,
     "market_weight": 0.58,
     "stat_weight": 0.42
-  },
+  }
   "nba": {
     "min_edge": 0.035,
     "min_total_line": 190.0,
@@ -40,27 +28,3 @@
     "market_weight": 0.6,
     "stat_weight": 0.4
   },
-  "version": "ACE YOUTUBE VISION 2026-07-26",
-  "highlights_enabled": true,
-  "features": [
-    "multi_book_consensus_pinnacle_weighted",
-    "real_probables_hydrate",
-    "pitcher_xFIP_SIERA_KBB_Barrel",
-    "team_wOBA_ISO_splits",
-    "bullpen_fatigue_72h",
-    "park_orientation_wind_vector",
-    "weather_hourly_air_density",
-    "rest_travel_altitude_TNF_bye",
-    "war_weighted_injuries",
-    "lineup_platoon",
-    "monte_carlo_totals",
-    "highlights_mlb_content_api_espn_videos",
-    "ev_kelly_confidence",
-    "four_factors",
-    "epa_proxy",
-    "qb_cpoe",
-    "youtube_highlight_vision_ad_aware",
-    "gameplay_only_filter",
-    "yt_momentum_boost"
-  ]
-}
