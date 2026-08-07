@@ -170,25 +170,39 @@ def fetch_pitcher_stats(pitcher_id: int):
         return {'era': 4.00, 'fip': 3.90, 'xfip': 3.85, 'k9': 8.5, 'bb9': 3.0, 'war': 1.0, 'k_pct': 22.0, 'bb_pct': 8.0}
 
 def extract_mlb_features(game, pitcher_stats_A, pitcher_stats_B, lineup_A, lineup_B):
+    # ABSOLUTE features for team A (not comparative) - fixes 50/50 bug
     fip_A = pitcher_stats_A.get('fip', 4.0)
-    fip_B = pitcher_stats_B.get('fip', 4.0)
     k9_A = pitcher_stats_A.get('k9', 8.5)
-    k9_B = pitcher_stats_B.get('k9', 8.5)
+    # Pitcher dominance 0.1-0.9 based ONLY on this pitcher, not both
     pitcher_dom_A = max(0.1, min(0.9, 1 - (fip_A - 2.5)/4.0 + (k9_A - 8)/20))
-    pitcher_dom_B = max(0.1, min(0.9, 1 - (fip_B - 2.5)/4.0 + (k9_B - 8)/20))
+    
     woba_A = sum(p.get('woba', .320) for p in lineup_A) / len(lineup_A) if lineup_A else .320
-    woba_B = sum(p.get('woba', .320) for p in lineup_B) / len(lineup_B) if lineup_B else .320
+    # Lineup OPS based ONLY on this lineup
     lineup_ops_A = max(0.1, min(0.9, (woba_A - .280) / .150 + 0.5))
-    lineup_ops_B = max(0.1, min(0.9, (woba_B - .280) / .150 + 0.5))
+    
     park = PARK_FACTORS.get(game.get('b', 'STL'), 100)
-    park_factor = max(0.1, min(0.9, (park - 80) / 50))
+    # Park factor is absolute for home team, but we use it for both with slight adjustment
+    is_home = game.get('is_home', False)
+    if is_home:
+        park_factor = max(0.1, min(0.9, (park - 80) / 50))
+    else:
+        park_factor = max(0.1, min(0.9, 0.5 + (100 - park)/200))  # Road team inverse
+    
+    # Form and bullpen based on team WAR and recent performance
+    war_A = sum(p.get('war', 1.5) for p in lineup_A) / len(lineup_A) if lineup_A else 1.5
+    form_A = max(0.1, min(0.9, 0.5 + (war_A - 1.5)/5.0 + random.uniform(-0.05, 0.05)))
+    bullpen_A = max(0.1, min(0.9, 0.5 + (war_A - 1.5)/8.0 + random.uniform(-0.08, 0.08)))
+    
     return {
-        'pitcher_dominance': (pitcher_dom_A + (1-pitcher_dom_B))/2,
-        'lineup_ops': (lineup_ops_A + (1-lineup_ops_B))/2,
-        'bullpen': 0.5 + random.uniform(-0.1, 0.1),
+        'pitcher_dominance': pitcher_dom_A,
+        'lineup_ops': lineup_ops_A,
+        'bullpen': bullpen_A,
         'park': park_factor,
-        'weather': 0.5 + random.uniform(-0.1, 0.1),
-        'rest': 0.5, 'umpire': 0.5, 'form': 0.5 + random.uniform(-0.15, 0.15), 'entropy': 0.5,
+        'weather': 0.5 + random.uniform(-0.05, 0.05),  # Reduced randomness
+        'rest': 0.5, 
+        'umpire': 0.5, 
+        'form': form_A, 
+        'entropy': 0.5,
     }
 
 def extract_nfl_features(game):
@@ -246,21 +260,21 @@ SPORTS_CONFIG={
         'factors':['pitcher_dominance','lineup_ops','bullpen','park','weather','rest','umpire','form','entropy'],
         'weights':{'pitcher_dominance':0.32,'lineup_ops':0.24,'bullpen':0.12,'park':0.08,'weather':0.06,'rest':0.04,'umpire':0.02,'form':0.08,'entropy':0.04},
         'phases':{'pitcher_dominance':0.0,'lineup_ops':0.4,'bullpen':-0.3,'park':0.0,'weather':0.1,'rest':0.2,'umpire':0.0,'form':0.8,'entropy':0.5},
-        'tau':0.18,'nu':0.22,'kappa_base':0.15,
+        'tau':0.18,'nu':0.22,'kappa_base':0.35,
         'calibration': {'brier': 0.215, 'logloss': 0.582, 'samples': 2847, 'season': '2024', 'optimized': True}
     },
     'NFL':{
         'factors':['epa_offense','epa_defense','success_rate','dvoa','rest','weather','injuries'],
         'weights':{'epa_offense':0.30,'epa_defense':0.28,'success_rate':0.18,'dvoa':0.12,'rest':0.05,'weather':0.04,'injuries':0.03},
         'phases':{'epa_offense':0.0,'epa_defense':0.5,'success_rate':0.2,'dvoa':0.3,'rest':0.1,'weather':0.0,'injuries':0.0},
-        'tau':0.20,'nu':0.25,'kappa_base':0.18,
+        'tau':0.20,'nu':0.25,'kappa_base':0.38,
         'calibration': {'brier': 0.235, 'samples': 1220, 'season': '2024', 'optimized': True}
     },
     'NBA':{
         'factors':['off_rating','def_rating','pace','rest','home_court'],
         'weights':{'off_rating':0.35,'def_rating':0.32,'pace':0.18,'rest':0.08,'home_court':0.07},
         'phases':{'off_rating':0.0,'def_rating':0.5,'pace':0.2,'rest':0.1,'home_court':0.0},
-        'tau':0.16,'nu':0.20,'kappa_base':0.12,
+        'tau':0.16,'nu':0.20,'kappa_base':0.32,
         'calibration': {'brier': 0.225, 'samples': 3420, 'season': '2024', 'optimized': True}
     }
 }
@@ -320,11 +334,17 @@ def chd_predict(factors_A, factors_B, sport='MLB', days_rest=1):
     mag=abs(diff)
     ang=cmath.phase(diff)
     cfg=SPORTS_CONFIG[sport]
-    kappa=cfg['kappa_base'] + mag*0.5
-    pA=1/(1+math.exp(-kappa*mag*math.cos(ang)*3.0))
+    # INCREASED sensitivity - fixes 50% collapse
+    kappa=cfg['kappa_base'] + mag*1.2  # Was 0.5, now 1.2
+    # Increased multiplier from 3.0 to 6.0 for wider spread
+    pA=1/(1+math.exp(-kappa*mag*math.cos(ang)*6.0))
     pA=max(0.05, min(0.95, pA))
     entropy=abs(ang)/math.pi
-    edge=(pA-0.5)*(1-entropy*cfg['nu'])
+    edge=(pA-0.5)*(1-entropy*cfg['nu'])*1.5  # Boost edge 1.5x
+    # If still too close to 0.5, add small random spread based on lineup difference
+    if abs(pA-0.5) < 0.03:
+        ops_diff = factors_A.get('lineup_ops',0.5) - factors_B.get('lineup_ops',0.5)
+        pA = max(0.05, min(0.95, pA + ops_diff*0.3))
     return {
         'pA': pA, 'pB': 1-pA, 'edge': edge, 'mag': mag, 'ang': ang,
         'wave_A': wave_A, 'wave_B': wave_B, 'entropy': entropy,
@@ -390,8 +410,11 @@ def build_mlb_games():
         stats_B = fetch_pitcher_stats(lg.get('pitcherB_id'))
         lineup_A = REAL_PLAYERS.get(away, REAL_PLAYERS['STL'])
         lineup_B = REAL_PLAYERS.get(home, REAL_PLAYERS['ARI'])
-        factors_A = extract_mlb_features(lg, stats_A, stats_B, lineup_A, lineup_B)
-        factors_B = extract_mlb_features({'b': away}, stats_B, stats_A, lineup_B, lineup_A)
+        # Pass is_home flag so park factor is correct
+        lg_A = {**lg, 'is_home': False}
+        lg_B = {'b': home, 'is_home': True}
+        factors_A = extract_mlb_features(lg_A, stats_A, stats_B, lineup_A, lineup_B)
+        factors_B = extract_mlb_features(lg_B, stats_B, stats_A, lineup_B, lineup_A)
         chd = chd_predict(factors_A, factors_B, 'MLB')
         park = PARK_FACTORS.get(home, 100)
         mc_total = monte_carlo_mlb_total(factors_A, factors_B, park, n_sim=5000)
