@@ -42,20 +42,29 @@ jobs:
         run: |
           echo "=== CHD Build - ODDS_API_KEY from GitHub Secrets ==="
           echo "Key length: ${#ODDS_API_KEY}"
-          python chd_unified_all.py
+          python -m py_compile chd.py chd_unified_all.py
+          python chd.py
           ls -lh parlayos.html index.html
           touch .nojekyll
-          # Verify no gate
-          if grep -q "accessGate" parlayos.html; then echo "Gate still present!"; exit 1; fi
-          # Verify unlock only
-          if ! grep -q "coverUnlockBtn" parlayos.html; then echo "Unlock missing!"; exit 1; fi
-          # Verify chips deleted
-          if grep -q 'data-stab="pitching"' parlayos.html; then echo "Pitching chip not deleted!"; exit 1; fi
-          if grep -q 'data-stab="lineups"' parlayos.html; then echo "Lineups chip not deleted!"; exit 1; fi
-          # Verify dashboard data
-          if ! grep -q "PARLAYOS_DATA" parlayos.html; then echo "No data!"; exit 1; fi
+          python - <<'PYVALID'
+from pathlib import Path
+import re
+html = Path('parlayos.html').read_text(encoding='utf-8')
+checks = {
+    'gate removed': 'accessGate' not in html,
+    'unlock present': 'coverUnlockBtn' in html,
+    'pitching chip removed': 'data-stab="pitching"' not in html,
+    'lineups chip removed': 'data-stab="lineups"' not in html,
+    'dashboard data present': 'PARLAYOS_DATA' in html,
+}
+failed = [name for name, ok in checks.items() if not ok]
+if failed:
+    raise SystemExit('Build validation failed: ' + ', '.join(failed))
+if not re.search(r'PARLAYOS_DATA\s*=\s*\{', html):
+    raise SystemExit('Build validation failed: PARLAYOS_DATA object missing')
+PYVALID
           cp parlayos.html index.html
-          echo "Build OK - No gate, unlock only, 14 NFL games, no pitching/lineups chips"
+          echo "Build OK - canonical engine, no gate, unlock only, 14 NFL games, no pitching/lineups chips"
 
       - name: Checkout PUBLIC repo
         uses: actions/checkout@v4
