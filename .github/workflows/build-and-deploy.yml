@@ -47,22 +47,22 @@ jobs:
           ls -lh parlayos.html index.html
           touch .nojekyll
           python - <<'PYVALID'
-from pathlib import Path
-import re
-html = Path('parlayos.html').read_text(encoding='utf-8')
-checks = {
-    'gate removed': 'accessGate' not in html,
-    'unlock present': 'coverUnlockBtn' in html,
-    'pitching chip removed': 'data-stab="pitching"' not in html,
-    'lineups chip removed': 'data-stab="lineups"' not in html,
-    'dashboard data present': 'PARLAYOS_DATA' in html,
-}
-failed = [name for name, ok in checks.items() if not ok]
-if failed:
-    raise SystemExit('Build validation failed: ' + ', '.join(failed))
-if not re.search(r'PARLAYOS_DATA\s*=\s*\{', html):
-    raise SystemExit('Build validation failed: PARLAYOS_DATA object missing')
-PYVALID
+          from pathlib import Path
+          import re
+          html = Path('parlayos.html').read_text(encoding='utf-8')
+          checks = {
+              'gate removed': 'accessGate' not in html,
+              'unlock present': 'coverUnlockBtn' in html,
+              'pitching chip removed': 'data-stab="pitching"' not in html,
+              'lineups chip removed': 'data-stab="lineups"' not in html,
+              'dashboard data present': 'PARLAYOS_DATA' in html,
+          }
+          failed = [name for name, ok in checks.items() if not ok]
+          if failed:
+              raise SystemExit('Build validation failed: ' + ', '.join(failed))
+          if not re.search(r'PARLAYOS_DATA\s*=\s*\{', html):
+              raise SystemExit('Build validation failed: PARLAYOS_DATA object missing')
+          PYVALID
           cp parlayos.html index.html
           echo "Build OK - canonical engine, no gate, unlock only, 14 NFL games, no pitching/lineups chips"
 
