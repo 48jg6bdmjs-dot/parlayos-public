@@ -43,7 +43,7 @@ jobs:
           echo "=== CHD Build - ODDS_API_KEY from GitHub Secrets ==="
           echo "Key length: ${#ODDS_API_KEY}"
           python -m py_compile chd_master_predictor.py chd_unified_all.py
-          python chd.py
+          python chd_master_predictor.py
           ls -lh parlayos.html index.html
           touch .nojekyll
           python - <<'PYVALID'
