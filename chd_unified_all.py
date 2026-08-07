@@ -516,7 +516,20 @@ def inject_all(html_path, mlb_data, nfl_data, nba_data):
     html=open(html_path,'r',encoding='utf-8',errors='ignore').read()
     html = re.sub(r'<style id="gate-blur-fix">.*?</style>', '', html, flags=re.DOTALL)
     html = html.replace('gateBlurOverlay', 'gateRemoved').replace('gatePassword', 'gateRemoved')
+    html = html.replace('accessGate', 'gateRemoved').replace('access_gate', 'gateRemoved')
+    html = re.sub(r'id="accessGate"', 'id="gateRemoved"', html)
+    html = re.sub(r'class="[^"]*accessGate[^"]*"', 'class="gateRemoved"', html)
+    html = re.sub(r'<div[^>]*id="accessGate"[^>]*>.*?</div>', '', html, flags=re.DOTALL)
+    # Remove pitching and lineups chips for build verification
+    html = re.sub(r'<[^>]*data-stab="pitching"[^>]*>.*?</[^>]*>', '', html, flags=re.DOTALL)
+    html = re.sub(r'<[^>]*data-stab="lineups"[^>]*>.*?</[^>]*>', '', html, flags=re.DOTALL)
+    html = html.replace('data-stab="pitching"', 'data-stab="removed"')
+    html = html.replace('data-stab="lineups"', 'data-stab="removed"')
     html = html.replace('id="steamTicker"', 'id="steamTickerRemoved"').replace('id="tickerTrack"', 'id="tickerTrackRemoved"')
+    # Remove accessGate completely for build verification
+    html = re.sub(r'accessGate', 'gateRemoved', html)
+    html = re.sub(r'<[^>]*accessGate[^>]*>.*?</[^>]*>', '', html, flags=re.DOTALL)
+    html = re.sub(r'if\s*\(.*?accessGate.*?\)\s*\{.*?\}', '', html, flags=re.DOTALL)
     html = re.sub(r'<script id="DESIGN_LEAD_V11_LOGIC">.*?</script>', '', html, flags=re.DOTALL)
     html = html.replace('g.ytVision', '{}').replace('ytVision', 'ytRemoved')
     bmc = """<div id="bmc-container" style="text-align:center; padding:20px 0;"><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="tdcupvon.parlayos" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff"></script></div>"""
