@@ -8,7 +8,7 @@ Implements all recommendations from table_20260805.csv:
 - Right games/players, bottom buttons + O/U + K Prop + Moneyline, menu fixed, no steam ticker
 """
 
-import json, math, cmath, random, os, re, time
+import json, math, cmath, random, os, re, time, hashlib
 from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Tuple, Optional
 try:
@@ -23,6 +23,35 @@ try:
     HAS_URLLIB = True
 except:
     HAS_URLLIB = False
+
+
+def clamp01(value: float, low: float = 0.0, high: float = 1.0) -> float:
+    return max(low, min(high, value))
+
+
+def stable_unit_interval(*parts) -> float:
+    """Deterministic 0..1 helper used to remove run-to-run randomness."""
+    blob = "|".join(str(p) for p in parts).encode("utf-8")
+    digest = hashlib.sha256(blob).hexdigest()
+    return int(digest[:16], 16) / 0xFFFFFFFFFFFFFFFF
+
+
+def seed_from_parts(*parts) -> int:
+    digest = hashlib.sha256("|".join(map(str, parts)).encode("utf-8")).hexdigest()
+    return int(digest[:16], 16)
+
+
+def set_deterministic_seed(*parts) -> random.Random:
+    return random.Random(seed_from_parts(*parts))
+
+
+
+def sigmoid(x: float) -> float:
+    if x >= 0:
+        z = math.exp(-x)
+        return 1 / (1 + z)
+    z = math.exp(x)
+    return z / (1 + z)
 
 # === REAL PLAYERS - Enhanced with wOBA, WAR for real modeling ===
 REAL_PLAYERS = {
@@ -64,8 +93,8 @@ PARK_FACTORS = {'ARI':105,'ATL':100,'BAL':102,'BOS':108,'CHC':102,'CWS':102,'CIN
 NFL_TEAMS = ['ARI','ATL','BAL','BUF','CAR','CHI','CIN','CLE','DAL','DEN','DET','GB','HOU','IND','JAX','KC','LAC','LAR','LV','MIA','MIN','NE','NO','NYG','NYJ','PHI','PIT','SEA','SF','TB','TEN','WAS']
 NBA_TEAMS = ['ATL','BOS','BKN','CHA','CHI','CLE','DAL','DEN','DET','GSW','HOU','IND','LAC','LAL','MEM','MIA','MIL','MIN','NOP','NYK','OKC','ORL','PHI','PHX','POR','SAC','SAS','TOR','UTA','WAS']
 
-ODDS_API_KEY = os.environ.get('ODDS_API_KEY', '70149b76574291a6fb5d6fffb540b652')
-ODDS_API_ENABLED = bool(ODDS_API_KEY and len(ODDS_API_KEY) > 10)
+ODDS_API_KEY = os.environ.get('ODDS_API_KEY', '').strip()
+ODDS_API_ENABLED = bool(ODDS_API_KEY)
 
 def fetch_json(url: str, timeout: int = 8):
     if not HAS_URLLIB:
@@ -85,7 +114,7 @@ def fetch_mlb_schedule_live(date_str: str = None):
     url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={date_str}&hydrate=team,probablePitcher,linescore,weather"
     data = fetch_json(url)
     if not data or 'dates' not in data or not data['dates']:
-        print(f"[MLB LIVE] No games for {date_str}, using mock with real structure")
+        print(f"[MLB LIVE] No games for {date_str}")
         return []
     games = []
     for date_entry in data['dates']:
@@ -118,7 +147,7 @@ def fetch_mlb_schedule_live(date_str: str = None):
 
 def fetch_odds_live(sport: str = 'baseball_mlb'):
     if not ODDS_API_ENABLED:
-        print(f"[ODDS] No API key, using mock odds with de-vig simulation")
+        print(f"[ODDS] No API key, skipping live odds")
         return {}
     url = f"https://api.the-odds-api.com/v4/sports/{sport}/odds?apiKey={ODDS_API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american"
     data = fetch_json(url, timeout=10)
@@ -150,80 +179,110 @@ def fetch_odds_live(sport: str = 'baseball_mlb'):
     print(f"[ODDS] Fetched {len(odds_map)} games with de-vigged odds")
     return odds_map
 
+
 def fetch_pitcher_stats(pitcher_id: int):
+    default = {'era': 4.00, 'fip': 3.90, 'xfip': 3.85, 'k9': 8.5, 'bb9': 3.0, 'war': 1.0, 'k_pct': 22.0, 'bb_pct': 8.0}
     if not pitcher_id:
-        return {'era': 4.00, 'fip': 3.90, 'xfip': 3.85, 'k9': 8.5, 'bb9': 3.0, 'war': 1.0, 'k_pct': 22.0, 'bb_pct': 8.0}
+        return default
     url = f"https://statsapi.mlb.com/api/v1/people/{pitcher_id}/stats?stats=season&group=pitching"
     data = fetch_json(url)
     try:
         stats = data['stats'][0]['splits'][0]['stat']
+
+        def sf(*keys, fallback=None):
+            for key in keys:
+                if key in stats and stats[key] not in (None, ""):
+                    try:
+                        return float(stats[key])
+                    except Exception:
+                        pass
+            return fallback
+
+        era = sf('era', 'earnedRunAverage', fallback=default['era']) or default['era']
+        fip = sf('fip', fallback=era) or era
+        xfip = sf('xfip', fallback=fip) or fip
+        k9 = sf('strikeoutsPer9Inn', 'strikeoutsPerNineInnings', fallback=default['k9']) or default['k9']
+        bb9 = sf('walksPer9Inn', 'walksPerNineInnings', fallback=default['bb9']) or default['bb9']
+        k_pct = sf('strikeoutWalkRatio', fallback=default['k_pct']) or default['k_pct']
+        bb_pct = sf('walksPer9Inn', fallback=default['bb_pct']) or default['bb_pct']
+
         return {
-            'era': float(stats.get('era', 4.00)),
-            'fip': float(stats.get('era', 4.00)),
-            'xfip': float(stats.get('era', 4.00)),
-            'k9': float(stats.get('strikeoutsPer9Inn', 8.5)),
-            'bb9': float(stats.get('walksPer9Inn', 3.0)),
-            'war': 1.0,
-            'k_pct': 22.0, 'bb_pct': 8.0,
+            'era': era,
+            'fip': fip,
+            'xfip': xfip,
+            'k9': k9,
+            'bb9': bb9,
+            'war': default['war'],
+            'k_pct': k_pct,
+            'bb_pct': bb_pct,
         }
-    except:
-        return {'era': 4.00, 'fip': 3.90, 'xfip': 3.85, 'k9': 8.5, 'bb9': 3.0, 'war': 1.0, 'k_pct': 22.0, 'bb_pct': 8.0}
+    except Exception:
+        return default
 
 def extract_mlb_features(game, pitcher_stats_A, pitcher_stats_B, lineup_A, lineup_B):
-    # ABSOLUTE features for team A (not comparative) - fixes 50/50 bug
+    # Deterministic absolute features for team A.
     fip_A = pitcher_stats_A.get('fip', 4.0)
     k9_A = pitcher_stats_A.get('k9', 8.5)
-    # Pitcher dominance 0.1-0.9 based ONLY on this pitcher, not both
-    pitcher_dom_A = max(0.1, min(0.9, 1 - (fip_A - 2.5)/4.0 + (k9_A - 8)/20))
-    
+    pitcher_dom_A = clamp01(1 - (fip_A - 2.5) / 4.0 + (k9_A - 8.0) / 20.0, 0.1, 0.9)
+
     woba_A = sum(p.get('woba', .320) for p in lineup_A) / len(lineup_A) if lineup_A else .320
-    # Lineup OPS based ONLY on this lineup
-    lineup_ops_A = max(0.1, min(0.9, (woba_A - .280) / .150 + 0.5))
-    
+    lineup_ops_A = clamp01((woba_A - .280) / .150 + 0.5, 0.1, 0.9)
+
     park = PARK_FACTORS.get(game.get('b', 'STL'), 100)
-    # Park factor is absolute for home team, but we use it for both with slight adjustment
     is_home = game.get('is_home', False)
     if is_home:
-        park_factor = max(0.1, min(0.9, (park - 80) / 50))
+        park_factor = clamp01((park - 80) / 50, 0.1, 0.9)
     else:
-        park_factor = max(0.1, min(0.9, 0.5 + (100 - park)/200))  # Road team inverse
-    
-    # Form and bullpen based on team WAR and recent performance
+        park_factor = clamp01(0.5 + (100 - park) / 200, 0.1, 0.9)
+
     war_A = sum(p.get('war', 1.5) for p in lineup_A) / len(lineup_A) if lineup_A else 1.5
-    form_A = max(0.1, min(0.9, 0.5 + (war_A - 1.5)/5.0 + random.uniform(-0.05, 0.05)))
-    bullpen_A = max(0.1, min(0.9, 0.5 + (war_A - 1.5)/8.0 + random.uniform(-0.08, 0.08)))
-    
+    war_delta = war_A - 1.5
+    form_A = clamp01(0.50 + war_delta / 5.0, 0.1, 0.9)
+    bullpen_A = clamp01(0.50 + war_delta / 8.0, 0.1, 0.9)
+
+    travel = stable_unit_interval(game.get('a', ''), game.get('b', ''), game.get('venue', ''), 'weather')
+    weather = clamp01(0.48 + (travel - 0.5) * 0.08, 0.1, 0.9)
+
     return {
         'pitcher_dominance': pitcher_dom_A,
         'lineup_ops': lineup_ops_A,
         'bullpen': bullpen_A,
         'park': park_factor,
-        'weather': 0.5 + random.uniform(-0.05, 0.05),  # Reduced randomness
-        'rest': 0.5, 
-        'umpire': 0.5, 
-        'form': form_A, 
-        'entropy': 0.5,
+        'weather': weather,
+        'rest': 0.5,
+        'umpire': 0.5,
+        'form': form_A,
+        'entropy': clamp01(0.5 - abs(lineup_ops_A - 0.5) * 0.2, 0.1, 0.9),
     }
 
 def extract_nfl_features(game):
-    epa_A = random.uniform(-0.1, 0.3)
-    epa_B = random.uniform(-0.1, 0.3)
+    key = f"{game.get('a', '')}_{game.get('b', '')}"
+    offense = stable_unit_interval(key, 'epa_offense')
+    defense = stable_unit_interval(key, 'epa_defense')
+    success = stable_unit_interval(key, 'success_rate')
+    dvoa = stable_unit_interval(key, 'dvoa')
+    injuries = stable_unit_interval(key, 'injuries')
     return {
-        'epa_offense': max(0.1, min(0.9, (epa_A + 0.5))),
-        'epa_defense': max(0.1, min(0.9, 1 - (epa_B + 0.5))),
-        'success_rate': 0.5 + random.uniform(-0.15, 0.15),
-        'dvoa': 0.5 + random.uniform(-0.2, 0.2),
-        'rest': 0.5, 'weather': 0.5, 'injuries': 0.5 + random.uniform(-0.1, 0.1),
+        'epa_offense': clamp01(0.35 + offense * 0.45, 0.1, 0.9),
+        'epa_defense': clamp01(0.35 + (1 - defense) * 0.45, 0.1, 0.9),
+        'success_rate': clamp01(0.35 + success * 0.45, 0.1, 0.9),
+        'dvoa': clamp01(0.30 + dvoa * 0.50, 0.1, 0.9),
+        'rest': 0.5,
+        'weather': 0.5,
+        'injuries': clamp01(0.35 + injuries * 0.40, 0.1, 0.9),
     }
 
 def extract_nba_features(game):
-    offrtg_A = random.uniform(105, 120)
-    defrtg_A = random.uniform(105, 120)
+    key = f"{game.get('a', '')}_{game.get('b', '')}"
+    off = stable_unit_interval(key, 'off_rating')
+    deff = stable_unit_interval(key, 'def_rating')
+    pace = stable_unit_interval(key, 'pace')
     return {
-        'off_rating': max(0.1, min(0.9, (offrtg_A - 100) / 30)),
-        'def_rating': max(0.1, min(0.9, 1 - (defrtg_A - 100) / 30)),
-        'pace': 0.5 + random.uniform(-0.15, 0.15),
-        'rest': 0.5, 'home_court': 0.6,
+        'off_rating': clamp01(0.40 + off * 0.40, 0.1, 0.9),
+        'def_rating': clamp01(0.40 + (1 - deff) * 0.40, 0.1, 0.9),
+        'pace': clamp01(0.35 + pace * 0.45, 0.1, 0.9),
+        'rest': 0.5,
+        'home_court': 0.6,
     }
 
 def magic_fourier_weight(r,r0=1.0):
@@ -281,33 +340,69 @@ SPORTS_CONFIG={
 
 def calibrate_weights(historical_results: List[Dict], sport: str = 'MLB'):
     """
-    Dynamic calibration - optimizes weights via grid search on Brier score
-    In production, this would run on historical data
+    Deterministic calibration.
+
+    If there is no historical data, keep the existing weights unchanged.
+    When historical data is available, do a small deterministic grid search
+    instead of injecting random noise into the model.
     """
     cfg = SPORTS_CONFIG[sport]
-    best_brier = cfg['calibration']['brier']
+    if not historical_results:
+        cfg['calibration']['optimized_at'] = datetime.now(ET_ZONE).isoformat()
+        print(f"[CALIBRATION] {sport} skipped (no historical data)")
+        return cfg['weights'].copy()
+
+    best_brier = float('inf')
     best_weights = cfg['weights'].copy()
-    
-    # Simple grid search over key weights (in production, use Bayesian opt)
-    for pitcher_w in [0.28, 0.30, 0.32, 0.34]:
-        for lineup_w in [0.20, 0.22, 0.24, 0.26]:
+
+    def predict_from_weights(row_weights, row_a, row_b):
+        score = 0.0
+        for factor, weight in row_weights.items():
+            score += weight * (row_a.get(factor, 0.5) - row_b.get(factor, 0.5))
+        return sigmoid(score * 4.0)
+
+    grid = {
+        'MLB': ([0.28, 0.30, 0.32, 0.34], [0.20, 0.22, 0.24, 0.26]),
+        'NFL': ([0.26, 0.28, 0.30, 0.32], [0.24, 0.26, 0.28, 0.30]),
+        'NBA': ([0.32, 0.34, 0.36], [0.28, 0.30, 0.32]),
+    }
+    first_key, second_key = {
+        'MLB': ('pitcher_dominance', 'lineup_ops'),
+        'NFL': ('epa_offense', 'epa_defense'),
+        'NBA': ('off_rating', 'def_rating'),
+    }[sport]
+
+    first_vals, second_vals = grid[sport]
+    for first_w in first_vals:
+        for second_w in second_vals:
             test_weights = best_weights.copy()
-            test_weights['pitcher_dominance'] = pitcher_w
-            test_weights['lineup_ops'] = lineup_w
-            # Normalize
+            test_weights[first_key] = first_w
+            test_weights[second_key] = second_w
             total = sum(test_weights.values())
-            test_weights = {k: v/total for k,v in test_weights.items()}
-            
-            # Compute Brier on historical (mock calc)
-            brier = 0.215 + random.uniform(-0.01, 0.01)  # In real, compute from historical
+            test_weights = {k: v / total for k, v in test_weights.items()}
+
+            brier_sum = 0.0
+            n = 0
+            for row in historical_results:
+                row_a = row.get('factors_A', {})
+                row_b = row.get('factors_B', {})
+                outcome = row.get('outcome')
+                if outcome is None:
+                    continue
+                p = predict_from_weights(test_weights, row_a, row_b)
+                brier_sum += (p - outcome) ** 2
+                n += 1
+            if n == 0:
+                continue
+            brier = brier_sum / n
             if brier < best_brier:
                 best_brier = brier
                 best_weights = test_weights
-    
+
     cfg['weights'] = best_weights
-    cfg['calibration']['brier'] = best_brier
+    cfg['calibration']['brier'] = best_brier if best_brier < float('inf') else cfg['calibration'].get('brier', 0.25)
     cfg['calibration']['optimized_at'] = datetime.now(ET_ZONE).isoformat()
-    print(f"[CALIBRATION] {sport} Brier {best_brier:.4f} with weights {best_weights}")
+    print(f"[CALIBRATION] {sport} Brier {cfg['calibration']['brier']:.4f} with weights {best_weights}")
     return best_weights
 
 def build_wave(factors,sport,days_rest=1):
@@ -328,26 +423,34 @@ def build_wave(factors,sport,days_rest=1):
     return S
 
 def chd_predict(factors_A, factors_B, sport='MLB', days_rest=1):
-    wave_A=build_wave(factors_A, sport, days_rest)
-    wave_B=build_wave(factors_B, sport, days_rest)
-    diff=wave_A-wave_B
-    mag=abs(diff)
-    ang=cmath.phase(diff)
-    cfg=SPORTS_CONFIG[sport]
-    # INCREASED sensitivity - fixes 50% collapse
-    kappa=cfg['kappa_base'] + mag*1.2  # Was 0.5, now 1.2
-    # Increased multiplier from 3.0 to 6.0 for wider spread
-    pA=1/(1+math.exp(-kappa*mag*math.cos(ang)*6.0))
-    pA=max(0.05, min(0.95, pA))
-    entropy=abs(ang)/math.pi
-    edge=(pA-0.5)*(1-entropy*cfg['nu'])*1.5  # Boost edge 1.5x
-    # If still too close to 0.5, add small random spread based on lineup difference
-    if abs(pA-0.5) < 0.03:
-        ops_diff = factors_A.get('lineup_ops',0.5) - factors_B.get('lineup_ops',0.5)
-        pA = max(0.05, min(0.95, pA + ops_diff*0.3))
+    cfg = SPORTS_CONFIG[sport]
+
+    # Deterministic weighted comparison instead of angle-heavy amplification.
+    score = 0.0
+    for factor in cfg['factors']:
+        weight = cfg['weights'].get(factor, 0.0)
+        delta = factors_A.get(factor, 0.5) - factors_B.get(factor, 0.5)
+        score += weight * delta
+
+    separation = sum(abs(factors_A.get(f, 0.5) - factors_B.get(f, 0.5)) * cfg['weights'].get(f, 0.0) for f in cfg['factors'])
+    confidence = clamp01(0.55 + separation * 1.2, 0.35, 0.95)
+
+    temperature = max(2.2, 4.8 - confidence * 1.8)
+    pA = sigmoid(score * temperature * 6.0)
+    pA = 0.5 + (pA - 0.5) * (1 - cfg['nu'] * 0.35)
+    pA = clamp01(pA, 0.05, 0.95)
+
+    edge = (pA - 0.5) * (1 + separation) * 1.25
+
     return {
-        'pA': pA, 'pB': 1-pA, 'edge': edge, 'mag': mag, 'ang': ang,
-        'wave_A': wave_A, 'wave_B': wave_B, 'entropy': entropy,
+        'pA': pA,
+        'pB': 1 - pA,
+        'edge': edge,
+        'mag': separation,
+        'ang': 0.0,
+        'wave_A': 0j,
+        'wave_B': 0j,
+        'entropy': 1 - confidence,
         'calibration': cfg.get('calibration', {})
     }
 
@@ -356,15 +459,16 @@ def monte_carlo_mlb_total(factors_A, factors_B, park_factor, n_sim=10000):
     ops_B = factors_B.get('lineup_ops', 0.5)
     pitcher_A = factors_A.get('pitcher_dominance', 0.5)
     pitcher_B = factors_B.get('pitcher_dominance', 0.5)
-    exp_runs_A = 4.5 * (0.5 + (ops_A - 0.5)*0.8) * (1.2 - pitcher_B*0.4) * (park_factor/100)
-    exp_runs_B = 4.5 * (0.5 + (ops_B - 0.5)*0.8) * (1.2 - pitcher_A*0.4) * (park_factor/100)
+    exp_runs_A = 4.5 * (0.5 + (ops_A - 0.5) * 0.8) * (1.2 - pitcher_B * 0.4) * (park_factor / 100)
+    exp_runs_B = 4.5 * (0.5 + (ops_B - 0.5) * 0.8) * (1.2 - pitcher_A * 0.4) * (park_factor / 100)
     r_dispersion = 5.0
+    rng = set_deterministic_seed('mlb_total', round(exp_runs_A, 4), round(exp_runs_B, 4), round(park_factor, 4), n_sim)
     totals = []
     for _ in range(n_sim):
-        mean_A = max(0.5, exp_runs_A * random.uniform(0.85, 1.15))
-        mean_B = max(0.5, exp_runs_B * random.uniform(0.85, 1.15))
-        runs_A = max(0, int(random.gauss(mean_A, math.sqrt(mean_A + mean_A**2/r_dispersion))))
-        runs_B = max(0, int(random.gauss(mean_B, math.sqrt(mean_B + mean_B**2/r_dispersion))))
+        mean_A = max(0.5, exp_runs_A * rng.uniform(0.85, 1.15))
+        mean_B = max(0.5, exp_runs_B * rng.uniform(0.85, 1.15))
+        runs_A = max(0, int(rng.gauss(mean_A, math.sqrt(mean_A + mean_A ** 2 / r_dispersion))))
+        runs_B = max(0, int(rng.gauss(mean_B, math.sqrt(mean_B + mean_B ** 2 / r_dispersion))))
         totals.append(runs_A + runs_B)
     totals.sort()
     mean_total = sum(totals)/len(totals)
@@ -379,9 +483,10 @@ def monte_carlo_mlb_total(factors_A, factors_B, park_factor, n_sim=10000):
 def monte_carlo_k_prop(pitcher_stats, lineup, n_sim=5000):
     k9 = pitcher_stats.get('k9', 8.5)
     exp_k = k9 * 6 / 9
+    rng = set_deterministic_seed('mlb_k', round(k9, 4), len(lineup) if lineup else 0, n_sim)
     ks = []
     for _ in range(n_sim):
-        k = max(0, int(random.gauss(exp_k, 1.5)))
+        k = max(0, int(rng.gauss(exp_k, 1.5)))
         ks.append(k)
     ks.sort()
     return {
@@ -396,13 +501,17 @@ def build_mlb_games():
     live_games = fetch_mlb_schedule_live(date_str)
     odds_data = fetch_odds_live('baseball_mlb')
     if not live_games:
-        live_games = [
-            {'a': 'STL', 'b': 'ARI', 'pitcherA': 'Matthew Liberatore', 'pitcherB': 'Merrill Kelly', 'pitcherA_id': None, 'pitcherB_id': None, 'venue': 'Chase Field'},
-            {'a': 'NYY', 'b': 'BOS', 'pitcherA': 'Carlos Rodon', 'pitcherB': 'Brayan Bello', 'pitcherA_id': None, 'pitcherB_id': None, 'venue': 'Fenway Park'},
-            {'a': 'LAD', 'b': 'NYM', 'pitcherA': 'Yoshinobu Yamamoto', 'pitcherB': 'Kodai Senga', 'pitcherA_id': None, 'pitcherB_id': None, 'venue': 'Citi Field'},
-            {'a': 'HOU', 'b': 'TEX', 'pitcherA': 'Framber Valdez', 'pitcherB': 'Jacob deGrom', 'pitcherA_id': None, 'pitcherB_id': None, 'venue': 'Globe Life Field'},
-            {'a': 'ATL', 'b': 'PHI', 'pitcherA': 'Spencer Strider', 'pitcherB': 'Zack Wheeler', 'pitcherA_id': None, 'pitcherB_id': None, 'venue': 'Citizens Bank Park'},
-        ]
+        if os.environ.get('ALLOW_DEMO_SLATE', '') == '1':
+            live_games = [
+                {'a': 'STL', 'b': 'ARI', 'pitcherA': 'Matthew Liberatore', 'pitcherB': 'Merrill Kelly', 'pitcherA_id': None, 'pitcherB_id': None, 'venue': 'Chase Field'},
+                {'a': 'NYY', 'b': 'BOS', 'pitcherA': 'Carlos Rodon', 'pitcherB': 'Brayan Bello', 'pitcherA_id': None, 'pitcherB_id': None, 'venue': 'Fenway Park'},
+                {'a': 'LAD', 'b': 'NYM', 'pitcherA': 'Yoshinobu Yamamoto', 'pitcherB': 'Kodai Senga', 'pitcherA_id': None, 'pitcherB_id': None, 'venue': 'Citi Field'},
+                {'a': 'HOU', 'b': 'TEX', 'pitcherA': 'Framber Valdez', 'pitcherB': 'Jacob deGrom', 'pitcherA_id': None, 'pitcherB_id': None, 'venue': 'Globe Life Field'},
+                {'a': 'ATL', 'b': 'PHI', 'pitcherA': 'Spencer Strider', 'pitcherB': 'Zack Wheeler', 'pitcherA_id': None, 'pitcherB_id': None, 'venue': 'Citizens Bank Park'},
+            ]
+        else:
+            print('[MLB LIVE] No slate available and demo fallback disabled')
+            return []
     games = []
     for i, lg in enumerate(live_games[:15]):
         away = lg['a']; home = lg['b']
@@ -458,6 +567,21 @@ def build_mlb_games():
         games.append(game_obj)
     return games
 
+
+def rank_mlb_ml_card(mlb_data, limit=15):
+    games = list(mlb_data.get('games', []))
+    ranked = sorted(
+        games,
+        key=lambda g: (
+            g.get('mlEdge', 0.0),
+            g.get('chd_pA', 0.0),
+            g.get('total', 0.0)
+        ),
+        reverse=True,
+    )
+    return ranked[:limit]
+
+
 def build_nfl_games():
     today = datetime.now(ET_ZONE)
     matchups = [('KC','BUF'),('SF','DAL'),('PHI','DET'),('BAL','CIN')]
@@ -502,6 +626,7 @@ def build_nba_games():
 
 def build_data():
     today=datetime.now(ET_ZONE)
+    random.seed(seed_from_parts('build_data', today.strftime('%Y-%m-%d')))
     # Dynamic calibration
     try:
         calibrate_weights([], 'MLB')
@@ -648,8 +773,13 @@ if __name__=="__main__":
     SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
     mlb_data, nfl_data, nba_data = build_data()
     print(f"Built CHD v3.1 MLB {len(mlb_data['games'])} | NFL {len(nfl_data['games'])} | NBA {len(nba_data['games'])} | Odds {ODDS_API_ENABLED} | Monte Carlo: YES | Sport-specific: YES")
-    for g in mlb_data['games'][:3]:
-        print(f"  {g['a']}@{g['b']} CHD {g['chd_pA']*100:.1f}%/{g['chd_pB']*100:.1f}% total {g['total']} (CI {g['total_dist']['ci_10']}-{g['total_dist']['ci_90']}) fav {g['mlFav']} edge {g['mlEdge']*100:+.1f}% | K {g['kLine']} | {g['pitcherA']} vs {g['pitcherB']} | Real: {g['lineupA'][0]['name']} {g['lineupA'][0]['pos']} {g['lineupA'][0]['team']}")
+    mlb_ranked = rank_mlb_ml_card(mlb_data, limit=15)
+    if mlb_ranked:
+        print("Top MLB moneyline card:")
+        for g in mlb_ranked[:3]:
+            print(f"  {g['a']}@{g['b']} CHD {g['chd_pA']*100:.1f}%/{g['chd_pB']*100:.1f}% total {g['total']} (CI {g['total_dist']['ci_10']}-{g['total_dist']['ci_90']}) fav {g['mlFav']} edge {g['mlEdge']*100:+.1f}% | K {g['kLine']} | {g['pitcherA']} vs {g['pitcherB']} | Real: {g['lineupA'][0]['name']} {g['lineupA'][0]['pos']} {g['lineupA'][0]['team']}")
+    else:
+        print("No MLB games available.")
     for fname in ["parlayos.html", "ParlayOS.html", "index.html", "parlayos_chd_unified.html", "parlayos_2.html"]:
         fpath = os.path.join(SCRIPT_DIR, fname)
         if os.path.exists(fpath):
