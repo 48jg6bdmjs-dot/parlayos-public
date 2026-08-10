@@ -549,12 +549,15 @@ def build_mlb_games():
             "total_dist": mc_total,
             "ouPick": f"{'OVER' if mc_total['p_over_8_5']>0.5 else 'UNDER'} {round(mc_total['mean'],1)}",
             "ouEdge": round((mc_total['p_over_8_5']-0.5)*2*mc_total['mean']/10, 4),
+            "ouProb": round(mc_total['p_over_8_5'] if mc_total['p_over_8_5']>0.5 else 1-mc_total['p_over_8_5'], 4),
             "kLine": round(mc_k_A['mean'], 1),
             "kPick": f"{'OVER' if mc_k_A['p_over_6_5']>0.5 else 'UNDER'} {round(mc_k_A['mean'],1)} K",
             "kEdge": round(mc_k_A['p_over_6_5']-0.5, 4),
+            "kProb": round(mc_k_A['p_over_6_5'] if mc_k_A['p_over_6_5']>0.5 else 1-mc_k_A['p_over_6_5'], 4),
             "k_dist": mc_k_A,
             "mlFav": away if chd['pA']>0.5 else home, "mlPrice": ml_price,
-            "mlEdge": round(edge, 4), "model": round(chd['pA'], 4),
+            "mlProb": round(max(chd['pA'], chd['pB']), 4),
+            "mlEdge": round(edge, 4), "model": round(max(chd['pA'], chd['pB']), 4),
             "lineupA": lineup_A, "lineupB": lineup_B,
             "factorsA": factors_A, "factorsB": factors_B,
             "chd_pA": round(chd['pA'], 4), "chd_pB": round(chd['pB'], 4),
@@ -595,7 +598,8 @@ def build_nfl_games():
             "id": f"nfl_{i}_{away}_{home}", "a": away, "b": home, "abbrA": away, "abbrB": home,
             "total": round(exp_total,1), "ouPick": f"{'OVER' if random.random()>0.5 else 'UNDER'} {exp_total:.1f}",
             "mlFav": away if chd['pA']>0.5 else home, "mlEdge": round(chd['edge'],4),
-            "model": round(chd['pA'],4), "lineupA": [], "lineupB": [],
+            "mlProb": round(max(chd['pA'], chd['pB']),4),
+            "model": round(max(chd['pA'], chd['pB']),4), "lineupA": [], "lineupB": [],
             "chd_pA": round(chd['pA'],4), "chd_pB": round(chd['pB'],4),
             "factorsA": factors_A, "factorsB": factors_B,
             "time": today.strftime("%-I:%M %p"), "date": today.strftime("%a %b %d"),
@@ -616,7 +620,8 @@ def build_nba_games():
             "id": f"nba_{i}_{away}_{home}", "a": away, "b": home, "abbrA": away, "abbrB": home,
             "total": round(exp_total,1), "ouPick": f"{'OVER' if exp_total>224 else 'UNDER'} {exp_total:.1f}",
             "mlFav": away if chd['pA']>0.5 else home, "mlEdge": round(chd['edge'],4),
-            "model": round(chd['pA'],4), "lineupA": [], "lineupB": [],
+            "mlProb": round(max(chd['pA'], chd['pB']),4),
+            "model": round(max(chd['pA'], chd['pB']),4), "lineupA": [], "lineupB": [],
             "chd_pA": round(chd['pA'],4), "chd_pB": round(chd['pB'],4),
             "factorsA": factors_A, "factorsB": factors_B,
             "time": today.strftime("%-I:%M %p"), "date": today.strftime("%a %b %d"),
@@ -678,9 +683,9 @@ def inject_all(html_path, mlb_data, nfl_data, nba_data):
     html = html.replace('accessGate', 'gateRemoved')
     html = html.replace('access_gate', 'gateRemoved')
     
-    # Remove pitching and lineups chips - replace attribute to pass grep -v check
-    html = re.sub(r'data-stab="pitching"', 'data-stab="removed-pitching"', html)
-    html = re.sub(r'data-stab="lineups"', 'data-stab="removed-lineups"', html)
+    # KEEP pitching and lineups chips - DO NOT REMOVE (fixed)
+    # html = re.sub(r'data-stab="pitching"', 'data-stab="removed-pitching"', html)
+    # html = re.sub(r'data-stab="lineups"', 'data-stab="removed-lineups"', html)
     
     # Remove steam ticker
     html = html.replace('id="steamTicker"', 'id="steamTickerRemoved"')
@@ -744,14 +749,9 @@ def inject_all(html_path, mlb_data, nfl_data, nba_data):
     # 2. unlock present - MUST have coverUnlockBtn
     if 'coverUnlockBtn' not in html:
         html = html.replace('</body>', unlock_code + '\n</body>')
-    # 3 & 4. pitching and lineups removed
-    html = html.replace('data-stab="pitching"', 'data-stab="removed"')
-    html = html.replace('data-stab="lineups"', 'data-stab="removed"')
-    html = html.replace('data-stab="removed-pitching"', 'data-stab="removed"')
-    html = html.replace('data-stab="removed-lineups"', 'data-stab="removed"')
-    # Ensure no pitching/lineups remain for grep check
-    html = re.sub(r'data-stab="[^"]*pitching[^"]*"', 'data-stab="removed"', html)
-    html = re.sub(r'data-stab="[^"]*lineups[^"]*"', 'data-stab="removed"', html)
+    # 3 & 4. pitching and lineups KEPT - ensure they exist
+    # (previously removed, now fixed to keep)
+    pass
     
     # Inject data
     html = html.replace('</body>', inj + '\n</body>')
@@ -760,8 +760,8 @@ def inject_all(html_path, mlb_data, nfl_data, nba_data):
     html = html.replace('accessGate', 'gateRemoved')
     if 'coverUnlockBtn' not in html:
         html = html.replace('</body>', unlock_code + '\n</body>')
-    html = re.sub(r'data-stab="pitching"', 'data-stab="removed"', html)
-    html = re.sub(r'data-stab="lineups"', 'data-stab="removed"', html)
+    # KEEP pitching/lineups - do not remove
+    pass
     
     with open(html_path, 'w', encoding='utf-8') as out:
         out.write(html)
