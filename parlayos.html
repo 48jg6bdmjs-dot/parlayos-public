@@ -14414,6 +14414,25 @@ body.dark .table-card .mini-table td {
                               try{ applyPrefs(); }catch(e){}
                             }
 
+                            function markGameActionPicked(attrName, token){
+                              try{
+                                const isPickListButton = token && !String(token).includes(':');
+                                document.querySelectorAll('button[' + attrName + ']').forEach(btn=>{
+                                  if(btn.getAttribute(attrName) !== token) return;
+                                  btn.classList.add('picked');
+                                  btn.disabled = true;
+                                  btn.setAttribute('aria-pressed','true');
+                                  btn.setAttribute('title','Already in parlay');
+                                  const txt = (btn.textContent || '').trim();
+                                  if(isPickListButton){
+                                    btn.textContent = '✓ Added';
+                                  } else if(txt && !txt.includes('✓')){
+                                    btn.textContent = txt + ' ✓';
+                                  }
+                                });
+                              }catch(e){ console.warn('markGameActionPicked error:', e); }
+                            }
+
                             function addLegByToken(token){
                               // DEDUP GUARD: prevent triple add from multiple listeners
                               window.__lastAdd = window.__lastAdd || {};
@@ -14425,6 +14444,7 @@ body.dark .table-card .mini-table td {
                               const legId = buildLegId(g, mk);
                               if(parlay.some(l=>l.id===legId)){ beep('error'); return; }
                               if(parlay.length>=20){ beep('error'); return; }
+                              markGameActionPicked('data-add', token);
                               parlay.push({ id: legId, gameId: gid, market: mk, label: legLabel(g,mk), dec: mk==='ml'? g.mlPriceDec : legOdds(g,mk), prob: legProb(g,mk) });
                               persist();
                               renderParlay();
@@ -14547,6 +14567,7 @@ body.dark .table-card .mini-table td {
                               const legId = buildLegId(g, mk)+'_nfl';
                               if(parlayNFL.some(l=>l.id===legId || l.gameId===gid)){ beep('error'); return; }
                               if(parlayNFL.length>=20){ beep('error'); return; }
+                              markGameActionPicked('data-nfl-add', token);
                               parlayNFL.push({ id: legId, gameId: gid, market: mk, label: legLabel(g,mk), dec: mk==='ml'? g.mlPriceDec : legOdds(g,mk), prob: legProb(g,mk) });
                               try{ localStorage.setItem('parlayos_nfl_parlay', JSON.stringify(parlayNFL)); }catch{}
                               renderNFLParlay(); try{ renderNFLDashboard(); }catch{} try{ renderNFLPicks(); }catch{} beep('success');
@@ -14561,6 +14582,7 @@ body.dark .table-card .mini-table td {
                               const legId = buildLegId(g, mk)+'_nba';
                               if(parlayNBA.some(l=>l.id===legId || l.gameId===gid)){ beep('error'); return; }
                               if(parlayNBA.length>=20){ beep('error'); return; }
+                              markGameActionPicked('data-nba-add', token);
                               parlayNBA.push({ id: legId, gameId: gid, market: mk, label: legLabel(g,mk), dec: mk==='ml'? g.mlPriceDec : legOdds(g,mk), prob: legProb(g,mk) });
                               try{ localStorage.setItem('parlayos_nba_parlay', JSON.stringify(parlayNBA)); }catch{}
                               renderNBAParlay(); try{ renderNBADashboard(); }catch{} try{ renderNBAPicks(); }catch{} beep('success');
