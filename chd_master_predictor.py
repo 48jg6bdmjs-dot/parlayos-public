@@ -532,10 +532,18 @@ def build_mlb_games():
         market_odds = odds_data.get(odds_key, {})
         ml_price = -110
         if market_odds and 'h2h' in market_odds:
-            devig = list(market_odds['h2h'].values())[0].get('devig_prob', 0.5) if market_odds['h2h'] else 0.5
+            h2h = market_odds.get('h2h') or {}
+            # Use the price for the CHD-selected side when available.
+            fav = away if chd['pA'] > 0.5 else home
+            try:
+                ml_price = int(h2h.get(fav, {}).get('price', -110))
+            except Exception:
+                ml_price = -110
+            devig = h2h.get(fav, {}).get('devig_prob', 0.5) if h2h else 0.5
             edge = chd['pA'] - devig
         else:
             edge = chd['edge']
+        ml_price_dec = (1 + ml_price/100.0) if ml_price > 0 else (1 + 100.0/abs(ml_price))
         game_obj = {
             "id": lg.get('id', f"chd_{i}_{away}_{home}"),
             "a": away, "b": home, "abbrA": away, "abbrB": home,
@@ -555,7 +563,7 @@ def build_mlb_games():
             "kEdge": round(mc_k_A['p_over_6_5']-0.5, 4),
             "kProb": round(mc_k_A['p_over_6_5'] if mc_k_A['p_over_6_5']>0.5 else 1-mc_k_A['p_over_6_5'], 4),
             "k_dist": mc_k_A,
-            "mlFav": away if chd['pA']>0.5 else home, "mlPrice": ml_price,
+            "mlFav": away if chd['pA']>0.5 else home, "mlPrice": ml_price, "mlPriceAmerican": ml_price, "mlPriceDec": round(ml_price_dec, 4), "ouPriceAmerican": -110, "kPriceAmerican": -110,
             "mlProb": round(max(chd['pA'], chd['pB']), 4),
             "mlEdge": round(edge, 4), "model": round(max(chd['pA'], chd['pB']), 4),
             "lineupA": lineup_A, "lineupB": lineup_B,
@@ -565,7 +573,7 @@ def build_mlb_games():
             "chd_calibration": chd['calibration'],
             "time": lg.get('time', today.strftime("%-I:%M %p")),
             "date": today.strftime("%a %b %d"), "status": lg.get('status', 'Scheduled'),
-            "startAt": int(today.timestamp()*1000)+i*3600000,
+            "startAt": int(datetime.fromisoformat(lg['time'].replace('Z','+00:00')).timestamp()*1000) if lg.get('time') else None,
         }
         games.append(game_obj)
     return games
@@ -585,46 +593,71 @@ def rank_mlb_ml_card(mlb_data, limit=15):
     return ranked[:limit]
 
 
-def build_nfl_games():
-    today = datetime.now(ET_ZONE)
-    matchups = [('KC','BUF'),('SF','DAL'),('PHI','DET'),('BAL','CIN')]
+def fetch_espn_scoreboard(sport: str):
+    """Return today's real ESPN games as (away, home, UTC start ISO, status)."""
+    date_str = datetime.now(ET_ZONE).strftime('%Y%m%d')
+    url = f"https://site.api.espn.com/apis/site/v2/sports/{sport}/scoreboard?dates={date_str}"
+    data = fetch_json(url) or {}
     games = []
-    for i,(away,home) in enumerate(matchups):
+    for event in data.get('events', []):
+        try:
+            comp = (event.get('competitions') or [])[0]
+            teams = comp.get('competitors') or []
+            away = next((x for x in teams if x.get('homeAway') == 'away'), None)
+            home = next((x for x in teams if x.get('homeAway') == 'home'), None)
+            a = ((away or {}).get('team') or {}).get('abbreviation')
+            b = ((home or {}).get('team') or {}).get('abbreviation')
+            start = event.get('date') or comp.get('date')
+            if a and b and start:
+                games.append({'a': a, 'b': b, 'time': start, 'date': start[:10], 'status': ((comp.get('status') or {}).get('type') or {}).get('description', 'Scheduled'), 'id': f"{sport.split('/')[-1]}_{event.get('id', a+'_'+b)}"})
+        except Exception:
+            continue
+    print(f"[ESPN] {sport}: {len(games)} real games for {date_str}")
+    return games
+
+
+def build_nfl_games():
+    scheduled = fetch_espn_scoreboard('football/nfl')
+    games = []
+    for i, lg in enumerate(scheduled):
+        away, home = lg['a'], lg['b']
         factors_A = extract_nfl_features({'a': away, 'b': home})
         factors_B = extract_nfl_features({'a': home, 'b': away})
         chd = chd_predict(factors_A, factors_B, 'NFL')
         exp_total = random.uniform(42, 52)
         game_obj = {
-            "id": f"nfl_{i}_{away}_{home}", "a": away, "b": home, "abbrA": away, "abbrB": home,
+            "id": lg.get('id', f"nfl_{i}_{away}_{home}"), "a": away, "b": home, "abbrA": away, "abbrB": home,
             "total": round(exp_total,1), "ouPick": f"{'OVER' if random.random()>0.5 else 'UNDER'} {exp_total:.1f}",
             "mlFav": away if chd['pA']>0.5 else home, "mlEdge": round(chd['edge'],4),
-            "mlProb": round(max(chd['pA'], chd['pB']),4),
-            "model": round(max(chd['pA'], chd['pB']),4), "lineupA": [], "lineupB": [],
-            "chd_pA": round(chd['pA'],4), "chd_pB": round(chd['pB'],4),
-            "factorsA": factors_A, "factorsB": factors_B,
-            "time": today.strftime("%-I:%M %p"), "date": today.strftime("%a %b %d"),
+            "mlProb": round(max(chd['pA'], chd['pB']),4), "model": round(max(chd['pA'], chd['pB']),4),
+            "mlPrice": -110, "mlPriceAmerican": -110, "mlPriceDec": 1.9091, "ouPriceAmerican": -110, "kPriceAmerican": -110,
+            "lineupA": [], "lineupB": [], "chd_pA": round(chd['pA'],4), "chd_pB": round(chd['pB'],4),
+            "factorsA": factors_A, "factorsB": factors_B, "time": lg['time'],
+            "date": lg['time'][:10], "status": lg.get('status','Scheduled'),
+            "startAt": int(datetime.fromisoformat(lg['time'].replace('Z','+00:00')).timestamp()*1000),
         }
         games.append(game_obj)
     return games
 
 def build_nba_games():
-    today = datetime.now(ET_ZONE)
-    matchups = [('BOS','NYK'),('GSW','LAL'),('DEN','MIA'),('MIL','PHI')]
+    scheduled = fetch_espn_scoreboard('basketball/nba')
     games = []
-    for i,(away,home) in enumerate(matchups):
+    for i, lg in enumerate(scheduled):
+        away, home = lg['a'], lg['b']
         factors_A = extract_nba_features({'a': away, 'b': home})
         factors_B = extract_nba_features({'a': home, 'b': away})
         chd = chd_predict(factors_A, factors_B, 'NBA')
         exp_total = random.uniform(215, 235)
         game_obj = {
-            "id": f"nba_{i}_{away}_{home}", "a": away, "b": home, "abbrA": away, "abbrB": home,
+            "id": lg.get('id', f"nba_{i}_{away}_{home}"), "a": away, "b": home, "abbrA": away, "abbrB": home,
             "total": round(exp_total,1), "ouPick": f"{'OVER' if exp_total>224 else 'UNDER'} {exp_total:.1f}",
             "mlFav": away if chd['pA']>0.5 else home, "mlEdge": round(chd['edge'],4),
-            "mlProb": round(max(chd['pA'], chd['pB']),4),
-            "model": round(max(chd['pA'], chd['pB']),4), "lineupA": [], "lineupB": [],
-            "chd_pA": round(chd['pA'],4), "chd_pB": round(chd['pB'],4),
-            "factorsA": factors_A, "factorsB": factors_B,
-            "time": today.strftime("%-I:%M %p"), "date": today.strftime("%a %b %d"),
+            "mlProb": round(max(chd['pA'], chd['pB']),4), "model": round(max(chd['pA'], chd['pB']),4),
+            "mlPrice": -110, "mlPriceAmerican": -110, "mlPriceDec": 1.9091, "ouPriceAmerican": -110, "kPriceAmerican": -110,
+            "lineupA": [], "lineupB": [], "chd_pA": round(chd['pA'],4), "chd_pB": round(chd['pB'],4),
+            "factorsA": factors_A, "factorsB": factors_B, "time": lg['time'],
+            "date": lg['time'][:10], "status": lg.get('status','Scheduled'),
+            "startAt": int(datetime.fromisoformat(lg['time'].replace('Z','+00:00')).timestamp()*1000),
         }
         games.append(game_obj)
     return games
