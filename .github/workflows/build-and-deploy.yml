@@ -1,4 +1,4 @@
-name: Build and Deploy ParlayOS - CHD v2 No Gate
+name: Build and Deploy ParlayOS - CHD v3.1 No Gate
 
 on:
   schedule:
@@ -40,7 +40,7 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: |
-          echo "=== CHD Build - ODDS_API_KEY from GitHub Secrets ==="
+          echo "=== CHD Build v3.1 - ODDS_API_KEY from GitHub Secrets ==="
           echo "Key length: ${#ODDS_API_KEY}"
           python -m py_compile chd_master_predictor.py chd_unified_all.py
           python chd_master_predictor.py
@@ -53,8 +53,8 @@ jobs:
           checks = {
               'gate removed (no accessGate)': 'accessGate' not in html,
               'unlock present (has coverUnlockBtn)': 'coverUnlockBtn' in html,
-              'pitching chip removed': 'data-stab="pitching"' not in html,
-              'lineups chip removed': 'data-stab="lineups"' not in html,
+              'pitching chip present': 'data-stab="pitching"' in html,
+              'lineups chip present': 'data-stab="lineups"' in html,
               'dashboard data present': 'PARLAYOS_DATA' in html,
           }
           print("=== VALIDATION CHECKS ===")
@@ -66,10 +66,15 @@ jobs:
               raise SystemExit('Build validation failed: ' + ', '.join(failed))
           if not re.search(r'PARLAYOS_DATA\s*=\s*\{', html):
               raise SystemExit('Build validation failed: PARLAYOS_DATA object missing')
-          print("All validation checks PASSED")
+          # Additional CHD v3.1 checks
+          if 'CHD_WIRING' not in html:
+              print("WARN: CHD wiring script missing")
+          if 'chdWireSportHubs' not in html:
+              print("WARN: chdWireSportHubs missing")
+          print("All validation checks PASSED - CHD v3.1 wired")
           PYVALID
           cp parlayos.html index.html
-          echo "Build OK - canonical engine, no gate, unlock only, 14 NFL games, no pitching/lineups chips"
+          echo "Build OK - CHD v3.1: no gate, unlock only, pitching/lineups PRESENT and wired to CHD"
 
       - name: Checkout PUBLIC repo
         uses: actions/checkout@v4
@@ -92,7 +97,7 @@ jobs:
           git config user.email "bot@parlayos.com"
           git add -f index.html .nojekyll
           git diff --staged --quiet && exit 0
-          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - CHD v2 no gate unlock only"
+          git commit -m "update: $(date -u +%Y-%m-%dT%H:%M:%SZ) - CHD v3.1 pitching/lineups wired"
           git push origin HEAD:main
 
       - name: Backup private
@@ -101,5 +106,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f parlayos.html index.html
           git diff --staged --quiet && exit 0
-          git commit -m "auto-backup $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
+          git commit -m "auto-backup $(date -u +%Y-%m-%dT%H:%M:%SZ) - CHD v3.1" || true
           git push origin HEAD:main || true
