@@ -26,13 +26,14 @@ jobs:
 
       - name: Fetch full MLB rosters (30 teams)
         env:
-          ALLOW_DEMO_SLATE: 1
+          ALLOW_DEMO_SLATE: 0
+          ALLOW_MOCK_STATS: 0
         run: |
           python chd_master_predictor.py --fetch-rosters
 
       - name: Build CHD data
         env:
-          ALLOW_DEMO_SLATE: 1
+          ALLOW_DEMO_SLATE: 0
           ALLOW_MOCK_STATS: 0
           CHD_MODE: ensemble
           CHD_WEATHER_ENABLED: 1
@@ -49,32 +50,19 @@ jobs:
         run: |
           python chd_master_predictor.py --test
 
-      - name: Build and publish HTML
+      - name: Build and publish HTML from CHD JSON only
         run: |
           set -e
-          # Do not require a pre-existing generated HTML file.
-          # Prefer the canonical template when present; otherwise preserve
-          # an existing non-empty dashboard source. Never publish empty HTML.
-          if [ -s parlayos_3.html ]; then
-            python run_all.py
-          elif [ -s parlayos.html ]; then
-            echo "parlayos_3.html absent; preserving checked-in parlayos.html as HTML source"
-            cp -f parlayos.html index.html
-          elif [ -s index.html ]; then
-            echo "parlayos_3.html and parlayos.html absent; using checked-in index.html as HTML source"
-            cp -f index.html parlayos.html
-          else
-            echo "ERROR: no non-empty HTML source/template available"
-            exit 1
-          fi
-
+          test -s parlayos_chd_data.json
+          test -s parlayos_mlb_chd.json
+          test -s parlayos_nfl_chd.json
+          test -s parlayos_nba_chd.json
+          test -f run_all.py
+          python run_all.py
           test -s parlayos.html
           test -s index.html
-          cmp -s parlayos.html index.html || {
-            echo "ERROR: parlayos.html and index.html diverged"
-            exit 1
-          }
-          echo "HTML publish validation passed: $(wc -c < parlayos.html) bytes"
+          cmp -s parlayos.html index.html
+          echo "CHD JSON-only dashboard publish validation passed: $(wc -c < parlayos.html) bytes"
 
       - name: Commit generated outputs
         run: |
