@@ -1,5 +1,5 @@
 {
-  "runDate": "Aug 12 2026 03:49 AM",
+  "runDate": "Aug 12 2026 10:24 AM",
   "pickCount": 15,
   "games": [
     {
@@ -10,24 +10,24 @@
       "away_abbr": "BAL",
       "factorsA": {
         "pitcher_dominance": 0.6593333333333334,
-        "lineup_ops": 0.6990370370370369,
+        "lineup_ops": 0.7666666666666666,
         "bullpen": 0.5,
         "park": 0.49,
-        "weather": 0.55,
+        "weather": 0.553,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.5865240032795374,
+        "form": 0.5,
         "entropy": 0.5
       },
       "factorsB": {
         "pitcher_dominance": 0.4236666666666666,
-        "lineup_ops": 0.8687407407407406,
+        "lineup_ops": 0.7666666666666666,
         "bullpen": 0.5,
         "park": 0.44,
-        "weather": 0.55,
+        "weather": 0.553,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.4505470527747339,
+        "form": 0.4,
         "entropy": 0.5
       },
       "factors": {
@@ -37,31 +37,31 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.4789025531201266,
-        "pB": 0.5210974468798735,
-        "raw_score": 0.03782504019393152,
+        "pA": 0.5132220201825605,
+        "pB": 0.48677797981743953,
+        "raw_score": 0.05296533333333336,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5236230494669831,
-        "wave_p": 0.44908888888888887,
-        "edge": 0.01927369650794486,
+        "simple_p": 0.5330550504564012,
+        "wave_p": 0.5,
+        "edge": -0.02048949870929906,
         "mag": 0.0,
         "entropy": 0.0,
-        "devig_prob_home": 0.5018237503719286,
-        "market_price": -106,
+        "devig_prob_home": 0.5072674785267386,
+        "market_price": -104,
         "book": "fanduel",
         "weather": {
-          "temp": 70.5,
-          "wind": 4.5,
+          "temp": 73.8,
+          "wind": 1.6,
           "precip": 0.0,
-          "factor": 0.55,
+          "factor": 0.553,
           "source": "open-meteo",
           "park": "MIN"
         }
       },
       "total": {
-        "mean": 5.7106,
+        "mean": 5.67,
         "median": 6,
-        "p_over_8_5": 0.1758,
+        "p_over_8_5": 0.1754,
         "ci_10": 2,
         "ci_90": 10,
         "distribution": [
@@ -168,15 +168,15 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 8.5,
-          "over_prob": 0.6102,
-          "under_prob": 0.38980000000000004,
+          "line": 9.0,
+          "over_prob": 0.4874,
+          "under_prob": 0.5126,
           "mean_total": 9.5868,
           "n_sim": 5000,
           "home_mean": 4.8285,
           "away_mean": 4.7685
         },
-        "line": 8.5
+        "line": 9.0
       },
       "k_prop": {
         "line": 6.5,
@@ -204,307 +204,180 @@
       "lineups": {
         "home": [
           {
-            "name": "Alan Roden",
-            "pos": "RF",
-            "team": "MIN",
-            "avg": ".192",
-            "ops": ".491",
+            "name": "Trevor Larnach",
+            "pos": "LF",
+            "avg": ".250",
+            "ops": ".750",
             "hr": 0,
-            "woba": 0.2589,
-            "war": 1.8669140947701983,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
-          },
-          {
-            "name": "Alex Jackson",
-            "pos": "C",
-            "team": "MIN",
-            "avg": ".303",
-            "ops": ".742",
-            "hr": 1,
-            "woba": 0.3558,
-            "war": 0.858556094911061,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
-          },
-          {
-            "name": "Austin Martin",
-            "pos": "RF",
-            "team": "MIN",
-            "avg": ".242",
-            "ops": ".687",
-            "hr": 3,
-            "woba": 0.34809999999999997,
-            "war": 1.437219016409295,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
-          },
-          {
-            "name": "Brooks Lee",
-            "pos": "3B",
-            "team": "MIN",
-            "avg": ".245",
-            "ops": ".726",
-            "hr": 17,
-            "woba": 0.33859999999999996,
-            "war": 0.7399323268931423,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
-          },
-          {
-            "name": "Josh Bell",
-            "pos": "DH",
-            "team": "MIN",
-            "avg": ".251",
-            "ops": ".737",
-            "hr": 16,
-            "woba": 0.34629999999999994,
-            "war": 1.699747999787366,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
-          },
-          {
-            "name": "Kaelen Culpepper",
-            "pos": "SS",
-            "team": "MIN",
-            "avg": ".154",
-            "ops": ".679",
-            "hr": 1,
-            "woba": 0.3213,
-            "war": 1.2720702527993732,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
-          },
-          {
-            "name": "Kody Clemens",
-            "pos": "1B",
-            "team": "MIN",
-            "avg": ".229",
-            "ops": ".748",
-            "hr": 20,
-            "woba": 0.33919999999999995,
-            "war": 0.5827129662959462,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
-          },
-          {
-            "name": "Luke Keaschall",
-            "pos": "2B",
-            "team": "MIN",
-            "avg": ".265",
-            "ops": ".722",
-            "hr": 6,
-            "woba": 0.361,
-            "war": 1.8058174663851818,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
+            "team": "home",
+            "woba": 0.32,
+            "war": 1.0
           },
           {
             "name": "Royce Lewis",
             "pos": "1B",
-            "team": "MIN",
-            "avg": ".242",
-            "ops": ".742",
-            "hr": 13,
-            "woba": 0.34859999999999997,
-            "war": 1.011647156611462,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
-          }
-        ],
-        "away": [
-          {
-            "name": "Carlos Narv\u00e1ez",
-            "pos": "C",
-            "team": "BAL",
-            "avg": ".178",
-            "ops": ".509",
-            "hr": 3,
-            "woba": 0.2535,
-            "war": 1.0729989049158895,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
-          },
-          {
-            "name": "Christian Encarnacion-Strand",
-            "pos": "3B",
-            "team": "BAL",
-            "avg": ".271",
-            "ops": ".853",
-            "hr": 4,
-            "woba": 0.3871,
-            "war": 1.712674756867883,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
-          },
-          {
-            "name": "Christian Franklin",
-            "pos": "LF",
-            "team": "BAL",
-            "avg": ".083",
-            "ops": ".381",
+            "avg": ".250",
+            "ops": ".750",
             "hr": 0,
-            "woba": 0.1999,
-            "war": 1.3644000970478842,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
+            "team": "home",
+            "woba": 0.32,
+            "war": 1.0
           },
           {
-            "name": "Coby Mayo",
+            "name": "Josh Bell",
+            "pos": "DH",
+            "avg": ".250",
+            "ops": ".750",
+            "hr": 0,
+            "team": "home",
+            "woba": 0.32,
+            "war": 1.0
+          },
+          {
+            "name": "Kody Clemens",
+            "pos": "2B",
+            "avg": ".250",
+            "ops": ".750",
+            "hr": 0,
+            "team": "home",
+            "woba": 0.32,
+            "war": 1.0
+          },
+          {
+            "name": "Brooks Lee",
             "pos": "3B",
-            "team": "BAL",
-            "avg": ".214",
-            "ops": ".714",
-            "hr": 15,
-            "woba": 0.3254,
-            "war": 0.9128676538986378,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
+            "avg": ".250",
+            "ops": ".750",
+            "hr": 0,
+            "team": "home",
+            "woba": 0.32,
+            "war": 1.0
           },
           {
-            "name": "Colton Cowser",
+            "name": "Luke Keaschall",
             "pos": "CF",
-            "team": "BAL",
-            "avg": ".212",
-            "ops": ".655",
-            "hr": 9,
-            "woba": 0.32289999999999996,
-            "war": 2.950973019553817,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
+            "avg": ".250",
+            "ops": ".750",
+            "hr": 0,
+            "team": "home",
+            "woba": 0.32,
+            "war": 1.0
           },
           {
-            "name": "Dylan Beavers",
+            "name": "Victor Caratini",
+            "pos": "C",
+            "avg": ".250",
+            "ops": ".750",
+            "hr": 0,
+            "team": "home",
+            "woba": 0.32,
+            "war": 1.0
+          },
+          {
+            "name": "Alan Roden",
             "pos": "RF",
-            "team": "BAL",
-            "avg": ".237",
-            "ops": ".650",
-            "hr": 2,
-            "woba": 0.32299999999999995,
-            "war": 0.8431883672062093,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
+            "avg": ".250",
+            "ops": ".750",
+            "hr": 0,
+            "team": "home",
+            "woba": 0.32,
+            "war": 1.0
           },
           {
-            "name": "Gunnar Henderson",
+            "name": "Ryan Kreidler",
             "pos": "SS",
-            "team": "BAL",
-            "avg": ".216",
-            "ops": ".688",
-            "hr": 19,
-            "woba": 0.3248,
-            "war": 2.175408625751552,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
-          },
-          {
-            "name": "Jackson Holliday",
-            "pos": "2B",
-            "team": "BAL",
-            "avg": ".246",
-            "ops": ".737",
-            "hr": 6,
-            "woba": 0.3611,
-            "war": 3.0513309445567183,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
-          },
-          {
-            "name": "Jeremiah Jackson",
-            "pos": "2B",
-            "team": "BAL",
-            "avg": ".232",
-            "ops": ".626",
-            "hr": 7,
-            "woba": 0.291,
-            "war": 3.309737777780585,
-            "k_pct": 20.0,
-            "bb_pct": 8.0
+            "avg": ".250",
+            "ops": ".750",
+            "hr": 0,
+            "team": "home",
+            "woba": 0.32,
+            "war": 1.0
           }
         ],
-        "source": "roster"
+        "away": [],
+        "source": "boxscore"
       },
       "weather": {
-        "temp": 70.5,
-        "wind": 4.5,
+        "temp": 73.8,
+        "wind": 1.6,
         "precip": 0.0,
-        "factor": 0.55,
+        "factor": 0.553,
         "source": "open-meteo",
         "park": "MIN"
       },
       "odds": {
         "h2h": {
           "Baltimore Orioles": {
-            "price": -102,
-            "devig_prob": 0.49817624962807144,
+            "price": -104,
+            "devig_prob": 0.4927325214732616,
             "book": "fanduel",
-            "implied": 0.514233510321935
+            "implied": 0.5086345650492536
           },
           "Minnesota Twins": {
-            "price": -106,
-            "devig_prob": 0.5018237503719286,
+            "price": -104,
+            "devig_prob": 0.5072674785267386,
             "book": "fanduel",
-            "implied": 0.517998577630575
+            "implied": 0.5236386113354617
           }
         },
         "totals": {
-          "line": 8.5,
-          "over_price": -125,
-          "under_price": 105
+          "line": 9.0,
+          "over_price": 100,
+          "under_price": -120
         },
         "raw_books": {
           "draftkings": {
             "h2h": {
-              "Baltimore Orioles": -102,
-              "Minnesota Twins": -105
+              "Baltimore Orioles": -101,
+              "Minnesota Twins": -106
             }
           },
           "lowvig": {
             "h2h": {
-              "Baltimore Orioles": -107,
-              "Minnesota Twins": -103
+              "Baltimore Orioles": -101,
+              "Minnesota Twins": -109
             }
           },
           "betonlineag": {
             "h2h": {
-              "Baltimore Orioles": -107,
-              "Minnesota Twins": -103
+              "Baltimore Orioles": -101,
+              "Minnesota Twins": -109
             }
           },
           "mybookieag": {
             "h2h": {
               "Baltimore Orioles": -106,
-              "Minnesota Twins": -111
+              "Minnesota Twins": -110
             }
           },
           "fanduel": {
             "h2h": {
-              "Baltimore Orioles": -102,
-              "Minnesota Twins": -106
+              "Baltimore Orioles": -104,
+              "Minnesota Twins": -104
             }
           },
           "bovada": {
-            "h2h": {
-              "Baltimore Orioles": -105,
-              "Minnesota Twins": -115
-            }
-          },
-          "betmgm": {
             "h2h": {
               "Baltimore Orioles": -110,
               "Minnesota Twins": -110
             }
           },
+          "betmgm": {
+            "h2h": {
+              "Baltimore Orioles": -105,
+              "Minnesota Twins": -115
+            }
+          },
           "betrivers": {
             "h2h": {
-              "Baltimore Orioles": -107,
-              "Minnesota Twins": -112
+              "Baltimore Orioles": -103,
+              "Minnesota Twins": -118
             }
           },
           "betus": {
             "h2h": {
-              "Baltimore Orioles": -107,
-              "Minnesota Twins": -103
+              "Baltimore Orioles": -101,
+              "Minnesota Twins": -109
             }
           }
         }
@@ -512,15 +385,15 @@
       "ab_test_mode": "simple",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5236230494669831,
-          "pB": 0.4763769505330169,
-          "raw_score": 0.0945626004848288,
+          "pA": 0.5330550504564012,
+          "pB": 0.4669449495435988,
+          "raw_score": 0.13241333333333338,
           "model": "simple",
           "edge": 0.0
         },
         "wave": {
-          "pA": 0.44908888888888887,
-          "pB": 0.5509111111111111,
+          "pA": 0.5,
+          "pB": 0.5,
           "edge": 0.0,
           "mag": 0.0,
           "ang": 0.0,
@@ -537,12 +410,12 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.4789025531201266,
-          "pB": 0.5210974468798735,
-          "raw_score": 0.03782504019393152,
+          "pA": 0.5132220201825605,
+          "pB": 0.48677797981743953,
+          "raw_score": 0.05296533333333336,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.5236230494669831,
-          "wave_p": 0.44908888888888887,
+          "simple_p": 0.5330550504564012,
+          "wave_p": 0.5,
           "edge": 0.0,
           "mag": 0.0,
           "entropy": 0.0
@@ -560,10 +433,10 @@
         "lineup_ops": 0.8569629629629627,
         "bullpen": 0.5,
         "park": 0.48,
-        "weather": 0.666,
+        "weather": 0.745,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.5699295445900142,
+        "form": 0.6540379988821275,
         "entropy": 0.5
       },
       "factorsB": {
@@ -571,10 +444,10 @@
         "lineup_ops": 0.6557777777777769,
         "bullpen": 0.5,
         "park": 0.4,
-        "weather": 0.666,
+        "weather": 0.745,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.5128247433444104,
+        "form": 0.5639866979980793,
         "entropy": 0.5
       },
       "factors": {
@@ -584,23 +457,23 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.5476501255477779,
-        "pB": 0.4523498744522221,
-        "raw_score": 0.045797131417637194,
+        "pA": 0.5479128157145042,
+        "pB": 0.45208718428549577,
+        "raw_score": 0.04685141940606741,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5285919805361111,
+        "simple_p": 0.529248705952927,
         "wave_p": 0.5603555555555557,
-        "edge": 0.048312742878269366,
+        "edge": 0.05075785983816755,
         "mag": 0.0,
         "entropy": 0.0,
-        "devig_prob_home": 0.4040371315739527,
+        "devig_prob_home": 0.4013293244473282,
         "market_price": 144,
         "book": "fanduel",
         "weather": {
-          "temp": 80.8,
-          "wind": 5.8,
+          "temp": 84.4,
+          "wind": 10.1,
           "precip": 0.0,
-          "factor": 0.666,
+          "factor": 0.745,
           "source": "open-meteo",
           "park": "STL"
         }
@@ -715,7 +588,7 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 8.5,
+          "line": 8.0,
           "over_prob": 0.5648,
           "under_prob": 0.43520000000000003,
           "mean_total": 9.1706,
@@ -723,7 +596,7 @@
           "home_mean": 4.635000000000001,
           "away_mean": 4.575000000000001
         },
-        "line": 8.5
+        "line": 8.0
       },
       "k_prop": {
         "line": 6.5,
@@ -758,7 +631,7 @@
             "ops": ".830",
             "hr": 19,
             "woba": 0.38939999999999997,
-            "war": 2.8748060174883303,
+            "war": 3.3829671579748464,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -770,7 +643,7 @@
             "ops": ".637",
             "hr": 1,
             "woba": 0.3003,
-            "war": 1.0509399026628565,
+            "war": 1.0623396087655548,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -782,7 +655,7 @@
             "ops": ".671",
             "hr": 4,
             "woba": 0.3145,
-            "war": 2.9647572943271334,
+            "war": 1.8651281448284354,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -794,7 +667,7 @@
             "ops": ".000",
             "hr": 0,
             "woba": 0.0,
-            "war": 0.6210373375553528,
+            "war": 0.8146433180186088,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -806,7 +679,7 @@
             "ops": ".754",
             "hr": 5,
             "woba": 0.34419999999999995,
-            "war": 2.254003466103799,
+            "war": 1.7527653775026617,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -818,7 +691,7 @@
             "ops": ".750",
             "hr": 13,
             "woba": 0.36819999999999997,
-            "war": 1.5873519349603291,
+            "war": 1.0443649335961385,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -830,7 +703,7 @@
             "ops": ".729",
             "hr": 16,
             "woba": 0.35829999999999995,
-            "war": 1.1843816512364072,
+            "war": 2.0992611086792663,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -842,7 +715,7 @@
             "ops": ".573",
             "hr": 4,
             "woba": 0.2703,
-            "war": 0.9727336883513488,
+            "war": 3.400616501923315,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -854,7 +727,7 @@
             "ops": ".829",
             "hr": 23,
             "woba": 0.3851,
-            "war": 0.56710215781291,
+            "war": 0.957315258624739,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -868,7 +741,7 @@
             "ops": ".648",
             "hr": 13,
             "woba": 0.30999999999999994,
-            "war": 0.9520018259704837,
+            "war": 3.211133822349415,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -880,7 +753,7 @@
             "ops": ".752",
             "hr": 16,
             "woba": 0.352,
-            "war": 2.56748058186718,
+            "war": 2.6569424805894934,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -892,7 +765,7 @@
             "ops": ".1020",
             "hr": 2,
             "woba": 0.4687,
-            "war": 3.4208804421416956,
+            "war": 1.0744669502175461,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -904,7 +777,7 @@
             "ops": ".865",
             "hr": 25,
             "woba": 0.4075,
-            "war": 0.995005556245251,
+            "war": 1.1487739691857257,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -916,7 +789,7 @@
             "ops": ".761",
             "hr": 8,
             "woba": 0.3647,
-            "war": 3.038073165408402,
+            "war": 3.4010959558611713,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -928,7 +801,7 @@
             "ops": ".708",
             "hr": 9,
             "woba": 0.32719999999999994,
-            "war": 1.9608813561669254,
+            "war": 0.9251255307605012,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -940,7 +813,7 @@
             "ops": ".605",
             "hr": 5,
             "woba": 0.28509999999999996,
-            "war": 0.7990344921527717,
+            "war": 2.5333055323657376,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -952,7 +825,7 @@
             "ops": ".318",
             "hr": 0,
             "woba": 0.17379999999999998,
-            "war": 0.8058967626112798,
+            "war": 2.8186493793600023,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -964,7 +837,7 @@
             "ops": ".647",
             "hr": 8,
             "woba": 0.31289999999999996,
-            "war": 2.107575323986649,
+            "war": 2.662216329006144,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -972,10 +845,10 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 80.8,
-        "wind": 5.8,
+        "temp": 84.4,
+        "wind": 10.1,
         "precip": 0.0,
-        "factor": 0.666,
+        "factor": 0.745,
         "source": "open-meteo",
         "park": "STL"
       },
@@ -983,44 +856,44 @@
         "h2h": {
           "Philadelphia Phillies": {
             "price": -156,
-            "devig_prob": 0.5959628684260474,
+            "devig_prob": 0.5986706755526718,
             "book": "fanduel",
-            "implied": 0.614796165068862
+            "implied": 0.6174074678558407
           },
           "St. Louis Cardinals": {
             "price": 144,
-            "devig_prob": 0.4040371315739527,
+            "devig_prob": 0.4013293244473282,
             "book": "fanduel",
-            "implied": 0.416805294754556
+            "implied": 0.4138898598208018
           }
         },
         "totals": {
-          "line": 8.5,
-          "over_price": 105,
-          "under_price": -125
+          "line": 8.0,
+          "over_price": -105,
+          "under_price": -115
         },
         "raw_books": {
           "draftkings": {
             "h2h": {
-              "Philadelphia Phillies": -155,
-              "St. Louis Cardinals": 144
+              "Philadelphia Phillies": -158,
+              "St. Louis Cardinals": 147
             }
           },
           "lowvig": {
             "h2h": {
-              "Philadelphia Phillies": -160,
-              "St. Louis Cardinals": 145
+              "Philadelphia Phillies": -159,
+              "St. Louis Cardinals": 144
             }
           },
           "betonlineag": {
             "h2h": {
-              "Philadelphia Phillies": -160,
-              "St. Louis Cardinals": 145
+              "Philadelphia Phillies": -159,
+              "St. Louis Cardinals": 144
             }
           },
           "mybookieag": {
             "h2h": {
-              "Philadelphia Phillies": -160,
+              "Philadelphia Phillies": -159,
               "St. Louis Cardinals": 135
             }
           },
@@ -1032,14 +905,14 @@
           },
           "bovada": {
             "h2h": {
-              "Philadelphia Phillies": -160,
-              "St. Louis Cardinals": 134
+              "Philadelphia Phillies": -163,
+              "St. Louis Cardinals": 137
             }
           },
           "betmgm": {
             "h2h": {
-              "Philadelphia Phillies": -165,
-              "St. Louis Cardinals": 135
+              "Philadelphia Phillies": -170,
+              "St. Louis Cardinals": 140
             }
           },
           "betrivers": {
@@ -1050,8 +923,8 @@
           },
           "betus": {
             "h2h": {
-              "Philadelphia Phillies": -154,
-              "St. Louis Cardinals": 138
+              "Philadelphia Phillies": -162,
+              "St. Louis Cardinals": 144
             }
           }
         }
@@ -1059,9 +932,9 @@
       "ab_test_mode": "ensemble",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5285919805361111,
-          "pB": 0.4714080194638889,
-          "raw_score": 0.11449282854409297,
+          "pA": 0.529248705952927,
+          "pB": 0.47075129404707305,
+          "raw_score": 0.11712854851516852,
           "model": "simple",
           "edge": 0.0
         },
@@ -1084,11 +957,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.5476501255477779,
-          "pB": 0.4523498744522221,
-          "raw_score": 0.045797131417637194,
+          "pA": 0.5479128157145042,
+          "pB": 0.45208718428549577,
+          "raw_score": 0.04685141940606741,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.5285919805361111,
+          "simple_p": 0.529248705952927,
           "wave_p": 0.5603555555555557,
           "edge": 0.0,
           "mag": 0.0,
@@ -1110,7 +983,7 @@
         "weather": 0.5,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.62261756687411,
+        "form": 0.6365499028170047,
         "entropy": 0.5
       },
       "factorsB": {
@@ -1131,17 +1004,17 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.5821239106544924,
-        "pB": 0.4178760893455076,
-        "raw_score": 0.261332070019113,
+        "pA": 0.582232754382384,
+        "pB": 0.417767245617616,
+        "raw_score": 0.26177790476928564,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5764492223631533,
+        "simple_p": 0.5767213316828823,
         "wave_p": 0.5859070361820519,
-        "edge": 0.06111260804523938,
+        "edge": 0.0773659436589893,
         "mag": 0.23007755016893958,
         "entropy": 0.3684671451238184,
-        "devig_prob_home": 0.3567634813002682,
-        "market_price": 174,
+        "devig_prob_home": 0.3404013019586267,
+        "market_price": 186,
         "book": "fanduel",
         "weather": {
           "temp": 72,
@@ -1305,7 +1178,7 @@
             "ops": ".370",
             "hr": 1,
             "woba": 0.17259999999999998,
-            "war": 2.962336796219238,
+            "war": 1.221111486656131,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1317,7 +1190,7 @@
             "ops": ".636",
             "hr": 13,
             "woba": 0.30399999999999994,
-            "war": 3.399471018326916,
+            "war": 3.4460786435920863,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1329,7 +1202,7 @@
             "ops": ".699",
             "hr": 0,
             "woba": 0.3433,
-            "war": 2.0781051053587953,
+            "war": 1.0921321259104197,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1341,7 +1214,7 @@
             "ops": ".805",
             "hr": 15,
             "woba": 0.3907,
-            "war": 1.0725380554166681,
+            "war": 3.4520453282280537,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1353,7 +1226,7 @@
             "ops": ".738",
             "hr": 8,
             "woba": 0.34019999999999995,
-            "war": 0.7005695055861119,
+            "war": 3.498412811755774,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1365,7 +1238,7 @@
             "ops": ".923",
             "hr": 35,
             "woba": 0.4245,
-            "war": 2.2539193226398764,
+            "war": 0.580031139971372,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1377,7 +1250,7 @@
             "ops": ".801",
             "hr": 15,
             "woba": 0.3867,
-            "war": 1.4731416045132497,
+            "war": 1.0720006075795085,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1389,7 +1262,7 @@
             "ops": ".688",
             "hr": 4,
             "woba": 0.3316,
-            "war": 1.8943843710683428,
+            "war": 3.4395044085741313,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1401,7 +1274,7 @@
             "ops": ".689",
             "hr": 5,
             "woba": 0.3419,
-            "war": 3.183324730205751,
+            "war": 1.8434290744977404,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -1418,52 +1291,70 @@
       "odds": {
         "h2h": {
           "Athletics": {
-            "price": 174,
-            "devig_prob": 0.3567634813002682,
+            "price": 186,
+            "devig_prob": 0.3404013019586267,
             "book": "fanduel",
-            "implied": 0.3688734113869786
+            "implied": 0.35086765822860594
           },
           "Tampa Bay Rays": {
-            "price": -186,
-            "devig_prob": 0.6432365186997318,
+            "price": -205,
+            "devig_prob": 0.6595986980413733,
             "book": "fanduel",
-            "implied": 0.665070449802441
+            "implied": 0.6798794517552781
           }
         },
         "totals": {
           "line": 9.5,
-          "over_price": -103,
-          "under_price": -122
+          "over_price": 100,
+          "under_price": -120
         },
         "raw_books": {
           "fanduel": {
             "h2h": {
-              "Athletics": 174,
-              "Tampa Bay Rays": -186
+              "Athletics": 186,
+              "Tampa Bay Rays": -205
+            }
+          },
+          "mybookieag": {
+            "h2h": {
+              "Athletics": 175,
+              "Tampa Bay Rays": -210
             }
           },
           "bovada": {
             "h2h": {
-              "Athletics": 167,
-              "Tampa Bay Rays": -204
+              "Athletics": 185,
+              "Tampa Bay Rays": -225
             }
           },
           "draftkings": {
             "h2h": {
-              "Athletics": 180,
-              "Tampa Bay Rays": -194
+              "Athletics": 195,
+              "Tampa Bay Rays": -210
             }
           },
           "betmgm": {
             "h2h": {
-              "Athletics": 170,
+              "Athletics": 180,
+              "Tampa Bay Rays": -220
+            }
+          },
+          "betonlineag": {
+            "h2h": {
+              "Athletics": 189,
               "Tampa Bay Rays": -210
             }
           },
-          "betrivers": {
+          "lowvig": {
             "h2h": {
-              "Athletics": 165,
-              "Tampa Bay Rays": -200
+              "Athletics": 189,
+              "Tampa Bay Rays": -210
+            }
+          },
+          "betus": {
+            "h2h": {
+              "Athletics": 182,
+              "Tampa Bay Rays": -210
             }
           }
         }
@@ -1471,9 +1362,9 @@
       "ab_test_mode": "ensemble",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5764492223631533,
-          "pB": 0.4235507776368467,
-          "raw_score": 0.30821384979437316,
+          "pA": 0.5767213316828823,
+          "pB": 0.4232786683171177,
+          "raw_score": 0.30932843666980475,
           "model": "simple",
           "edge": 0.0
         },
@@ -1496,11 +1387,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.5821239106544924,
-          "pB": 0.4178760893455076,
-          "raw_score": 0.261332070019113,
+          "pA": 0.582232754382384,
+          "pB": 0.417767245617616,
+          "raw_score": 0.26177790476928564,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.5764492223631533,
+          "simple_p": 0.5767213316828823,
           "wave_p": 0.5859070361820519,
           "edge": 0.11841476055162155,
           "mag": 0.23007755016893958,
@@ -1522,7 +1413,7 @@
         "weather": 0.5,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.5168200639667775,
+        "form": 0.6392324194084765,
         "entropy": 0.5
       },
       "factorsB": {
@@ -1543,17 +1434,17 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.5264648702578103,
-        "pB": 0.4735351297421897,
-        "raw_score": 0.010558097615639573,
+        "pA": 0.5274439371072254,
+        "pB": 0.47255606289277463,
+        "raw_score": 0.014475292989773942,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5064393785603396,
+        "simple_p": 0.5088870456838772,
         "wave_p": 0.5398151980561241,
-        "edge": -0.13992632960842932,
+        "edge": -0.14995135577639274,
         "mag": 0.00042420372561560797,
         "entropy": 0.8108585519195105,
-        "devig_prob_home": 0.613461459350619,
-        "market_price": -164,
+        "devig_prob_home": 0.6225074186691674,
+        "market_price": -172,
         "book": "fanduel",
         "weather": {
           "temp": 72,
@@ -1717,7 +1608,7 @@
             "ops": ".700",
             "hr": 5,
             "woba": 0.3212,
-            "war": 0.8467868672901855,
+            "war": 2.966330611574172,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1729,7 +1620,7 @@
             "ops": ".876",
             "hr": 5,
             "woba": 0.4144,
-            "war": 1.0956618316872686,
+            "war": 1.712113858841217,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1741,7 +1632,7 @@
             "ops": ".636",
             "hr": 4,
             "woba": 0.3164,
-            "war": 0.8379723056645129,
+            "war": 1.8537273290920253,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1753,7 +1644,7 @@
             "ops": ".580",
             "hr": 9,
             "woba": 0.2744,
-            "war": 2.580282298922908,
+            "war": 0.8433575467912581,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1765,7 +1656,7 @@
             "ops": ".865",
             "hr": 34,
             "woba": 0.38749999999999996,
-            "war": 0.8452809469916919,
+            "war": 1.952113193507322,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1777,7 +1668,7 @@
             "ops": ".851",
             "hr": 13,
             "woba": 0.3913,
-            "war": 1.9576978952190571,
+            "war": 2.8316240015665044,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1789,7 +1680,7 @@
             "ops": ".583",
             "hr": 1,
             "woba": 0.2721,
-            "war": 3.092054348816161,
+            "war": 2.5158642470807138,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1801,7 +1692,7 @@
             "ops": ".785",
             "hr": 10,
             "woba": 0.37989999999999996,
-            "war": 0.8918675491751356,
+            "war": 2.1205022602811594,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -1813,7 +1704,7 @@
             "ops": ".868",
             "hr": 19,
             "woba": 0.386,
-            "war": 2.10929883473807,
+            "war": 2.9698258246470717,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -1830,76 +1721,70 @@
       "odds": {
         "h2h": {
           "Arizona Diamondbacks": {
-            "price": -164,
-            "devig_prob": 0.613461459350619,
+            "price": -172,
+            "devig_prob": 0.6225074186691674,
             "book": "fanduel",
-            "implied": 0.6333026508856653
+            "implied": 0.6417487142402962
           },
           "Colorado Rockies": {
-            "price": 150,
-            "devig_prob": 0.3865385406493809,
+            "price": 158,
+            "devig_prob": 0.3774925813308326,
             "book": "fanduel",
-            "implied": 0.39904036143013555
+            "implied": 0.3891606291571913
           }
         },
         "totals": {
           "line": 9.5,
           "over_price": 100,
-          "under_price": -122
+          "under_price": -120
         },
         "raw_books": {
           "draftkings": {
             "h2h": {
-              "Arizona Diamondbacks": -170,
-              "Colorado Rockies": 158
+              "Arizona Diamondbacks": -176,
+              "Colorado Rockies": 163
             }
           },
           "lowvig": {
             "h2h": {
-              "Arizona Diamondbacks": -171,
-              "Colorado Rockies": 154
+              "Arizona Diamondbacks": -176,
+              "Colorado Rockies": 159
             }
           },
           "betonlineag": {
             "h2h": {
-              "Arizona Diamondbacks": -171,
-              "Colorado Rockies": 154
+              "Arizona Diamondbacks": -176,
+              "Colorado Rockies": 159
             }
           },
           "mybookieag": {
             "h2h": {
-              "Arizona Diamondbacks": -176,
-              "Colorado Rockies": 149
+              "Arizona Diamondbacks": -182,
+              "Colorado Rockies": 154
             }
           },
           "fanduel": {
             "h2h": {
-              "Arizona Diamondbacks": -164,
-              "Colorado Rockies": 150
+              "Arizona Diamondbacks": -172,
+              "Colorado Rockies": 158
             }
           },
           "bovada": {
             "h2h": {
-              "Arizona Diamondbacks": -181,
-              "Colorado Rockies": 149
+              "Arizona Diamondbacks": -186,
+              "Colorado Rockies": 154
             }
           },
           "betmgm": {
             "h2h": {
-              "Arizona Diamondbacks": -175,
-              "Colorado Rockies": 145
+              "Arizona Diamondbacks": -190,
+              "Colorado Rockies": 154
             }
           },
           "betus": {
             "h2h": {
-              "Arizona Diamondbacks": -172,
-              "Colorado Rockies": 152
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Arizona Diamondbacks": -175,
-              "Colorado Rockies": 145
+              "Arizona Diamondbacks": -176,
+              "Colorado Rockies": 155
             }
           }
         }
@@ -1907,9 +1792,9 @@
       "ab_test_mode": "simple",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5064393785603396,
-          "pB": 0.4935606214396604,
-          "raw_score": 0.02575893845067552,
+          "pA": 0.5088870456838772,
+          "pB": 0.4911129543161228,
+          "raw_score": 0.03555192688601144,
           "model": "simple",
           "edge": 0.0
         },
@@ -1932,11 +1817,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.5264648702578103,
-          "pB": 0.4735351297421897,
-          "raw_score": 0.010558097615639573,
+          "pA": 0.5274439371072254,
+          "pB": 0.47255606289277463,
+          "raw_score": 0.014475292989773942,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.5064393785603396,
+          "simple_p": 0.5088870456838772,
           "wave_p": 0.5398151980561241,
           "edge": -0.00022775299773479302,
           "mag": 0.00042420372561560797,
@@ -1955,10 +1840,10 @@
         "lineup_ops": 0.8944444444444439,
         "bullpen": 0.5,
         "park": 0.505,
-        "weather": 0.443,
+        "weather": 0.422,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.4832240005069245,
+        "form": 0.6622602725631839,
         "entropy": 0.5
       },
       "factorsB": {
@@ -1966,10 +1851,10 @@
         "lineup_ops": 0.4292592592592588,
         "bullpen": 0.5,
         "park": 0.24,
-        "weather": 0.443,
+        "weather": 0.422,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.5335676582828878,
+        "form": 0.5203236324484788,
         "entropy": 0.5
       },
       "factors": {
@@ -1979,23 +1864,23 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.6090637052956758,
-        "pB": 0.3909362947043242,
-        "raw_score": 0.09123744265685206,
+        "pA": 0.6105844559278454,
+        "pB": 0.3894155440721546,
+        "raw_score": 0.09739041218935345,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5514052955963981,
+        "simple_p": 0.5552071721768221,
         "wave_p": 0.6475026450951942,
-        "edge": -0.0409254658821111,
+        "edge": -0.03598292735089653,
         "mag": 0.01449554765761961,
         "entropy": 0.032114179702660166,
-        "devig_prob_home": 0.43186176058643533,
-        "market_price": 122,
+        "devig_prob_home": 0.42539847142305115,
+        "market_price": 128,
         "book": "fanduel",
         "weather": {
-          "temp": 56.1,
-          "wind": 8.2,
+          "temp": 56.8,
+          "wind": 5.3,
           "precip": 0.0,
-          "factor": 0.443,
+          "factor": 0.422,
           "source": "open-meteo",
           "park": "SF"
         }
@@ -2153,7 +2038,7 @@
             "ops": ".750",
             "hr": 5,
             "woba": 0.32,
-            "war": 1.310809720403504,
+            "war": 0.5346077068945297,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2165,7 +2050,7 @@
             "ops": ".775",
             "hr": 12,
             "woba": 0.3689,
-            "war": 1.1656871847224899,
+            "war": 0.8648511376881908,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2177,7 +2062,7 @@
             "ops": ".231",
             "hr": 0,
             "woba": 0.12849999999999998,
-            "war": 2.0492635118823834,
+            "war": 2.685101540301359,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2189,7 +2074,7 @@
             "ops": ".400",
             "hr": 0,
             "woba": 0.2012,
-            "war": 0.8164618024226533,
+            "war": 2.640286241734505,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2201,7 +2086,7 @@
             "ops": ".609",
             "hr": 0,
             "woba": 0.32309999999999994,
-            "war": 0.669471112794016,
+            "war": 2.59541357237922,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2213,7 +2098,7 @@
             "ops": ".686",
             "hr": 5,
             "woba": 0.33499999999999996,
-            "war": 2.0415571423315777,
+            "war": 0.5438650142714163,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2225,7 +2110,7 @@
             "ops": ".389",
             "hr": 1,
             "woba": 0.2075,
-            "war": 1.7243989062327358,
+            "war": 1.156753548767028,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2237,7 +2122,7 @@
             "ops": ".775",
             "hr": 9,
             "woba": 0.36529999999999996,
-            "war": 2.6883326261597684,
+            "war": 1.119045872777947,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2249,7 +2134,7 @@
             "ops": ".250",
             "hr": 0,
             "woba": 0.175,
-            "war": 2.5445626157808214,
+            "war": 2.2746388253673517,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -2263,7 +2148,7 @@
             "ops": ".695",
             "hr": 16,
             "woba": 0.3273,
-            "war": 0.5869938141114464,
+            "war": 1.0340252265107515,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2275,7 +2160,7 @@
             "ops": ".588",
             "hr": 5,
             "woba": 0.2828,
-            "war": 0.5836996364373548,
+            "war": 3.110508307300312,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2287,7 +2172,7 @@
             "ops": ".765",
             "hr": 22,
             "woba": 0.3559,
-            "war": 2.1334744304322006,
+            "war": 1.994768638105508,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2299,7 +2184,7 @@
             "ops": ".670",
             "hr": 8,
             "woba": 0.3226,
-            "war": 2.0640930989109987,
+            "war": 2.658413603320703,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2311,7 +2196,7 @@
             "ops": ".768",
             "hr": 15,
             "woba": 0.36999999999999994,
-            "war": 1.8456090220592918,
+            "war": 2.5125498013583303,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2323,7 +2208,7 @@
             "ops": ".823",
             "hr": 13,
             "woba": 0.38649999999999995,
-            "war": 0.9573589562190127,
+            "war": 3.4047538136573023,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2335,7 +2220,7 @@
             "ops": ".695",
             "hr": 13,
             "woba": 0.3301,
-            "war": 2.3554849248365626,
+            "war": 2.216863914516093,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2347,7 +2232,7 @@
             "ops": ".716",
             "hr": 2,
             "woba": 0.35719999999999996,
-            "war": 0.7766895890772533,
+            "war": 2.2810428578658115,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2359,7 +2244,7 @@
             "ops": ".695",
             "hr": 4,
             "woba": 0.3201,
-            "war": 1.4416765507274834,
+            "war": 1.5887861027084562,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -2367,56 +2252,62 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 56.1,
-        "wind": 8.2,
+        "temp": 56.8,
+        "wind": 5.3,
         "precip": 0.0,
-        "factor": 0.443,
+        "factor": 0.422,
         "source": "open-meteo",
         "park": "SF"
       },
       "odds": {
         "h2h": {
           "Houston Astros": {
-            "price": -130,
-            "devig_prob": 0.5681382394135647,
+            "price": -138,
+            "devig_prob": 0.5746015285769488,
             "book": "fanduel",
-            "implied": 0.5873195605922684
+            "implied": 0.5940213056577867
           },
           "San Francisco Giants": {
-            "price": 122,
-            "devig_prob": 0.43186176058643533,
+            "price": 128,
+            "devig_prob": 0.42539847142305115,
             "book": "fanduel",
-            "implied": 0.4464421541595899
+            "implied": 0.43977564077382586
           }
         },
         "totals": {
           "line": 8.5,
-          "over_price": -110,
-          "under_price": -110
+          "over_price": -105,
+          "under_price": -115
         },
         "raw_books": {
           "fanduel": {
             "h2h": {
-              "Houston Astros": -130,
-              "San Francisco Giants": 122
+              "Houston Astros": -138,
+              "San Francisco Giants": 128
             }
           },
           "bovada": {
             "h2h": {
-              "Houston Astros": -140,
-              "San Francisco Giants": 117
+              "Houston Astros": -148,
+              "San Francisco Giants": 124
+            }
+          },
+          "mybookieag": {
+            "h2h": {
+              "Houston Astros": -146,
+              "San Francisco Giants": 124
             }
           },
           "betrivers": {
             "h2h": {
-              "Houston Astros": -141,
-              "San Francisco Giants": 120
+              "Houston Astros": -150,
+              "San Francisco Giants": 128
             }
           },
           "draftkings": {
             "h2h": {
-              "Houston Astros": -147,
-              "San Francisco Giants": 137
+              "Houston Astros": -141,
+              "San Francisco Giants": 131
             }
           },
           "betmgm": {
@@ -2424,15 +2315,21 @@
               "Houston Astros": -155,
               "San Francisco Giants": 125
             }
+          },
+          "betus": {
+            "h2h": {
+              "Houston Astros": -147,
+              "San Francisco Giants": 132
+            }
           }
         }
       },
       "ab_test_mode": "ensemble",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5514052955963981,
-          "pB": 0.44859470440360194,
-          "raw_score": 0.2063502851557007,
+          "pA": 0.5552071721768221,
+          "pB": 0.44479282782317786,
+          "raw_score": 0.22173270898695419,
           "model": "simple",
           "edge": 0.0
         },
@@ -2455,11 +2352,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.6090637052956758,
-          "pB": 0.3909362947043242,
-          "raw_score": 0.09123744265685206,
+          "pA": 0.6105844559278454,
+          "pB": 0.3894155440721546,
+          "raw_score": 0.09739041218935345,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.5514052955963981,
+          "simple_p": 0.5552071721768221,
           "wave_p": 0.6475026450951942,
           "edge": 0.011836413603133547,
           "mag": 0.01449554765761961,
@@ -2478,10 +2375,10 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.495,
-        "weather": 0.529,
+        "weather": 0.527,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.5466917501251104,
+        "form": 0.6332498805948881,
         "entropy": 0.5
       },
       "factorsB": {
@@ -2489,10 +2386,10 @@
         "lineup_ops": 0.7878518518518518,
         "bullpen": 0.5,
         "park": 0.28,
-        "weather": 0.529,
+        "weather": 0.527,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.541708363543361,
+        "form": 0.6317684992610885,
         "entropy": 0.5
       },
       "factors": {
@@ -2502,23 +2399,23 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.524009778598262,
-        "pB": 0.47599022140173797,
-        "raw_score": 0.012079879936395583,
+        "pA": 0.523981765966816,
+        "pB": 0.476018234033184,
+        "raw_score": 0.011967815768461188,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.505551661793669,
+        "simple_p": 0.505481630215054,
         "wave_p": 0.536315189801324,
-        "edge": -0.000825633144359017,
+        "edge": -0.004629999078144098,
         "mag": 0.005328093350373411,
         "entropy": 0.11299138207108833,
-        "devig_prob_home": 0.476815854546097,
-        "market_price": 100,
+        "devig_prob_home": 0.4806482331113281,
+        "market_price": 104,
         "book": "fanduel",
         "weather": {
-          "temp": 70.0,
-          "wind": 2.9,
+          "temp": 71.8,
+          "wind": 0.9,
           "precip": 0.0,
-          "factor": 0.529,
+          "factor": 0.527,
           "source": "open-meteo",
           "park": "SD"
         }
@@ -2676,7 +2573,7 @@
             "ops": ".688",
             "hr": 2,
             "woba": 0.3184,
-            "war": 0.8615047719388429,
+            "war": 3.283983460164455,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2688,7 +2585,7 @@
             "ops": ".770",
             "hr": 12,
             "woba": 0.371,
-            "war": 1.3515921521291416,
+            "war": 2.6208614643049177,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2700,7 +2597,7 @@
             "ops": ".595",
             "hr": 4,
             "woba": 0.2885,
-            "war": 2.2994162040387254,
+            "war": 1.206517342293413,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2712,7 +2609,7 @@
             "ops": ".708",
             "hr": 15,
             "woba": 0.33799999999999997,
-            "war": 1.5608188422556086,
+            "war": 3.2035971670055714,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2724,7 +2621,7 @@
             "ops": ".716",
             "hr": 19,
             "woba": 0.3328,
-            "war": 1.6650384207275424,
+            "war": 1.315102235562168,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2736,7 +2633,7 @@
             "ops": ".592",
             "hr": 3,
             "woba": 0.2996,
-            "war": 1.2896466406103315,
+            "war": 0.5325493690277183,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2748,7 +2645,7 @@
             "ops": ".408",
             "hr": 1,
             "woba": 0.1992,
-            "war": 1.9519265462235444,
+            "war": 1.8173286055049558,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2760,7 +2657,7 @@
             "ops": ".923",
             "hr": 5,
             "woba": 0.44089999999999996,
-            "war": 0.9069990580804125,
+            "war": 3.084834675888833,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2772,7 +2669,7 @@
             "ops": ".638",
             "hr": 3,
             "woba": 0.3202,
-            "war": 3.489933723447094,
+            "war": 2.364808146996948,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -2786,7 +2683,7 @@
             "ops": ".860",
             "hr": 5,
             "woba": 0.41359999999999997,
-            "war": 1.3066917073584614,
+            "war": 2.8874193013386162,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2798,7 +2695,7 @@
             "ops": ".686",
             "hr": 0,
             "woba": 0.34819999999999995,
-            "war": 1.1595617485028518,
+            "war": 1.0793115988907234,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2810,7 +2707,7 @@
             "ops": ".814",
             "hr": 16,
             "woba": 0.38859999999999995,
-            "war": 0.6448438407731315,
+            "war": 2.056151641781272,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2822,7 +2719,7 @@
             "ops": ".688",
             "hr": 8,
             "woba": 0.3316,
-            "war": 2.89948784359722,
+            "war": 1.7636388871618613,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2834,7 +2731,7 @@
             "ops": ".637",
             "hr": 3,
             "woba": 0.31629999999999997,
-            "war": 2.965367834920062,
+            "war": 2.3998795997896596,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2846,7 +2743,7 @@
             "ops": ".762",
             "hr": 8,
             "woba": 0.36979999999999996,
-            "war": 1.1268910676614192,
+            "war": 2.9925233284737263,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2858,7 +2755,7 @@
             "ops": ".820",
             "hr": 9,
             "woba": 0.3952,
-            "war": 2.131838593091846,
+            "war": 2.1517382280513733,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2870,7 +2767,7 @@
             "ops": ".821",
             "hr": 17,
             "woba": 0.3827,
-            "war": 2.6821570571204774,
+            "war": 1.0527287822562812,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -2882,7 +2779,7 @@
             "ops": ".875",
             "hr": 21,
             "woba": 0.41209999999999997,
-            "war": 0.6842890626044974,
+            "war": 3.1128532590264473,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -2890,86 +2787,86 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 70.0,
-        "wind": 2.9,
+        "temp": 71.8,
+        "wind": 0.9,
         "precip": 0.0,
-        "factor": 0.529,
+        "factor": 0.527,
         "source": "open-meteo",
         "park": "SD"
       },
       "odds": {
         "h2h": {
           "Milwaukee Brewers": {
-            "price": -118,
-            "devig_prob": 0.523184145453903,
+            "price": -112,
+            "devig_prob": 0.5193517668886719,
             "book": "fanduel",
-            "implied": 0.5423781047706757
+            "implied": 0.5352695607492141
           },
           "San Diego Padres": {
-            "price": 100,
-            "devig_prob": 0.476815854546097,
+            "price": 104,
+            "devig_prob": 0.4806482331113281,
             "book": "fanduel",
-            "implied": 0.4943087090090508
+            "implied": 0.49537978883498457
           }
         },
         "totals": {
           "line": 8.0,
-          "over_price": -115,
-          "under_price": -105
+          "over_price": -110,
+          "under_price": -110
         },
         "raw_books": {
           "draftkings": {
             "h2h": {
-              "Milwaukee Brewers": -120,
-              "San Diego Padres": 100
+              "Milwaukee Brewers": -113,
+              "San Diego Padres": 105
             }
           },
           "lowvig": {
             "h2h": {
-              "Milwaukee Brewers": -115,
-              "San Diego Padres": 104
+              "Milwaukee Brewers": -113,
+              "San Diego Padres": 103
             }
           },
           "betonlineag": {
             "h2h": {
-              "Milwaukee Brewers": -115,
-              "San Diego Padres": 104
+              "Milwaukee Brewers": -113,
+              "San Diego Padres": 103
             }
           },
           "mybookieag": {
             "h2h": {
-              "Milwaukee Brewers": -119,
-              "San Diego Padres": 101
+              "Milwaukee Brewers": -115,
+              "San Diego Padres": -102
             }
           },
           "fanduel": {
             "h2h": {
-              "Milwaukee Brewers": -118,
-              "San Diego Padres": 100
+              "Milwaukee Brewers": -112,
+              "San Diego Padres": 104
             }
           },
           "bovada": {
             "h2h": {
-              "Milwaukee Brewers": -120,
-              "San Diego Padres": 100
+              "Milwaukee Brewers": -119,
+              "San Diego Padres": -101
             }
           },
           "betmgm": {
             "h2h": {
-              "Milwaukee Brewers": -120,
-              "San Diego Padres": 100
+              "Milwaukee Brewers": -118,
+              "San Diego Padres": -102
             }
           },
           "betrivers": {
             "h2h": {
-              "Milwaukee Brewers": -124,
-              "San Diego Padres": 106
+              "Milwaukee Brewers": -121,
+              "San Diego Padres": 104
             }
           },
           "betus": {
             "h2h": {
-              "Milwaukee Brewers": -116,
-              "San Diego Padres": 106
+              "Milwaukee Brewers": -113,
+              "San Diego Padres": 103
             }
           }
         }
@@ -2977,9 +2874,9 @@
       "ab_test_mode": "wave",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.505551661793669,
-          "pB": 0.49444833820633105,
-          "raw_score": 0.022207559815428837,
+          "pA": 0.505481630215054,
+          "pB": 0.494518369784946,
+          "raw_score": 0.021927399395592854,
           "model": "simple",
           "edge": 0.0
         },
@@ -3002,11 +2899,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.524009778598262,
-          "pB": 0.47599022140173797,
-          "raw_score": 0.012079879936395583,
+          "pA": 0.523981765966816,
+          "pB": 0.476018234033184,
+          "raw_score": 0.011967815768461188,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.505551661793669,
+          "simple_p": 0.505481630215054,
           "wave_p": 0.536315189801324,
           "edge": 0.0039065335363381104,
           "mag": 0.005328093350373411,
@@ -3025,10 +2922,10 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.51,
-        "weather": 0.507,
+        "weather": 0.56,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.6588374716810027,
+        "form": 0.5326524897820185,
         "entropy": 0.5
       },
       "factorsB": {
@@ -3036,10 +2933,10 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.36,
-        "weather": 0.507,
+        "weather": 0.56,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.6008780349238958,
+        "form": 0.5849002813218329,
         "entropy": 0.5
       },
       "factors": {
@@ -3049,23 +2946,23 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.5098086251870338,
-        "pB": 0.49019137481296615,
-        "raw_score": 0.03911035990747639,
+        "pA": 0.5089288664786593,
+        "pB": 0.4910711335213407,
+        "raw_score": 0.0355837286019749,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5242967041687373,
+        "simple_p": 0.5220973073978008,
         "wave_p": 0.5001499058658982,
-        "edge": -0.05438384425795928,
+        "edge": -0.04528049188233385,
         "mag": 0.0003416521076371714,
         "entropy": 0.1856006030239212,
-        "devig_prob_home": 0.5445752190709254,
-        "market_price": -130,
+        "devig_prob_home": 0.5363516254036745,
+        "market_price": -120,
         "book": "fanduel",
         "weather": {
-          "temp": 68.0,
-          "wind": 2.7,
+          "temp": 69.4,
+          "wind": 6.5,
           "precip": 0.0,
-          "factor": 0.507,
+          "factor": 0.56,
           "source": "open-meteo",
           "park": "DET"
         }
@@ -3223,7 +3120,7 @@
             "ops": ".760",
             "hr": 1,
             "woba": 0.38079999999999997,
-            "war": 0.9382809068596643,
+            "war": 0.8350267093288194,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3235,7 +3132,7 @@
             "ops": ".729",
             "hr": 8,
             "woba": 0.3459,
-            "war": 3.0724649262247596,
+            "war": 1.1449234103202288,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3247,7 +3144,7 @@
             "ops": ".854",
             "hr": 26,
             "woba": 0.38980000000000004,
-            "war": 2.2584064718207744,
+            "war": 2.5608110929242653,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3259,7 +3156,7 @@
             "ops": ".1224",
             "hr": 4,
             "woba": 0.5347999999999999,
-            "war": 1.9673535288108308,
+            "war": 3.4392592234350485,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3271,7 +3168,7 @@
             "ops": ".754",
             "hr": 7,
             "woba": 0.3746,
-            "war": 1.4424364579706632,
+            "war": 3.200207637860257,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3283,7 +3180,7 @@
             "ops": ".721",
             "hr": 6,
             "woba": 0.3363,
-            "war": 1.7771571014650582,
+            "war": 2.1839531667123,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3295,7 +3192,7 @@
             "ops": ".553",
             "hr": 5,
             "woba": 0.2587,
-            "war": 0.7813016836546194,
+            "war": 1.5056402034931522,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3307,7 +3204,7 @@
             "ops": ".699",
             "hr": 2,
             "woba": 0.33409999999999995,
-            "war": 2.4534742580889004,
+            "war": 1.6049849626904238,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3319,7 +3216,7 @@
             "ops": ".822",
             "hr": 12,
             "woba": 0.403,
-            "war": 3.348636236680041,
+            "war": 0.8457062527179866,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -3333,7 +3230,7 @@
             "ops": ".981",
             "hr": 1,
             "woba": 0.4763,
-            "war": 2.5106396816598995,
+            "war": 1.5128891104419637,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3345,7 +3242,7 @@
             "ops": ".695",
             "hr": 12,
             "woba": 0.3161,
-            "war": 0.6217062847263276,
+            "war": 0.5430866092431622,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3357,7 +3254,7 @@
             "ops": ".724",
             "hr": 4,
             "woba": 0.3504,
-            "war": 2.9405338876468092,
+            "war": 0.9176621816458983,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3369,7 +3266,7 @@
             "ops": ".685",
             "hr": 9,
             "woba": 0.3319,
-            "war": 1.4321924150662162,
+            "war": 1.7053714755863927,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3381,7 +3278,7 @@
             "ops": ".800",
             "hr": 13,
             "woba": 0.3828,
-            "war": 3.2550066034379905,
+            "war": 2.286206516183138,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3393,7 +3290,7 @@
             "ops": ".685",
             "hr": 17,
             "woba": 0.32189999999999996,
-            "war": 3.3464054594356463,
+            "war": 0.870847233565926,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3405,7 +3302,7 @@
             "ops": ".718",
             "hr": 10,
             "woba": 0.3494,
-            "war": 2.102278566911984,
+            "war": 1.068777419029631,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3417,7 +3314,7 @@
             "ops": ".822",
             "hr": 13,
             "woba": 0.3822,
-            "war": 3.181122651343373,
+            "war": 2.770408268249281,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3429,7 +3326,7 @@
             "ops": ".546",
             "hr": 6,
             "woba": 0.26299999999999996,
-            "war": 1.2578006754168767,
+            "war": 3.2941132262454373,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -3437,10 +3334,10 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 68.0,
-        "wind": 2.7,
+        "temp": 69.4,
+        "wind": 6.5,
         "precip": 0.0,
-        "factor": 0.507,
+        "factor": 0.56,
         "source": "open-meteo",
         "park": "DET"
       },
@@ -3448,51 +3345,51 @@
         "h2h": {
           "Cleveland Guardians": {
             "price": 110,
-            "devig_prob": 0.45542478092907457,
+            "devig_prob": 0.4636483745963255,
             "book": "fanduel",
-            "implied": 0.4723061615629056
+            "implied": 0.4778221932477197
           },
           "Detroit Tigers": {
-            "price": -130,
-            "devig_prob": 0.5445752190709254,
+            "price": -120,
+            "devig_prob": 0.5363516254036745,
             "book": "fanduel",
-            "implied": 0.5647611684128431
+            "implied": 0.5527479962061624
           }
         },
         "totals": {
           "line": 8.0,
-          "over_price": -117,
-          "under_price": -103
+          "over_price": -113,
+          "under_price": -106
         },
         "raw_books": {
           "draftkings": {
             "h2h": {
-              "Cleveland Guardians": 109,
-              "Detroit Tigers": -131
+              "Cleveland Guardians": 111,
+              "Detroit Tigers": -119
             }
           },
           "lowvig": {
             "h2h": {
-              "Cleveland Guardians": 116,
-              "Detroit Tigers": -128
+              "Cleveland Guardians": 111,
+              "Detroit Tigers": -122
             }
           },
           "betonlineag": {
             "h2h": {
-              "Cleveland Guardians": 116,
-              "Detroit Tigers": -128
+              "Cleveland Guardians": 111,
+              "Detroit Tigers": -122
             }
           },
           "mybookieag": {
             "h2h": {
-              "Cleveland Guardians": 110,
-              "Detroit Tigers": -129
+              "Cleveland Guardians": 103,
+              "Detroit Tigers": -121
             }
           },
           "fanduel": {
             "h2h": {
               "Cleveland Guardians": 110,
-              "Detroit Tigers": -130
+              "Detroit Tigers": -120
             }
           },
           "bovada": {
@@ -3503,20 +3400,20 @@
           },
           "betmgm": {
             "h2h": {
-              "Cleveland Guardians": 110,
-              "Detroit Tigers": -135
+              "Cleveland Guardians": 105,
+              "Detroit Tigers": -125
             }
           },
           "betus": {
             "h2h": {
-              "Cleveland Guardians": 117,
-              "Detroit Tigers": -128
+              "Cleveland Guardians": 111,
+              "Detroit Tigers": -122
             }
           },
           "betrivers": {
             "h2h": {
-              "Cleveland Guardians": 110,
-              "Detroit Tigers": -129
+              "Cleveland Guardians": 114,
+              "Detroit Tigers": -132
             }
           }
         }
@@ -3524,9 +3421,9 @@
       "ab_test_mode": "wave",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5242967041687373,
-          "pB": 0.4757032958312627,
-          "raw_score": 0.09726342160723521,
+          "pA": 0.5220973073978008,
+          "pB": 0.4779026926021992,
+          "raw_score": 0.0884468433434815,
           "model": "simple",
           "edge": 0.0
         },
@@ -3549,11 +3446,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.5098086251870338,
-          "pB": 0.49019137481296615,
-          "raw_score": 0.03911035990747639,
+          "pA": 0.5089288664786593,
+          "pB": 0.4910711335213407,
+          "raw_score": 0.0355837286019749,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.5242967041687373,
+          "simple_p": 0.5220973073978008,
           "wave_p": 0.5001499058658982,
           "edge": 0.0002156773345418841,
           "mag": 0.0003416521076371714,
@@ -3572,10 +3469,10 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.51,
-        "weather": 0.634,
+        "weather": 0.68,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.6606645297919376,
+        "form": 0.6510263320548733,
         "entropy": 0.5
       },
       "factorsB": {
@@ -3583,10 +3480,10 @@
         "lineup_ops": 0.8239259259259253,
         "bullpen": 0.5,
         "park": 0.3,
-        "weather": 0.634,
+        "weather": 0.68,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.590946783943281,
+        "form": 0.6054321312146651,
         "entropy": 0.5
       },
       "factors": {
@@ -3596,23 +3493,23 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.5287482128821486,
-        "pB": 0.47125178711785143,
-        "raw_score": 0.05869103904367824,
+        "pA": 0.5285561847657079,
+        "pB": 0.47144381523429213,
+        "raw_score": 0.057919085603407895,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.535508921241691,
+        "simple_p": 0.5350288509505896,
         "wave_p": 0.5242410739757868,
-        "edge": -0.04646808813732772,
+        "edge": -0.041039523635780006,
         "mag": 0.002968266775683413,
         "entropy": 0.14260007989457923,
-        "devig_prob_home": 0.5177198752551792,
-        "market_price": -112,
+        "devig_prob_home": 0.5124833388700721,
+        "market_price": -106,
         "book": "fanduel",
         "weather": {
-          "temp": 80.8,
-          "wind": 2.6,
+          "temp": 86.5,
+          "wind": 1.4,
           "precip": 0.0,
-          "factor": 0.634,
+          "factor": 0.68,
           "source": "open-meteo",
           "park": "MIA"
         }
@@ -3770,7 +3667,7 @@
             "ops": ".673",
             "hr": 2,
             "woba": 0.3335,
-            "war": 3.4123423338826457,
+            "war": 2.0405926881971186,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3782,7 +3679,7 @@
             "ops": ".405",
             "hr": 0,
             "woba": 0.21669999999999998,
-            "war": 1.9161716472663337,
+            "war": 1.2864782976739075,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3794,7 +3691,7 @@
             "ops": ".887",
             "hr": 6,
             "woba": 0.42089999999999994,
-            "war": 1.4501187411231646,
+            "war": 3.093854167327735,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3806,7 +3703,7 @@
             "ops": ".529",
             "hr": 1,
             "woba": 0.25029999999999997,
-            "war": 1.2644510828600217,
+            "war": 2.67452061197874,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3818,7 +3715,7 @@
             "ops": ".893",
             "hr": 12,
             "woba": 0.40909999999999996,
-            "war": 2.7145017103844897,
+            "war": 0.7254880714307032,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3830,7 +3727,7 @@
             "ops": ".735",
             "hr": 16,
             "woba": 0.33809999999999996,
-            "war": 3.1804712861051705,
+            "war": 1.066047723453162,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3842,7 +3739,7 @@
             "ops": ".636",
             "hr": 6,
             "woba": 0.3208,
-            "war": 1.4650870531231988,
+            "war": 3.3807533717319997,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3854,7 +3751,7 @@
             "ops": ".724",
             "hr": 4,
             "woba": 0.3424,
-            "war": 1.5562036255305394,
+            "war": 1.5571769987672752,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3866,7 +3763,7 @@
             "ops": ".705",
             "hr": 11,
             "woba": 0.3255,
-            "war": 0.6332577971720833,
+            "war": 2.419533974099289,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -3880,7 +3777,7 @@
             "ops": ".801",
             "hr": 25,
             "woba": 0.3679,
-            "war": 3.3814137223866916,
+            "war": 2.168113256955523,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3892,7 +3789,7 @@
             "ops": ".815",
             "hr": 15,
             "woba": 0.3949,
-            "war": 3.4675454968857675,
+            "war": 2.376036894066372,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3904,7 +3801,7 @@
             "ops": ".840",
             "hr": 7,
             "woba": 0.4012,
-            "war": 1.4594771190192581,
+            "war": 2.472941997029591,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3916,7 +3813,7 @@
             "ops": ".937",
             "hr": 14,
             "woba": 0.4291,
-            "war": 0.7861987406321584,
+            "war": 1.448338171309644,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3928,7 +3825,7 @@
             "ops": ".586",
             "hr": 8,
             "woba": 0.2846,
-            "war": 2.902074687834912,
+            "war": 3.056631476378195,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3940,7 +3837,7 @@
             "ops": ".675",
             "hr": 5,
             "woba": 0.3185,
-            "war": 3.3782052491350716,
+            "war": 1.6416600080258128,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3952,7 +3849,7 @@
             "ops": ".737",
             "hr": 4,
             "woba": 0.3615,
-            "war": 1.3207592182619199,
+            "war": 2.6531024039018423,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3964,7 +3861,7 @@
             "ops": ".622",
             "hr": 1,
             "woba": 0.3134,
-            "war": 1.6106784786734094,
+            "war": 3.1173809259984497,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -3976,7 +3873,7 @@
             "ops": ".395",
             "hr": 0,
             "woba": 0.20009999999999997,
-            "war": 2.423551127808005,
+            "war": 1.3619798088038677,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -3984,26 +3881,26 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 80.8,
-        "wind": 2.6,
+        "temp": 86.5,
+        "wind": 1.4,
         "precip": 0.0,
-        "factor": 0.634,
+        "factor": 0.68,
         "source": "open-meteo",
         "park": "MIA"
       },
       "odds": {
         "h2h": {
           "Miami Marlins": {
-            "price": -112,
-            "devig_prob": 0.5177198752551792,
+            "price": -106,
+            "devig_prob": 0.5124833388700721,
             "book": "fanduel",
-            "implied": 0.5367362943009719
+            "implied": 0.5284379431726696
           },
           "Pittsburgh Pirates": {
-            "price": -104,
-            "devig_prob": 0.48228012474482085,
+            "price": -102,
+            "devig_prob": 0.48751666112992786,
             "book": "fanduel",
-            "implied": 0.4999948028708718
+            "implied": 0.5026940041366308
           }
         },
         "totals": {
@@ -4014,26 +3911,26 @@
         "raw_books": {
           "fanduel": {
             "h2h": {
-              "Miami Marlins": -112,
-              "Pittsburgh Pirates": -104
+              "Miami Marlins": -106,
+              "Pittsburgh Pirates": -102
             }
           },
           "lowvig": {
             "h2h": {
-              "Miami Marlins": -115,
-              "Pittsburgh Pirates": 104
+              "Miami Marlins": -111,
+              "Pittsburgh Pirates": 101
             }
           },
           "betonlineag": {
             "h2h": {
-              "Miami Marlins": -115,
-              "Pittsburgh Pirates": 104
+              "Miami Marlins": -111,
+              "Pittsburgh Pirates": 101
             }
           },
           "mybookieag": {
             "h2h": {
-              "Miami Marlins": -117,
-              "Pittsburgh Pirates": 100
+              "Miami Marlins": -115,
+              "Pittsburgh Pirates": -102
             }
           },
           "bovada": {
@@ -4044,26 +3941,26 @@
           },
           "draftkings": {
             "h2h": {
-              "Miami Marlins": -120,
-              "Pittsburgh Pirates": 100
+              "Miami Marlins": -109,
+              "Pittsburgh Pirates": 102
             }
           },
           "betmgm": {
             "h2h": {
-              "Miami Marlins": -120,
-              "Pittsburgh Pirates": 100
+              "Miami Marlins": -115,
+              "Pittsburgh Pirates": -105
             }
           },
           "betus": {
             "h2h": {
-              "Miami Marlins": -115,
-              "Pittsburgh Pirates": 105
+              "Miami Marlins": -111,
+              "Pittsburgh Pirates": 101
             }
           },
           "betrivers": {
             "h2h": {
-              "Miami Marlins": -115,
-              "Pittsburgh Pirates": -103
+              "Miami Marlins": -117,
+              "Pittsburgh Pirates": 100
             }
           }
         }
@@ -4071,9 +3968,9 @@
       "ab_test_mode": "wave",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.535508921241691,
-          "pB": 0.464491078758309,
-          "raw_score": 0.14227519744567046,
+          "pA": 0.5350288509505896,
+          "pB": 0.4649711490494104,
+          "raw_score": 0.1403453138449946,
           "model": "simple",
           "edge": 0.0
         },
@@ -4096,11 +3993,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.5287482128821486,
-          "pB": 0.47125178711785143,
-          "raw_score": 0.05869103904367824,
+          "pA": 0.5285561847657079,
+          "pB": 0.47144381523429213,
+          "raw_score": 0.057919085603407895,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.535508921241691,
+          "simple_p": 0.5350288509505896,
           "wave_p": 0.5242410739757868,
           "edge": 0.002061509267119006,
           "mag": 0.002968266775683413,
@@ -4119,10 +4016,10 @@
         "lineup_ops": 0.8634814814814813,
         "bullpen": 0.5,
         "park": 0.49,
-        "weather": 0.566,
+        "weather": 0.628,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.6239125165998907,
+        "form": 0.7144872802473968,
         "entropy": 0.5
       },
       "factorsB": {
@@ -4130,10 +4027,10 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.4,
-        "weather": 0.566,
+        "weather": 0.628,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.5852383411893382,
+        "form": 0.643036984085675,
         "entropy": 0.5
       },
       "factors": {
@@ -4143,23 +4040,23 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.4930449494223349,
-        "pB": 0.5069550505776651,
-        "raw_score": -0.0015268708313067787,
+        "pA": 0.49330715793907315,
+        "pB": 0.5066928420609269,
+        "raw_score": -0.0004780349672693585,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.4990457068891707,
+        "simple_p": 0.4997012281810163,
         "wave_p": 0.4890444444444444,
-        "edge": 0.10564937100337446,
+        "edge": 0.10494358966826534,
         "mag": 0.0,
         "entropy": 0.0,
-        "devig_prob_home": 0.40130567957429064,
-        "market_price": 134,
+        "devig_prob_home": 0.40174925239266157,
+        "market_price": 142,
         "book": "fanduel",
         "weather": {
-          "temp": 74.8,
-          "wind": 1.8,
+          "temp": 77.4,
+          "wind": 5.5,
           "precip": 0.0,
-          "factor": 0.566,
+          "factor": 0.628,
           "source": "open-meteo",
           "park": "WSH"
         }
@@ -4317,7 +4214,7 @@
             "ops": ".903",
             "hr": 2,
             "woba": 0.3988999999999999,
-            "war": 2.69217532453269,
+            "war": 1.713222482417403,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4329,7 +4226,7 @@
             "ops": ".837",
             "hr": 6,
             "woba": 0.38989999999999997,
-            "war": 0.505290874512976,
+            "war": 2.5402070779768358,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4341,7 +4238,7 @@
             "ops": ".1250",
             "hr": 1,
             "woba": 0.475,
-            "war": 1.7315278674131926,
+            "war": 0.7270225596987704,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4353,7 +4250,7 @@
             "ops": ".691",
             "hr": 8,
             "woba": 0.3233,
-            "war": 0.8745552074519674,
+            "war": 2.4111381421272933,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4365,7 +4262,7 @@
             "ops": ".905",
             "hr": 29,
             "woba": 0.41469999999999996,
-            "war": 1.0702624918535868,
+            "war": 2.5429424934203984,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4377,7 +4274,7 @@
             "ops": ".711",
             "hr": 15,
             "woba": 0.3313,
-            "war": 2.949923611541548,
+            "war": 1.0407764444343797,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4389,7 +4286,7 @@
             "ops": ".666",
             "hr": 10,
             "woba": 0.3166,
-            "war": 2.4182440195640016,
+            "war": 2.1264974936609073,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4401,7 +4298,7 @@
             "ops": ".788",
             "hr": 2,
             "woba": 0.3668,
-            "war": 2.8944440705720984,
+            "war": 3.364431780853761,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4413,7 +4310,7 @@
             "ops": ".719",
             "hr": 10,
             "woba": 0.34049999999999997,
-            "war": 2.199301886078158,
+            "war": 3.4704258092656284,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -4427,7 +4324,7 @@
             "ops": ".729",
             "hr": 13,
             "woba": 0.35509999999999997,
-            "war": 3.3864151366151742,
+            "war": 2.5521373176580164,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4439,7 +4336,7 @@
             "ops": ".727",
             "hr": 7,
             "woba": 0.35729999999999995,
-            "war": 1.7373745282512765,
+            "war": 3.2756372780529164,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4451,7 +4348,7 @@
             "ops": ".689",
             "hr": 17,
             "woba": 0.3243,
-            "war": 3.084183219631929,
+            "war": 2.5778538458637947,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4463,7 +4360,7 @@
             "ops": ".747",
             "hr": 20,
             "woba": 0.3549,
-            "war": 0.75150664457482,
+            "war": 3.491152269479341,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4475,7 +4372,7 @@
             "ops": ".400",
             "hr": 0,
             "woba": 0.19999999999999998,
-            "war": 1.420099251027231,
+            "war": 3.013304634358497,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4487,7 +4384,7 @@
             "ops": ".745",
             "hr": 14,
             "woba": 0.3651,
-            "war": 2.495257585284695,
+            "war": 0.7480867110635541,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4499,7 +4396,7 @@
             "ops": ".775",
             "hr": 9,
             "woba": 0.3625,
-            "war": 2.7321147982508234,
+            "war": 1.4597311670603221,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4511,7 +4408,7 @@
             "ops": ".719",
             "hr": 4,
             "woba": 0.35529999999999995,
-            "war": 1.9876145529163154,
+            "war": 2.651086109594509,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4523,7 +4420,7 @@
             "ops": ".690",
             "hr": 7,
             "woba": 0.3362,
-            "war": 1.4814975304428164,
+            "war": 3.38293827800191,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -4531,68 +4428,68 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 74.8,
-        "wind": 1.8,
+        "temp": 77.4,
+        "wind": 5.5,
         "precip": 0.0,
-        "factor": 0.566,
+        "factor": 0.628,
         "source": "open-meteo",
         "park": "WSH"
       },
       "odds": {
         "h2h": {
           "Chicago Cubs": {
-            "price": -158,
-            "devig_prob": 0.5986943204257095,
+            "price": -154,
+            "devig_prob": 0.5982507476073383,
             "book": "fanduel",
-            "implied": 0.6209868472947518
+            "implied": 0.6167842276607651
           },
           "Washington Nationals": {
-            "price": 134,
-            "devig_prob": 0.40130567957429064,
+            "price": 142,
+            "devig_prob": 0.40174925239266157,
             "book": "fanduel",
-            "implied": 0.4162483929747584
+            "implied": 0.4141952238945402
           }
         },
         "totals": {
           "line": 9.5,
-          "over_price": -105,
-          "under_price": -115
+          "over_price": -110,
+          "under_price": -110
         },
         "raw_books": {
           "draftkings": {
             "h2h": {
-              "Chicago Cubs": -168,
-              "Washington Nationals": 139
+              "Chicago Cubs": -159,
+              "Washington Nationals": 148
             }
           },
           "betus": {
             "h2h": {
-              "Chicago Cubs": -163,
-              "Washington Nationals": 145
+              "Chicago Cubs": -162,
+              "Washington Nationals": 144
             }
           },
           "betonlineag": {
             "h2h": {
-              "Chicago Cubs": -163,
+              "Chicago Cubs": -162,
               "Washington Nationals": 147
             }
           },
           "lowvig": {
             "h2h": {
-              "Chicago Cubs": -163,
+              "Chicago Cubs": -162,
               "Washington Nationals": 147
             }
           },
           "mybookieag": {
             "h2h": {
-              "Chicago Cubs": -165,
-              "Washington Nationals": 139
+              "Chicago Cubs": -158,
+              "Washington Nationals": 134
             }
           },
           "fanduel": {
             "h2h": {
-              "Chicago Cubs": -158,
-              "Washington Nationals": 134
+              "Chicago Cubs": -154,
+              "Washington Nationals": 142
             }
           },
           "bovada": {
@@ -4603,14 +4500,14 @@
           },
           "betrivers": {
             "h2h": {
-              "Chicago Cubs": -165,
-              "Washington Nationals": 138
+              "Chicago Cubs": -167,
+              "Washington Nationals": 143
             }
           },
           "betmgm": {
             "h2h": {
-              "Chicago Cubs": -170,
-              "Washington Nationals": 140
+              "Chicago Cubs": -165,
+              "Washington Nationals": 135
             }
           }
         }
@@ -4618,9 +4515,9 @@
       "ab_test_mode": "simple",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.4990457068891707,
-          "pB": 0.5009542931108293,
-          "raw_score": -0.0038171770782669465,
+          "pA": 0.4997012281810163,
+          "pB": 0.5002987718189837,
+          "raw_score": -0.0011950874181733961,
           "model": "simple",
           "edge": 0.0
         },
@@ -4643,11 +4540,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.4930449494223349,
-          "pB": 0.5069550505776651,
-          "raw_score": -0.0015268708313067787,
+          "pA": 0.49330715793907315,
+          "pB": 0.5066928420609269,
+          "raw_score": -0.0004780349672693585,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.4990457068891707,
+          "simple_p": 0.4997012281810163,
           "wave_p": 0.4890444444444444,
           "edge": 0.0,
           "mag": 0.0,
@@ -4666,10 +4563,10 @@
         "lineup_ops": 0.7825925925925925,
         "bullpen": 0.5,
         "park": 0.525,
-        "weather": 0.5,
+        "weather": 0.634,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.6092187476037931,
+        "form": 0.6262084605230482,
         "entropy": 0.5
       },
       "factorsB": {
@@ -4677,10 +4574,10 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.54,
-        "weather": 0.5,
+        "weather": 0.634,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.683926410260051,
+        "form": 0.6346930217246091,
         "entropy": 0.5
       },
       "factors": {
@@ -4690,24 +4587,25 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.4856952389616194,
-        "pB": 0.5143047610383806,
-        "raw_score": 0.0273249103505553,
+        "pA": 0.4862243570925727,
+        "pB": 0.5137756429074273,
+        "raw_score": 0.029444049597105604,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5170714307373819,
+        "simple_p": 0.5183942260647652,
         "wave_p": 0.46477777777777773,
-        "edge": -0.02545867662868795,
+        "edge": -0.031515073197946886,
         "mag": 0.0,
         "entropy": 0.0,
-        "devig_prob_home": 0.5397634376670686,
-        "market_price": -122,
+        "devig_prob_home": 0.5452907161053742,
+        "market_price": -124,
         "book": "fanduel",
         "weather": {
-          "temp": 72,
-          "wind": 5,
-          "precip": 0,
-          "factor": 0.5,
-          "source": "fallback"
+          "temp": 77.0,
+          "wind": 6.4,
+          "precip": 0.0,
+          "factor": 0.634,
+          "source": "open-meteo",
+          "park": "NYY"
         }
       },
       "total": {
@@ -4863,7 +4761,7 @@
             "ops": ".657",
             "hr": 1,
             "woba": 0.3171,
-            "war": 3.467912828937329,
+            "war": 2.5128392061563996,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4875,7 +4773,7 @@
             "ops": ".708",
             "hr": 10,
             "woba": 0.32199999999999995,
-            "war": 2.735065520843755,
+            "war": 1.1574344351846666,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4887,7 +4785,7 @@
             "ops": ".574",
             "hr": 8,
             "woba": 0.2818,
-            "war": 2.754297347747641,
+            "war": 2.8803161136841307,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4899,7 +4797,7 @@
             "ops": ".890",
             "hr": 32,
             "woba": 0.40659999999999996,
-            "war": 0.9661211493502557,
+            "war": 3.1300340005200114,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4911,7 +4809,7 @@
             "ops": ".946",
             "hr": 2,
             "woba": 0.43379999999999996,
-            "war": 3.240126200712948,
+            "war": 2.5738390026473374,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4923,7 +4821,7 @@
             "ops": ".707",
             "hr": 9,
             "woba": 0.3317,
-            "war": 3.481604784664413,
+            "war": 0.9700362507147505,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4935,7 +4833,7 @@
             "ops": ".692",
             "hr": 17,
             "woba": 0.32639999999999997,
-            "war": 1.3429339800918316,
+            "war": 2.5933721570694743,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4947,7 +4845,7 @@
             "ops": ".687",
             "hr": 12,
             "woba": 0.32449999999999996,
-            "war": 1.0507028867948232,
+            "war": 2.6436667641159795,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4959,7 +4857,7 @@
             "ops": ".868",
             "hr": 24,
             "woba": 0.3856,
-            "war": 2.7379237625592934,
+            "war": 1.09964804751466,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -4973,7 +4871,7 @@
             "ops": ".774",
             "hr": 3,
             "woba": 0.37779999999999997,
-            "war": 2.490986144529173,
+            "war": 1.5083046423011286,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4985,7 +4883,7 @@
             "ops": ".563",
             "hr": 12,
             "woba": 0.27449999999999997,
-            "war": 1.607346632832301,
+            "war": 3.250898148942519,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -4997,7 +4895,7 @@
             "ops": ".727",
             "hr": 14,
             "woba": 0.3465,
-            "war": 2.099007680100068,
+            "war": 0.938067621413147,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5009,7 +4907,7 @@
             "ops": ".591",
             "hr": 8,
             "woba": 0.2773,
-            "war": 1.1266430801714789,
+            "war": 3.461577758502627,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5021,7 +4919,7 @@
             "ops": ".815",
             "hr": 18,
             "woba": 0.3757,
-            "war": 2.2684675650164356,
+            "war": 2.411625037449707,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5033,7 +4931,7 @@
             "ops": ".658",
             "hr": 2,
             "woba": 0.3214,
-            "war": 1.5196948110845556,
+            "war": 1.930014661433864,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5045,7 +4943,7 @@
             "ops": ".700",
             "hr": 10,
             "woba": 0.3412,
-            "war": 2.0542645178663994,
+            "war": 1.82073818812327,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5057,7 +4955,7 @@
             "ops": ".742",
             "hr": 18,
             "woba": 0.351,
-            "war": 2.4041699506697203,
+            "war": 2.9691129236018177,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5069,7 +4967,7 @@
             "ops": ".435",
             "hr": 0,
             "woba": 0.2361,
-            "war": 2.8442632599005564,
+            "war": 0.8890417417690927,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -5077,67 +4975,68 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 72,
-        "wind": 5,
-        "precip": 0,
-        "factor": 0.5,
-        "source": "fallback"
+        "temp": 77.0,
+        "wind": 6.4,
+        "precip": 0.0,
+        "factor": 0.634,
+        "source": "open-meteo",
+        "park": "NYY"
       },
       "odds": {
         "h2h": {
           "New York Yankees": {
-            "price": -122,
-            "devig_prob": 0.5397634376670686,
+            "price": -124,
+            "devig_prob": 0.5452907161053742,
             "book": "fanduel",
-            "implied": 0.559780908991204
+            "implied": 0.5625673249329275
           },
           "Seattle Mariners": {
-            "price": 104,
-            "devig_prob": 0.46023656233293136,
+            "price": 114,
+            "devig_prob": 0.4547092838946258,
             "book": "fanduel",
-            "implied": 0.4773047287664286
+            "implied": 0.46911597411706896
           }
         },
         "totals": {
           "line": 8.5,
-          "over_price": -120,
-          "under_price": 100
+          "over_price": -125,
+          "under_price": 105
         },
         "raw_books": {
           "draftkings": {
             "h2h": {
-              "New York Yankees": -130,
-              "Seattle Mariners": 108
+              "New York Yankees": -124,
+              "Seattle Mariners": 116
             }
           },
           "lowvig": {
             "h2h": {
-              "New York Yankees": -125,
-              "Seattle Mariners": 113
+              "New York Yankees": -128,
+              "Seattle Mariners": 116
             }
           },
           "betonlineag": {
             "h2h": {
-              "New York Yankees": -125,
-              "Seattle Mariners": 113
+              "New York Yankees": -128,
+              "Seattle Mariners": 116
             }
           },
           "mybookieag": {
             "h2h": {
-              "New York Yankees": -127,
-              "Seattle Mariners": 108
+              "New York Yankees": -131,
+              "Seattle Mariners": 111
             }
           },
           "fanduel": {
             "h2h": {
-              "New York Yankees": -122,
-              "Seattle Mariners": 104
+              "New York Yankees": -124,
+              "Seattle Mariners": 114
             }
           },
           "bovada": {
             "h2h": {
-              "New York Yankees": -131,
-              "Seattle Mariners": 109
+              "New York Yankees": -133,
+              "Seattle Mariners": 111
             }
           },
           "betmgm": {
@@ -5154,8 +5053,8 @@
           },
           "betus": {
             "h2h": {
-              "New York Yankees": -125,
-              "Seattle Mariners": 114
+              "New York Yankees": -130,
+              "Seattle Mariners": 118
             }
           }
         }
@@ -5163,9 +5062,9 @@
       "ab_test_mode": "simple",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5170714307373819,
-          "pB": 0.48292856926261807,
-          "raw_score": 0.06831227587638825,
+          "pA": 0.5183942260647652,
+          "pB": 0.48160577393523485,
+          "raw_score": 0.07361012399276401,
           "model": "simple",
           "edge": 0.0
         },
@@ -5188,11 +5087,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.4856952389616194,
-          "pB": 0.5143047610383806,
-          "raw_score": 0.0273249103505553,
+          "pA": 0.4862243570925727,
+          "pB": 0.5137756429074273,
+          "raw_score": 0.029444049597105604,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.5170714307373819,
+          "simple_p": 0.5183942260647652,
           "wave_p": 0.46477777777777773,
           "edge": 0.0,
           "mag": 0.0,
@@ -5211,10 +5110,10 @@
         "lineup_ops": 0.8760740740740742,
         "bullpen": 0.5,
         "park": 0.46,
-        "weather": 0.5,
+        "weather": 0.558,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.6545140808874896,
+        "form": 0.6606559552597446,
         "entropy": 0.5
       },
       "factorsB": {
@@ -5222,10 +5121,10 @@
         "lineup_ops": 0.7959259259259255,
         "bullpen": 0.5,
         "park": 0.44,
-        "weather": 0.5,
+        "weather": 0.558,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.5114334251921955,
+        "form": 0.5794377956965677,
         "entropy": 0.5
       },
       "factors": {
@@ -5235,24 +5134,25 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.5214266736897891,
-        "pB": 0.4785733263102109,
-        "raw_score": 0.028011469871138367,
+        "pA": 0.52093233817017,
+        "pB": 0.47906766182982996,
+        "raw_score": 0.02603186999491061,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5175000175578058,
+        "simple_p": 0.5162641787587582,
         "wave_p": 0.5240444444444446,
-        "edge": 0.013166483135214957,
+        "edge": 0.011323063132437805,
         "mag": 0.0,
         "entropy": 0.0,
-        "devig_prob_home": 0.4654068431749959,
-        "market_price": 108,
+        "devig_prob_home": 0.46774459869739216,
+        "market_price": 110,
         "book": "fanduel",
         "weather": {
-          "temp": 72,
-          "wind": 5,
-          "precip": 0,
-          "factor": 0.5,
-          "source": "fallback"
+          "temp": 71.6,
+          "wind": 4.2,
+          "precip": 0.0,
+          "factor": 0.558,
+          "source": "open-meteo",
+          "park": "TOR"
         }
       },
       "total": {
@@ -5408,7 +5308,7 @@
             "ops": ".699",
             "hr": 4,
             "woba": 0.3429,
-            "war": 2.4373449631672877,
+            "war": 2.786268070396341,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5420,7 +5320,7 @@
             "ops": ".644",
             "hr": 8,
             "woba": 0.30639999999999995,
-            "war": 0.7167634865254142,
+            "war": 0.813822962462262,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5432,7 +5332,7 @@
             "ops": ".701",
             "hr": 8,
             "woba": 0.3339,
-            "war": 0.7760193895230267,
+            "war": 1.8172277336737044,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5444,7 +5344,7 @@
             "ops": ".697",
             "hr": 0,
             "woba": 0.3423,
-            "war": 1.6070665934846573,
+            "war": 1.5324705400883574,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5456,7 +5356,7 @@
             "ops": ".598",
             "hr": 2,
             "woba": 0.267,
-            "war": 1.1172089353039194,
+            "war": 1.996104563087993,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5468,7 +5368,7 @@
             "ops": ".712",
             "hr": 9,
             "woba": 0.3356,
-            "war": 0.8865125871651386,
+            "war": 3.3237529498483007,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5480,7 +5380,7 @@
             "ops": ".713",
             "hr": 12,
             "woba": 0.3415,
-            "war": 2.816068912962053,
+            "war": 0.6613772910662957,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5492,7 +5392,7 @@
             "ops": ".752",
             "hr": 8,
             "woba": 0.3528,
-            "war": 1.634865025437875,
+            "war": 2.140457241177272,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5504,7 +5404,7 @@
             "ops": ".589",
             "hr": 2,
             "woba": 0.2971,
-            "war": 2.0226542400794227,
+            "war": 2.0032194545450217,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -5518,7 +5418,7 @@
             "ops": ".768",
             "hr": 8,
             "woba": 0.3648,
-            "war": 3.143421574782459,
+            "war": 1.288260269130634,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5530,7 +5430,7 @@
             "ops": ".776",
             "hr": 6,
             "woba": 0.3644,
-            "war": 1.128203911198346,
+            "war": 2.553761228284817,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5542,7 +5442,7 @@
             "ops": ".713",
             "hr": 3,
             "woba": 0.3403,
-            "war": 1.2679285427261724,
+            "war": 2.7199913640003652,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5554,7 +5454,7 @@
             "ops": ".715",
             "hr": 11,
             "woba": 0.3413,
-            "war": 3.199288560968852,
+            "war": 2.8012305580762074,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5566,7 +5466,7 @@
             "ops": ".793",
             "hr": 16,
             "woba": 0.3675,
-            "war": 3.083240858016418,
+            "war": 3.321471267614463,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5578,7 +5478,7 @@
             "ops": ".700",
             "hr": 3,
             "woba": 0.3432,
-            "war": 2.488962318040496,
+            "war": 0.5941197935676396,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5590,7 +5490,7 @@
             "ops": ".684",
             "hr": 5,
             "woba": 0.32039999999999996,
-            "war": 1.541370655053969,
+            "war": 2.736033838768438,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5602,7 +5502,7 @@
             "ops": ".626",
             "hr": 4,
             "woba": 0.297,
-            "war": 1.4146686721449437,
+            "war": 1.2235581688097223,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5614,7 +5514,7 @@
             "ops": ".616",
             "hr": 16,
             "woba": 0.2888,
-            "war": 3.1860485470053774,
+            "war": 3.4910914984362242,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -5622,25 +5522,26 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 72,
-        "wind": 5,
-        "precip": 0,
-        "factor": 0.5,
-        "source": "fallback"
+        "temp": 71.6,
+        "wind": 4.2,
+        "precip": 0.0,
+        "factor": 0.558,
+        "source": "open-meteo",
+        "park": "TOR"
       },
       "odds": {
         "h2h": {
           "Boston Red Sox": {
-            "price": -126,
-            "devig_prob": 0.5345931568250041,
+            "price": -118,
+            "devig_prob": 0.5322554013026078,
             "book": "fanduel",
-            "implied": 0.5543488772598484
+            "implied": 0.548322077644271
           },
           "Toronto Blue Jays": {
-            "price": 108,
-            "devig_prob": 0.4654068431749959,
+            "price": 110,
+            "devig_prob": 0.46774459869739216,
             "book": "fanduel",
-            "implied": 0.48260580534809083
+            "implied": 0.4818639501580633
           }
         },
         "totals": {
@@ -5651,8 +5552,8 @@
         "raw_books": {
           "draftkings": {
             "h2h": {
-              "Boston Red Sox": -126,
-              "Toronto Blue Jays": 104
+              "Boston Red Sox": -119,
+              "Toronto Blue Jays": 111
             }
           },
           "lowvig": {
@@ -5669,14 +5570,14 @@
           },
           "mybookieag": {
             "h2h": {
-              "Boston Red Sox": -125,
-              "Toronto Blue Jays": 107
+              "Boston Red Sox": -121,
+              "Toronto Blue Jays": 103
             }
           },
           "fanduel": {
             "h2h": {
-              "Boston Red Sox": -126,
-              "Toronto Blue Jays": 108
+              "Boston Red Sox": -118,
+              "Toronto Blue Jays": 110
             }
           },
           "bovada": {
@@ -5687,20 +5588,20 @@
           },
           "betmgm": {
             "h2h": {
-              "Boston Red Sox": -130,
+              "Boston Red Sox": -125,
               "Toronto Blue Jays": 105
             }
           },
           "betrivers": {
             "h2h": {
-              "Boston Red Sox": -125,
-              "Toronto Blue Jays": 107
+              "Boston Red Sox": -124,
+              "Toronto Blue Jays": 106
             }
           },
           "betus": {
             "h2h": {
-              "Boston Red Sox": -120,
-              "Toronto Blue Jays": 109
+              "Boston Red Sox": -118,
+              "Toronto Blue Jays": 108
             }
           }
         }
@@ -5708,9 +5609,9 @@
       "ab_test_mode": "ensemble",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5175000175578058,
-          "pB": 0.48249998244219416,
-          "raw_score": 0.07002867467784592,
+          "pA": 0.5162641787587582,
+          "pB": 0.4837358212412418,
+          "raw_score": 0.06507967498727653,
           "model": "simple",
           "edge": 0.0
         },
@@ -5733,11 +5634,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.5214266736897891,
-          "pB": 0.4785733263102109,
-          "raw_score": 0.028011469871138367,
+          "pA": 0.52093233817017,
+          "pB": 0.47906766182982996,
+          "raw_score": 0.02603186999491061,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.5175000175578058,
+          "simple_p": 0.5162641787587582,
           "wave_p": 0.5240444444444446,
           "edge": 0.0,
           "mag": 0.0,
@@ -5756,10 +5657,10 @@
         "lineup_ops": 0.6605925925925922,
         "bullpen": 0.5,
         "park": 0.5,
-        "weather": 0.5,
+        "weather": 0.6,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.640450379324782,
+        "form": 0.5690841118910285,
         "entropy": 0.5
       },
       "factorsB": {
@@ -5767,10 +5668,10 @@
         "lineup_ops": 0.8042962962962963,
         "bullpen": 0.5,
         "park": 0.4,
-        "weather": 0.5,
+        "weather": 0.6,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.5551153952962625,
+        "form": 0.5345144906178022,
         "entropy": 0.5
       },
       "factors": {
@@ -5780,24 +5681,25 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.490931455923762,
-        "pB": 0.509068544076238,
-        "raw_score": 0.06735116393335704,
+        "pA": 0.49052812975053395,
+        "pB": 0.509471870249466,
+        "raw_score": 0.06572667232518765,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5419953064760717,
+        "simple_p": 0.5409869910430016,
         "wave_p": 0.4568888888888888,
-        "edge": -0.07715096588129156,
+        "edge": -0.10485237143290604,
         "mag": 0.0,
         "entropy": 0.0,
-        "devig_prob_home": 0.5862195099575296,
-        "market_price": -158,
+        "devig_prob_home": 0.6143242416823721,
+        "market_price": -172,
         "book": "fanduel",
         "weather": {
-          "temp": 72,
-          "wind": 5,
-          "precip": 0,
-          "factor": 0.5,
-          "source": "fallback"
+          "temp": 75.2,
+          "wind": 4.8,
+          "precip": 0.0,
+          "factor": 0.6,
+          "source": "open-meteo",
+          "park": "ATL"
         }
       },
       "total": {
@@ -5910,15 +5812,15 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 9.0,
-          "over_prob": 0.5402,
-          "under_prob": 0.4598,
+          "line": 8.5,
+          "over_prob": 0.667,
+          "under_prob": 0.33299999999999996,
           "mean_total": 10.0322,
           "n_sim": 5000,
           "home_mean": 5.0225,
           "away_mean": 4.9625
         },
-        "line": 9.0
+        "line": 8.5
       },
       "k_prop": {
         "line": 6.5,
@@ -5953,7 +5855,7 @@
             "ops": ".657",
             "hr": 14,
             "woba": 0.3151,
-            "war": 0.917605440792758,
+            "war": 1.8863186568580033,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5965,7 +5867,7 @@
             "ops": ".718",
             "hr": 8,
             "woba": 0.3442,
-            "war": 2.0925433269909246,
+            "war": 1.9830106861165757,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5977,7 +5879,7 @@
             "ops": ".805",
             "hr": 20,
             "woba": 0.38389999999999996,
-            "war": 3.1056662025606405,
+            "war": 1.2429609563200423,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -5989,7 +5891,7 @@
             "ops": ".234",
             "hr": 0,
             "woba": 0.137,
-            "war": 0.6219151717557236,
+            "war": 2.8898568581266795,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6001,7 +5903,7 @@
             "ops": ".597",
             "hr": 1,
             "woba": 0.2887,
-            "war": 1.4418343732051664,
+            "war": 1.5478106655609796,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6013,7 +5915,7 @@
             "ops": ".712",
             "hr": 10,
             "woba": 0.3432,
-            "war": 2.258609719702421,
+            "war": 1.3440433274847277,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6025,7 +5927,7 @@
             "ops": ".897",
             "hr": 35,
             "woba": 0.4063,
-            "war": 2.119363298793976,
+            "war": 0.9847154560076876,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6037,7 +5939,7 @@
             "ops": ".713",
             "hr": 10,
             "woba": 0.33909999999999996,
-            "war": 0.7273701982075967,
+            "war": 1.4354783746198954,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6049,7 +5951,7 @@
             "ops": ".815",
             "hr": 20,
             "woba": 0.37329999999999997,
-            "war": 2.695285056322608,
+            "war": 1.7389570967065064,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -6063,7 +5965,7 @@
             "ops": ".720",
             "hr": 7,
             "woba": 0.3472,
-            "war": 2.4699861579499895,
+            "war": 2.8994613864599823,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6075,7 +5977,7 @@
             "ops": ".685",
             "hr": 11,
             "woba": 0.3295,
-            "war": 2.8471351307648707,
+            "war": 1.0927554073763859,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6087,7 +5989,7 @@
             "ops": ".616",
             "hr": 8,
             "woba": 0.29919999999999997,
-            "war": 2.8962214403329063,
+            "war": 1.3925016165046427,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6099,7 +6001,7 @@
             "ops": ".744",
             "hr": 13,
             "woba": 0.3568,
-            "war": 1.616394663940077,
+            "war": 2.1557194098489236,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6111,7 +6013,7 @@
             "ops": ".000",
             "hr": 0,
             "woba": 0.0,
-            "war": 3.213608974412267,
+            "war": 1.82164086327385,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6123,7 +6025,7 @@
             "ops": ".782",
             "hr": 13,
             "woba": 0.3722,
-            "war": 2.9250001270767374,
+            "war": 2.1759733760524664,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6135,7 +6037,7 @@
             "ops": ".767",
             "hr": 11,
             "woba": 0.3621,
-            "war": 1.4451607025061945,
+            "war": 1.5739638337105712,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6147,7 +6049,7 @@
             "ops": ".644",
             "hr": 5,
             "woba": 0.3024,
-            "war": 0.9883110895134597,
+            "war": 1.7542349877761052,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6159,7 +6061,7 @@
             "ops": ".774",
             "hr": 7,
             "woba": 0.3674,
-            "war": 1.4184487831186854,
+            "war": 1.7425341540933554,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -6167,85 +6069,86 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 72,
-        "wind": 5,
-        "precip": 0,
-        "factor": 0.5,
-        "source": "fallback"
+        "temp": 75.2,
+        "wind": 4.8,
+        "precip": 0.0,
+        "factor": 0.6,
+        "source": "open-meteo",
+        "park": "ATL"
       },
       "odds": {
         "h2h": {
           "Atlanta Braves": {
-            "price": -158,
-            "devig_prob": 0.5862195099575296,
+            "price": -172,
+            "devig_prob": 0.6143242416823721,
             "book": "fanduel",
-            "implied": 0.6072316681786857
+            "implied": 0.634092311340349
           },
           "New York Mets": {
-            "price": 134,
-            "devig_prob": 0.4137804900424704,
+            "price": 158,
+            "devig_prob": 0.38567575831762785,
             "book": "fanduel",
-            "implied": 0.42861183048392004
+            "implied": 0.39808624896493955
           }
         },
         "totals": {
-          "line": 9.0,
-          "over_price": 100,
-          "under_price": -120
+          "line": 8.5,
+          "over_price": -115,
+          "under_price": -103
         },
         "raw_books": {
           "draftkings": {
             "h2h": {
-              "Atlanta Braves": -157,
-              "New York Mets": 130
+              "Atlanta Braves": -170,
+              "New York Mets": 158
             }
           },
           "lowvig": {
             "h2h": {
-              "Atlanta Braves": -150,
-              "New York Mets": 136
+              "Atlanta Braves": -171,
+              "New York Mets": 154
             }
           },
           "betonlineag": {
             "h2h": {
-              "Atlanta Braves": -150,
-              "New York Mets": 136
+              "Atlanta Braves": -171,
+              "New York Mets": 154
             }
           },
           "mybookieag": {
             "h2h": {
-              "Atlanta Braves": -155,
-              "New York Mets": 131
+              "Atlanta Braves": -178,
+              "New York Mets": 150
             }
           },
           "fanduel": {
             "h2h": {
-              "Atlanta Braves": -158,
-              "New York Mets": 134
+              "Atlanta Braves": -172,
+              "New York Mets": 158
             }
           },
           "bovada": {
             "h2h": {
-              "Atlanta Braves": -160,
-              "New York Mets": 134
+              "Atlanta Braves": -181,
+              "New York Mets": 149
             }
           },
           "betmgm": {
             "h2h": {
-              "Atlanta Braves": -160,
-              "New York Mets": 135
+              "Atlanta Braves": -185,
+              "New York Mets": 150
             }
           },
           "betus": {
             "h2h": {
-              "Atlanta Braves": -150,
-              "New York Mets": 134
+              "Atlanta Braves": -171,
+              "New York Mets": 151
             }
           },
           "betrivers": {
             "h2h": {
-              "Atlanta Braves": -152,
-              "New York Mets": 130
+              "Atlanta Braves": -162,
+              "New York Mets": 138
             }
           }
         }
@@ -6253,9 +6156,9 @@
       "ab_test_mode": "simple",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5419953064760717,
-          "pB": 0.45800469352392825,
-          "raw_score": 0.16837790983339257,
+          "pA": 0.5409869910430016,
+          "pB": 0.45901300895699837,
+          "raw_score": 0.16431668081296913,
           "model": "simple",
           "edge": 0.0
         },
@@ -6278,11 +6181,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.490931455923762,
-          "pB": 0.509068544076238,
-          "raw_score": 0.06735116393335704,
+          "pA": 0.49052812975053395,
+          "pB": 0.509471870249466,
+          "raw_score": 0.06572667232518765,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.5419953064760717,
+          "simple_p": 0.5409869910430016,
           "wave_p": 0.4568888888888888,
           "edge": 0.0,
           "mag": 0.0,
@@ -6301,10 +6204,10 @@
         "lineup_ops": 0.8200740740740734,
         "bullpen": 0.5,
         "park": 0.455,
-        "weather": 0.5,
+        "weather": 0.543,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.6579169389138132,
+        "form": 0.6005378848608818,
         "entropy": 0.5
       },
       "factorsB": {
@@ -6312,10 +6215,10 @@
         "lineup_ops": 0.7205925925925927,
         "bullpen": 0.5,
         "park": 0.44,
-        "weather": 0.5,
+        "weather": 0.543,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.6275175539297242,
+        "form": 0.7112848019420397,
         "entropy": 0.5
       },
       "factors": {
@@ -6325,24 +6228,25 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.5259211233250609,
-        "pB": 0.4740788766749391,
-        "raw_score": 0.032075002541713006,
+        "pA": 0.524793522986925,
+        "pB": 0.47520647701307495,
+        "raw_score": 0.02755832087562511,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5200361416459859,
+        "simple_p": 0.5172171408006463,
         "wave_p": 0.5298444444444442,
-        "edge": -0.0909653019462584,
+        "edge": -0.09647265510901026,
         "mag": 0.0,
         "entropy": 0.0,
-        "devig_prob_home": 0.5650441786211975,
-        "market_price": -146,
+        "devig_prob_home": 0.5716791321220852,
+        "market_price": -138,
         "book": "fanduel",
         "weather": {
-          "temp": 72,
-          "wind": 5,
-          "precip": 0,
-          "factor": 0.5,
-          "source": "fallback"
+          "temp": 73.0,
+          "wind": 1.2,
+          "precip": 0.0,
+          "factor": 0.543,
+          "source": "open-meteo",
+          "park": "CWS"
         }
       },
       "total": {
@@ -6498,7 +6402,7 @@
             "ops": ".737",
             "hr": 12,
             "woba": 0.34429999999999994,
-            "war": 3.314596170276273,
+            "war": 1.5682714573435814,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6510,7 +6414,7 @@
             "ops": ".689",
             "hr": 4,
             "woba": 0.33349999999999996,
-            "war": 2.2327536954545066,
+            "war": 3.3328307347460595,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6522,7 +6426,7 @@
             "ops": ".601",
             "hr": 2,
             "woba": 0.2955,
-            "war": 2.6903712282885013,
+            "war": 3.2295420224666387,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6534,7 +6438,7 @@
             "ops": ".754",
             "hr": 11,
             "woba": 0.36619999999999997,
-            "war": 2.323758873161134,
+            "war": 2.8768406170220873,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6546,7 +6450,7 @@
             "ops": ".735",
             "hr": 26,
             "woba": 0.33809999999999996,
-            "war": 2.4435469703751886,
+            "war": 0.5572671793931797,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6558,7 +6462,7 @@
             "ops": ".474",
             "hr": 5,
             "woba": 0.2254,
-            "war": 1.191951533114181,
+            "war": 3.492047110471093,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6570,7 +6474,7 @@
             "ops": ".524",
             "hr": 3,
             "woba": 0.2656,
-            "war": 1.2850082086560826,
+            "war": 1.7668684610625047,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6582,7 +6486,7 @@
             "ops": ".538",
             "hr": 1,
             "woba": 0.2682,
-            "war": 1.950018360612317,
+            "war": 3.3486986763493594,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6594,7 +6498,7 @@
             "ops": ".814",
             "hr": 25,
             "woba": 0.381,
-            "war": 1.8062848868994017,
+            "war": 2.835449828537281,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -6608,7 +6512,7 @@
             "ops": ".696",
             "hr": 3,
             "woba": 0.348,
-            "war": 1.7619314222250906,
+            "war": 2.8635224451357137,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6620,7 +6524,7 @@
             "ops": ".847",
             "hr": 20,
             "woba": 0.39449999999999996,
-            "war": 2.698060900603887,
+            "war": 0.9765393657718491,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6632,7 +6536,7 @@
             "ops": ".702",
             "hr": 17,
             "woba": 0.32499999999999996,
-            "war": 3.3740484798683754,
+            "war": 1.4549641985452653,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6644,7 +6548,7 @@
             "ops": ".387",
             "hr": 0,
             "woba": 0.20049999999999998,
-            "war": 1.8282020528524785,
+            "war": 0.5784921460942399,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6656,7 +6560,7 @@
             "ops": ".794",
             "hr": 20,
             "woba": 0.3734,
-            "war": 3.211008809337521,
+            "war": 3.2572459752471845,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6668,7 +6572,7 @@
             "ops": ".657",
             "hr": 4,
             "woba": 0.2971,
-            "war": 0.8682082066653943,
+            "war": 2.190945494750608,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6680,7 +6584,7 @@
             "ops": ".425",
             "hr": 4,
             "woba": 0.20389999999999997,
-            "war": 1.818481651458185,
+            "war": 3.4399287344004352,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6692,7 +6596,7 @@
             "ops": ".639",
             "hr": 10,
             "woba": 0.3097,
-            "war": 2.99159678469731,
+            "war": 1.5387863348979949,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -6704,7 +6608,7 @@
             "ops": ".1000",
             "hr": 0,
             "woba": 0.5,
-            "war": 2.054723943413351,
+            "war": 1.7237801238963866,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -6712,49 +6616,50 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 72,
-        "wind": 5,
-        "precip": 0,
-        "factor": 0.5,
-        "source": "fallback"
+        "temp": 73.0,
+        "wind": 1.2,
+        "precip": 0.0,
+        "factor": 0.543,
+        "source": "open-meteo",
+        "park": "CWS"
       },
       "odds": {
         "h2h": {
           "Chicago White Sox": {
-            "price": -146,
-            "devig_prob": 0.5650441786211975,
+            "price": -138,
+            "devig_prob": 0.5716791321220852,
             "book": "fanduel",
-            "implied": 0.5854990535263473
+            "implied": 0.5889782563975213
           },
           "Cincinnati Reds": {
-            "price": 124,
-            "devig_prob": 0.4349558213788025,
+            "price": 128,
+            "devig_prob": 0.4283208678779148,
             "book": "fanduel",
-            "implied": 0.45070143429225684
+            "implied": 0.4412819425557296
           }
         },
         "totals": {
           "line": 9.0,
-          "over_price": -105,
-          "under_price": -115
+          "over_price": 100,
+          "under_price": -120
         },
         "raw_books": {
           "draftkings": {
             "h2h": {
-              "Chicago White Sox": -147,
-              "Cincinnati Reds": 122
+              "Chicago White Sox": -141,
+              "Cincinnati Reds": 131
             }
           },
           "lowvig": {
             "h2h": {
-              "Chicago White Sox": -136,
-              "Cincinnati Reds": 123
+              "Chicago White Sox": -143,
+              "Cincinnati Reds": 130
             }
           },
           "betonlineag": {
             "h2h": {
-              "Chicago White Sox": -136,
-              "Cincinnati Reds": 123
+              "Chicago White Sox": -143,
+              "Cincinnati Reds": 130
             }
           },
           "mybookieag": {
@@ -6765,32 +6670,32 @@
           },
           "fanduel": {
             "h2h": {
-              "Chicago White Sox": -146,
-              "Cincinnati Reds": 124
+              "Chicago White Sox": -138,
+              "Cincinnati Reds": 128
             }
           },
           "bovada": {
             "h2h": {
-              "Chicago White Sox": -142,
-              "Cincinnati Reds": 119
+              "Chicago White Sox": -144,
+              "Cincinnati Reds": 121
             }
           },
           "betmgm": {
             "h2h": {
-              "Chicago White Sox": -145,
-              "Cincinnati Reds": 120
+              "Chicago White Sox": -150,
+              "Cincinnati Reds": 125
             }
           },
           "betrivers": {
             "h2h": {
-              "Chicago White Sox": -139,
-              "Cincinnati Reds": 120
+              "Chicago White Sox": -143,
+              "Cincinnati Reds": 123
             }
           },
           "betus": {
             "h2h": {
-              "Chicago White Sox": -136,
-              "Cincinnati Reds": 123
+              "Chicago White Sox": -143,
+              "Cincinnati Reds": 129
             }
           }
         }
@@ -6798,9 +6703,9 @@
       "ab_test_mode": "ensemble",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5200361416459859,
-          "pB": 0.4799638583540141,
-          "raw_score": 0.08018750635428251,
+          "pA": 0.5172171408006463,
+          "pB": 0.4827828591993537,
+          "raw_score": 0.06889580218906277,
           "model": "simple",
           "edge": 0.0
         },
@@ -6823,11 +6728,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.5259211233250609,
-          "pB": 0.4740788766749391,
-          "raw_score": 0.032075002541713006,
+          "pA": 0.524793522986925,
+          "pB": 0.47520647701307495,
+          "raw_score": 0.02755832087562511,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.5200361416459859,
+          "simple_p": 0.5172171408006463,
           "wave_p": 0.5298444444444442,
           "edge": 0.0,
           "mag": 0.0,
@@ -6849,7 +6754,7 @@
         "weather": 0.5,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.553061399983507,
+        "form": 0.56076323949084,
         "entropy": 0.5
       },
       "factorsB": {
@@ -6860,7 +6765,7 @@
         "weather": 0.5,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.6292674361561772,
+        "form": 0.6177066623528484,
         "entropy": 0.5
       },
       "factors": {
@@ -6870,17 +6775,17 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.5159682905436886,
-        "pB": 0.48403170945631135,
-        "raw_score": 0.06400940684247455,
+        "pA": 0.516121399660367,
+        "pB": 0.48387860033963304,
+        "raw_score": 0.06462581046841573,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5399207263592216,
+        "simple_p": 0.5403034991509174,
         "wave_p": 0.5,
-        "edge": -0.17810310300268228,
+        "edge": -0.17314086679160334,
         "mag": 0.0,
         "entropy": 0.0,
-        "devig_prob_home": 0.6621348124589936,
-        "market_price": -240,
+        "devig_prob_home": 0.6570194671312364,
+        "market_price": -205,
         "book": "fanduel",
         "weather": {
           "temp": 72,
@@ -7000,7 +6905,7 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 9.5,
+          "line": 9.0,
           "over_prob": 0.5536,
           "under_prob": 0.4464,
           "mean_total": 10.0912,
@@ -7008,7 +6913,7 @@
           "home_mean": 5.055,
           "away_mean": 4.995
         },
-        "line": 9.5
+        "line": 9.0
       },
       "k_prop": {
         "line": 6.5,
@@ -7043,7 +6948,7 @@
             "ops": ".678",
             "hr": 1,
             "woba": 0.34459999999999996,
-            "war": 2.921111959655451,
+            "war": 0.8863840165376734,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7055,7 +6960,7 @@
             "ops": ".792",
             "hr": 19,
             "woba": 0.3724,
-            "war": 0.9159247218509825,
+            "war": 2.4062854234950968,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7067,7 +6972,7 @@
             "ops": ".334",
             "hr": 0,
             "woba": 0.167,
-            "war": 1.50007882257459,
+            "war": 2.4342745204786063,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7079,7 +6984,7 @@
             "ops": ".842",
             "hr": 1,
             "woba": 0.3798,
-            "war": 2.2406531251708177,
+            "war": 0.9221783707270954,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7091,7 +6996,7 @@
             "ops": ".850",
             "hr": 15,
             "woba": 0.4062,
-            "war": 3.3569095133835396,
+            "war": 3.496621151191367,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7103,7 +7008,7 @@
             "ops": ".646",
             "hr": 2,
             "woba": 0.3162,
-            "war": 2.078448123400687,
+            "war": 3.3748848795342448,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7115,7 +7020,7 @@
             "ops": ".721",
             "hr": 11,
             "woba": 0.35150000000000003,
-            "war": 1.6223143399897704,
+            "war": 3.1989427605111014,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7127,7 +7032,7 @@
             "ops": ".830",
             "hr": 22,
             "woba": 0.38699999999999996,
-            "war": 1.7143879705869198,
+            "war": 0.9280046885202002,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7139,7 +7044,7 @@
             "ops": ".737",
             "hr": 3,
             "woba": 0.3523,
-            "war": 2.9672060504152125,
+            "war": 1.1492239948827938,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -7153,7 +7058,7 @@
             "ops": ".801",
             "hr": 13,
             "woba": 0.3823,
-            "war": 0.582532582118279,
+            "war": 1.98461041794525,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7165,7 +7070,7 @@
             "ops": ".714",
             "hr": 16,
             "woba": 0.33499999999999996,
-            "war": 3.275422132805268,
+            "war": 2.6609475600437866,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7177,7 +7082,7 @@
             "ops": ".695",
             "hr": 6,
             "woba": 0.3417,
-            "war": 1.1289157528800404,
+            "war": 1.3436759741012323,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7189,7 +7094,7 @@
             "ops": ".810",
             "hr": 21,
             "woba": 0.3718,
-            "war": 2.2609128912310483,
+            "war": 2.5332583512842515,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7201,7 +7106,7 @@
             "ops": ".814",
             "hr": 2,
             "woba": 0.3698,
-            "war": 1.1947112785081977,
+            "war": 3.4338426757419143,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7213,7 +7118,7 @@
             "ops": ".592",
             "hr": 1,
             "woba": 0.2848,
-            "war": 0.9683908834115126,
+            "war": 0.5537697397934409,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7225,7 +7130,7 @@
             "ops": ".619",
             "hr": 4,
             "woba": 0.2973,
-            "war": 1.105845068658226,
+            "war": 1.2770062465221144,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7237,7 +7142,7 @@
             "ops": ".816",
             "hr": 1,
             "woba": 0.3712,
-            "war": 3.120705977829115,
+            "war": 1.6244729466519796,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7249,7 +7154,7 @@
             "ops": ".708",
             "hr": 9,
             "woba": 0.3288,
-            "war": 2.25032643181613,
+            "war": 0.8227618650038249,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -7266,76 +7171,76 @@
       "odds": {
         "h2h": {
           "Kansas City Royals": {
-            "price": 198,
-            "devig_prob": 0.33786518754100636,
+            "price": 186,
+            "devig_prob": 0.3429805328687636,
             "book": "fanduel",
-            "implied": 0.3504538825739954
+            "implied": 0.3539510413266428
           },
           "Los Angeles Dodgers": {
-            "price": -240,
-            "devig_prob": 0.6621348124589936,
+            "price": -205,
+            "devig_prob": 0.6570194671312364,
             "book": "fanduel",
-            "implied": 0.6868056383746113
+            "implied": 0.6780347637163416
           }
         },
         "totals": {
-          "line": 9.5,
-          "over_price": 105,
-          "under_price": -125
+          "line": 9.0,
+          "over_price": -105,
+          "under_price": -115
         },
         "raw_books": {
           "draftkings": {
             "h2h": {
-              "Kansas City Royals": 186,
-              "Los Angeles Dodgers": -229
+              "Kansas City Royals": 192,
+              "Los Angeles Dodgers": -207
             }
           },
           "lowvig": {
             "h2h": {
-              "Kansas City Royals": 193,
-              "Los Angeles Dodgers": -215
+              "Kansas City Royals": 189,
+              "Los Angeles Dodgers": -210
             }
           },
           "betonlineag": {
             "h2h": {
-              "Kansas City Royals": 193,
-              "Los Angeles Dodgers": -215
+              "Kansas City Royals": 189,
+              "Los Angeles Dodgers": -210
             }
           },
           "mybookieag": {
             "h2h": {
-              "Kansas City Royals": 175,
-              "Los Angeles Dodgers": -208
+              "Kansas City Royals": 173,
+              "Los Angeles Dodgers": -206
             }
           },
           "fanduel": {
             "h2h": {
-              "Kansas City Royals": 198,
-              "Los Angeles Dodgers": -240
+              "Kansas City Royals": 186,
+              "Los Angeles Dodgers": -205
             }
           },
           "bovada": {
             "h2h": {
-              "Kansas City Royals": 174,
-              "Los Angeles Dodgers": -214
+              "Kansas City Royals": 178,
+              "Los Angeles Dodgers": -218
             }
           },
           "betmgm": {
             "h2h": {
-              "Kansas City Royals": 185,
-              "Los Angeles Dodgers": -225
+              "Kansas City Royals": 180,
+              "Los Angeles Dodgers": -220
             }
           },
           "betrivers": {
             "h2h": {
-              "Kansas City Royals": 180,
-              "Los Angeles Dodgers": -215
+              "Kansas City Royals": 175,
+              "Los Angeles Dodgers": -210
             }
           },
           "betus": {
             "h2h": {
-              "Kansas City Royals": 186,
-              "Los Angeles Dodgers": -215
+              "Kansas City Royals": 182,
+              "Los Angeles Dodgers": -210
             }
           }
         }
@@ -7343,9 +7248,9 @@
       "ab_test_mode": "wave",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5399207263592216,
-          "pB": 0.4600792736407784,
-          "raw_score": 0.16002351710618637,
+          "pA": 0.5403034991509174,
+          "pB": 0.45969650084908265,
+          "raw_score": 0.1615645261710393,
           "model": "simple",
           "edge": 0.0
         },
@@ -7368,11 +7273,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.5159682905436886,
-          "pB": 0.48403170945631135,
-          "raw_score": 0.06400940684247455,
+          "pA": 0.516121399660367,
+          "pB": 0.48387860033963304,
+          "raw_score": 0.06462581046841573,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.5399207263592216,
+          "simple_p": 0.5403034991509174,
           "wave_p": 0.5,
           "edge": 0.0,
           "mag": 0.0,
@@ -7394,7 +7299,7 @@
         "weather": 0.5,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.5962464373643459,
+        "form": 0.5857601330592944,
         "entropy": 0.5
       },
       "factorsB": {
@@ -7405,7 +7310,7 @@
         "weather": 0.5,
         "rest": 0.5,
         "umpire": 0.5,
-        "form": 0.6229105721222512,
+        "form": 0.5948057326168429,
         "entropy": 0.5
       },
       "factors": {
@@ -7415,17 +7320,17 @@
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.5756929605667218,
-        "pB": 0.4243070394332782,
-        "raw_score": 0.23511505556688855,
+        "pA": 0.5758318421168787,
+        "pB": 0.42416815788312134,
+        "raw_score": 0.23567884869329997,
         "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5603718471437267,
+        "simple_p": 0.560719051019119,
         "wave_p": 0.5859070361820519,
-        "edge": -0.029849966312503085,
+        "edge": -0.023123622695701562,
         "mag": 0.23007755016893958,
         "entropy": 0.3684671451238184,
-        "devig_prob_home": 0.4541570057457813,
-        "market_price": 108,
+        "devig_prob_home": 0.4472917805788229,
+        "market_price": 120,
         "book": "fanduel",
         "weather": {
           "temp": 72,
@@ -7545,7 +7450,7 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 9.5,
+          "line": 9.0,
           "over_prob": 0.6316,
           "under_prob": 0.36839999999999995,
           "mean_total": 10.7306,
@@ -7553,7 +7458,7 @@
           "home_mean": 5.3725000000000005,
           "away_mean": 5.312500000000001
         },
-        "line": 9.5
+        "line": 9.0
       },
       "k_prop": {
         "line": 6.5,
@@ -7588,7 +7493,7 @@
             "ops": ".591",
             "hr": 1,
             "woba": 0.2893,
-            "war": 2.0771351389469555,
+            "war": 1.4546388348726857,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7600,7 +7505,7 @@
             "ops": ".625",
             "hr": 5,
             "woba": 0.2983,
-            "war": 2.9210020370017915,
+            "war": 1.4321796957566593,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7612,7 +7517,7 @@
             "ops": ".791",
             "hr": 7,
             "woba": 0.3629,
-            "war": 3.4711540742203435,
+            "war": 3.199175821004651,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7624,7 +7529,7 @@
             "ops": ".605",
             "hr": 8,
             "woba": 0.2871,
-            "war": 1.7906808407932846,
+            "war": 1.5382419783560268,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7636,7 +7541,7 @@
             "ops": ".829",
             "hr": 20,
             "woba": 0.4023,
-            "war": 3.3187576278126816,
+            "war": 3.1177299590115406,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7648,7 +7553,7 @@
             "ops": ".629",
             "hr": 6,
             "woba": 0.30189999999999995,
-            "war": 0.9616663287818428,
+            "war": 1.9346557348226074,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7660,7 +7565,7 @@
             "ops": ".735",
             "hr": 7,
             "woba": 0.35969999999999996,
-            "war": 1.221299750257049,
+            "war": 1.3046890933979465,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7672,7 +7577,7 @@
             "ops": ".630",
             "hr": 7,
             "woba": 0.299,
-            "war": 2.3417089258334074,
+            "war": 1.3127513260948147,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7684,7 +7589,7 @@
             "ops": ".583",
             "hr": 1,
             "woba": 0.2925,
-            "war": 0.9275710218539438,
+            "war": 2.472195524440998,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -7698,7 +7603,7 @@
             "ops": ".350",
             "hr": 1,
             "woba": 0.17579999999999998,
-            "war": 2.849362168508933,
+            "war": 1.1996718826532762,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7710,7 +7615,7 @@
             "ops": ".792",
             "hr": 13,
             "woba": 0.3752,
-            "war": 1.0447245858997167,
+            "war": 1.2244946324155315,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7722,7 +7627,7 @@
             "ops": ".637",
             "hr": 1,
             "woba": 0.30549999999999994,
-            "war": 2.7124190156896804,
+            "war": 1.032409054324576,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7734,7 +7639,7 @@
             "ops": ".664",
             "hr": 11,
             "woba": 0.31639999999999996,
-            "war": 2.555480584575782,
+            "war": 2.1927090939037135,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7746,7 +7651,7 @@
             "ops": ".672",
             "hr": 5,
             "woba": 0.3072,
-            "war": 1.4910287893910872,
+            "war": 3.3905894630924918,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7758,7 +7663,7 @@
             "ops": ".622",
             "hr": 8,
             "woba": 0.3074,
-            "war": 2.0362699183546065,
+            "war": 2.4658707703352833,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7770,7 +7675,7 @@
             "ops": ".773",
             "hr": 13,
             "woba": 0.3627,
-            "war": 0.7901485535272941,
+            "war": 1.624010000998311,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7782,7 +7687,7 @@
             "ops": ".707",
             "hr": 19,
             "woba": 0.33049999999999996,
-            "war": 3.133997800741005,
+            "war": 1.3950278710505288,
             "k_pct": 20.0,
             "bb_pct": 8.0
           },
@@ -7794,7 +7699,7 @@
             "ops": ".620",
             "hr": 1,
             "woba": 0.3116,
-            "war": 1.2176582647074643,
+            "war": 2.8344232188945404,
             "k_pct": 20.0,
             "bb_pct": 8.0
           }
@@ -7811,40 +7716,40 @@
       "odds": {
         "h2h": {
           "Los Angeles Angels": {
-            "price": 108,
-            "devig_prob": 0.4541570057457813,
+            "price": 120,
+            "devig_prob": 0.4472917805788229,
             "book": "fanduel",
-            "implied": 0.47090546616022677
+            "implied": 0.46102397444217885
           },
           "Texas Rangers": {
-            "price": -126,
-            "devig_prob": 0.5458429942542187,
+            "price": -128,
+            "devig_prob": 0.5527082194211771,
             "book": "fanduel",
-            "implied": 0.5659726623339983
+            "implied": 0.5696767771915436
           }
         },
         "totals": {
-          "line": 9.5,
-          "over_price": 101,
-          "under_price": -122
+          "line": 9.0,
+          "over_price": -101,
+          "under_price": -119
         },
         "raw_books": {
           "fanduel": {
             "h2h": {
-              "Los Angeles Angels": 108,
-              "Texas Rangers": -126
+              "Los Angeles Angels": 120,
+              "Texas Rangers": -128
             }
           },
           "mybookieag": {
             "h2h": {
-              "Los Angeles Angels": 112,
-              "Texas Rangers": -132
+              "Los Angeles Angels": 114,
+              "Texas Rangers": -134
             }
           },
           "bovada": {
             "h2h": {
-              "Los Angeles Angels": 107,
-              "Texas Rangers": -128
+              "Los Angeles Angels": 113,
+              "Texas Rangers": -135
             }
           },
           "betrivers": {
@@ -7855,32 +7760,32 @@
           },
           "lowvig": {
             "h2h": {
-              "Los Angeles Angels": 118,
-              "Texas Rangers": -130
+              "Los Angeles Angels": 121,
+              "Texas Rangers": -133
             }
           },
           "betonlineag": {
             "h2h": {
-              "Los Angeles Angels": 118,
-              "Texas Rangers": -130
+              "Los Angeles Angels": 121,
+              "Texas Rangers": -133
             }
           },
           "betmgm": {
             "h2h": {
-              "Los Angeles Angels": 110,
-              "Texas Rangers": -135
+              "Los Angeles Angels": 115,
+              "Texas Rangers": -140
             }
           },
           "betus": {
             "h2h": {
-              "Los Angeles Angels": 118,
-              "Texas Rangers": -130
+              "Los Angeles Angels": 121,
+              "Texas Rangers": -133
             }
           },
           "draftkings": {
             "h2h": {
-              "Los Angeles Angels": 113,
-              "Texas Rangers": -136
+              "Los Angeles Angels": 120,
+              "Texas Rangers": -129
             }
           }
         }
@@ -7888,9 +7793,9 @@
       "ab_test_mode": "ensemble",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5603718471437267,
-          "pB": 0.4396281528562733,
-          "raw_score": 0.24267131366381195,
+          "pA": 0.560719051019119,
+          "pB": 0.439280948980881,
+          "raw_score": 0.2440807964798405,
           "model": "simple",
           "edge": 0.0
         },
@@ -7913,11 +7818,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.5756929605667218,
-          "pB": 0.4243070394332782,
-          "raw_score": 0.23511505556688855,
+          "pA": 0.5758318421168787,
+          "pB": 0.42416815788312134,
+          "raw_score": 0.23567884869329997,
           "model": "ensemble(0.4*simple+0.6*wave_true)",
-          "simple_p": 0.5603718471437267,
+          "simple_p": 0.560719051019119,
           "wave_p": 0.5859070361820519,
           "edge": 0.11841476055162155,
           "mag": 0.23007755016893958,
