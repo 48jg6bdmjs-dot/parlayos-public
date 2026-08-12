@@ -15,12 +15,12 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: |
-          pip install -r requirements_chd_v3.4.txt
+          pip install -r requirements.txt
       - name: Fetch full MLB rosters (30 teams)
         env:
           ALLOW_DEMO_SLATE: 1
         run: |
-          python chd_master_predictor_v3.4.py --fetch-rosters
+          python chd_master_predictor.py --fetch-rosters
       - name: Build CHD data
         env:
           ALLOW_DEMO_SLATE: 1
@@ -29,14 +29,14 @@ jobs:
           CHD_WEATHER_ENABLED: 1
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
-          python chd_master_predictor_v3.4.py --date $(date +%Y-%m-%d)
+          python chd_master_predictor.py --date $(date +%Y-%m-%d)
       - name: Validate model
         run: |
-          python chd_master_predictor_v3.4.py --validate
-          python chd_master_predictor_v3.4.py --ab-test-report
+          python chd_master_predictor.py --validate
+          python chd_master_predictor.py --ab-test-report
       - name: Run self-tests
         run: |
-          python chd_master_predictor_v3.4.py --test
+          python chd_master_predictor.py --test
       - name: Commit JSON outputs
         run: |
           git config user.name "CHD Bot"
