@@ -874,18 +874,18 @@ def fetch_full_mlb_rosters(force_refresh: bool = False) -> Dict[str, List[Dict]]
             log.error(f"Failed roster for {abbr}: {e}")
             continue
 
+    # Fallback for missing teams with mock (must be before save so cache has 30 teams even offline)
+    for team in MLB_TEAM_IDS:
+        if team not in real_players:
+            real_players[team] = [{"name": f"{team} Star {i+1}", "pos": pos, "avg": f".{250+i*5}", "ops": f".{750+i*10}", "hr": 10+i*2, "team": team, "woba": .320+i*0.01, "war": 1.5+i*0.3} for i, pos in enumerate(['CF','2B','1B','3B','C','SS','LF','RF','DH'])]
+
     # Save cache
     try:
         to_save = {**real_players, "_timestamp": time.time()}
         ROSTER_CACHE_PATH.write_text(json.dumps(to_save, indent=2, default=str))
-        log.info(f"Saved roster cache to {ROSTER_CACHE_PATH}")
+        log.info(f"Saved roster cache to {ROSTER_CACHE_PATH} with {len(real_players)} teams")
     except Exception as e:
         log.warning(f"Failed to save roster cache: {e}")
-
-    # Fallback for missing teams with mock
-    for team in MLB_TEAM_IDS:
-        if team not in real_players:
-            real_players[team] = [{"name": f"{team} Star {i+1}", "pos": pos, "avg": f".{250+i*5}", "ops": f".{750+i*10}", "hr": 10+i*2, "team": team, "woba": .320+i*0.01, "war": 1.5+i*0.3} for i, pos in enumerate(['CF','2B','1B','3B','C','SS','LF','RF','DH'])]
 
     return real_players
 
@@ -1877,10 +1877,10 @@ if __name__=="__main__":
 
     try:
         out_dir=Path("./")
-        (out_dir/"parlayos_chd_data.json").write_text(json.dumps({"mlb":data["mlb_data"],"nfl":data["nfl_data"],"nba":data["nba_data"]}, indent=2))
-        (out_dir/"parlayos_mlb_chd.json").write_text(json.dumps(data["mlb_data"], indent=2))
-        (out_dir/"parlayos_nfl_chd.json").write_text(json.dumps(data["nfl_data"], indent=2))
-        (out_dir/"parlayos_nba_chd.json").write_text(json.dumps(data["nba_data"], indent=2))
+        (out_dir/"parlayos_chd_data.json").write_text(json.dumps({"mlb":data["mlb_data"],"nfl":data["nfl_data"],"nba":data["nba_data"]}, indent=2, default=str))
+        (out_dir/"parlayos_mlb_chd.json").write_text(json.dumps(data["mlb_data"], indent=2, default=str))
+        (out_dir/"parlayos_nfl_chd.json").write_text(json.dumps(data["nfl_data"], indent=2, default=str))
+        (out_dir/"parlayos_nba_chd.json").write_text(json.dumps(data["nba_data"], indent=2, default=str))
         print("Wrote parlayos_*.json for frontend")
     except Exception as e:
         print(f"Write jsons failed {e}")
