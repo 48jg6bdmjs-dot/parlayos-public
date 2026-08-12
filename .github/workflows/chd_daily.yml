@@ -4,23 +4,32 @@ on:
     - cron: '0 13 * * *' # 9am ET daily
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
+
       - name: Fetch full MLB rosters (30 teams)
         env:
           ALLOW_DEMO_SLATE: 1
         run: |
           python chd_master_predictor.py --fetch-rosters
+
       - name: Build CHD data
         env:
           ALLOW_DEMO_SLATE: 1
@@ -30,25 +39,60 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
           python chd_master_predictor.py --date $(date +%Y-%m-%d)
+
       - name: Validate model
         run: |
           python chd_master_predictor.py --validate
           python chd_master_predictor.py --ab-test-report
+
       - name: Run self-tests
         run: |
           python chd_master_predictor.py --test
-      - name: Commit JSON outputs
+
+      - name: Build and publish HTML
+        run: |
+          set -e
+          # Prefer the established HTML builder when its source template exists.
+          if [ -f parlayos_3.html ]; then
+            python run_all.py
+          elif [ -s parlayos.html ]; then
+            echo "parlayos_3.html is absent; preserving checked-in parlayos.html"
+            cp -f parlayos.html index.html
+          elif [ -s index.html ]; then
+            echo "parlayos.html is absent; using checked-in index.html as the source"
+            cp -f index.html parlayos.html
+          else
+            echo "ERROR: no HTML source/template available"
+            exit 1
+          fi
+
+          test -s parlayos.html
+          test -s index.html
+          cmp -s parlayos.html index.html || {
+            echo "ERROR: parlayos.html and index.html diverged"
+            exit 1
+          }
+          echo "HTML publish validation passed: $(wc -c < parlayos.html) bytes"
+
+      - name: Commit generated outputs
         run: |
           git config user.name "CHD Bot"
           git config user.email "chd@parlayos.com"
-          git add parlayos_*.json chd.log mlb_rosters_cache.json || true
-          git diff --staged --quiet || git commit -m "CHD daily build $(date +%Y-%m-%d) - $(cat parlayos_chd_data.json | jq .summary.mlb_count) MLB games"
-          git push || echo "No push"
+          git add parlayos_*.json chd.log mlb_rosters_cache.json parlayos.html index.html || true
+          if git diff --staged --quiet; then
+            echo "No generated changes to commit"
+            exit 0
+          fi
+          git commit -m "CHD daily build $(date +%Y-%m-%d)"
+          git push origin HEAD:main
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: chd-outputs
           path: |
             parlayos_*.json
+            parlayos.html
+            index.html
             chd.log
             mlb_rosters_cache.json
