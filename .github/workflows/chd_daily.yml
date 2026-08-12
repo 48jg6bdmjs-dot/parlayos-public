@@ -1,0 +1,54 @@
+name: CHD Daily Build
+on:
+  schedule:
+    - cron: '0 13 * * *' # 9am ET daily
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements_chd_v3.4.txt
+      - name: Fetch full MLB rosters (30 teams)
+        env:
+          ALLOW_DEMO_SLATE: 1
+        run: |
+          python chd_master_predictor_v3.4.py --fetch-rosters
+      - name: Build CHD data
+        env:
+          ALLOW_DEMO_SLATE: 1
+          ALLOW_MOCK_STATS: 0
+          CHD_MODE: ensemble
+          CHD_WEATHER_ENABLED: 1
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          python chd_master_predictor_v3.4.py --date $(date +%Y-%m-%d)
+      - name: Validate model
+        run: |
+          python chd_master_predictor_v3.4.py --validate
+          python chd_master_predictor_v3.4.py --ab-test-report
+      - name: Run self-tests
+        run: |
+          python chd_master_predictor_v3.4.py --test
+      - name: Commit JSON outputs
+        run: |
+          git config user.name "CHD Bot"
+          git config user.email "chd@parlayos.com"
+          git add parlayos_*.json chd.log mlb_rosters_cache.json || true
+          git diff --staged --quiet || git commit -m "CHD daily build $(date +%Y-%m-%d) - $(cat parlayos_chd_data.json | jq .summary.mlb_count) MLB games"
+          git push || echo "No push"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: chd-outputs
+          path: |
+            parlayos_*.json
+            chd.log
+            mlb_rosters_cache.json
