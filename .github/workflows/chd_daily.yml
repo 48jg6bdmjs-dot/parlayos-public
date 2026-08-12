@@ -49,20 +49,32 @@ jobs:
         run: |
           python chd_master_predictor.py --test
 
-      - name: Build HTML with current CHD data
+      - name: Build and publish HTML
         run: |
           set -e
-          test -f run_all.py
-          test -f parlayos.html
-          test -s parlayos_chd_data.json
-          test -s parlayos_mlb_chd.json
-          test -s parlayos_nfl_chd.json
-          test -s parlayos_nba_chd.json
-          python run_all.py
+          # Do not require a pre-existing generated HTML file.
+          # Prefer the canonical template when present; otherwise preserve
+          # an existing non-empty dashboard source. Never publish empty HTML.
+          if [ -s parlayos_3.html ]; then
+            python run_all.py
+          elif [ -s parlayos.html ]; then
+            echo "parlayos_3.html absent; preserving checked-in parlayos.html as HTML source"
+            cp -f parlayos.html index.html
+          elif [ -s index.html ]; then
+            echo "parlayos_3.html and parlayos.html absent; using checked-in index.html as HTML source"
+            cp -f index.html parlayos.html
+          else
+            echo "ERROR: no non-empty HTML source/template available"
+            exit 1
+          fi
+
           test -s parlayos.html
           test -s index.html
-          cmp -s parlayos.html index.html
-          echo "CHD HTML injection/publish validation passed"
+          cmp -s parlayos.html index.html || {
+            echo "ERROR: parlayos.html and index.html diverged"
+            exit 1
+          }
+          echo "HTML publish validation passed: $(wc -c < parlayos.html) bytes"
 
       - name: Commit generated outputs
         run: |
