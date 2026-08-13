@@ -1524,7 +1524,7 @@ def inject_all(original_html: str, chd_data: Dict[str,Any]) -> str:
             console.log('[CHD v3.4] Injected', data.summary);
             window.dispatchEvent(new CustomEvent('chd:ready',{detail:data}));
             const observer=()=>{
-              const games=data.mlb||[];
+              const games=(data.mlb&&data.mlb.games)?data.mlb.games:[];
               games.forEach(g=>{
                 const el=document.querySelector(`[data-game-pk="${g.gamePk}"]`)||document.querySelector(`[data-game-id="${g.id||''}"]`);
                 if(el){
@@ -1878,9 +1878,9 @@ if __name__=="__main__":
     try:
         out_dir=Path("./")
         (out_dir/"parlayos_chd_data.json").write_text(json.dumps({"mlb":data["mlb_data"],"nfl":data["nfl_data"],"nba":data["nba_data"]}, indent=2, default=str))
-        (out_dir/"parlayos_mlb_chd.json").write_text(json.dumps(data["mlb_data"], indent=2, default=str))
-        (out_dir/"parlayos_nfl_chd.json").write_text(json.dumps(data["nfl_data"], indent=2, default=str))
-        (out_dir/"parlayos_nba_chd.json").write_text(json.dumps(data["nba_data"], indent=2, default=str))
+        (out_dir/"parlayos_mlb_chd.json").write_text(json.dumps({"mlb":data["mlb_data"]}, indent=2, default=str))
+        (out_dir/"parlayos_nfl_chd.json").write_text(json.dumps({"nfl":data["nfl_data"]}, indent=2, default=str))
+        (out_dir/"parlayos_nba_chd.json").write_text(json.dumps({"nba":data["nba_data"]}, indent=2, default=str))
         print("Wrote parlayos_*.json for frontend")
     except Exception as e:
         print(f"Write jsons failed {e}")
