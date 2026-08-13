@@ -1743,9 +1743,9 @@ def build_data(target_date: date = None, use_history: bool = True, use_true_wave
     }
 
     return {
-        "mlb":mlb_games,
-        "nfl":nfl_games,
-        "nba":nba_games,
+        "mlb": {"runDate": datetime.now(ET_ZONE).strftime("%b %d %Y %I:%M %p"), "pickCount": len(mlb_games), "games": mlb_games, "chd_meta": {"model": summary["model"], "calibration": WAVE_SPORTS_CONFIG['MLB']['calibration']}},
+        "nfl": {"runDate": datetime.now(ET_ZONE).strftime("%b %d %Y %I:%M %p"), "pickCount": len(nfl_games), "games": nfl_games, "chd_meta": {"model": "CHD v3.4 NFL EPA/DVOA nflverse", "calibration": WAVE_SPORTS_CONFIG['NFL']['calibration']}},
+        "nba": {"runDate": datetime.now(ET_ZONE).strftime("%b %d %Y %I:%M %p"), "pickCount": len(nba_games), "games": nba_games, "chd_meta": {"model": "CHD v3.4 NBA OffRtg/DefRtg NBA Stats API", "calibration": WAVE_SPORTS_CONFIG['NBA']['calibration']}},
         "mlb_data": {"runDate": datetime.now(ET_ZONE).strftime("%b %d %Y %I:%M %p"), "pickCount": len(mlb_games), "games": mlb_games, "chd_meta": {"model": summary["model"], "calibration": WAVE_SPORTS_CONFIG['MLB']['calibration']}},
         "nfl_data": {"runDate": datetime.now(ET_ZONE).strftime("%b %d %Y %I:%M %p"), "pickCount": len(nfl_games), "games": nfl_games, "chd_meta": {"model": "CHD v3.4 NFL EPA/DVOA nflverse", "calibration": WAVE_SPORTS_CONFIG['NFL']['calibration']}},
         "nba_data": {"runDate": datetime.now(ET_ZONE).strftime("%b %d %Y %I:%M %p"), "pickCount": len(nba_games), "games": nba_games, "chd_meta": {"model": "CHD v3.4 NBA OffRtg/DefRtg NBA Stats API", "calibration": WAVE_SPORTS_CONFIG['NBA']['calibration']}},
