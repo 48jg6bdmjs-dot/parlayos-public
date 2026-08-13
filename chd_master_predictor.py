@@ -1263,7 +1263,8 @@ def build_mlb_games(target_date: date = None, odds_data: Dict = None, weights: D
             for p in ["./parlayos_mlb_chd.json","/mnt/data/parlayos_mlb_chd.json"]:
                 if Path(p).exists():
                     j=json.loads(Path(p).read_text())
-                    return j.get("games",[])[:15]
+                    # support both legacy standalone and wrapped files
+                    return (j.get("mlb",j).get("games",[]) if isinstance(j.get("mlb",j),dict) else [])[:15]
         except Exception as e:
             log.warning(f"demo fallback failed {e}")
 
@@ -1435,7 +1436,8 @@ def build_nfl_games(target_date: date = None, weights: Dict = None) -> List[Dict
                 for p in ["./parlayos_nfl_chd.json","/mnt/data/parlayos_nfl_chd.json"]:
                     if Path(p).exists():
                         j=json.loads(Path(p).read_text())
-                        for g in j.get("games",[]):
+                        payload=j.get("nfl",j)
+                        for g in payload.get("games",[]):
                             fa=g.get("factorsA",{}); fb=g.get("factorsB",{})
                             chd=chd_predict(fa, fb, sport='NFL', mode=CONFIG.chd_mode)
                             games_out.append({"home":g.get("b"),"away":g.get("a"),"factorsA":fa,"factorsB":fb,"chd":chd,"total_line":g.get("total",44.5),"parlayos":True})
@@ -1482,7 +1484,8 @@ def build_nba_games(target_date: date = None, weights: Dict = None) -> List[Dict
                 for p in ["./parlayos_nba_chd.json","/mnt/data/parlayos_nba_chd.json"]:
                     if Path(p).exists():
                         j=json.loads(Path(p).read_text())
-                        for g in j.get("games",[]):
+                        payload=j.get("nba",j)
+                        for g in payload.get("games",[]):
                             fa=g.get("factorsA",{}); fb=g.get("factorsB",{})
                             chd=chd_predict(fa, fb, sport='NBA', mode=CONFIG.chd_mode)
                             games_out.append({"home":g.get("b"),"away":g.get("a"),"factorsA":fa,"factorsB":fb,"chd":chd,"total_line":g.get("total",224.5),"parlayos":True})
@@ -1878,9 +1881,11 @@ if __name__=="__main__":
     try:
         out_dir=Path("./")
         (out_dir/"parlayos_chd_data.json").write_text(json.dumps({"mlb":data["mlb_data"],"nfl":data["nfl_data"],"nba":data["nba_data"]}, indent=2, default=str))
-        (out_dir/"parlayos_mlb_chd.json").write_text(json.dumps({"mlb":data["mlb_data"]}, indent=2, default=str))
-        (out_dir/"parlayos_nfl_chd.json").write_text(json.dumps({"nfl":data["nfl_data"]}, indent=2, default=str))
-        (out_dir/"parlayos_nba_chd.json").write_text(json.dumps({"nba":data["nba_data"]}, indent=2, default=str))
+        # Standalone JSON files retain the legacy flat games-array contract.
+        # The combined master file remains wrapped and the injected JS reads data.mlb.games.
+        (out_dir/"parlayos_mlb_chd.json").write_text(json.dumps(data["mlb_data"], indent=2, default=str))
+        (out_dir/"parlayos_nfl_chd.json").write_text(json.dumps(data["nfl_data"], indent=2, default=str))
+        (out_dir/"parlayos_nba_chd.json").write_text(json.dumps(data["nba_data"], indent=2, default=str))
         print("Wrote parlayos_*.json for frontend")
     except Exception as e:
         print(f"Write jsons failed {e}")
