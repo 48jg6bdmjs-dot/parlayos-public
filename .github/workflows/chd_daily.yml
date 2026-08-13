@@ -41,6 +41,29 @@ jobs:
         run: |
           python chd_master_predictor.py --date $(date +%Y-%m-%d)
 
+      - name: Validate generated CHD outputs
+        run: |
+          set -e
+          test -s parlayos_chd_data.json
+          test -s parlayos_mlb_chd.json
+          test -s parlayos_nfl_chd.json
+          test -s parlayos_nba_chd.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for name in [
+              'parlayos_chd_data.json',
+              'parlayos_mlb_chd.json',
+              'parlayos_nfl_chd.json',
+              'parlayos_nba_chd.json',
+          ]:
+              p = Path(name)
+              data = json.loads(p.read_text(encoding='utf-8'))
+              if not isinstance(data, dict):
+                  raise SystemExit(f'{name} is not a JSON object')
+              print(f'OK {name}: {len(data.get("games", []))} games')
+          PY
+
       - name: Validate model
         run: |
           python chd_master_predictor.py --validate
@@ -50,19 +73,16 @@ jobs:
         run: |
           python chd_master_predictor.py --test
 
-      - name: Build and publish HTML from CHD JSON only
+      - name: Build and publish HTML from generated CHD JSON
         run: |
           set -e
-          test -s parlayos_chd_data.json
-          test -s parlayos_mlb_chd.json
-          test -s parlayos_nfl_chd.json
-          test -s parlayos_nba_chd.json
           test -f run_all.py
+          test -s parlayos.html || test -s index.html
           python run_all.py
           test -s parlayos.html
           test -s index.html
           cmp -s parlayos.html index.html
-          echo "CHD JSON-only dashboard publish validation passed: $(wc -c < parlayos.html) bytes"
+          echo "CHD JSON dashboard publish validation passed: $(wc -c < parlayos.html) bytes"
 
       - name: Commit generated outputs
         run: |
