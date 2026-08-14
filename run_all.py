@@ -135,10 +135,11 @@ def _reject_mock_dashboard_content(html):
 
 
 def main():
+    import re
     has_key=bool(os.getenv("ODDS_API_KEY"))
     print(f"ODDS_API_KEY env set: {has_key}")
     print("Backend - Real CHD JSON only")
-    payloads=_validate_chd_payloads()
+    _validate_chd_payloads()
 
     parlayos_html=os.path.join(BASE_DIR,"parlayos.html")
     index_html=os.path.join(BASE_DIR,"index.html")
@@ -151,7 +152,7 @@ def main():
     for name,mod_path,_ in engines:
         if not os.path.exists(os.path.join(BASE_DIR,mod_path)): print(f"Skipping {name}: {mod_path} not found")
 
-    results=[]; start=time.time()
+    results=[]
     with ThreadPoolExecutor(max_workers=3) as executor:
         future_to_engine={executor.submit(_run_one,name,mod_path,html_p):(name,mod_path) for name,mod_path,html_p in existing_engines}
         for future in as_completed(future_to_engine):
@@ -167,7 +168,7 @@ def main():
     required=['parlayos_mlb_chd.json','parlayos_nfl_chd.json','parlayos_nba_chd.json','parlayos_chd_data.json','loadParlayOSCHDData','CHD_DATA_INJECTION']
     missing=[token for token in required if token not in content]
     if missing: raise RuntimeError('HTML CHD validation failed: '+', '.join(missing))
-    forbidden=[(r"window\.PARLAYOS_DATA\s*=\s*\{\s*[\"']runDate[\"']",'inline MLB CHD snapshot'),(r"window\.PARLAYOS_NFL_DATA\s*=\s*\{\s*[\"']runDate[\"']",'inline NFL CHD snapshot'),(r"window\.PARLAYOS_NBA_DATA\s*=\s*\{\s*[\"']runDate[\"']",'inline NBA CHD snapshot'),(r"window\.PARLAYOS_LIVE_SCORES\s*=\s*\{",'embedded live-score snapshot'),(r"window\.PARLAYOS_SPORTS_CONFIG\s*=\s*\{",'embedded sports configuration')]
+    forbidden=[(r"window\.PARLAYOS_DATA\s*=\s*\{\s*[\"']runDate[\"']",'inline MLB CHD snapshot'),(r"window\.PARLAYOS_NFL_DATA\s*=\s*\{\s*[\"']runDate[\"']",'inline NFL CHD snapshot'),(r"window\.PARLAYOS_NBA_DATA\s*=\s*\{\s*[\"']runDate[\"']",'inline NBA CHD snapshot'),(r"window\.PARLAYOS_LIVE_SCORES\s*=\s*\{",'embedded live-score snapshot'),(r"window\.LIVE_SCORES_DATA\s*=\s*\{",'embedded live-score snapshot'),(r"window\.PARLAYOS_SPORTS_CONFIG\s*=\s*\{",'embedded sports configuration')]
     for pattern,label in forbidden:
         if re.search(pattern,content,flags=re.S): raise RuntimeError(f'HTML still contains {label}')
     if '16b0a233c6bbe7492dc168a1a46ec469' in content: raise RuntimeError('Browser artifact contains an exposed ODDS_API_KEY')
