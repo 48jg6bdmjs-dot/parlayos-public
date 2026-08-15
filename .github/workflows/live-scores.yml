@@ -13,8 +13,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: parlayos-live-scores
-  cancel-in-progress: true
+  group: parlayos-main-writers
+  cancel-in-progress: false
 
 jobs:
   live-scores:
