@@ -38265,17 +38265,23 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   async function load(){
     const [mlb,nfl,nba,combined]=await Promise.all([get(SRC.mlb),get(SRC.nfl),get(SRC.nba),get(SRC.combined)]);
     window.CHD_DATA=combined;
-    window.PARLAYOS_DATA=normalize(mlb);
-    window.PARLAYOS_NFL_DATA=normalize(nfl);
-    window.PARLAYOS_NBA_DATA=normalize(nba);
-    window.PARLAYOS_GAMES=window.PARLAYOS_DATA.games||[];
-    window.gamesNFL=window.PARLAYOS_NFL_DATA.games||[];
-    window.gamesNBA=window.PARLAYOS_NBA_DATA.games||[];
+    const mlbGames=(Array.isArray(mlb.games)?mlb.games:[]).map(transformMLBGame);
+    const nflGames=(Array.isArray(nfl.games)?nfl.games:[]).map(transformNFLGame);
+    const nbaGames=(Array.isArray(nba.games)?nba.games:[]).map(transformNBAGame);
+    window.PARLAYOS_DATA=Object.assign({},normalize(mlb),{games:mlbGames,teamStats:buildMLBTeamStats(mlbGames)});
+    window.PARLAYOS_NFL_DATA=Object.assign({},normalize(nfl),{games:nflGames,standings:buildNFLStandings(nflGames)});
+    window.PARLAYOS_NBA_DATA=Object.assign({},normalize(nba),{games:nbaGames,standings:buildNBAStandings(nbaGames)});
+    window.PARLAYOS_GAMES=mlbGames;
+    window.games=mlbGames;
+    window.gamesNFL=nflGames;
+    window.gamesNBA=nbaGames;
     const detail={mlb:window.PARLAYOS_DATA,nfl:window.PARLAYOS_NFL_DATA,nba:window.PARLAYOS_NBA_DATA,combined:combined};
     try{window.dispatchEvent(new CustomEvent('chd:ready',{detail:combined}));}catch(_){}
     try{document.dispatchEvent(new CustomEvent('parlayos:chd-data-ready',{detail:detail}));}catch(_){}
     try{if(typeof window.loadRealData==='function')window.loadRealData();}catch(_){}
     try{if(typeof window.renderDashboard==='function')window.renderDashboard();}catch(_){}
+    try{if(typeof window.renderNFLDashboard==='function')window.renderNFLDashboard();}catch(_){}
+    try{if(typeof window.renderNBADashboard==='function')window.renderNBADashboard();}catch(_){}
     try{if(typeof window.chdWireSportHubs==='function')window.chdWireSportHubs();}catch(_){}
     return combined;
   }
