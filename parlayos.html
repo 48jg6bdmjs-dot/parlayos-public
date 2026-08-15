@@ -1132,7 +1132,7 @@
                         body.dark .table-head h3 { color: #eef2ff !important; }
 
                         .breadcrumb { /* removed */ }
-                        .screen { overflow-y:auto; -webkit-overflow-scrolling:touch; padding: 76px 18px calc(82px + env(safe-area-inset-bottom));}
+                         .screen { overflow-y:auto; -webkit-overflow-scrolling:touch; padding: 76px 18px calc(82px + env(safe-area-inset-bottom)); overscroll-behavior: contain; scroll-behavior: auto; }
 
                         body.dark .toolbar .search {
                           background: rgba(12,18,32,0.96) !important;
@@ -31950,123 +31950,150 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
   
   function overrideStandings(){
     try{
-      const origNFL = window.renderNFLStandings;
-      window.renderNFLStandings = function(){
-        const mount=document.getElementById('nflStandingsMount'); if(!mount) return;
-        const live=window.PARLAYOS_NFL_DATA; let standings=(live&&live.standings)||window.NFL_STANDINGS||{};
-        if(standings.AL || standings.NL || (standings.East && standings.East.Atlantic) || !standings.AFC){
-          standings=window.NFL_STANDINGS||{};
-        }
-        const now=new Date(); const mName=now.toLocaleString('en-US',{month:'long',year:'numeric'});
-        try{
-          const allGames=(live&&Array.isArray(live.games)?live.games:[]);
-          const gamesByDate = typeof getGamesByDateFromLive==='function' ? getGamesByDateFromLive(allGames) : {};
-          const grid = typeof buildSportMonthGrid==='function' ? buildSportMonthGrid(now, gamesByDate, (window.gamesNFL||[]).length) : {DOW:['S','M','T','W','T','F','S'], eC:'', dC:''};
-          const calendarHTML = `
-                <div class="glass panel-pad" style="border-radius:22px;margin-bottom:12px;">
-                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
-                    <b style="font-size:13px;letter-spacing:-0.02em;">${mName} • NFL</b>
-                    <span class="badge">${(window.gamesNFL||[]).length} TODAY • ${allGames.length} THIS MONTH</span>
-                  </div>
-                  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;margin-bottom:4px;">${grid.DOW.map(d=>`<div class="mini" style="padding:3px 0;font-size:9.5px;">${d}</div>`).join('')}</div>
-                  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">${grid.eC}${grid.dC}</div>
-                </div>`;
-          const hasGames = (window.gamesNFL||[]).length>0;
-          const scheduleListHTML = hasGames ? (window.gamesNFL||[]).map(g=>`<div class="glass" style="padding:10px 12px;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;flex-direction:row;align-items:center;gap:12px;min-width:0;flex:1;"><b style="white-space:nowrap;">${g.a} @ ${g.b}</b><div class="mini" style="margin:0;opacity:0.7;white-space:nowrap;">${g.date||''} ${g.time||''}</div></div><span class="badge">${g.ouPick||''}</span></div>`).join('') : `<div class="glass panel-pad" style="border-radius:18px;padding:20px;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">🏈</div><b>No NFL games today</b><div style="font-size:11px;opacity:0.6;margin-top:4px;">Check calendar for month view</div></div>`;
-          const scheduleHTML = `${calendarHTML}<div style="margin-top:4px;"><b style="font-size:13px;letter-spacing:-0.02em;">Today's Schedule</b><span class="mini" style="margin-left:8px;color:var(--muted);">${now.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span><div style="margin-top:8px;">${scheduleListHTML}</div></div>`;
-          const standHTML = `<div class="clean-standings-wrapper">${Object.keys(standings).flatMap(conf=> Object.keys(standings[conf]||{}).map(div=> cleanDivTable(conf, div, standings[conf][div]) )).join('')}</div>`;
-          
-          // Each chip's window shows what glass cards normally would - now with glass
-          const passingHTML = `<div style="display:grid;gap:10px;">${(window.gamesNFL||[]).slice(0,6).map(g=>`<div class="glass panel-pad" style="border-radius:18px;padding:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><b style="font-size:13px;">${g.a} @ ${g.b}</b><span class="badge">PASS</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div class="glass" style="border-radius:12px;padding:10px;"><div class="mini" style="opacity:0.7;">QB Rating</div><b>98.4</b></div><div class="glass" style="border-radius:12px;padding:10px;"><div class="mini" style="opacity:0.7;">Yards</div><b>284</b></div></div></div>`).join('') || `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">🎯</div><b>Passing Stats</b><div style="font-size:11px;opacity:0.6;margin-top:6px;">Glass cards with QB stats appear here when season active</div></div>`}</div>`;
-          const rushingHTML = `<div style="display:grid;gap:10px;">${(window.gamesNFL||[]).slice(0,6).map(g=>`<div class="glass panel-pad" style="border-radius:18px;padding:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><b style="font-size:13px;">${g.a} @ ${g.b}</b><span class="badge">RUSH</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div class="glass" style="border-radius:12px;padding:10px;"><div class="mini" style="opacity:0.7;">Rush Yards</div><b>124</b></div><div class="glass" style="border-radius:12px;padding:10px;"><div class="mini" style="opacity:0.7;">TDs</div><b>2</b></div></div></div>`).join('') || `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">🏃</div><b>Rushing Stats</b><div style="font-size:11px;opacity:0.6;margin-top:6px;">Glass cards with RB stats appear here</div></div>`}</div>`;
-          const defenseHTML = `<div style="display:grid;gap:10px;">${Object.keys(standings).slice(0,2).flatMap(conf=> Object.keys(standings[conf]||{}).slice(0,1).map(div=> `<div class="glass panel-pad" style="border-radius:18px;"><b style="font-size:13px;">${conf} ${div} Defense</b><div style="margin-top:10px;display:grid;gap:8px;">${(standings[conf][div]||[]).slice(0,3).map(r=>`<div class="glass" style="border-radius:12px;padding:10px;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:800;">${r.t}</span><span class="badge">${r.w}-${r.l}</span></div>`).join('')}</div></div>`)).join('') || `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;">🛡️</div><b>Defense Stats</b><div style="font-size:11px;opacity:0.6;margin-top:6px;">Glass cards with defensive rankings</div></div>`}</div>`;
-          const playersHTML = (()=>{ const src=(typeof gamesNFL!=='undefined'?gamesNFL:[]); if(!src.length) return `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">👤</div><b style="font-size:14px;">NFL Players</b><div style="font-size:11px;opacity:0.6;margin-top:8px;">Player stats will appear when season is active</div></div>`; return `<div style="display:grid;gap:10px;">${src.slice(0,10).map(g=>`<div class="glass" style="border-radius:16px;padding:12px;display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.10);display:grid;place-items:center;font-weight:900;">${g.b.slice(0,2)}</div><div style="flex:1;"><div style="font-weight:800;">${g.cityB||g.b} Roster</div><div style="font-size:11px;opacity:0.6;">${g.b} • Tap for details</div></div><div style="opacity:0.5;">→</div></div>`).join('')}</div>`; })();
+       const origNFL = window.renderNFLStandings;
+       window.renderNFLStandings = function(){
+         const mount=document.getElementById('nflStandingsMount'); if(!mount) return;
+         const live=window.PARLAYOS_NFL_DATA; let standings=(live&&live.standings)||window.NFL_STANDINGS||{};
+         if(standings.AL || standings.NL || (standings.East && standings.East.Atlantic) || !standings.AFC){
+           standings=window.NFL_STANDINGS||{};
+         }
+         const now=new Date(); const mName=now.toLocaleString('en-US',{month:'long',year:'numeric'});
+         try{
+           const allGames=(live&&Array.isArray(live.games)?live.games:[]);
+           const gamesByDate = typeof getGamesByDateFromLive==='function' ? getGamesByDateFromLive(allGames) : {};
+           const grid = typeof buildSportMonthGrid==='function' ? buildSportMonthGrid(now, gamesByDate, (window.gamesNFL||[]).length) : {DOW:['S','M','T','W','T','F','S'], eC:'', dC:''};
+           const calendarHTML = `
+                 <div class="glass panel-pad" style="border-radius:22px;margin-bottom:12px;">
+                   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                     <b style="font-size:13px;letter-spacing:-0.02em;">${mName} • NFL</b>
+                     <span class="badge">${(window.gamesNFL||[]).length} TODAY • ${allGames.length} THIS MONTH</span>
+                   </div>
+                   <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;margin-bottom:4px;">${grid.DOW.map(d=>`<div class="mini" style="padding:3px 0;font-size:9.5px;">${d}</div>`).join('')}</div>
+                   <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">${grid.eC}${grid.dC}</div>
+                 </div>`;
+           const hasGames = (window.gamesNFL||[]).length>0;
+           const scheduleListHTML = hasGames ? (window.gamesNFL||[]).map(g=>`<div class="glass" style="padding:10px 12px;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;flex-direction:row;align-items:center;gap:12px;min-width:0;flex:1;"><b style="white-space:nowrap;">${g.a} @ ${g.b}</b><div class="mini" style="margin:0;opacity:0.7;white-space:nowrap;">${g.date||''} ${g.time||''}</div></div><span class="badge">${g.ouPick||''}</span></div>`).join('') : `<div class="glass panel-pad" style="border-radius:18px;padding:20px;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">🏈</div><b>No NFL games today</b><div style="font-size:11px;opacity:0.6;margin-top:4px;">Check calendar for month view</div></div>`;
+           const scheduleHTML = `${calendarHTML}<div style="margin-top:4px;"><b style="font-size:13px;letter-spacing:-0.02em;">Today's Schedule</b><span class="mini" style="margin-left:8px;color:var(--muted);">${now.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span><div style="margin-top:8px;">${scheduleListHTML}</div></div>`;
+           const standHTML = `<div class="clean-standings-wrapper">${Object.keys(standings).flatMap(conf=> Object.keys(standings[conf]||{}).map(div=> cleanDivTable(conf, div, standings[conf][div]) )).join('')}</div>`;
+           
+           const teamStats = {};
+           allGames.forEach(g=>{
+             [g.stats?.home, g.stats?.away].forEach(s=>{
+               if(!s || !s.abbr) return;
+               if(!teamStats[s.abbr]) teamStats[s.abbr] = {abbr:s.abbr, off_eff:[], def_eff:[], epa:[], games:0};
+               if(s.off_eff != null) teamStats[s.abbr].off_eff.push(s.off_eff);
+               if(s.def_eff != null) teamStats[s.abbr].def_eff.push(s.def_eff);
+               if(s.epa != null) teamStats[s.abbr].epa.push(s.epa);
+               teamStats[s.abbr].games++;
+             });
+           });
+           const avg = arr => arr.length ? (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2) : '—';
+           const teamCards = Object.values(teamStats).sort((a,b)=>b.games-a.games).slice(0,8).map(t=>`<div class="glass panel-pad" style="border-radius:14px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;"><div><b style="font-size:12px;">${t.abbr}</b><div class="mini" style="opacity:0.6;">${t.games} game${t.games>1?'s':''}</div></div><div style="display:flex;gap:10px;font-size:10px;"><span>OFF ${avg(t.off_eff)}</span><span>DEF ${avg(t.def_eff)}</span><span>EPA ${avg(t.epa)}</span></div></div>`).join('');
+           const passingHTML = `<div style="display:grid;gap:8px;">${teamCards || `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">🎯</div><b>Passing Stats</b><div style="font-size:11px;opacity:0.6;margin-top:6px;">Team offensive efficiency appears here</div></div>`}</div>`;
+           const rushingHTML = `<div style="display:grid;gap:8px;">${teamCards || `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">🏃</div><b>Rushing Stats</b><div style="font-size:11px;opacity:0.6;margin-top:6px;">Team ground game stats appear here</div></div>`}</div>`;
+           const defenseHTML = `<div style="display:grid;gap:8px;">${teamCards || `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;">🛡️</div><b>Defense Stats</b><div style="font-size:11px;opacity:0.6;margin-top:6px;">Team defensive rankings appear here</div></div>`}</div>`;
+           const playersHTML = (()=>{ const src=(typeof gamesNFL!=='undefined'?gamesNFL:[]); if(!src.length) return `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">👤</div><b style="font-size:14px;">NFL Players</b><div style="font-size:11px;opacity:0.6;margin-top:8px;">Player stats will appear when season is active</div></div>`; return `<div style="display:grid;gap:10px;">${src.slice(0,10).map(g=>`<div class="glass" style="border-radius:16px;padding:12px;display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.10);display:grid;place-items:center;font-weight:900;">${g.b.slice(0,2)}</div><div style="flex:1;"><div style="font-weight:800;">${g.cityB||g.b} Roster</div><div style="font-size:11px;opacity:0.6;">${g.b} • Tap for details</div></div><div style="opacity:0.5;">→</div></div>`).join('')}</div>`; })();
 
-          // FIX: No glass cards in stats tab - only chips, each chip opens its own glass window
-          mount.innerHTML = `
-              <div class="stats-tab-row" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;position:sticky;top:0;z-index:5;">
-                <button class="chip" data-nfl-stab="passing">🎯 Passing</button>
-                <button class="chip" data-nfl-stab="rushing">🏃 Rushing</button>
-                <button class="chip" data-nfl-stab="defense">🛡️ Defense</button>
-                <button class="chip" data-nfl-stab="schedule">📅 Schedule</button>
-                <button class="chip" data-nfl-stab="standings">📊 Standings</button>
-                <button class="chip" data-nfl-stab="players">👤 Players</button>
-              </div>
-            `;
-          const modalData = {passing:passingHTML, rushing:rushingHTML, defense:defenseHTML, schedule:scheduleHTML, standings:standHTML, players:playersHTML};
-          mount.querySelectorAll('[data-nfl-stab]').forEach(tab=>{
-            tab.addEventListener('click', (e)=>{
-              e.preventDefault(); e.stopPropagation();
-              mount.querySelectorAll('[data-nfl-stab]').forEach(t=>t.classList.remove('active'));
-              tab.classList.add('active');
-              const w=tab.dataset.nflStab;
-              const content = modalData[w] || `<div class="glass panel-pad" style="border-radius:18px;padding:20px;">${w}</div>`;
-              const titleMap = {passing:'🎯 NFL Passing', rushing:'🏃 NFL Rushing', defense:'🛡️ NFL Defense', schedule:'📅 NFL Schedule', standings:'📊 NFL Standings', players:'👤 NFL Players'};
-              if(typeof openSectionModal==='function'){
-                openSectionModal(titleMap[w]||tab.textContent.trim(), '<div style="color:#eef2ff;">' + content + '</div>');
-              }
-            });
-          });
-          return;
-        }catch(e){ console.warn('clean NFL standings fallback', e); }
-        if(origNFL) origNFL();
-      };
+           // FIX: No glass cards in stats tab - only chips, each chip opens its own glass window
+           mount.innerHTML = `
+               <div class="stats-tab-row" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;position:sticky;top:0;z-index:5;">
+                 <button class="chip" data-nfl-stab="passing">🎯 Passing</button>
+                 <button class="chip" data-nfl-stab="rushing">🏃 Rushing</button>
+                 <button class="chip" data-nfl-stab="defense">🛡️ Defense</button>
+                 <button class="chip" data-nfl-stab="schedule">📅 Schedule</button>
+                 <button class="chip" data-nfl-stab="standings">📊 Standings</button>
+                 <button class="chip" data-nfl-stab="players">👤 Players</button>
+               </div>
+             `;
+           const modalData = {passing:passingHTML, rushing:rushingHTML, defense:defenseHTML, schedule:scheduleHTML, standings:standHTML, players:playersHTML};
+           mount.querySelectorAll('[data-nfl-stab]').forEach(tab=>{
+             tab.addEventListener('click', (e)=>{
+               e.preventDefault(); e.stopPropagation();
+               mount.querySelectorAll('[data-nfl-stab]').forEach(t=>t.classList.remove('active'));
+               tab.classList.add('active');
+               const w=tab.dataset.nflStab;
+               const content = modalData[w] || `<div class="glass panel-pad" style="border-radius:18px;padding:20px;">${w}</div>`;
+               const titleMap = {passing:'🎯 NFL Passing', rushing:'🏃 NFL Rushing', defense:'🛡️ NFL Defense', schedule:'📅 NFL Schedule', standings:'📊 NFL Standings', players:'👤 NFL Players'};
+               if(typeof openSectionModal==='function'){
+                 openSectionModal(titleMap[w]||tab.textContent.trim(), '<div style="color:#eef2ff;">' + content + '</div>');
+               }
+             });
+           });
+           return;
+         }catch(e){ console.warn('clean NFL standings fallback', e); }
+         if(origNFL) origNFL();
+       };
     }catch(e){ console.warn(e); }
     try{
-      const origNBA = window.renderNBAStandings;
-      window.renderNBAStandings = function(){
-        const mount=document.getElementById('nbaStandingsMount'); if(!mount) return;
-        const live=window.PARLAYOS_NBA_DATA; let standings=(live&&live.standings)||window.NBA_STANDINGS||{};
-        if(standings.AL||standings.NL||standings.AFC||standings.NFC||!standings.East){
-          standings=window.NBA_STANDINGS||{};
-        }
-        const now=new Date(); const mName=now.toLocaleString('en-US',{month:'long',year:'numeric'});
-        const allGames=(live&&Array.isArray(live.games)?live.games:[]);
-        const gamesByDate = typeof getGamesByDateFromLive==='function' ? getGamesByDateFromLive(allGames) : {};
-        const grid = typeof buildSportMonthGrid==='function' ? buildSportMonthGrid(now, gamesByDate, (window.gamesNBA||[]).length) : {DOW:['S','M','T','W','T','F','S'], eC:'', dC:''};
-        const calendarHTML = `
-            <div class="glass panel-pad" style="border-radius:22px;margin-bottom:12px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
-                <b style="font-size:13px;letter-spacing:-0.02em;">${mName} • NBA</b>
-                <span class="badge">${(window.gamesNBA||[]).length} TODAY • ${allGames.length} THIS MONTH</span>
-              </div>
-              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;margin-bottom:4px;">${grid.DOW.map(d=>`<div class="mini" style="padding:3px 0;font-size:9.5px;">${d}</div>`).join('')}</div>
-              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">${grid.eC}${grid.dC}</div>
-            </div>`;
-        const hasGames = (window.gamesNBA||[]).length>0;
-        const scheduleListHTML = hasGames ? (window.gamesNBA||[]).map(g=>`<div class="glass" style="padding:10px 12px;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;flex-direction:row;align-items:center;gap:12px;min-width:0;flex:1;"><b style="white-space:nowrap;">${g.a} @ ${g.b}</b><div class="mini" style="margin:0;opacity:0.7;white-space:nowrap;">${g.date||''} ${g.time||''}</div></div><span class="badge">${g.ouPick||''}</span></div>`).join('') : `<div class="glass panel-pad" style="border-radius:18px;padding:20px;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">🏀</div><b>No NBA games today</b><div style="font-size:11px;opacity:0.6;margin-top:4px;">Check calendar for month view</div></div>`;
-        const scheduleHTML = `${calendarHTML}<div style="margin-top:4px;"><b style="font-size:13px;letter-spacing:-0.02em;">Today's Schedule</b><span class="mini" style="margin-left:8px;color:var(--muted);">${now.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span><div style="margin-top:8px;">${scheduleListHTML}</div></div>`;
-        const standHTML = `<div class="clean-standings-wrapper">${Object.keys(standings).flatMap(conf=> Object.keys(standings[conf]||{}).map(div=> cleanDivTable(conf, div, standings[conf][div]) )).join('')}</div>`;
-        const scoringHTML = `<div style="display:grid;gap:10px;"><div class="glass panel-pad" style="border-radius:18px;padding:20px;text-align:center;"><div style="font-size:28px;">🎯</div><b>Scoring Leaders</b><div style="font-size:11px;opacity:0.6;margin-top:6px;">Glass cards with PPG leaders</div></div><div class="glass" style="border-radius:16px;padding:12px;display:flex;justify-content:space-between;"><span style="font-weight:800;">Jokic</span><span>26.4 PPG</span></div><div class="glass" style="border-radius:16px;padding:12px;display:flex;justify-content:space-between;"><span style="font-weight:800;">Doncic</span><span>28.2 PPG</span></div></div>`;
-        const reboundingHTML = `<div style="display:grid;gap:10px;"><div class="glass panel-pad" style="border-radius:18px;padding:20px;text-align:center;"><div style="font-size:28px;">🏀</div><b>Rebounding</b><div style="font-size:11px;opacity:0.6;margin-top:6px;">Glass cards with RPG leaders</div></div><div class="glass" style="border-radius:16px;padding:12px;display:flex;justify-content:space-between;"><span style="font-weight:800;">Gobert</span><span>12.8 RPG</span></div></div>`;
-        const assistsHTML = `<div style="display:grid;gap:10px;"><div class="glass panel-pad" style="border-radius:18px;padding:20px;text-align:center;"><div style="font-size:28px;">🅰️</div><b>Assists</b><div style="font-size:11px;opacity:0.6;margin-top:6px;">Glass cards with APG leaders</div></div><div class="glass" style="border-radius:16px;padding:12px;display:flex;justify-content:space-between;"><span style="font-weight:800;">Haliburton</span><span>11.2 APG</span></div></div>`;
-        const playersHTML = (()=>{ const src=(typeof gamesNBA!=='undefined'?gamesNBA:[]); if(!src.length) return `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">👤</div><b>NBA Players</b><div style="font-size:11px;opacity:0.6;margin-top:8px;">Player stats will appear when season is active</div></div>`; return `<div style="display:grid;gap:10px;">${src.slice(0,10).map(g=>`<div class="glass" style="border-radius:16px;padding:12px;display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.10);display:grid;place-items:center;font-weight:900;">${g.b.slice(0,2)}</div><div style="flex:1;"><div style="font-weight:800;">${g.cityB||g.b} Roster</div><div style="font-size:11px;opacity:0.6;">${g.b}</div></div><div style="opacity:0.5;">→</div></div>`).join('')}</div>`; })();
+       const origNBA = window.renderNBAStandings;
+       window.renderNBAStandings = function(){
+         const mount=document.getElementById('nbaStandingsMount'); if(!mount) return;
+         const live=window.PARLAYOS_NBA_DATA; let standings=(live&&live.standings)||window.NBA_STANDINGS||{};
+         if(standings.AL||standings.NL||standings.AFC||standings.NFC||!standings.East){
+           standings=window.NBA_STANDINGS||{};
+         }
+         const now=new Date(); const mName=now.toLocaleString('en-US',{month:'long',year:'numeric'});
+         const allGames=(live&&Array.isArray(live.games)?live.games:[]);
+         const gamesByDate = typeof getGamesByDateFromLive==='function' ? getGamesByDateFromLive(allGames) : {};
+         const grid = typeof buildSportMonthGrid==='function' ? buildSportMonthGrid(now, gamesByDate, (window.gamesNBA||[]).length) : {DOW:['S','M','T','W','T','F','S'], eC:'', dC:''};
+         const calendarHTML = `
+             <div class="glass panel-pad" style="border-radius:22px;margin-bottom:12px;">
+               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                 <b style="font-size:13px;letter-spacing:-0.02em;">${mName} • NBA</b>
+                 <span class="badge">${(window.gamesNBA||[]).length} TODAY • ${allGames.length} THIS MONTH</span>
+               </div>
+               <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;margin-bottom:4px;">${grid.DOW.map(d=>`<div class="mini" style="padding:3px 0;font-size:9.5px;">${d}</div>`).join('')}</div>
+               <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">${grid.eC}${grid.dC}</div>
+             </div>`;
+         const hasGames = (window.gamesNBA||[]).length>0;
+         const scheduleListHTML = hasGames ? (window.gamesNBA||[]).map(g=>`<div class="glass" style="padding:10px 12px;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;flex-direction:row;align-items:center;gap:12px;min-width:0;flex:1;"><b style="white-space:nowrap;">${g.a} @ ${g.b}</b><div class="mini" style="margin:0;opacity:0.7;white-space:nowrap;">${g.date||''} ${g.time||''}</div></div><span class="badge">${g.ouPick||''}</span></div>`).join('') : `<div class="glass panel-pad" style="border-radius:18px;padding:20px;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">🏀</div><b>No NBA games today</b><div style="font-size:11px;opacity:0.6;margin-top:4px;">Check calendar for month view</div></div>`;
+         const scheduleHTML = `${calendarHTML}<div style="margin-top:4px;"><b style="font-size:13px;letter-spacing:-0.02em;">Today's Schedule</b><span class="mini" style="margin-left:8px;color:var(--muted);">${now.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span><div style="margin-top:8px;">${scheduleListHTML}</div></div>`;
+         const standHTML = `<div class="clean-standings-wrapper">${Object.keys(standings).flatMap(conf=> Object.keys(standings[conf]||{}).map(div=> cleanDivTable(conf, div, standings[conf][div]) )).join('')}</div>`;
 
-        mount.innerHTML = `
-          <div class="stats-tab-row" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;position:sticky;top:0;z-index:5;">
-            <button class="chip" data-nba-stab="scoring">🎯 Scoring</button>
-            <button class="chip" data-nba-stab="rebounding">🏀 Rebounding</button>
-            <button class="chip" data-nba-stab="assists">🅰️ Assists</button>
-            <button class="chip" data-nba-stab="schedule">📅 Schedule</button>
-            <button class="chip" data-nba-stab="standings">📊 Standings</button>
-            <button class="chip" data-nba-stab="players">👤 Players</button>
-          </div>
-        `;
-        const modalData = {scoring:scoringHTML, rebounding:reboundingHTML, assists:assistsHTML, schedule:scheduleHTML, standings:standHTML, players:playersHTML};
-        mount.querySelectorAll('[data-nba-stab]').forEach(tab=>{
-          tab.addEventListener('click', (e)=>{
-            e.preventDefault(); e.stopPropagation();
-            mount.querySelectorAll('[data-nba-stab]').forEach(t=>t.classList.remove('active'));
-            tab.classList.add('active');
-            const w=tab.dataset.nbaStab;
-            const content = modalData[w] || `<div class="glass panel-pad" style="border-radius:18px;padding:20px;">${w}</div>`;
-            const titleMap = {scoring:'🎯 NBA Scoring', rebounding:'🏀 NBA Rebounding', assists:'🅰️ NBA Assists', schedule:'📅 NBA Schedule', standings:'📊 NBA Standings', players:'👤 NBA Players'};
-            if(typeof openSectionModal==='function'){
-              openSectionModal(titleMap[w]||tab.textContent.trim(), '<div style="color:#eef2ff;">' + content + '</div>');
-            }
-          });
-        });
-      };
+         const teamStats = {};
+         allGames.forEach(g=>{
+           [g.stats?.home, g.stats?.away].forEach(s=>{
+             if(!s || !s.abbr) return;
+             if(!teamStats[s.abbr]) teamStats[s.abbr] = {abbr:s.abbr, off_rtg:[], def_rtg:[], net:[], pace:[], games:0};
+             if(s.off_rtg != null) teamStats[s.abbr].off_rtg.push(s.off_rtg);
+             if(s.def_rtg != null) teamStats[s.abbr].def_rtg.push(s.def_rtg);
+             if(s.net != null) teamStats[s.abbr].net.push(s.net);
+             if(s.pace != null) teamStats[s.abbr].pace.push(s.pace);
+             teamStats[s.abbr].games++;
+           });
+         });
+         const avg = arr => arr.length ? (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1) : '—';
+         const teamCards = Object.values(teamStats).sort((a,b)=>b.games-a.games).slice(0,8).map(t=>`<div class="glass panel-pad" style="border-radius:14px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;"><div><b style="font-size:12px;">${t.abbr}</b><div class="mini" style="opacity:0.6;">${t.games} game${t.games>1?'s':''}</div></div><div style="display:flex;gap:10px;font-size:10px;"><span>OFF ${avg(t.off_rtg)}</span><span>DEF ${avg(t.def_rtg)}</span><span>NET ${avg(t.net)}</span><span>PACE ${avg(t.pace)}</span></div></div>`).join('');
+         const scoringHTML = `<div style="display:grid;gap:8px;">${teamCards || `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;">🎯</div><b>Scoring Leaders</b><div style="font-size:11px;opacity:0.6;margin-top:6px;">Team offensive ratings appear here</div></div>`}</div>`;
+         const reboundingHTML = `<div style="display:grid;gap:8px;">${teamCards || `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;">🏀</div><b>Rebounding</b><div style="font-size:11px;opacity:0.6;margin-top:6px;">Team rebounding stats appear here</div></div>`}</div>`;
+         const assistsHTML = `<div style="display:grid;gap:8px;">${teamCards || `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;">🅰️</div><b>Assists</b><div style="font-size:11px;opacity:0.6;margin-top:6px;">Team assist stats appear here</div></div>`}</div>`;
+         const playersHTML = (()=>{ const src=(typeof gamesNBA!=='undefined'?gamesNBA:[]); if(!src.length) return `<div class="glass panel-pad" style="border-radius:18px;padding:24px;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">👤</div><b>NBA Players</b><div style="font-size:11px;opacity:0.6;margin-top:8px;">Player stats will appear when season is active</div></div>`; return `<div style="display:grid;gap:10px;">${src.slice(0,10).map(g=>`<div class="glass" style="border-radius:16px;padding:12px;display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.10);display:grid;place-items:center;font-weight:900;">${g.b.slice(0,2)}</div><div style="flex:1;"><div style="font-weight:800;">${g.cityB||g.b} Roster</div><div style="font-size:11px;opacity:0.6;">${g.b}</div></div><div style="opacity:0.5;">→</div></div>`).join('')}</div>`; })();
+
+         mount.innerHTML = `
+           <div class="stats-tab-row" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;position:sticky;top:0;z-index:5;">
+             <button class="chip" data-nba-stab="scoring">🎯 Scoring</button>
+             <button class="chip" data-nba-stab="rebounding">🏀 Rebounding</button>
+             <button class="chip" data-nba-stab="assists">🅰️ Assists</button>
+             <button class="chip" data-nba-stab="schedule">📅 Schedule</button>
+             <button class="chip" data-nba-stab="standings">📊 Standings</button>
+             <button class="chip" data-nba-stab="players">👤 Players</button>
+           </div>
+         `;
+         const modalData = {scoring:scoringHTML, rebounding:reboundingHTML, assists:assistsHTML, schedule:scheduleHTML, standings:standHTML, players:playersHTML};
+         mount.querySelectorAll('[data-nba-stab]').forEach(tab=>{
+           tab.addEventListener('click', (e)=>{
+             e.preventDefault(); e.stopPropagation();
+             mount.querySelectorAll('[data-nba-stab]').forEach(t=>t.classList.remove('active'));
+             tab.classList.add('active');
+             const w=tab.dataset.nbaStab;
+             const content = modalData[w] || `<div class="glass panel-pad" style="border-radius:18px;padding:20px;">${w}</div>`;
+             const titleMap = {scoring:'🎯 NBA Scoring', rebounding:'🏀 NBA Rebounding', assists:'🅰️ NBA Assists', schedule:'📅 NBA Schedule', standings:'📊 NBA Standings', players:'👤 NBA Players'};
+             if(typeof openSectionModal==='function'){
+               openSectionModal(titleMap[w]||tab.textContent.trim(), '<div style="color:#eef2ff;">' + content + '</div>');
+             }
+           });
+         });
+       };
     }catch(e){}
 
     try{
@@ -34115,7 +34142,7 @@ html body .game-actions .btn{flex:1 1 calc(33.333% - 6px) !important;min-width:8
   .cards,#dashboardCards{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:16px !important;}
 }
 #sectionModalOverlay,#sectionModal{z-index:99999 !important;}
-#sectionModalBody{max-height:70vh !important;overflow-y:auto !important;}
+#sectionModalBody{max-height:70vh !important;overflow-y:auto !important; overscroll-behavior: contain; scroll-behavior: auto;}
 </style>
 <script id="CHD_GROUND_UP_REWRITE_V2">
 (function(){
@@ -38332,9 +38359,8 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       teamA_avg:tA_avg,teamA_ops:tA_ops,teamA_hr:tA_hr,
       teamB_avg:tB_avg,teamB_ops:tB_ops,teamB_hr:tB_hr,
       weather:weatherText,wind:windText,
-      startAt:Date.now(),
-      date:new Date().toISOString().slice(0,10),
-      time:'TBD',
+      date:g.date||new Date().toISOString().slice(0,10),
+      time:g.time||'TBD',
       hot:mlEdge>0.03,
       mlPriceDec,
       ytConfidence:Math.round(mlEdge*200),
@@ -38362,9 +38388,8 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       ouPick:`O/U ${totalLine}`,ouEdge:0,ouProb:0.5,
       kLine:g.k_line||0,kPick:g.k_pick||'Spread',kEdge:0,kProb:0.5,
       mlFav,mlEdge,model:mlProb,
-      startAt:Date.now(),
-      date:new Date().toISOString().slice(0,10),
-      time:'TBD',
+      date:g.date||'',
+      time:g.time||'TBD',
       hot:mlEdge>0.03
     };
   }
@@ -38389,9 +38414,8 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       ouPick:`O/U ${totalLine}`,ouEdge:0,ouProb:0.5,
       kLine:g.k_line||0,kPick:g.k_pick||'Spread',kEdge:0,kProb:0.5,
       mlFav,mlEdge,model:mlProb,
-      startAt:Date.now(),
-      date:new Date().toISOString().slice(0,10),
-      time:'TBD',
+      date:g.date||'',
+      time:g.time||'TBD',
       hot:mlEdge>0.03
     };
   }
