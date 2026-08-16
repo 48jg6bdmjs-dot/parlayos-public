@@ -24577,7 +24577,7 @@ Parlay Odds: +350</code>`);
       // clear text input but keep link for reference
       if(textEl) textEl.value='';
       // scroll to pending
-      setTimeout(()=>{ const pp = document.getElementById('brPendingPanel'); if(pp) pp.scrollIntoView({behavior:'smooth', block:'nearest'}); }, 400);
+      setTimeout(()=>{ const pp = document.getElementById('brPendingPanel'); if(pp) pp.scrollIntoView({behavior:'auto', block:'nearest'}); }, 400);
     }catch(e){
       showMsg('error','Failed to log: '+e.message);
     }
