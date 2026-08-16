@@ -1,5 +1,5 @@
 {
-  "runDate": "Aug 15 2026 07:42 PM",
+  "runDate": "Aug 15 2026 08:39 PM",
   "pickCount": 16,
   "games": [
     {
@@ -47,6 +47,60 @@
         },
         "away": {
           "abbr": "BAL",
+          "off_eff": -0.5,
+          "def_eff": -0.5,
+          "epa": 0.0,
+          "source": "espn_parsed"
+        }
+      },
+      "synthetic": false,
+      "source": "espn_parsed"
+    },
+    {
+      "home": "Dallas Cowboys",
+      "away": "Seattle Seahawks",
+      "home_abbr": "DAL",
+      "away_abbr": "SEA",
+      "factorsA": {
+        "epa_offense": 0.5,
+        "epa_defense": 0.1,
+        "success_rate": 0.5,
+        "dvoa": 0.5,
+        "rest": 0.5,
+        "weather": 0.5,
+        "injuries": 0.5
+      },
+      "factorsB": {
+        "epa_offense": 0.5,
+        "epa_defense": 0.1,
+        "success_rate": 0.5,
+        "dvoa": 0.5,
+        "rest": 0.5,
+        "weather": 0.5,
+        "injuries": 0.5
+      },
+      "chd": {
+        "pA": 0.5044992407787419,
+        "pB": 0.49550075922125814,
+        "raw_score": 0.018,
+        "model": "ensemble(0.4*simple+0.6*wave_true)",
+        "simple_p": 0.5112481019468548,
+        "wave_p": 0.5,
+        "edge": 0.0,
+        "mag": 0.0,
+        "entropy": 0.0
+      },
+      "total_line": 44.5,
+      "stats": {
+        "home": {
+          "abbr": "DAL",
+          "off_eff": -0.5,
+          "def_eff": -0.5,
+          "epa": 0.0,
+          "source": "espn_parsed"
+        },
+        "away": {
+          "abbr": "SEA",
           "off_eff": -0.5,
           "def_eff": -0.5,
           "epa": 0.0,
@@ -317,60 +371,6 @@
         },
         "away": {
           "abbr": "NO",
-          "off_eff": -0.5,
-          "def_eff": -0.5,
-          "epa": 0.0,
-          "source": "espn_parsed"
-        }
-      },
-      "synthetic": false,
-      "source": "espn_parsed"
-    },
-    {
-      "home": "Dallas Cowboys",
-      "away": "Seattle Seahawks",
-      "home_abbr": "DAL",
-      "away_abbr": "SEA",
-      "factorsA": {
-        "epa_offense": 0.5,
-        "epa_defense": 0.1,
-        "success_rate": 0.5,
-        "dvoa": 0.5,
-        "rest": 0.5,
-        "weather": 0.5,
-        "injuries": 0.5
-      },
-      "factorsB": {
-        "epa_offense": 0.5,
-        "epa_defense": 0.1,
-        "success_rate": 0.5,
-        "dvoa": 0.5,
-        "rest": 0.5,
-        "weather": 0.5,
-        "injuries": 0.5
-      },
-      "chd": {
-        "pA": 0.5044992407787419,
-        "pB": 0.49550075922125814,
-        "raw_score": 0.018,
-        "model": "ensemble(0.4*simple+0.6*wave_true)",
-        "simple_p": 0.5112481019468548,
-        "wave_p": 0.5,
-        "edge": 0.0,
-        "mag": 0.0,
-        "entropy": 0.0
-      },
-      "total_line": 37.5,
-      "stats": {
-        "home": {
-          "abbr": "DAL",
-          "off_eff": -0.5,
-          "def_eff": -0.5,
-          "epa": 0.0,
-          "source": "espn_parsed"
-        },
-        "away": {
-          "abbr": "SEA",
           "off_eff": -0.5,
           "def_eff": -0.5,
           "epa": 0.0,
