@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 
 
 def get_today_mlb_scores():
-    """Fetch today's MLB games with linescore from free MLB Stats API."""
+    """Fetch today's MLB games with linescore, plate info, and box score from free MLB Stats API."""
     today = datetime.now().strftime("%Y-%m-%d")
     url = f"https://statsapi.mlb.com/api/v1/schedule?hydrate=team,linescore,flags,game(content(media(epg)))&date={today}&sportId=1"
     try:
@@ -48,15 +48,28 @@ def get_today_mlb_scores():
                     away_score = away.get('score', 0)
                     home_score = home.get('score', 0)
                     linescore = game.get('linescore', {})
-                    away_runs = linescore.get('teams', {}).get('away', {}).get('runs', away_score) if linescore.get('teams') else away_score
-                    home_runs = linescore.get('teams', {}).get('home', {}).get('runs', home_score) if linescore.get('teams') else home_score
+                    ls_teams = linescore.get('teams', {})
+                    away_ls = ls_teams.get('away', {}) if ls_teams else {}
+                    home_ls = ls_teams.get('home', {}) if ls_teams else {}
+                    away_runs = away_ls.get('runs', away_score)
+                    home_runs = home_ls.get('runs', home_score)
                     if away_runs is not None:
                         away_score = away_runs
                     if home_runs is not None:
                         home_score = home_runs
+                    away_hits = away_ls.get('hits')
+                    home_hits = home_ls.get('hits')
+                    away_errors = away_ls.get('errors')
+                    home_errors = home_ls.get('errors')
+                    away_lob = away_ls.get('leftOnBase')
+                    home_lob = home_ls.get('leftOnBase')
                     game_id = game.get('gamePk', '')
                     game_time = game.get('gameDate', '')
-                    games.append({
+                    balls = away_ls.get('balls') or home_ls.get('balls')
+                    strikes = away_ls.get('strikes') or home_ls.get('strikes')
+                    outs = away_ls.get('outs') or home_ls.get('outs')
+                    base_runner_state = away_ls.get('baseRunnerState') or home_ls.get('baseRunnerState')
+                    game_record = {
                         "id": f"mlb_{game_id}", "lg": "MLB", "date": date_str,
                         "status": status, "inning": f"{inning_state} {current_inning}".strip() if current_inning else status,
                         "final": final, "a": away_team, "b": home_team,
@@ -68,8 +81,18 @@ def get_today_mlb_scores():
                             {"name": home_team, "abbr": home_abbr, "logo": home_abbr, "score": home_score}
                         ],
                         "gamePk": game_id, "gameDate": game_time,
-                        "abstractGameState": game_state, "detailedState": detailed_state
-                    })
+                        "abstractGameState": game_state, "detailedState": detailed_state,
+                        "boxScore": {
+                            "aHits": away_hits, "bHits": home_hits,
+                            "aErrors": away_errors, "bErrors": home_errors,
+                            "aLob": away_lob, "bLob": home_lob
+                        },
+                        "plateInfo": {
+                            "balls": balls, "strikes": strikes, "outs": outs,
+                            "baseRunners": base_runner_state
+                        }
+                    }
+                    games.append(game_record)
                 except Exception as e:
                     print(f"Error parsing game: {e}")
         print(f"Fetched {len(games)} games for {today}")

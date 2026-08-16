@@ -13785,12 +13785,12 @@ body.dark .table-card .mini-table td {
                                   <button class="chip" data-stab="schedule">📅 Schedule</button>
                                   <button class="chip" data-stab="standings">📊 Standings</button>
                                 </div>
-                                <div id="sTabPitching" style="display:none">${pitchHTML}</div>
-                                <div id="sTabBatting" style="display:none">${batHTML}</div>
-                                <div id="sTabLineups" style="display:none">${lineupHTML}</div>
-                                <div id="sTabSchedule" style="display:none">${scheduleHTML}</div>
-                                <div id="sTabStandings" style="display:none">${standHTML}</div>
-                                <div id="sTabPlaceholder">${statsPlaceholder}</div>
+                                 <div id="sTabPitching">${pitchHTML}</div>
+                                 <div id="sTabBatting" style="display:none">${batHTML}</div>
+                                 <div id="sTabLineups" style="display:none">${lineupHTML}</div>
+                                 <div id="sTabSchedule" style="display:none">${scheduleHTML}</div>
+                                 <div id="sTabStandings" style="display:none">${standHTML}</div>
+                                 <div id="sTabPlaceholder" style="display:none">${statsPlaceholder}</div>
                               `;
                               $$('[data-stab]',mount).forEach(tab=>{
                                 tab.addEventListener('click',()=>{
@@ -14327,10 +14327,14 @@ body.dark .table-card .mini-table td {
                               function divTable(conf, divName, rows){ return `<div class="glass table-card"><div class="table-head"><h3>${conf} ${divName}</h3><span class="badge">${rows.length} TEAMS</span></div><table class="mini-table"><tr><th style="text-align:left;width:50%;">Team</th><th>W</th><th>L</th><th>PCT</th><th>GB</th></tr>${rows.map((r,i)=>{const pct=(r.w/(r.w+r.l)).toFixed(3).replace('0.','.'); const gb=i===0?'—':((rows[0].w - r.w + r.l - rows[0].l)/2).toFixed(1); return `<tr><td style="text-align:left;font-weight:700;">${typeof wordmark!=='undefined'?wordmark(r.t,13):r.t}</td><td>${r.w}</td><td>${r.l}</td><td>${pct}</td><td>${gb}</td></tr>`;}).join('')}</table></div>`; }
                               const standHTML = `<div class="league-grid">${Object.keys(standings).flatMap(conf=> Object.keys(standings[conf]).map(div=> divTable(conf, div, standings[conf][div]) )).join('')}</div>`;
 
-                              const nflPlaceholder = '<div style="text-align:center;padding:32px 16px;opacity:0.5;"><div style="font-size:32px;margin-bottom:8px;">🏈</div><b style="font-size:14px;">Select a category above</b><div style="font-size:12px;margin-top:4px;">Choose a stat category to view data</div></div>';
-                              const nflPassHTML = '<div style="text-align:center;padding:28px 16px;opacity:0.5;"><div style="font-size:28px;">🎯</div><b>Passing Stats</b><div style="font-size:11px;margin-top:4px;">View individual player passing data in the Players tab.</div></div>';
-                              const nflRushHTML = '<div style="text-align:center;padding:28px 16px;opacity:0.5;"><div style="font-size:28px;">🏃</div><b>Rushing Stats</b><div style="font-size:11px;margin-top:4px;">View individual player rushing data in the Players tab.</div></div>';
-                              const nflDefHTML = '<div style="text-align:center;padding:28px 16px;opacity:0.5;"><div style="font-size:28px;">🛡️</div><b>Defense Stats</b><div style="font-size:11px;margin-top:4px;">View team defensive metrics in the Players tab.</div></div>';
+                               const nflPlaceholder = '<div style="text-align:center;padding:32px 16px;opacity:0.5;"><div style="font-size:32px;margin-bottom:8px;">🏈</div><b style="font-size:14px;">Select a category above</b><div style="font-size:12px;margin-top:4px;">Choose a stat category to view data</div></div>';
+                               function nflTeamStatsTable(statName, headers, rows){
+                                 if(!rows || !rows.length) return `<div class="empty"><b>No ${statName} data</b><span>Check back during season</span></div>`;
+                                 return `<div class="glass table-card" style="border-radius:22px;overflow:hidden;"><div class="table-head"><h3>${statName}</h3><span class="badge">${rows.length} TEAMS</span></div><table class="mini-table"><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${Object.values(r).map(v=>`<td><b>${v}</b></td>`).join('')}</tr>`).join('')}</table></div>`;
+                               }
+                               const nflPassHTML = nflTeamStatsTable('Passing Offense', ['Team','EPA/Play','Success%','DVOA'], []);
+                               const nflRushHTML = nflTeamStatsTable('Rushing Offense', ['Team','EPA/Play','Success%','DVOA'], []);
+                               const nflDefHTML = nflTeamStatsTable('Defense', ['Team','EPA/Play','Success%','DVOA'], []);
                               mount.innerHTML = `
                                 <div class="stats-tab-row" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;position:sticky;top:0;z-index:5;">
                 <button class="chip" data-nfl-stab="passing">🎯 Passing</button>
@@ -14340,12 +14344,12 @@ body.dark .table-card .mini-table td {
                 <button class="chip" data-nfl-stab="standings">📊 Standings</button>
                 <button class="chip" data-nfl-stab="players">👤 Players</button>
               </div>
-                                <div id="nflTabPassing" style="display:none">${nflPassHTML}</div>
+                                <div id="nflTabPassing">${nflPassHTML}</div>
                                 <div id="nflTabRushing" style="display:none">${nflRushHTML}</div>
                                 <div id="nflTabDefense" style="display:none">${nflDefHTML}</div>
                                 <div id="nflTabSchedule" style="display:none">${scheduleHTML}</div>
                                 <div id="nflTabStandings" style="display:none">${standHTML}</div>
-                                <div id="nflTabPlaceholder">${nflPlaceholder}</div>`;
+                                <div id="nflTabPlaceholder" style="display:none">${nflPlaceholder}</div>`;
                               mount.querySelectorAll('[data-nfl-stab]').forEach(tab=>{
                                 tab.addEventListener('click', (e)=>{
                                   e.preventDefault(); e.stopPropagation();
@@ -14373,6 +14377,46 @@ body.dark .table-card .mini-table td {
                 }
                                   const target=document.getElementById(map[w]) || mount.querySelector('#' + map[w]);
                                   if(target){ target.style.display=''; }
+                                  // Populate NFL stats tables with real CHD data
+                                  if(w==='passing' || w==='rushing' || w==='defense'){
+                                    try {
+                                      const src = (typeof gamesNFL !== 'undefined' ? gamesNFL : []);
+                                      const rows = src.map(g => {
+                                        const aStats = (g.stats && g.stats.away) || {};
+                                        const bStats = (g.stats && g.stats.home) || {};
+                                        const aFactors = g.factorsA || {};
+                                        const bFactors = g.factorsB || {};
+                                        const aTeam = (g.away_abbr || g.a || 'AWY').toUpperCase();
+                                        const bTeam = (g.home_abbr || g.b || 'HME').toUpperCase();
+                                        return [
+                                          { Team: aTeam, 'EPA/Play': aStats.epa != null ? aStats.epa.toFixed(3) : (aFactors.epa_offense != null ? aFactors.epa_offense.toFixed(3) : '—'), 'Success%': aStats.success_rate != null ? (aStats.success_rate*100).toFixed(1)+'%' : (aFactors.success_rate != null ? (aFactors.success_rate*100).toFixed(1)+'%' : '—'), DVOA: aStats.dvoa != null ? (aStats.dvoa*100).toFixed(1)+'%' : (aFactors.dvoa != null ? (aFactors.dvoa*100).toFixed(1)+'%' : '—') },
+                                          { Team: bTeam, 'EPA/Play': bStats.epa != null ? bStats.epa.toFixed(3) : (bFactors.epa_offense != null ? bFactors.epa_offense.toFixed(3) : '—'), 'Success%': bStats.success_rate != null ? (bStats.success_rate*100).toFixed(1)+'%' : (bFactors.success_rate != null ? (bFactors.success_rate*100).toFixed(1)+'%' : '—'), DVOA: bStats.dvoa != null ? (bStats.dvoa*100).toFixed(1)+'%' : (bFactors.dvoa != null ? (bFactors.dvoa*100).toFixed(1)+'%' : '—') }
+                                        ];
+                                      }).flat();
+                                      const headers = ['Team','EPA/Play','Success%','DVOA'];
+                                      const table = nflTeamStatsTable('NFL Team Stats', headers, rows);
+                                      target.innerHTML = table;
+                                    } catch(e) { console.warn('NFL stats populate failed', e); }
+                                  }
+                                  // Populate NBA stats tables with real CHD data
+                                  if(w==='scoring' || w==='rebounding' || w==='assists'){
+                                    try {
+                                      const src = (typeof gamesNBA !== 'undefined' ? gamesNBA : []);
+                                      const rows = src.map(g => {
+                                        const aStats = (g.stats && g.stats.away) || {};
+                                        const bStats = (g.stats && g.stats.home) || {};
+                                        const aTeam = (g.away_abbr || g.a || 'AWY').toUpperCase();
+                                        const bTeam = (g.home_abbr || g.b || 'HME').toUpperCase();
+                                        return [
+                                          { Team: aTeam, 'ORtg': aStats.off_rtg != null ? aStats.off_rtg.toFixed(1) : '—', 'DRtg': aStats.def_rtg != null ? aStats.def_rtg.toFixed(1) : '—', Net: aStats.net != null ? aStats.net.toFixed(1) : '—', Pace: aStats.pace != null ? aStats.pace.toFixed(1) : '—' },
+                                          { Team: bTeam, 'ORtg': bStats.off_rtg != null ? bStats.off_rtg.toFixed(1) : '—', 'DRtg': bStats.def_rtg != null ? bStats.def_rtg.toFixed(1) : '—', Net: bStats.net != null ? bStats.net.toFixed(1) : '—', Pace: bStats.pace != null ? bStats.pace.toFixed(1) : '—' }
+                                        ];
+                                      }).flat();
+                                      const headers = ['Team','ORtg','DRtg','Net','Pace'];
+                                      const table = nbaTeamStatsTable('NBA Team Stats', headers, rows);
+                                      target.innerHTML = table;
+                                    } catch(e) { console.warn('NBA stats populate failed', e); }
+                                  }
                                   beep('click');
                                 });
                               });
@@ -14403,10 +14447,14 @@ body.dark .table-card .mini-table td {
                               function divTable(conf, divName, rows){ return `<div class="glass table-card"><div class="table-head"><h3>${conf} ${divName}</h3><span class="badge">${rows.length} TEAMS</span></div><table class="mini-table"><tr><th style="text-align:left;width:50%;">Team</th><th>W</th><th>L</th><th>PCT</th><th>GB</th></tr>${rows.map((r,i)=>{const pct=(r.w/(r.w+r.l)).toFixed(3).replace('0.','.'); const gb=i===0?'—':((rows[0].w - r.w + r.l - rows[0].l)/2).toFixed(1); return `<tr><td style="text-align:left;font-weight:700;">${typeof wordmark!=='undefined'?wordmark(r.t,13):r.t}</td><td>${r.w}</td><td>${r.l}</td><td>${pct}</td><td>${gb}</td></tr>`;}).join('')}</table></div>`; }
                               const standHTML = `<div class="league-grid">${Object.keys(standings).flatMap(conf=> Object.keys(standings[conf]).map(div=> divTable(conf, div, standings[conf][div]) )).join('')}</div>`;
 
-                              const nbaPlaceholder = '<div style="text-align:center;padding:32px 16px;opacity:0.5;"><div style="font-size:32px;margin-bottom:8px;">🏀</div><b style="font-size:14px;">Select a category above</b><div style="font-size:12px;margin-top:4px;">Choose a stat category to view data</div></div>';
-                              const nbaScoreHTML = '<div style="text-align:center;padding:28px 16px;opacity:0.5;"><div style="font-size:28px;">🎯</div><b>Scoring Leaders</b><div style="font-size:11px;margin-top:4px;">View individual player scoring data in the Players tab.</div></div>';
-                              const nbaReboundHTML = '<div style="text-align:center;padding:28px 16px;opacity:0.5;"><div style="font-size:28px;">🏀</div><b>Rebounding</b><div style="font-size:11px;margin-top:4px;">View individual player rebound data in the Players tab.</div></div>';
-                              const nbaAssistHTML = '<div style="text-align:center;padding:28px 16px;opacity:0.5;"><div style="font-size:28px;">🅰️</div><b>Assists</b><div style="font-size:11px;margin-top:4px;">View individual player assist data in the Players tab.</div></div>';
+                               const nbaPlaceholder = '<div style="text-align:center;padding:32px 16px;opacity:0.5;"><div style="font-size:32px;margin-bottom:8px;">🏀</div><b style="font-size:14px;">Select a category above</b><div style="font-size:12px;margin-top:4px;">Choose a stat category to view data</div></div>';
+                               function nbaTeamStatsTable(statName, headers, rows){
+                                 if(!rows || !rows.length) return `<div class="empty"><b>No ${statName} data</b><span>Check back during season</span></div>`;
+                                 return `<div class="glass table-card" style="border-radius:22px;overflow:hidden;"><div class="table-head"><h3>${statName}</h3><span class="badge">${rows.length} TEAMS</span></div><table class="mini-table"><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${Object.values(r).map(v=>`<td><b>${v}</b></td>`).join('')}</tr>`).join('')}</table></div>`;
+                               }
+                               const nbaScoreHTML = nbaTeamStatsTable('Scoring', ['Team','ORtg','DRtg','Net','Pace'], []);
+                               const nbaReboundHTML = nbaTeamStatsTable('Rebounding', ['Team','ORtg','DRtg','Net','Pace'], []);
+                               const nbaAssistHTML = nbaTeamStatsTable('Assists', ['Team','ORtg','DRtg','Net','Pace'], []);
                               mount.innerHTML = `
                                 <div class="stats-tab-row" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;position:sticky;top:0;z-index:5;">
             <button class="chip" data-nba-stab="scoring">🎯 Scoring</button>
@@ -14416,12 +14464,12 @@ body.dark .table-card .mini-table td {
             <button class="chip" data-nba-stab="standings">📊 Standings</button>
             <button class="chip" data-nba-stab="players">👤 Players</button>
           </div>
-                                <div id="nbaTabScoring" style="display:none">${nbaScoreHTML}</div>
+                                <div id="nbaTabScoring">${nbaScoreHTML}</div>
                                 <div id="nbaTabRebounding" style="display:none">${nbaReboundHTML}</div>
                                 <div id="nbaTabAssists" style="display:none">${nbaAssistHTML}</div>
                                 <div id="nbaTabSchedule" style="display:none">${scheduleHTML}</div>
                                 <div id="nbaTabStandings" style="display:none">${standHTML}</div>
-                                <div id="nbaTabPlaceholder">${nbaPlaceholder}</div>`;
+                                <div id="nbaTabPlaceholder" style="display:none">${nbaPlaceholder}</div>`;
                               mount.querySelectorAll('[data-nba-stab]').forEach(tab=>{
                                 tab.addEventListener('click', (e)=>{
                                   e.preventDefault(); e.stopPropagation();
@@ -22932,6 +22980,18 @@ body.no-fx #parlayos-emoji-canvas-v7 { display:none !important; }
       html+='<div style="display:flex; align-items:center; justify-content:space-between;"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:12px; font-weight:800; width:32px;">'+g.aAbbr+'</span><div><div style="font-weight:800; font-size:18px;">'+g.aName+'</div><div style="font-size:10px; opacity:0.6;">AWAY</div></div></div><div style="font-size:28px; font-weight:900;">'+g.aScore+'</div></div>';
       html+='<div style="height:1px; background:rgba(255,255,255,0.10);"></div>';
       html+='<div style="display:flex; align-items:center; justify-content:space-between;"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:12px; font-weight:800; width:32px;">'+g.bAbbr+'</span><div><div style="font-weight:800; font-size:18px;">'+g.bName+'</div><div style="font-size:10px; opacity:0.6;">HOME</div></div></div><div style="font-size:28px; font-weight:900;">'+g.bScore+'</div></div>';
+      const rawPlate = gRaw.plateInfo || {};
+      const rawBox = gRaw.boxScore || {};
+      const plateParts = [];
+      if(rawPlate.outs != null) plateParts.push(rawPlate.outs+' OUT');
+      if(rawPlate.balls != null && rawPlate.strikes != null) plateParts.push(rawPlate.balls+'-'+rawPlate.strikes+' BS');
+      if(rawPlate.baseRunners != null) plateParts.push(rawPlate.baseRunners+' RUNNER'+(rawPlate.baseRunners===1?'':'S'));
+      if(plateParts.length) html+='<div style="font-size:10px; opacity:0.8; margin-top:4px; font-family:monospace;">PLATE: '+plateParts.join(' • ')+'</div>';
+      const boxParts = [];
+      if(rawBox.aHits != null || rawBox.bHits != null) boxParts.push('H: '+(rawBox.aHits??'-')+'-'+(rawBox.bHits??'-'));
+      if(rawBox.aErrors != null || rawBox.bErrors != null) boxParts.push('E: '+(rawBox.aErrors??'-')+'-'+(rawBox.bErrors??'-'));
+      if(rawBox.aLob != null || rawBox.bLob != null) boxParts.push('LOB: '+(rawBox.aLob??'-')+'-'+(rawBox.bLob??'-'));
+      if(boxParts.length) html+='<div style="font-size:10px; opacity:0.7; margin-top:2px; font-family:monospace;">BOX: '+boxParts.join(' • ')+'</div>';
       html+='</div><div style="display:flex; justify-content:space-between; margin-top:14px; font-size:10px; opacity:0.5;"><span>LIVE • MLB</span><span>'+(g.final?'Final':'LIVE')+'</span></div></div>';
     });
     html+='</div><style>@keyframes pulseLive{0%,100%{opacity:1}50%{opacity:0.4}}</style>';

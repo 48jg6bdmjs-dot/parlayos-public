@@ -482,9 +482,24 @@ def chd_predict(features_or_factorsA, factorsB=None, sport='MLB', mode: str = No
             diff["home_adv"]=0.15
             s = chd_predict_simple(diff, weights)
             wav = chd_predict_wave_true(features_or_factorsA, factorsB, sport, days_rest)
-            alpha = CONFIG.ensemble_weight_simple
+            # Adaptive ensemble weighting: prefer the model with lower entropy (higher confidence)
+            s_entropy = 0.5  # simple model entropy placeholder
+            w_entropy = max(0.05, min(0.95, wav.get('entropy', 0.5)))
+            conf_simple = 1.0 - s_entropy
+            conf_wave = 1.0 - w_entropy
+            total_conf = conf_simple + conf_wave
+            if total_conf > 0:
+                alpha = conf_wave / total_conf
+                alpha = max(0.2, min(0.8, alpha))
+            else:
+                alpha = CONFIG.ensemble_weight_simple
             p = alpha*s["pA"] + (1-alpha)*wav["pA"]
-            return {"pA":p,"pB":1-p,"raw_score":alpha*s["raw_score"]+(1-alpha)*wav.get("mag",0),"model":f"ensemble({alpha}*simple+{1-alpha}*wave_true)","simple_p":s["pA"],"wave_p":wav["pA"],"edge":wav.get("edge",0),"mag":wav.get("mag",0),"entropy":wav.get("entropy",0)}
+            edge = wav.get('edge', 0.0)
+            # Smooth edge when models disagree strongly
+            model_diff = abs(s["pA"] - wav["pA"])
+            if model_diff > 0.15:
+                edge = edge * (1.0 - model_diff * 0.5)
+            return {"pA":p,"pB":1-p,"raw_score":alpha*s["raw_score"]+(1-alpha)*wav.get("mag",0),"model":f"ensemble({alpha:.2f}*simple+{1-alpha:.2f}*wave_true)","simple_p":s["pA"],"wave_p":wav["pA"],"edge":edge,"mag":wav.get("mag",0),"entropy":wav.get("entropy",0),"confidence":max(conf_simple, conf_wave)}
     else:
         features = features_or_factorsA
         if m == "simple":
