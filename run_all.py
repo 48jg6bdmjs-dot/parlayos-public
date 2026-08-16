@@ -99,20 +99,168 @@ def _install_runtime_chd_loader(html):
   const bust=u=>u+(u.includes('?')?'&':'?')+'ts='+Date.now();
   async function get(u){const r=await fetch(bust(u),{cache:'no-store'});if(!r.ok)throw new Error(u+' HTTP '+r.status);return r.json();}
   const normalize=d=>Object.assign({games:[],schedules:{},teamStats:{},standings:{}},d||{});
+  function americanToDecimal(odds){
+    if(odds==null||odds===''||isNaN(odds)) return null;
+    const n=Number(odds);
+    if(!Number.isFinite(n)||n===0) return null;
+    return n>0 ? 1+n/100 : 1+100/Math.abs(n);
+  }
+  function transformMLBGame(g, idx){
+    const away=g.away||'';
+    const home=g.home||'';
+    const aAbbr=g.away_abbr||'';
+    const bAbbr=g.home_abbr||'';
+    const pA=g.chd?.pA??0.5;
+    const pB=g.chd?.pB??0.5;
+    const favIsAway=pA>pB;
+    const mlFav=favIsAway?away:home;
+    const mlProb=Math.max(pA,pB);
+    const mlEdge=Math.abs(pA-pB);
+    const totalLine=g.total?.line||g.total?.mean||0;
+    const overProb=g.total?.simple?.over_prob??0.5;
+    const underProb=g.total?.simple?.under_prob??0.5;
+    const ouPick=overProb>=underProb?`OVER ${totalLine}`:`UNDER ${totalLine}`;
+    const ouEdge=Math.abs(overProb-0.5);
+    const ouProb=Math.max(overProb,underProb);
+    const kLine=g.k_prop?.line||0;
+    const kOver=g.k_prop?.over_prob??0.5;
+    const kUnder=g.k_prop?.under_prob??0.5;
+    const kPick=kOver>=kUnder?`OVER ${kLine} K`:`UNDER ${kLine} K`;
+    const kEdge=Math.abs(kOver-0.5);
+    const kProb=Math.max(kOver,kUnder);
+    let pitcherA=undefined;
+    let pitcherB=undefined;
+    let pA_era=0,pA_whip=0,pA_k9=0;
+    let pB_era=0,pB_whip=0,pB_k9=0;
+    if(g.pitchers){
+      pA_era=g.pitchers.away_stats?.era??0;
+      pA_whip=g.pitchers.away_stats?.whip??0;
+      pA_k9=g.pitchers.away_stats?.k9??0;
+      pB_era=g.pitchers.home_stats?.era??0;
+      pB_whip=g.pitchers.home_stats?.whip??0;
+      pB_k9=g.pitchers.home_stats?.k9??0;
+    }
+    let tA_avg=0,tA_ops=0,tA_hr=0;
+    let tB_avg=0,tB_ops=0,tB_hr=0;
+    if(g.lineups){
+      const aLU=(g.lineups.away||[]).filter(p=>p && p.avg);
+      const bLU=(g.lineups.home||[]).filter(p=>p && p.avg);
+      if(aLU.length){
+        tA_avg=aLU.reduce((s,p)=>s+(parseFloat(p.avg)||0),0)/aLU.length;
+        tA_ops=aLU.reduce((s,p)=>s+(parseFloat(p.ops)||0),0)/aLU.length;
+        tA_hr=aLU.reduce((s,p)=>s+(p.hr||0),0);
+      }
+      if(bLU.length){
+        tB_avg=bLU.reduce((s,p)=>s+(parseFloat(p.avg)||0),0)/bLU.length;
+        tB_ops=bLU.reduce((s,p)=>s+(parseFloat(p.ops)||0),0)/bLU.length;
+        tB_hr=bLU.reduce((s,p)=>s+(p.hr||0),0);
+      }
+    }
+    const w=g.weather||{};
+    const weatherText=w.temp?`${w.temp}° ${w.precip&&w.precip>0?'Rain':'Clear'}`:'';
+    const windText=w.wind?`${w.wind}mph`:'';
+    const awayOdds=g.odds?.h2h?.[away]?.price;
+    const homeOdds=g.odds?.h2h?.[home]?.price;
+    const mlPriceDec=americanToDecimal(awayOdds)||americanToDecimal(homeOdds)||null;
+    return {
+      id:`mlb_${g.gamePk||idx}`,
+      a:away,b:home,
+      abbrA:aAbbr,abbrB:bAbbr,
+      lgA:'MLB',lgB:'MLB',
+      total:totalLine,
+      ouPick,ouEdge,ouProb,
+      kLine,kPick,kEdge,kProb,
+      mlFav,mlEdge,model:mlProb,
+      chd_pA:pA,chd_pB:pB,
+      pitcherA,pitcherB,
+      pitcherA_era:pA_era,pitcherA_whip:pA_whip,pitcherA_k9:pA_k9,
+      pitcherB_era:pB_era,pitcherB_whip:pB_whip,pitcherB_k9:pB_k9,
+      teamA_avg:tA_avg,teamA_ops:tA_ops,teamA_hr:tA_hr,
+      teamB_avg:tB_avg,teamB_ops:tB_ops,teamB_hr:tB_hr,
+      weather:weatherText,wind:windText,
+      startAt:Date.now(),
+      date:new Date().toISOString().slice(0,10),
+      time:'TBD',
+      hot:mlEdge>0.03,
+      mlPriceDec,
+      ytConfidence:Math.round(mlEdge*200),
+      ytNarrative:`Model shows ${(mlEdge*100>0?'+':'')+(mlEdge*100).toFixed(1)}% edge on ${mlFav} ML.`
+    };
+  }
+  function transformNFLGame(g, idx){
+    const away=g.away||'';
+    const home=g.home||'';
+    const aAbbr=g.away_abbr||'';
+    const bAbbr=g.home_abbr||'';
+    const pA=g.chd?.pA??0.5;
+    const pB=g.chd?.pB??0.5;
+    const favIsAway=pA>pB;
+    const mlFav=favIsAway?away:home;
+    const mlProb=Math.max(pA,pB);
+    const mlEdge=Math.abs(pA-pB);
+    const totalLine=g.total_line||0;
+    return {
+      id:`nfl_${idx}`,
+      a:away,b:home,
+      abbrA:aAbbr,abbrB:bAbbr,
+      lgA:'NFL',lgB:'NFL',
+      total:totalLine,
+      ouPick:`O/U ${totalLine}`,ouEdge:0,ouProb:0.5,
+      kLine:g.k_line||0,kPick:g.k_pick||'Spread',kEdge:0,kProb:0.5,
+      mlFav,mlEdge,model:mlProb,
+      startAt:Date.now(),
+      date:new Date().toISOString().slice(0,10),
+      time:'TBD',
+      hot:mlEdge>0.03
+    };
+  }
+  function transformNBAGame(g, idx){
+    const home=g.home||'';
+    const away=g.away||'';
+    const aAbbr=g.stats?.away?.abbr||'';
+    const bAbbr=g.stats?.home?.abbr||'';
+    const pA=g.chd?.pA??0.5;
+    const pB=g.chd?.pB??0.5;
+    const favIsAway=pA>pB;
+    const mlFav=favIsAway?away:home;
+    const mlProb=Math.max(pA,pB);
+    const mlEdge=Math.abs(pA-pB);
+    const totalLine=g.total_line||0;
+    return {
+      id:`nba_${idx}`,
+      a:away,b:home,
+      abbrA:aAbbr,abbrB:bAbbr,
+      lgA:'NBA',lgB:'NBA',
+      total:totalLine,
+      ouPick:`O/U ${totalLine}`,ouEdge:0,ouProb:0.5,
+      kLine:g.k_line||0,kPick:g.k_pick||'Spread',kEdge:0,kProb:0.5,
+      mlFav,mlEdge,model:mlProb,
+      startAt:Date.now(),
+      date:new Date().toISOString().slice(0,10),
+      time:'TBD',
+      hot:mlEdge>0.03
+    };
+  }
   async function load(){
     const [mlb,nfl,nba,combined]=await Promise.all([get(SRC.mlb),get(SRC.nfl),get(SRC.nba),get(SRC.combined)]);
     window.CHD_DATA=combined;
-    window.PARLAYOS_DATA=normalize(mlb);
-    window.PARLAYOS_NFL_DATA=normalize(nfl);
-    window.PARLAYOS_NBA_DATA=normalize(nba);
-    window.PARLAYOS_GAMES=window.PARLAYOS_DATA.games||[];
-    window.gamesNFL=window.PARLAYOS_NFL_DATA.games||[];
-    window.gamesNBA=window.PARLAYOS_NBA_DATA.games||[];
+    const mlbGames=(Array.isArray(mlb.games)?mlb.games:[]).map(transformMLBGame);
+    const nflGames=(Array.isArray(nfl.games)?nfl.games:[]).map(transformNFLGame);
+    const nbaGames=(Array.isArray(nba.games)?nba.games:[]).map(transformNBAGame);
+    window.PARLAYOS_DATA=Object.assign({},normalize(mlb),{games:mlbGames});
+    window.PARLAYOS_NFL_DATA=Object.assign({},normalize(nfl),{games:nflGames});
+    window.PARLAYOS_NBA_DATA=Object.assign({},normalize(nba),{games:nbaGames});
+    window.PARLAYOS_GAMES=mlbGames;
+    window.games=mlbGames;
+    window.gamesNFL=nflGames;
+    window.gamesNBA=nbaGames;
     const detail={mlb:window.PARLAYOS_DATA,nfl:window.PARLAYOS_NFL_DATA,nba:window.PARLAYOS_NBA_DATA,combined:combined};
     try{window.dispatchEvent(new CustomEvent('chd:ready',{detail:combined}));}catch(_){}
     try{document.dispatchEvent(new CustomEvent('parlayos:chd-data-ready',{detail:detail}));}catch(_){}
     try{if(typeof window.loadRealData==='function')window.loadRealData();}catch(_){}
     try{if(typeof window.renderDashboard==='function')window.renderDashboard();}catch(_){}
+    try{if(typeof window.renderNFLDashboard==='function')window.renderNFLDashboard();}catch(_){}
+    try{if(typeof window.renderNBADashboard==='function')window.renderNBADashboard();}catch(_){}
     try{if(typeof window.chdWireSportHubs==='function')window.chdWireSportHubs();}catch(_){}
     return combined;
   }
