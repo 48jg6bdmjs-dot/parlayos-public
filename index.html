@@ -4748,6 +4748,7 @@
                 <script id="v31-js-gap-fix">
                         (function(){
                           function fixGaps(){
+                            if(!document.body) return;
                             document.documentElement.style.margin = '0';
                             document.documentElement.style.padding = '0';
                             document.documentElement.style.height = '100%';
@@ -4789,7 +4790,7 @@
                           }
                           fixArrows();
                           const obs = new MutationObserver(fixArrows);
-                          obs.observe(document.body, {childList:true, subtree:true});
+                          if(document.body) obs.observe(document.body, {childList:true, subtree:true});
                         })();
                 </script>
 
@@ -21749,7 +21750,7 @@ button[data-view-toggle],
   // Patch beep to check localStorage every time
   const originalDefine = Object.getOwnPropertyDescriptor(window, 'beep');
   let storedBeep = null;
-  Object.defineProperty(window, 'beep', {
+  try{ Object.defineProperty(window, 'beep', {
     get: function(){
       if(isDisabled()) return function(){};
       return storedBeep || function(){};
@@ -21761,11 +21762,11 @@ button[data-view-toggle],
       };
     },
     configurable: true
-  });
+  }); }catch(e){ console.warn('[beep] redefine failed', e); }
   
   // Also patch ensureAudio
   let storedEnsure = null;
-  Object.defineProperty(window, 'ensureAudio', {
+  try{ Object.defineProperty(window, 'ensureAudio', {
     get: function(){
       if(isDisabled()) return function(){ return dummyCtx(); };
       return storedEnsure || function(){ return dummyCtx(); };
@@ -21777,7 +21778,7 @@ button[data-view-toggle],
       };
     },
     configurable: true
-  });
+  }); }catch(e){ console.warn('[ensureAudio] redefine failed', e); }
   
   // Listen for prefs changes
   window.addEventListener('storage', function(e){
@@ -26690,6 +26691,7 @@ div:has(> #brHeatmap) {
   // Init
   console.log('[V18] Toggles fixed with onclick');
 })();
+</script>
 <script id="BANKROLL_CLEANUP_V3">
 (function(){
   // Remove duplicate bankroll sections injected by old V18 renderRealBankroll
@@ -28194,6 +28196,7 @@ body.theme-white #emojiPlaygroundHint {
     halloween: { click: 180, type:'sine', ambient:164, aType:'sine', vol:0.022, filter:480 },
     spring: { click: 1200, type:'sine', ambient:220, aType:'sine', vol:0.022, filter:600 },
     rain: { click: 600, type:'sine', ambient:196, aType:'sine', vol:0.020, filter:520 },
+  };
   function stopBGM(){
     ambientNodes.forEach(n=>{
       try{ n.osc && n.osc.stop(); }catch{}
@@ -28256,9 +28259,6 @@ body.theme-white #emojiPlaygroundHint {
   // Theme-aware beep - respects sfx toggle
   window.beep = function(type='click'){
     const prefs = getPrefs();
-    if(prefs.sfx===false) return;
-    if(prefs.sound===false && type==='click') return;
-    const c = getAudioCtx();
     if(prefs.sfx===false) return;
     if(prefs.sound===false && type==='click') return;
     const c = getAudioCtx();
@@ -35460,7 +35460,7 @@ html,body,button,input,select,textarea,option,
       game: g
     };
   }
-  // Expose globally so openPlayerDetailMLB (in another <script>) can call it
+  // Expose globally so openPlayerDetailMLB (in another script block) can call it
   window.findNextOpponent = findNextOpponent;
 
   // ============================================================
@@ -35720,7 +35720,7 @@ html,body,button,input,select,textarea,option,
       return null;
     }
   }
-  // Expose globally so the click handler in another <script> can call it
+  // Expose globally so the click handler in another script block can call it
   window.fetchMLBTeamPitching = fetchMLBTeamPitching;
 
   // Async lookup with a tiny in-flight dedupe so concurrent clicks don't
