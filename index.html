@@ -38423,26 +38423,39 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     };
   }
   async function load(){
-    const [mlb,nfl,nba,combined]=await Promise.all([get(SRC.mlb),get(SRC.nfl),get(SRC.nba),get(SRC.combined)]);
-    window.CHD_DATA=combined;
-    const mlbGames=(Array.isArray(mlb.games)?mlb.games:[]).map(transformMLBGame);
-    const nflGames=(Array.isArray(nfl.games)?nfl.games:[]).map(transformNFLGame);
-    const nbaGames=(Array.isArray(nba.games)?nba.games:[]).map(transformNBAGame);
-    window.PARLAYOS_DATA=Object.assign({},normalize(mlb),{games:mlbGames});
-    window.PARLAYOS_NFL_DATA=Object.assign({},normalize(nfl),{games:nflGames});
-    window.PARLAYOS_NBA_DATA=Object.assign({},normalize(nba),{games:nbaGames});
-    window.PARLAYOS_GAMES=mlbGames;
-    window.games=mlbGames;
-    window.gamesNFL=nflGames;
-    window.gamesNBA=nbaGames;
-    const detail={mlb:window.PARLAYOS_DATA,nfl:window.PARLAYOS_NFL_DATA,nba:window.PARLAYOS_NBA_DATA,combined:combined};
-    try{window.dispatchEvent(new CustomEvent('chd:ready',{detail:combined}));}catch(_){}
-    try{document.dispatchEvent(new CustomEvent('parlayos:chd-data-ready',{detail:detail}));}catch(_){}
-    try{if(typeof window.loadRealData==='function')window.loadRealData();}catch(_){}
-    try{if(typeof window.renderDashboard==='function')window.renderDashboard();}catch(_){}
-    try{if(typeof window.renderNFLDashboard==='function')window.renderNFLDashboard();}catch(_){}
-    try{if(typeof window.renderNBADashboard==='function')window.renderNBADashboard();}catch(_){}
-    try{if(typeof window.chdWireSportHubs==='function')window.chdWireSportHubs();}catch(_){}
+    let mlb, nfl, nba, combined;
+    try {
+      [mlb, nfl, nba, combined] = await Promise.all([get(SRC.mlb), get(SRC.nfl), get(SRC.nba), get(SRC.combined)]);
+    } catch (err) {
+      console.error('[CHD] Failed to load JSON payloads:', err);
+      throw err;
+    }
+    window.CHD_DATA = combined;
+    const mlbGames = (Array.isArray(mlb.games) ? mlb.games : []).map(transformMLBGame);
+    const nflGames = (Array.isArray(nfl.games) ? nfl.games : []).map(transformNFLGame);
+    const nbaGames = (Array.isArray(nba.games) ? nba.games : []).map(transformNBAGame);
+    window.PARLAYOS_DATA = Object.assign({}, normalize(mlb), {games: mlbGames});
+    window.PARLAYOS_NFL_DATA = Object.assign({}, normalize(nfl), {games: nflGames});
+    window.PARLAYOS_NBA_DATA = Object.assign({}, normalize(nba), {games: nbaGames});
+    window.PARLAYOS_GAMES = mlbGames;
+    window.games = mlbGames;
+    window.gamesNFL = nflGames;
+    window.gamesNBA = nbaGames;
+    const detail = {mlb: window.PARLAYOS_DATA, nfl: window.PARLAYOS_NFL_DATA, nba: window.PARLAYOS_NBA_DATA, combined: combined};
+    try { window.dispatchEvent(new CustomEvent('chd:ready', {detail: combined})); }
+    catch (e) { console.warn('[CHD] chd:ready dispatch failed', e); }
+    try { document.dispatchEvent(new CustomEvent('parlayos:chd-data-ready', {detail: detail})); }
+    catch (e) { console.warn('[CHD] parlayos:chd-data-ready dispatch failed', e); }
+    try { if (typeof window.loadRealData === 'function') window.loadRealData(); }
+    catch (e) { console.warn('[CHD] loadRealData failed', e); }
+    try { if (typeof window.renderDashboard === 'function') window.renderDashboard(); }
+    catch (e) { console.warn('[CHD] renderDashboard failed', e); }
+    try { if (typeof window.renderNFLDashboard === 'function') window.renderNFLDashboard(); }
+    catch (e) { console.warn('[CHD] renderNFLDashboard failed', e); }
+    try { if (typeof window.renderNBADashboard === 'function') window.renderNBADashboard(); }
+    catch (e) { console.warn('[CHD] renderNBADashboard failed', e); }
+    try { if (typeof window.chdWireSportHubs === 'function') window.chdWireSportHubs(); }
+    catch (e) { console.warn('[CHD] chdWireSportHubs failed', e); }
     return combined;
   }
   window.loadParlayOSCHDData=load;
