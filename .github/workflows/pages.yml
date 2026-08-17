@@ -23,13 +23,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
+      - name: Prepare artifact
+        run: |
+          mkdir -p site
+          cp index.html parlayos.html favicon.ico site/
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: |
-            index.html
-            parlayos.html
-            favicon.ico
+          path: site
   
   deploy:
     environment:
