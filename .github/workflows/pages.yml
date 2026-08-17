@@ -23,29 +23,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      
-      - name: Build ParlayOS
-        env:
-          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+      - name: Prepare artifact
         run: |
-          python run_all.py
-          cp parlayos.html index.html
-          ls -lh parlayos.html index.html
+          mkdir -p site
+          cp index.html parlayos.html favicon.ico site/
       
-       - name: Upload artifact
-         uses: actions/upload-pages-artifact@v3
-         with:
-           path: |
-             index.html
-             parlayos.html
-             favicon.ico
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
   
   deploy:
     environment:
