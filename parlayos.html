@@ -13494,12 +13494,12 @@ body.dark .table-card .mini-table td {
                                 if(screen==='desktop') el.innerHTML = `<b>SYSTEM</b><span>›</span><span>HOME</span>`;
                               });
                             }
-                             function switchScreen(next){
-                               if(next===current) return;
-                               beep('click');
-                               const curEl = $(`[data-screen="${current}"]`);
-                               const nextEl = $(`[data-screen="${next}"]`);
-                               if(curEl){ curEl.classList.remove('active'); curEl.classList.add('exit-left'); setTimeout(()=>curEl.classList.remove('exit-left'), 360); }
+                              function switchScreen(next){
+                                const curEl = document.querySelector('.screen.active');
+                                if(curEl && curEl.dataset.screen === next) return;
+                                beep('click');
+                                const nextEl = $(`[data-screen="${next}"]`);
+                                if(curEl){ curEl.classList.remove('active'); curEl.classList.add('exit-left'); setTimeout(()=>curEl.classList.remove('exit-left'), 360); }
                                if(nextEl){ nextEl.classList.add('active'); }
                                current = next; setBreadcrumb(next);
                                const _hb = $('#homeBtn'); if(_hb) _hb.style.display = next==='desktop' ? 'none' : 'inline-flex';
