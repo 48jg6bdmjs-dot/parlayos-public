@@ -12911,9 +12911,10 @@ body.dark .table-card .mini-table td {
                                }
                              };
 
-                             let activeModel = (()=>{ try{ return JSON.parse(localStorage.getItem('parlayos_active_model')||'null')||'my_chd'; }catch{ return 'my_chd'; } })();
-                             let modelFilter = 'all';
-                             let parlayByModel = {}; let parlayNFLByModel = {}; let parlayNBAByModel = {};
+                              let activeModel = (()=>{ try{ return JSON.parse(localStorage.getItem('parlayos_active_model')||'null')||'my_chd'; }catch{ return 'my_chd'; } })();
+                              let modelFilter = 'all';
+                              let parlayByModel = {}; let parlayNFLByModel = {}; let parlayNBAByModel = {};
+                              const modelPredCache = new Map();
 
                              function initModelParlays(){
                                Object.keys(MODEL_REGISTRY).forEach(mid => {
@@ -12982,21 +12983,83 @@ body.dark .table-card .mini-table td {
                               // ============================================================
                               // MODEL PREDICTION ENGINE
                               // ============================================================
-                              function runModelPrediction(game, modelId, sport, market){
-                                if(!game || !modelId) return null;
-                                const reg = MODEL_REGISTRY[modelId];
-                                if(!reg) return null;
-                                if(modelId === 'final_combined'){
-                                  return runFinalCombined(game, sport, market);
-                                }
-                                if(modelId === 'monte_carlo') return runMonteCarlo(game, sport, market);
-                                if(modelId === 'zips') return runZiPS(game, sport, market);
-                                if(modelId === 'steamer') return runSteamer(game, sport, market);
-                                if(modelId === 'season_stats') return runSeasonStats(game, sport, market);
-                                if(modelId === 'my_chd') return runMyCHD(game, sport, market);
-                                if(modelId === 'chd_master_predictor') return runCHDMaster(game, sport, market);
-                                return null;
-                              }
+                               function runModelPrediction(game, modelId, sport, market){
+                                 if(!game || !modelId) return null;
+                                 const cacheKey = `${game.id}-${modelId}-${sport}-${market}`;
+                                 if(modelPredCache.has(cacheKey)) return modelPredCache.get(cacheKey);
+                                 const reg = MODEL_REGISTRY[modelId];
+                                 if(!reg) return null;
+                                 if(modelId === 'final_combined'){
+                                   const result = runFinalCombined(game, sport, market);
+                                   modelPredCache.set(cacheKey, result);
+                                   return result;
+                                 }
+                                 if(modelId === 'monte_carlo'){ const r=runMonteCarlo(game,sport,market); modelPredCache.set(cacheKey,r); return r; }
+                                 if(modelId === 'zips'){ const r=runZiPS(game,sport,market); modelPredCache.set(cacheKey,r); return r; }
+                                 if(modelId === 'steamer'){ const r=runSteamer(game,sport,market); modelPredCache.set(cacheKey,r); return r; }
+                                 if(modelId === 'season_stats'){ const r=runSeasonStats(game,sport,market); modelPredCache.set(cacheKey,r); return r; }
+                                 if(modelId === 'my_chd'){ const r=runMyCHD(game,sport,market); modelPredCache.set(cacheKey,r); return r; }
+                                 if(modelId === 'chd_master_predictor'){ const r=runCHDMaster(game,sport,market); modelPredCache.set(cacheKey,r); return r; }
+                                 return null;
+                               }
+
+                               function getModelMarketPrediction(game, market){
+                                 if(!game || !market) return null;
+                                 if(!activeModel || activeModel === 'my_chd') return null;
+                                 try{
+                                   const isNFL = (typeof gamesNFL!=='undefined' && Array.isArray(gamesNFL) && gamesNFL.some(x=>x.id===game.id));
+                                   const isNBA = (typeof gamesNBA!=='undefined' && Array.isArray(gamesNBA) && gamesNBA.some(x=>x.id===game.id));
+                                   const sport = isNFL ? 'NFL' : isNBA ? 'NBA' : 'MLB';
+                                   return runModelPrediction(game, activeModel, sport, market);
+                                 }catch(e){ return null; }
+                               }
+
+                               function getModelBadgeHTML(){
+                                 if(!activeModel || activeModel === 'my_chd' || !MODEL_REGISTRY[activeModel]) return '';
+                                 const reg = MODEL_REGISTRY[activeModel];
+                                 let badge = `<span class="badge" style="font-size:9px;opacity:0.9;margin-left:6px;background:rgba(92,124,255,0.15);color:#5c7cff;border:1px solid rgba(92,124,255,0.3);">${reg.display_name}</span>`;
+                                 if(activeModel === 'final_combined') badge += `<span class="badge" style="font-size:9px;opacity:0.9;margin-left:4px;background:rgba(34,197,94,0.15);color:#16a34a;border:1px solid rgba(34,197,94,0.3);">ENSEMBLE</span>`;
+                                 return badge;
+                               }
+
+                               function getAgreementHTML(pred){
+                                 if(!pred || !pred.agreement) return '';
+                                 const a = pred.agreement;
+                                 const total = a.total || 0;
+                                 const sup = (a.supporting||[]).length;
+                                 const opp = (a.opposing||[]).length;
+                                 const unavail = a.unavailable || 0;
+                                 let html = `<div style="font-size:9px;opacity:0.7;margin-top:4px;line-height:1.4;">`;
+                                 html += `<b>MODEL AGREEMENT</b> `;
+                                 if(unavail > 0) html += `${total} of ${total + unavail} available `;
+                                 else html += `${total} / ${total} `;
+                                 html += `• ${sup} support, ${opp} oppose`;
+                                 if(sup > 0) html += `<br><span style="color:#16a34a;">+ ${a.supporting.join(', ')}</span>`;
+                                 if(opp > 0) html += `<br><span style="color:#ff5c5c;">- ${a.opposing.join(', ')}</span>`;
+                                 html += `</div>`;
+                                 return html;
+                               }
+
+                               function getFinalCombinedRecommendedPicks(gameList, sport){
+                                 if(!gameList || !gameList.length) return [];
+                                 const picks = [];
+                                 gameList.forEach(g=>{
+                                   const markets = ['ml','ou','k'];
+                                   let bestPick = null;
+                                   markets.forEach(mk=>{
+                                     const pred = runFinalCombined(g, sport, mk);
+                                     if(!pred) return;
+                                     const edge = Math.abs(pred.edge);
+                                     const prob = pred.edge >= 0 ? pred.pA : pred.pB;
+                                     if(pred.confidence < 0.55 || edge < 0.015) return;
+                                     if(!bestPick || pred.confidence > bestPick.confidence || (pred.confidence === bestPick.confidence && edge > bestPick.edge)){
+                                       bestPick = { g, market:mk, edge, prob, confidence:pred.confidence, label: legLabel(g,mk), dec: legOdds(g,mk), short: mk==='ml'?'ML':mk==='ou'?'O/U':'K' };
+                                     }
+                                   });
+                                   if(bestPick) picks.push(bestPick);
+                                 });
+                                 return picks.sort((a,b)=> b.confidence - a.confidence || b.edge - a.edge).slice(0, 20);
+                               }
 
                               function deterministicRandom(seed){
                                 let s = seed;
@@ -13006,30 +13069,58 @@ body.dark .table-card .mini-table td {
                                 };
                               }
 
-                              function runMonteCarlo(game, sport, market){
-                                const seed = hashGameForMC(game);
-                                const rng = deterministicRandom(seed);
-                                const nSims = 5000;
-                                let winsA = 0;
-                                let totalScore = 0;
-                                for(let i=0; i<nSims; i++){
-                                  const scoreA = simulateTeamScore(game, sport, 'A', rng);
-                                  const scoreB = simulateTeamScore(game, sport, 'B', rng);
-                                  totalScore += scoreA + scoreB;
-                                  if(scoreA > scoreB) winsA++;
-                                }
-                                const pA = winsA / nSims;
-                                const pB = 1 - pA;
-                                const confidence = 0.5 + 0.5 * (1 - Math.abs(0.5 - pA));
-                                let edge = 0;
-                                if(market === 'ml') edge = pA - 0.5;
-                                else if(market === 'ou'){
-                                  const avgTotal = totalScore / nSims;
-                                  const line = game.total || 8.5;
-                                  edge = avgTotal > line ? 0.02 : -0.02;
-                                }
-                                return { pA, pB, edge, confidence, model: 'monte_carlo', sims: nSims };
-                              }
+                               function runMonteCarlo(game, sport, market){
+                                 const seed = hashGameForMC(game);
+                                 const rng = deterministicRandom(seed);
+                                 const nSims = 5000;
+                                 if(market === 'ml'){
+                                   let winsA = 0;
+                                   for(let i=0; i<nSims; i++){
+                                     const scoreA = simulateTeamScore(game, sport, 'A', rng);
+                                     const scoreB = simulateTeamScore(game, sport, 'B', rng);
+                                     if(scoreA > scoreB) winsA++;
+                                   }
+                                   const pA = winsA / nSims;
+                                   const confidence = 0.5 + 0.5 * (1 - Math.abs(0.5 - pA));
+                                   return { pA: clamp(pA,.15,.85), pB: clamp(1-pA,.15,.85), edge: pA - 0.5, confidence, model: 'monte_carlo', sims: nSims };
+                                 }
+                                 if(market === 'ou'){
+                                   let overs = 0;
+                                   let totalRuns = 0;
+                                   const line = game.total || 8.5;
+                                   for(let i=0; i<nSims; i++){
+                                     const scoreA = simulateTeamScore(game, sport, 'A', rng);
+                                     const scoreB = simulateTeamScore(game, sport, 'B', rng);
+                                     const total = scoreA + scoreB;
+                                     totalRuns += total;
+                                     if(total > line) overs++;
+                                   }
+                                   const pOver = overs / nSims;
+                                   const confidence = 0.5 + 0.5 * (1 - Math.abs(0.5 - pOver));
+                                   return { pA: clamp(pOver,.30,.75), pB: clamp(1-pOver,.30,.75), edge: pOver - 0.5, confidence, model: 'monte_carlo', sims: nSims };
+                                 }
+                                 if(market === 'k'){
+                                   let overs = 0;
+                                   let totalKs = 0;
+                                   const kLine = game.kLine || 6.5;
+                                   for(let i=0; i<nSims; i++){
+                                     const ks = simulatePitcherKs(game, sport, rng);
+                                     totalKs += ks;
+                                     if(ks > kLine) overs++;
+                                   }
+                                   const pOver = overs / nSims;
+                                   const confidence = 0.5 + 0.5 * (1 - Math.abs(0.5 - pOver));
+                                   return { pA: clamp(pOver,.30,.75), pB: clamp(1-pOver,.30,.75), edge: pOver - 0.5, confidence, model: 'monte_carlo', sims: nSims };
+                                 }
+                                 return null;
+                               }
+
+                               function simulatePitcherKs(game, sport, rng){
+                                 const k9 = game.pitcherA_k9 || game.pitcherB_k9 || 8.0;
+                                 const ip = 5.0 + rng() * 2.0;
+                                 const noise = (rng() - 0.5) * 2.0;
+                                 return Math.max(0, k9 * ip / 9.0 + noise);
+                               }
 
                               function hashGameForMC(game){
                                 const str = `${game.id||game.a}${game.b}${game.startAt||''}${game.league||''}`;
@@ -13050,36 +13141,85 @@ body.dark .table-card .mini-table td {
                                 return Math.max(0, base + homeAdv + noise);
                               }
 
-                              function runZiPS(game, sport, market){
-                                if(sport !== 'MLB') return null;
-                                const pA = 0.5 + (game.mlEdge || 0);
-                                const pB = 1 - pA;
-                                const confidence = 0.6;
-                                return { pA: clamp(pA, .15, .85), pB: clamp(pB, .15, .85), edge: game.mlEdge || 0, confidence, model: 'zips', proj_type: 'zips_style' };
-                              }
+                               function runZiPS(game, sport, market){
+                                 if(sport !== 'MLB') return null;
+                                 if(market === 'ml'){
+                                   const pA = 0.5 + (game.mlEdge || 0);
+                                   return { pA: clamp(pA,.15,.85), pB: clamp(1-pA,.15,.85), edge: game.mlEdge||0, confidence: 0.6, model: 'zips', proj_type: 'zips_style' };
+                                 }
+                                 if(market === 'ou'){
+                                   const pOver = 0.5 + (game.ouEdge || 0);
+                                   return { pA: clamp(pOver,.30,.75), pB: clamp(1-pOver,.30,.75), edge: game.ouEdge||0, confidence: 0.55, model: 'zips', proj_type: 'zips_style' };
+                                 }
+                                 if(market === 'k'){
+                                   const pOver = 0.5 + (game.kEdge || 0);
+                                   return { pA: clamp(pOver,.30,.75), pB: clamp(1-pOver,.30,.75), edge: game.kEdge||0, confidence: 0.5, model: 'zips', proj_type: 'zips_style' };
+                                 }
+                                 return null;
+                               }
 
-                              function runSteamer(game, sport, market){
-                                if(sport !== 'MLB') return null;
-                                const pA = 0.5 + (game.ouEdge || 0) * 0.5;
-                                const pB = 1 - pA;
-                                const confidence = 0.55;
-                                return { pA: clamp(pA, .15, .85), pB: clamp(pB, .15, .85), edge: game.ouEdge || 0, confidence, model: 'steamer', proj_type: 'steamer_style' };
-                              }
+                               function runSteamer(game, sport, market){
+                                 if(sport !== 'MLB') return null;
+                                 if(market === 'ml'){
+                                   const pA = 0.5 + (game.mlEdge || 0) * 0.9;
+                                   return { pA: clamp(pA,.15,.85), pB: clamp(1-pA,.15,.85), edge: (game.mlEdge||0)*0.9, confidence: 0.55, model: 'steamer', proj_type: 'steamer_style' };
+                                 }
+                                 if(market === 'ou'){
+                                   const pOver = 0.5 + (game.ouEdge || 0) * 0.85;
+                                   return { pA: clamp(pOver,.30,.75), pB: clamp(1-pOver,.30,.75), edge: (game.ouEdge||0)*0.85, confidence: 0.5, model: 'steamer', proj_type: 'steamer_style' };
+                                 }
+                                 if(market === 'k'){
+                                   const pOver = 0.5 + (game.kEdge || 0) * 0.8;
+                                   return { pA: clamp(pOver,.30,.75), pB: clamp(1-pOver,.30,.75), edge: (game.kEdge||0)*0.8, confidence: 0.45, model: 'steamer', proj_type: 'steamer_style' };
+                                 }
+                                 return null;
+                               }
 
-                              function runSeasonStats(game, sport, market){
-                                const aStats = (game.stats && game.stats[sideKey('A', sport)]) || {};
-                                const bStats = (game.stats && game.stats[sideKey('B', sport)]) || {};
-                                const aFactor = getSeasonFactor(aStats, sport);
-                                const bFactor = getSeasonFactor(bStats, sport);
-                                const diff = aFactor - bFactor;
-                                const pA = 0.5 + diff * 0.1;
-                                const pB = 1 - pA;
-                                const confidence = 0.5 + Math.min(0.35, Math.abs(diff) * 0.1);
-                                let edge = 0;
-                                if(market === 'ml') edge = pA - 0.5;
-                                else if(market === 'ou') edge = (game.ouEdge || 0) * 0.8;
-                                return { pA: clamp(pA, .15, .85), pB: clamp(pB, .15, .85), edge, confidence, model: 'season_stats', stats_used: Object.keys(aStats).concat(Object.keys(bStats)) };
-                              }
+                               function runSeasonStats(game, sport, market){
+                                 const aStats = (game.stats && game.stats[sideKey('A', sport)]) || {};
+                                 const bStats = (game.stats && game.stats[sideKey('B', sport)]) || {};
+                                 if(market === 'ml'){
+                                   const aFactor = getSeasonFactor(aStats, sport);
+                                   const bFactor = getSeasonFactor(bStats, sport);
+                                   const diff = aFactor - bFactor;
+                                   const pA = 0.5 + diff * 0.1;
+                                   const edge = pA - 0.5;
+                                   return { pA: clamp(pA,.15,.85), pB: clamp(1-pA,.15,.85), edge, confidence: clamp(0.5 + Math.min(0.35, Math.abs(diff)*0.1), 0.3, 0.9), model: 'season_stats', stats_used: Object.keys(aStats).concat(Object.keys(bStats)) };
+                                 }
+                                 if(market === 'ou'){
+                                   const aRun = getSeasonRunFactor(aStats, sport);
+                                   const bRun = getSeasonRunFactor(bStats, sport);
+                                   const diff = aRun - bRun;
+                                   const pOver = 0.5 + diff * 0.05 + (game.ouEdge||0) * 0.5;
+                                   const edge = pOver - 0.5;
+                                   return { pA: clamp(pOver,.30,.75), pB: clamp(1-pOver,.30,.75), edge, confidence: 0.5, model: 'season_stats', stats_used: Object.keys(aStats).concat(Object.keys(bStats)) };
+                                 }
+                                 if(market === 'k'){
+                                   const aK = getSeasonKFactor(aStats, sport);
+                                   const bK = getSeasonKFactor(bStats, sport);
+                                   const diff = aK - bK;
+                                   const pOver = 0.5 + diff * 0.05 + (game.kEdge||0) * 0.5;
+                                   const edge = pOver - 0.5;
+                                   return { pA: clamp(pOver,.30,.75), pB: clamp(1-pOver,.30,.75), edge, confidence: 0.45, model: 'season_stats', stats_used: Object.keys(aStats).concat(Object.keys(bStats)) };
+                                 }
+                                 return null;
+                               }
+
+                               function getSeasonRunFactor(stats, sport){
+                                 if(!stats || typeof stats !== 'object') return 0;
+                                 if(sport === 'MLB') return (stats.runs || 4.5) - 4.5;
+                                 if(sport === 'NFL') return (stats.off_epa || 0) - (stats.def_epa || 0);
+                                 if(sport === 'NBA') return (stats.pace || 100) - 100;
+                                 return 0;
+                               }
+
+                               function getSeasonKFactor(stats, sport){
+                                 if(!stats || typeof stats !== 'object') return 0;
+                                 if(sport === 'MLB') return (stats.k9 || 8.0) - 8.0;
+                                 if(sport === 'NFL') return (stats.sacks || 0) * 0.1;
+                                 if(sport === 'NBA') return (stats.stl || 0) * 0.1;
+                                 return 0;
+                               }
 
                               function sideKey(side, sport){
                                 if(sport === 'MLB') return side === 'A' ? 'away' : 'home';
@@ -13101,47 +13241,64 @@ body.dark .table-card .mini-table td {
                                 return 0;
                               }
 
-                              function runMyCHD(game, sport, market){
-                                const pA = Number.isFinite(game.model) ? game.model : 0.5;
-                                const pB = 1 - pA;
-                                const edge = game.mlEdge || game.ouEdge || game.kEdge || 0;
-                                const confidence = 0.5 + Math.abs(edge) * 2;
-                                return { pA: clamp(pA, .15, .85), pB: clamp(pB, .15, .85), edge, confidence: clamp(confidence, 0.3, 0.9), model: 'my_chd' };
-                              }
+                               function runMyCHD(game, sport, market){
+                                 if(market === 'ml'){
+                                   const pA = Number.isFinite(game.model) ? game.model : 0.5;
+                                   return { pA: clamp(pA,.15,.85), pB: clamp(1-pA,.15,.85), edge: game.mlEdge||0, confidence: clamp(0.5 + Math.abs(game.mlEdge||0)*2, 0.3, 0.9), model: 'my_chd' };
+                                 }
+                                 if(market === 'ou'){
+                                   const pOver = 0.5 + (game.ouEdge||0);
+                                   return { pA: clamp(pOver,.30,.75), pB: clamp(1-pOver,.30,.75), edge: game.ouEdge||0, confidence: clamp(0.5 + Math.abs(game.ouEdge||0)*2, 0.3, 0.9), model: 'my_chd' };
+                                 }
+                                 if(market === 'k'){
+                                   const pOver = 0.5 + (game.kEdge||0);
+                                   return { pA: clamp(pOver,.30,.75), pB: clamp(1-pOver,.30,.75), edge: game.kEdge||0, confidence: clamp(0.5 + Math.abs(game.kEdge||0)*2, 0.3, 0.9), model: 'my_chd' };
+                                 }
+                                 return null;
+                               }
 
-                              function runCHDMaster(game, sport, market){
-                                const pA = Number.isFinite(game.model) ? game.model : 0.5;
-                                const pB = 1 - pA;
-                                const edge = game.mlEdge || game.ouEdge || game.kEdge || 0;
-                                const confidence = 0.55 + Math.abs(edge) * 2.5;
-                                return { pA: clamp(pA, .15, .85), pB: clamp(pB, .15, .85), edge, confidence: clamp(confidence, 0.35, 0.95), model: 'chd_master_predictor' };
-                              }
+                               function runCHDMaster(game, sport, market){
+                                 if(market === 'ml'){
+                                   const pA = Number.isFinite(game.model) ? game.model : 0.5;
+                                   return { pA: clamp(pA,.15,.85), pB: clamp(1-pA,.15,.85), edge: game.mlEdge||0, confidence: clamp(0.55 + Math.abs(game.mlEdge||0)*2.5, 0.35, 0.95), model: 'chd_master_predictor' };
+                                 }
+                                 if(market === 'ou'){
+                                   const pOver = 0.5 + (game.ouEdge||0);
+                                   return { pA: clamp(pOver,.30,.75), pB: clamp(1-pOver,.30,.75), edge: game.ouEdge||0, confidence: clamp(0.55 + Math.abs(game.ouEdge||0)*2.5, 0.35, 0.95), model: 'chd_master_predictor' };
+                                 }
+                                 if(market === 'k'){
+                                   const pOver = 0.5 + (game.kEdge||0);
+                                   return { pA: clamp(pOver,.30,.75), pB: clamp(1-pOver,.30,.75), edge: game.kEdge||0, confidence: clamp(0.55 + Math.abs(game.kEdge||0)*2.5, 0.35, 0.95), model: 'chd_master_predictor' };
+                                 }
+                                 return null;
+                               }
 
-                              function runFinalCombined(game, sport, market){
-                                const models = ['monte_carlo','zips','steamer','season_stats','my_chd','chd_master_predictor'];
-                                const available = [];
-                                const supporting = [];
-                                const opposing = [];
-                                models.forEach(mid => {
-                                  const pred = runModelPrediction(game, mid, sport, market);
-                                  if(!pred) return;
-                                  const reg = MODEL_REGISTRY[mid];
-                                  if((mid === 'zips' || mid === 'steamer') && sport !== 'MLB') return;
-                                  available.push(pred);
-                                  if(pred.edge > 0.01) supporting.push(reg.display_name);
-                                  else if(pred.edge < -0.01) opposing.push(reg.display_name);
-                                });
-                                if(!available.length) return null;
-                                const avgP = available.reduce((s,p)=>s+p.pA, 0) / available.length;
-                                const avgEdge = available.reduce((s,p)=>s+p.edge, 0) / available.length;
-                                const avgConf = available.reduce((s,p)=>s+p.confidence, 0) / available.length;
-                                const agreement = { total: available.length, supporting, opposing, unavailable: models.length - available.length };
-                                return { pA: clamp(avgP, .15, .85), pB: 1 - clamp(avgP, .15, .85), edge: avgEdge, confidence: clamp(avgConf, 0.3, 0.95), model: 'final_combined', agreement };
-                              }
+                               function runFinalCombined(game, sport, market){
+                                 const models = ['monte_carlo','zips','steamer','season_stats','my_chd','chd_master_predictor'];
+                                 const available = [];
+                                 const supporting = [];
+                                 const opposing = [];
+                                 models.forEach(mid => {
+                                   const pred = runModelPrediction(game, mid, sport, market);
+                                   if(!pred) return;
+                                   const reg = MODEL_REGISTRY[mid];
+                                   if((mid === 'zips' || mid === 'steamer') && sport !== 'MLB') return;
+                                   available.push(pred);
+                                   if(pred.edge > 0.01) supporting.push(reg.display_name);
+                                   else if(pred.edge < -0.01) opposing.push(reg.display_name);
+                                 });
+                                 if(!available.length) return null;
+                                 const avgP = available.reduce((s,p)=>s+p.pA, 0) / available.length;
+                                 const avgEdge = available.reduce((s,p)=>s+p.edge, 0) / available.length;
+                                 const avgConf = available.reduce((s,p)=>s+p.confidence, 0) / available.length;
+                                 const agreement = { total: available.length, supporting, opposing, unavailable: models.length - available.length };
+                                 return { pA: clamp(avgP, .15, .85), pB: 1 - clamp(avgP, .15, .85), edge: avgEdge, confidence: clamp(avgConf, 0.3, 0.95), model: 'final_combined', agreement };
+                               }
 
                              let games = [];
-                                function loadRealData(){
-                              try{
+                                 function loadRealData(){
+                                   try{ modelPredCache.clear(); }catch(e){}
+                                   try{
                                 const live = window.PARLAYOS_DATA;
                                 let src = (live && Array.isArray(live.games)) ? live.games : (Array.isArray(window.PARLAYOS_GAMES) ? window.PARLAYOS_GAMES : []);
                                 const seen = new Set(); src = src.filter(g => { const key = g.id || `${g.a}@${g.b}@${g.startAt||g.start_at||g.time||''}@${g.date||''}`; if(seen.has(key)) return false; seen.add(key); return true; });
@@ -13337,57 +13494,73 @@ body.dark .table-card .mini-table td {
                                 if(screen==='desktop') el.innerHTML = `<b>SYSTEM</b><span>›</span><span>HOME</span>`;
                               });
                             }
-                            function switchScreen(next){
-                              if(next===current) return;
-                              beep('click');
-                              const curEl = $(`[data-screen="${current}"]`);
-                              const nextEl = $(`[data-screen="${next}"]`);
-                              if(curEl){ curEl.classList.remove('active'); curEl.classList.add('exit-left'); setTimeout(()=>curEl.classList.remove('exit-left'), 360); }
-                              if(nextEl){ nextEl.classList.add('active'); }
-                              current = next; setBreadcrumb(next);
-                              if(next === 'settings' && nextEl){ nextEl.scrollTop = 0; requestAnimationFrame(()=>{ nextEl.scrollTop = 0; }); }
-                              const _hb = $('#homeBtn'); if(_hb) _hb.style.display = next==='desktop' ? 'none' : 'inline-flex';
-                              document.querySelectorAll('.backBtn').forEach(b=> b.style.display = next==='desktop' ? 'none' : 'inline-flex');
-                              const _tb = document.getElementById('titleBackBtn');
-                              if(_tb) _tb.classList.toggle('show', next !== 'desktop');
-                              if(prefs.motion){ if(curEl)curEl.style.transition='none'; if(nextEl)nextEl.style.transition='none'; requestAnimationFrame(()=>{ if(curEl)curEl.style.transition=''; if(nextEl)nextEl.style.transition=''; }); }
-                              renderScreen(next);
-                            }
+                             function switchScreen(next){
+                               if(next===current) return;
+                               beep('click');
+                               const curEl = $(`[data-screen="${current}"]`);
+                               const nextEl = $(`[data-screen="${next}"]`);
+                               if(curEl){ curEl.classList.remove('active'); curEl.classList.add('exit-left'); setTimeout(()=>curEl.classList.remove('exit-left'), 360); }
+                               if(nextEl){ nextEl.classList.add('active'); }
+                               current = next; setBreadcrumb(next);
+                               const _hb = $('#homeBtn'); if(_hb) _hb.style.display = next==='desktop' ? 'none' : 'inline-flex';
+                               document.querySelectorAll('.backBtn').forEach(b=> b.style.display = next==='desktop' ? 'none' : 'inline-flex');
+                               const _tb = document.getElementById('titleBackBtn');
+                               if(_tb) _tb.classList.toggle('show', next !== 'desktop');
+                               if(prefs.motion){ if(curEl)curEl.style.transition='none'; if(nextEl)nextEl.style.transition='none'; requestAnimationFrame(()=>{ if(curEl)curEl.style.transition=''; if(nextEl)nextEl.style.transition=''; }); }
+                               renderScreen(next);
+                             }
                             function goHome(){ switchScreen('desktop'); }
 
                                                     function marketCard(g, af='all'){
                           try{
                             if(!g || !g.id) return `<article class="game"><div class="empty">Invalid game data</div></article>`;
-                            const showOU = af==='all'||af==='edge'||af==='ou';
-                            const showK  = af==='all'||af==='edge'||af==='k';
-                            const showML = af==='all'||af==='edge'||af==='ml';
-                            // FIX: Favored teams must show >=50% - use actual pick prob
-                            const ouProb = (()=>{ 
-                              let p = (typeof g.ouProb==='number')? g.ouProb : (0.5 + Math.abs(g.ouEdge||0));
-                              if(p<0.5) p = 1-p; // ensure favored pick >=50
-                              return clamp(p, 0.30, 0.85);
-                            })();
-                            const kProb  = (()=>{ 
-                              let p = (typeof g.kProb==='number')? g.kProb : (0.5 + Math.abs(g.kEdge||0));
-                              if(p<0.5) p = 1-p;
-                              return clamp(p, 0.30, 0.85);
-                            })();
-                            const mlProb = (()=>{ 
-                              let p;
-                              if(typeof g.mlProb==='number') p = g.mlProb;
-                              else if(typeof g.model==='number'){
-                                // model is now fav prob in new data, but handle legacy where model = pA
-                                if(g.chd_pA!=null && g.chd_pB!=null){
-                                  const isFavAway = (g.mlFav===g.a || g.mlFav===g.abbrA || g.mlFav===g.abbrA?.toUpperCase() || String(g.mlFav).toUpperCase()===String(g.abbrA||'').toUpperCase());
-                                  p = isFavAway ? g.chd_pA : g.chd_pB;
-                                }else{
-                                  const isFavAway = (g.mlFav===g.a || g.mlFav===g.abbrA);
-                                  p = isFavAway ? g.model : (1 - g.model);
-                                }
-                              }else p = 0.5;
-                              if(p<0.5) p = 1-p; // favored must be >=50%
-                              return clamp(p, 0.15, 0.85);
-                            })();
+                             const showOU = af==='all'||af==='edge'||af==='ou';
+                             const showK  = af==='all'||af==='edge'||af==='k';
+                             const showML = af==='all'||af==='edge'||af==='ml';
+                             const modelPredOU = getModelMarketPrediction(g, 'ou');
+                             const modelPredK  = getModelMarketPrediction(g, 'k');
+                             const modelPredML = getModelMarketPrediction(g, 'ml');
+                             const modelBadgeHTML = getModelBadgeHTML();
+                             const agreementHTML = activeModel === 'final_combined' && modelPredML && modelPredML.agreement ? getAgreementHTML(modelPredML) : '';
+                             // FIX: Favored teams must show >=50% - use actual pick prob
+                             const ouProb = (()=>{ 
+                               if(modelPredOU){
+                                 const favSide = modelPredOU.edge >= 0 ? modelPredOU.pA : modelPredOU.pB;
+                                 return clamp(favSide, 0.30, 0.85);
+                               }
+                               let p = (typeof g.ouProb==='number')? g.ouProb : (0.5 + Math.abs(g.ouEdge||0));
+                               if(p<0.5) p = 1-p; // ensure favored pick >=50
+                               return clamp(p, 0.30, 0.85);
+                             })();
+                             const kProb  = (()=>{ 
+                               if(modelPredK){
+                                 const favSide = modelPredK.edge >= 0 ? modelPredK.pA : modelPredK.pB;
+                                 return clamp(favSide, 0.30, 0.85);
+                               }
+                               let p = (typeof g.kProb==='number')? g.kProb : (0.5 + Math.abs(g.kEdge||0));
+                               if(p<0.5) p = 1-p;
+                               return clamp(p, 0.30, 0.85);
+                             })();
+                             const mlProb = (()=>{ 
+                               if(modelPredML){
+                                 const favProb = modelPredML.pA >= modelPredML.pB ? modelPredML.pA : modelPredML.pB;
+                                 return clamp(favProb, 0.15, 0.85);
+                               }
+                               let p;
+                               if(typeof g.mlProb==='number') p = g.mlProb;
+                               else if(typeof g.model==='number'){
+                                 // model is now fav prob in new data, but handle legacy where model = pA
+                                 if(g.chd_pA!=null && g.chd_pB!=null){
+                                   const isFavAway = (g.mlFav===g.a || g.mlFav===g.abbrA || g.mlFav===g.abbrA?.toUpperCase() || String(g.mlFav).toUpperCase()===String(g.abbrA||'').toUpperCase());
+                                   p = isFavAway ? g.chd_pA : g.chd_pB;
+                                 }else{
+                                   const isFavAway = (g.mlFav===g.a || g.mlFav===g.abbrA);
+                                   p = isFavAway ? g.model : (1 - g.model);
+                                 }
+                               }else p = 0.5;
+                               if(p<0.5) p = 1-p; // favored must be >=50%
+                               return clamp(p, 0.15, 0.85);
+                             })();
                             // FIX: Detect sport robustly. The CHD/NFL/NBA feeds do NOT set
                             // lgA/lgB, so we also check the game ID prefix and the global
                             // gamesNFL/gamesNBA arrays as fallbacks. Without this, NFL/NBA
@@ -13619,27 +13792,28 @@ body.dark .table-card .mini-table td {
                               }
                             }
 
-                            return `
-                                <article class="game" data-game-id="${g.id}" data-start-at="${isoDate?isoDate.toISOString():''}">
-                                  <div class="game-head"><div class="tv">${safeHeader}</div><span class="badge ${g.hot?'hot':''}">${g.hot?'HOT EDGE':'MODEL'}</span></div>
-                                  ${metaBadgesHTML}
-                                  <div class="matchup">
-                                    <div class="team" style="gap:8px;">${badgeA}<div>${(typeof wordmark!=='undefined'?wordmark(toAbbr(g.a||g.cityA||''),19):'<b>'+(g.a||'')+'</b>')}<span class="rival-block">${subA}</span></div></div>
-                                    <div class="vs">VS</div>
-                                    <div class="team" style="flex-direction:row-reverse;text-align:right;gap:8px;">${badgeB}<div>${(typeof wordmark!=='undefined'?wordmark(toAbbr(g.b||g.cityB||''),19):'<b>'+(g.b||'')+'</b>')}<span class="rival-block">${subB}</span></div></div>
-                                  </div>
-                                  <div class="odds-grid">
-                                    ${showOU?`<div class="market"><div class="row"><span class="label">Over / Under • ${g.total||''}</span><span class="badge">${fmtPct(ouProb)} model</span></div><div class="row"><span class="pick">${g.ouPick||''}</span><span class="mini">Edge ${((g.ouEdge||0)*100).toFixed(1)}%</span></div><div class="meter"><i style="width:${ouProb*100}%"></i></div></div>`:''}
-                                    ${showK?`<div class="market"><div class="row"><span class="label">${kLabel}</span><span class="badge">${fmtPct(kProb)} model</span></div><div class="row"><span class="pick">${kPickText}</span><span class="mini">Edge ${((g.kEdge||0)*100).toFixed(1)}%</span></div><div class="meter"><i style="width:${kProb*100}%"></i></div></div>`:''}
-                                    ${showML?`<div class="market"><div class="row"><span class="label">Moneyline • Fav ${g.mlFav||''}</span><span class="badge">${american(g.mlPriceDec||2)} • ${fmtPct(mlProb)}</span></div><div class="row"><span class="pick">${g.mlFav||''} ML</span><span class="mini">Edge ${((g.mlEdge||0)*100).toFixed(1)}%</span></div><div class="meter"><i style="width:${mlProb*100}%"></i></div></div>`:''}
-                                  </div>
-                                  <div class="game-actions">
-                                    ${ouBtn}
-                                    ${kBtn}
-                                    ${mlBtn}
-                                  </div>
-                                  ${ytHTML}
-                                </article>`;
+                             return `
+                                 <article class="game" data-game-id="${g.id}" data-start-at="${isoDate?isoDate.toISOString():''}">
+                                   <div class="game-head"><div class="tv">${safeHeader}</div><span class="badge ${g.hot?'hot':''}">${g.hot?'HOT EDGE':'MODEL'}</span>${modelBadgeHTML}</div>
+                                   ${metaBadgesHTML}
+                                   <div class="matchup">
+                                     <div class="team" style="gap:8px;">${badgeA}<div>${(typeof wordmark!=='undefined'?wordmark(toAbbr(g.a||g.cityA||''),19):'<b>'+(g.a||'')+'</b>')}<span class="rival-block">${subA}</span></div></div>
+                                     <div class="vs">VS</div>
+                                     <div class="team" style="flex-direction:row-reverse;text-align:right;gap:8px;">${badgeB}<div>${(typeof wordmark!=='undefined'?wordmark(toAbbr(g.b||g.cityB||''),19):'<b>'+(g.b||'')+'</b>')}<span class="rival-block">${subB}</span></div></div>
+                                   </div>
+                                   <div class="odds-grid">
+                                     ${showOU?`<div class="market"><div class="row"><span class="label">Over / Under • ${g.total||''}</span><span class="badge">${fmtPct(ouProb)} model</span></div><div class="row"><span class="pick">${g.ouPick||''}</span><span class="mini">Edge ${((modelPredOU ? Math.abs(modelPredOU.edge) : (g.ouEdge||0))*100).toFixed(1)}%</span></div><div class="meter"><i style="width:${ouProb*100}%"></i></div></div>`:''}
+                                     ${showK?`<div class="market"><div class="row"><span class="label">${kLabel}</span><span class="badge">${fmtPct(kProb)} model</span></div><div class="row"><span class="pick">${kPickText}</span><span class="mini">Edge ${((modelPredK ? Math.abs(modelPredK.edge) : (g.kEdge||0))*100).toFixed(1)}%</span></div><div class="meter"><i style="width:${kProb*100}%"></i></div></div>`:''}
+                                     ${showML?`<div class="market"><div class="row"><span class="label">Moneyline • Fav ${g.mlFav||''}</span><span class="badge">${american(g.mlPriceDec||2)} • ${fmtPct(mlProb)}</span></div><div class="row"><span class="pick">${g.mlFav||''} ML</span><span class="mini">Edge ${((modelPredML ? Math.abs(modelPredML.edge) : (g.mlEdge||0))*100).toFixed(1)}%</span></div><div class="meter"><i style="width:${mlProb*100}%"></i></div></div>`:''}
+                                   </div>
+                                   <div class="game-actions">
+                                     ${ouBtn}
+                                     ${kBtn}
+                                     ${mlBtn}
+                                   </div>
+                                   ${ytHTML}
+                                   ${agreementHTML}
+                                 </article>`;
                           }catch(e){
                             console.warn('marketCard crash guard:', e.message, g);
                             return `<article class="game"><div class="empty"><b>Card error</b><span>${(e.message||'').slice(0,80)}</span></div></article>`;
@@ -13648,32 +13822,36 @@ body.dark .table-card .mini-table td {
 
 
 
-                            function renderDashboard(){
-                              try{
-                                const q = ($('#dashSearch')?.value||'').toLowerCase().trim();
-                                const activeChip = $('.chip.active', $('#dashChips'))?.dataset.chip || 'all';
-                                let list = [];
-                                try{ list = filterTodayGames(games.slice()); if(!list.length && games.length) list = games.slice(); }catch(e){ list = games.slice(); } // fallback to all if no today games - prevents No games flash
-                                if(q){ list = games.filter(g=> `${g.a||''} ${g.b||''} ${g.cityA||''} ${g.cityB||''} ${g.pitcherA||''} ${g.pitcherB||''} ${g.ouPick||''} ${g.kPick||''}`.toLowerCase().includes(q)); }
-                                if(activeChip==='edge'){ list = list.filter(g=> Math.max(g.ouEdge||0,g.kEdge||0,g.mlEdge||0) > .02); }
-                                if(activeChip==='ml'){ list = [...list].sort((a,b)=>(b.mlEdge||0)-(a.mlEdge||0)); }
-                                else if(activeChip==='ou'){ list = [...list].sort((a,b)=>(b.ouEdge||0)-(a.ouEdge||0)); }
-                                else if(activeChip==='k'){ list = [...list].sort((a,b)=>(b.kEdge||0)-(a.kEdge||0)); }
-                                const MAX_CARDS = 20;
-                                const overflow = list.length > MAX_CARDS;
-                                const shown = overflow ? list.slice(0, MAX_CARDS) : list;
-                                const el = $('#dashboardCards');
-                                if(el){
-                                  const overflowNote = overflow ? `<div class="mini" style="grid-column:1/-1;padding:8px 12px;background:rgba(255,255,255,0.08);border-radius:12px;margin-bottom:8px;">Showing ${MAX_CARDS} of ${list.length} — use search/filter to narrow.</div>` : '';
-                                  el.innerHTML = overflowNote + shown.map(g=>{
-                                    try{ return marketCard(g, activeChip==='all'?'all':activeChip); }catch(e){ return `<article class="game"><div class="empty">Err</div></article>`; }
-                                  }).join('') || `<div class="empty" style="grid-column:1/-1;"><b>No games</b><span></span></div>`;
-                                }
-                              }catch(e){
-                                console.warn('renderDashboard crash', e);
-                                const el=$('#dashboardCards'); if(el) el.innerHTML=`<div class="empty"><b>Dashboard error</b><span>${e.message}</span></div>`;
-                              }
-                            }
+                              function renderDashboard(){
+                                try{
+                                  const el = $('#dashboardCards');
+                                  const scrollEl = el ? el.closest('.screen') || el : document.querySelector('.screen.active');
+                                  const scrollTop = scrollEl ? scrollEl.scrollTop : 0;
+                                  const q = ($('#dashSearch')?.value||'').toLowerCase().trim();
+                                  const activeChip = $('.chip.active', $('#dashChips'))?.dataset.chip || 'all';
+                                  let list = [];
+                                  try{ list = filterTodayGames(games.slice()); if(!list.length && games.length) list = games.slice(); }catch(e){ list = games.slice(); }
+                                  if(q){ list = games.filter(g=> `${g.a||''} ${g.b||''} ${g.cityA||''} ${g.cityB||''} ${g.pitcherA||''} ${g.pitcherB||''} ${g.ouPick||''} ${g.kPick||''}`.toLowerCase().includes(q)); }
+                                  const getEdge = (g, mk)=>{ const p = getModelMarketPrediction(g, mk); return p ? Math.abs(p.edge) : (g[mk+'Edge']||0); };
+                                  if(activeChip==='edge'){ list = list.filter(g=> Math.max(getEdge(g,'ou'), getEdge(g,'k'), getEdge(g,'ml')) > .02); }
+                                  if(activeChip==='ml'){ list = [...list].sort((a,b)=>(getEdge(b,'ml')-getEdge(a,'ml'))); }
+                                  else if(activeChip==='ou'){ list = [...list].sort((a,b)=>(getEdge(b,'ou')-getEdge(a,'ou'))); }
+                                  else if(activeChip==='k'){ list = [...list].sort((a,b)=>(getEdge(b,'k')-getEdge(a,'k'))); }
+                                  const MAX_CARDS = 20;
+                                  const overflow = list.length > MAX_CARDS;
+                                  const shown = overflow ? list.slice(0, MAX_CARDS) : list;
+                                  if(el){
+                                   const overflowNote = overflow ? `<div class="mini" style="grid-column:1/-1;padding:8px 12px;background:rgba(255,255,255,0.08);border-radius:12px;margin-bottom:8px;">Showing ${MAX_CARDS} of ${list.length} — use search/filter to narrow.</div>` : '';
+                                   el.innerHTML = overflowNote + shown.map(g=>{
+                                     try{ return marketCard(g, activeChip==='all'?'all':activeChip); }catch(e){ return `<article class="game"><div class="empty">Err</div></article>`; }
+                                   }).join('') || `<div class="empty" style="grid-column:1/-1;"><b>No games</b><span></span></div>`;
+                                   if(scrollEl && scrollTop) scrollEl.scrollTop = scrollTop;
+                                 }
+                               }catch(e){
+                                 console.warn('renderDashboard crash', e);
+                                 const el=$('#dashboardCards'); if(el) el.innerHTML=`<div class="empty"><b>Dashboard error</b><span>${e.message}</span></div>`;
+                               }
+                             }
 
                             function buildLegId(g, market){ return `${g.id}:${market}`; }
                             function isPicked(g, market){
@@ -13693,8 +13871,9 @@ body.dark .table-card .mini-table td {
                                 picked,
                               };
                             }
-                            function shuffleOdds(){
-                              const allLists = [];
+                             function shuffleOdds(){
+                               try{ modelPredCache.clear(); }catch(e){}
+                               const allLists = [];
                               if(typeof games !== 'undefined' && Array.isArray(games)) allLists.push(games);
                               if(typeof gamesNFL !== 'undefined' && Array.isArray(gamesNFL)) allLists.push(gamesNFL);
                               if(typeof gamesNBA !== 'undefined' && Array.isArray(gamesNBA)) allLists.push(gamesNBA);
@@ -13807,17 +13986,28 @@ body.dark .table-card .mini-table td {
                                }).join('')
                                + (activeParlay.length < 20 ? '' : '<div class="slot" style="border:2px dashed rgba(92,124,255,0.4);opacity:0.7;"><span class="mini">PARLAY FULL • 20/20</span></div>');
 
-                               const pool = [];
-                               games.forEach(g=>{
-                                 const candidates = [
-                                   { mk:'ou', short:'O/U', edge: g.ouEdge||0 },
-                                   { mk:'k',  short:'K',   edge: g.kEdge||0  },
-                                   { mk:'ml', short:'ML',  edge: g.mlEdge||0 }
-                                 ];
-                                 const best = candidates.reduce((a,b)=> a.edge >= b.edge ? a : b);
-                                 const { mk, short, edge } = best;
-                                 pool.push({ id: buildLegId(g,mk), g, market: mk, label: legLabel(g,mk), dec: legOdds(g,mk), prob: legProb(g,mk), edge, short });
-                               });
+                                const pool = [];
+                                if(activeModel === 'final_combined'){
+                                  const recPicks = getFinalCombinedRecommendedPicks(games, 'MLB');
+                                  recPicks.forEach(p=>{
+                                    pool.push({ id: buildLegId(p.g,p.market), g: p.g, market: p.market, label: p.label, dec: p.dec, prob: p.prob, edge: p.edge, short: p.short });
+                                  });
+                                } else {
+                                  games.forEach(g=>{
+                                    const mkPredOU = getModelMarketPrediction(g, 'ou');
+                                    const mkPredK  = getModelMarketPrediction(g, 'k');
+                                    const mkPredML = getModelMarketPrediction(g, 'ml');
+                                    const candidates = [
+                                      { mk:'ou', short:'O/U', edge: mkPredOU ? Math.abs(mkPredOU.edge) : (g.ouEdge||0), pred: mkPredOU },
+                                      { mk:'k',  short:'K',   edge: mkPredK ? Math.abs(mkPredK.edge) : (g.kEdge||0), pred: mkPredK },
+                                      { mk:'ml', short:'ML',  edge: mkPredML ? Math.abs(mkPredML.edge) : (g.mlEdge||0), pred: mkPredML }
+                                    ];
+                                    const best = candidates.reduce((a,b)=> a.edge >= b.edge ? a : b);
+                                    const { mk, short, edge, pred } = best;
+                                    const prob = pred ? (pred.edge >= 0 ? pred.pA : pred.pB) : legProb(g, mk);
+                                    pool.push({ id: buildLegId(g,mk), g, market: mk, label: legLabel(g,mk), dec: legOdds(g,mk), prob: clamp(prob, mk==='ml'?.15:.30, mk==='ml'?.85:.75), edge, short });
+                                  });
+                                }
                                $('#poolList').innerHTML = pool.map(p=>{
                                  const disabled = activeParlay.some(l=> l.gameId===p.g.id) || activeParlay.length>=20;
                                  return `<button ${disabled?'disabled':''} data-pick="${p.id}"><span class="l">${p.label}</span><span class="r">${p.short} • ${american(p.dec)} • ${(p.edge*100).toFixed(1)}% edge</span></button>`;
@@ -13882,23 +14072,37 @@ body.dark .table-card .mini-table td {
                                });
                              }
 
-                            function filteredPicks(){
-
-                              const all = [];
-                              let _todayForPicks=[]; try{ _todayForPicks = filterTodayGames(games); if(!_todayForPicks.length) _todayForPicks=games; }catch(e){ _todayForPicks=games; }
-                              _todayForPicks.forEach(g=>{
-                                // FIX: use legOdds/legProb everywhere (was using g.mlPriceDec
-                                // which is undefined on the CHD/NFL/NBA feeds, causing
-                                // p.dec.toFixed(2) to throw and blank the entire picks list).
-                                all.push({ id:g.id+':ou', game:g, market:'ou', pick:g.ouPick||'O/U', edge:(g.ouEdge||0), prob: legProb(g,'ou'), dec: legOdds(g,'ou') });
-                                all.push({ id:g.id+':k', game:g, market:'k', pick:g.kPick||'Spread', edge:(g.kEdge||0), prob: legProb(g,'k'), dec: legOdds(g,'k') });
-                                all.push({ id:g.id+':ml', game:g, market:'ml', pick:`${g.mlFav||'Fav'} ML`, edge:(g.mlEdge||0), prob: legProb(g,'ml'), dec: legOdds(g,'ml') });
-                              });
-                              let filtered = [...all].sort((a,b)=>(b.edge||0)-(a.edge||0));
-                              if(forceEmpty) filtered = [];
-                              if(picksFilter!=='all') filtered = filtered.filter(p=>p.market===picksFilter);
-                              return filtered;
-                            }
+                             function filteredPicks(){
+                               const all = [];
+                               let _todayForPicks=[]; try{ _todayForPicks = filterTodayGames(games); if(!_todayForPicks.length) _todayForPicks=games; }catch(e){ _todayForPicks=games; }
+                               _todayForPicks.forEach(g=>{
+                                 const mkPredOU = getModelMarketPrediction(g, 'ou');
+                                 const mkPredK  = getModelMarketPrediction(g, 'k');
+                                 const mkPredML = getModelMarketPrediction(g, 'ml');
+                                 all.push({
+                                   id:g.id+':ou', game:g, market:'ou', pick:g.ouPick||'O/U',
+                                   edge: mkPredOU ? Math.abs(mkPredOU.edge) : (g.ouEdge||0),
+                                   prob: mkPredOU ? clamp((mkPredOU.edge>=0?mkPredOU.pA:mkPredOU.pB), .30, .75) : legProb(g,'ou'),
+                                   dec: legOdds(g,'ou')
+                                 });
+                                 all.push({
+                                   id:g.id+':k', game:g, market:'k', pick:g.kPick||'Spread',
+                                   edge: mkPredK ? Math.abs(mkPredK.edge) : (g.kEdge||0),
+                                   prob: mkPredK ? clamp((mkPredK.edge>=0?mkPredK.pA:mkPredK.pB), .30, .75) : legProb(g,'k'),
+                                   dec: legOdds(g,'k')
+                                 });
+                                 all.push({
+                                   id:g.id+':ml', game:g, market:'ml', pick:`${g.mlFav||'Fav'} ML`,
+                                   edge: mkPredML ? Math.abs(mkPredML.edge) : (g.mlEdge||0),
+                                   prob: mkPredML ? clamp((mkPredML.pA>=mkPredML.pB?mkPredML.pA:mkPredML.pB), .15, .85) : legProb(g,'ml'),
+                                   dec: legOdds(g,'ml')
+                                 });
+                               });
+                               let filtered = [...all].sort((a,b)=>(b.edge||0)-(a.edge||0));
+                               if(forceEmpty) filtered = [];
+                               if(picksFilter!=='all') filtered = filtered.filter(p=>p.market===picksFilter);
+                               return filtered;
+                             }
                             function renderPicks(){
                               const mount = $('#picksMount');
                               const list = filteredPicks();
@@ -13924,7 +14128,7 @@ body.dark .table-card .mini-table td {
                                 const _dec = Number.isFinite(p.dec)&&p.dec>1?p.dec:1.91;
                                 const _prob = Number.isFinite(p.prob)?p.prob:0.5;
                                 const _edge = Number.isFinite(p.edge)?p.edge:0;
-                                return `<article class="game" style="min-height:280px"><div class="game-head"><div class="tv">${abbrA}@${abbrB} • ${p.market.toUpperCase()}</div><span class="badge hot">EDGE ${(_edge*100).toFixed(1)}%</span></div><div style="padding:12px 14px 0"><b style="font-size:15px; letter-spacing:-0.02em;">${p.pick}</b><div class="mini" style="margin-top:4px;">${abbrA} @ ${abbrB} • DEC ${_dec.toFixed(2)} • ${american(_dec)}</div>${pitcherLine}</div><div class="odds-grid" style="padding-top:10px"><div class="market"><div class="row"><span class="label">Model prob</span><span class="badge">${fmtPct(_prob)}</span></div><div class="meter"><i style="width:${_prob*100}%"></i></div></div></div><div class="game-actions"><button class="btn${picked?' picked':''}" data-add="${g.id}:${p.market}" ${picked?'disabled title="Already in parlay"':''}>${picked?'✓ Added':'Add to Parlay'}</button><button class="btn primary" data-copy-pick="${p.id}">Copy</button></div></article>`;
+                                 return `<article class="game" style="min-height:280px"><div class="game-head"><div class="tv">${abbrA}@${abbrB} • ${p.market.toUpperCase()}</div><span class="badge hot">EDGE ${(_edge*100).toFixed(1)}%</span>${getModelBadgeHTML()}</div><div style="padding:12px 14px 0"><b style="font-size:15px; letter-spacing:-0.02em;">${p.pick}</b><div class="mini" style="margin-top:4px;">${abbrA} @ ${abbrB} • DEC ${_dec.toFixed(2)} • ${american(_dec)}</div>${pitcherLine}</div><div class="odds-grid" style="padding-top:10px"><div class="market"><div class="row"><span class="label">Model prob</span><span class="badge">${fmtPct(_prob)}</span></div><div class="meter"><i style="width:${_prob*100}%"></i></div></div></div><div class="game-actions"><button class="btn${picked?' picked':''}" data-add="${g.id}:${p.market}" ${picked?'disabled title="Already in parlay"':''}>${picked?'✓ Added':'Add to Parlay'}</button><button class="btn primary" data-copy-pick="${p.id}">Copy</button></div></article>`;
                               }).join('')}</div>`;
                             }
 
@@ -14466,79 +14670,85 @@ body.dark .table-card .mini-table td {
                             let nbaDashFilter = 'all';
                             let nflPicksFilter = 'all';
                             let nbaPicksFilter = 'all';
-                            function renderNFLDashboard(){
-                              try{
-                                const q = ($('#nflDashSearch')?.value||'').toLowerCase().trim();
-                                let list = Array.isArray(gamesNFL) ? gamesNFL.slice() : [];
-                                if(!list.length){
-                                  const el = $('#nflDashboardCards');
-                                  if(el) el.innerHTML = `<div class="empty" style="grid-column:1/-1;padding:28px;"><div style="font-size:32px;margin-bottom:8px;">🏈</div><b>No NFL games loaded</b></div>`;
-                                  return;
-                                }
-                                try{ const f = filterTodayGames(list); if(f.length || !list.length) list = f; /* fallback keeps old data if no today games */ }catch(e){}
-                                if(typeof nflDashFilter !== 'undefined'){
-                                  if(nflDashFilter==='edge'){ list = list.filter(g=> Math.max(g.ouEdge||0,g.kEdge||0,g.mlEdge||0) > .02); }
-                                  else if(nflDashFilter==='ml'){ list = [...list].sort((a,b)=>(b.mlEdge||0)-(a.mlEdge||0)); }
-                                  else if(nflDashFilter==='ou'){ list = [...list].sort((a,b)=>(b.ouEdge||0)-(a.ouEdge||0)); }
-                                  else if(nflDashFilter==='k'){ list = [...list].sort((a,b)=>(b.kEdge||0)-(a.kEdge||0)); }
-                                }
-                                if(q){ list = list.filter(g=> `${g.a||''} ${g.b||''} ${g.cityA||''} ${g.cityB||''}`.toLowerCase().includes(q)); }
-                                const MAX_NFL_CARDS = 30;
-                                const overflow = list.length > MAX_NFL_CARDS;
-                                const shown = overflow ? list.slice(0, MAX_NFL_CARDS) : list;
-                                const el = $('#nflDashboardCards');
-                                if(el){
-                                  try{
-                                    el.innerHTML = shown.map(g=>{
-                                      try{ return marketCard(g, (typeof nflDashFilter!=='undefined' && nflDashFilter!=='all'? nflDashFilter : 'all')); }catch(e){ return `<article class="game"><div class="empty">Err ${e.message}</div></article>`; }
-                                    }).join('') || `<div class="empty">No matches</div>`;
-                                  }catch(e){
-                                    console.warn('renderNFLDashboard innerHTML err', e);
-                                    el.innerHTML = `<div class="empty"><b>Render error</b><span>${e.message}</span></div>`;
+                             function renderNFLDashboard(){
+                               try{
+                                 const el = $('#nflDashboardCards');
+                                 const scrollEl = el ? el.closest('.screen') || el : document.querySelector('.screen.active');
+                                 const scrollTop = scrollEl ? scrollEl.scrollTop : 0;
+                                 const q = ($('#nflDashSearch')?.value||'').toLowerCase().trim();
+                                 let list = Array.isArray(gamesNFL) ? gamesNFL.slice() : [];
+                                 if(!list.length){
+                                   if(el) el.innerHTML = `<div class="empty" style="grid-column:1/-1;padding:28px;"><div style="font-size:32px;margin-bottom:8px;">🏈</div><b>No NFL games loaded</b></div>`;
+                                   return;
+                                 }
+                                  try{ const f = filterTodayGames(list); if(f.length || !list.length) list = f; }catch(e){}
+                                  const getEdge = (g, mk)=>{ const p = getModelMarketPrediction(g, mk); return p ? Math.abs(p.edge) : (g[mk+'Edge']||0); };
+                                  if(typeof nflDashFilter !== 'undefined'){
+                                    if(nflDashFilter==='edge'){ list = list.filter(g=> Math.max(getEdge(g,'ou'), getEdge(g,'k'), getEdge(g,'ml')) > .02); }
+                                    else if(nflDashFilter==='ml'){ list = [...list].sort((a,b)=>(getEdge(b,'ml')-getEdge(a,'ml'))); }
+                                    else if(nflDashFilter==='ou'){ list = [...list].sort((a,b)=>(getEdge(b,'ou')-getEdge(a,'ou'))); }
+                                    else if(nflDashFilter==='k'){ list = [...list].sort((a,b)=>(getEdge(b,'k')-getEdge(a,'k'))); }
                                   }
-                                }
-                              }catch(e){
-                                console.warn('renderNFLDashboard crash:', e);
-                                const el = $('#nflDashboardCards');
-                                if(el) el.innerHTML = `<div class="empty"><b>NFL dashboard error</b><span>${e.message}</span></div>`;
-                              }
-                            }
+                                 if(q){ list = list.filter(g=> `${g.a||''} ${g.b||''} ${g.cityA||''} ${g.cityB||''}`.toLowerCase().includes(q)); }
+                                 const MAX_NFL_CARDS = 30;
+                                 const overflow = list.length > MAX_NFL_CARDS;
+                                 const shown = overflow ? list.slice(0, MAX_NFL_CARDS) : list;
+                                 if(el){
+                                   try{
+                                     el.innerHTML = shown.map(g=>{
+                                       try{ return marketCard(g, (typeof nflDashFilter!=='undefined' && nflDashFilter!=='all'? nflDashFilter : 'all')); }catch(e){ return `<article class="game"><div class="empty">Err ${e.message}</div></article>`; }
+                                     }).join('') || `<div class="empty">No matches</div>`;
+                                   }catch(e){
+                                     console.warn('renderNFLDashboard innerHTML err', e);
+                                     el.innerHTML = `<div class="empty"><b>Render error</b><span>${e.message}</span></div>`;
+                                   }
+                                   if(scrollEl && scrollTop) scrollEl.scrollTop = scrollTop;
+                                 }
+                               }catch(e){
+                                 console.warn('renderNFLDashboard crash:', e);
+                                 const el = $('#nflDashboardCards');
+                                 if(el) el.innerHTML = `<div class="empty"><b>NFL dashboard error</b><span>${e.message}</span></div>`;
+                               }
+                             }
 
-                            function renderNBADashboard(){
-                              try{
-                                const q = ($('#nbaDashSearch')?.value||'').toLowerCase().trim();
-                                let list = Array.isArray(gamesNBA) ? gamesNBA.slice() : [];
-                                if(!list.length){
-                                  const el = $('#nbaDashboardCards');
-                                  if(el) el.innerHTML = `<div class="empty" style="grid-column:1/-1;padding:28px;"><div style="font-size:32px;margin-bottom:8px;">🏀</div><b>No NBA games loaded</b></div>`;
-                                  return;
-                                }
-                                try{ const f = filterTodayGames(list); if(f.length || !list.length) list = f; /* fallback keeps old data if no today games */ }catch(e){}
-                                if(typeof nbaDashFilter !== 'undefined'){
-                                  if(nbaDashFilter==='edge'){ list = list.filter(g=> Math.max(g.ouEdge||0,g.kEdge||0,g.mlEdge||0) > .02); }
-                                  else if(nbaDashFilter==='ml'){ list = [...list].sort((a,b)=>(b.mlEdge||0)-(a.mlEdge||0)); }
-                                  else if(nbaDashFilter==='ou'){ list = [...list].sort((a,b)=>(b.ouEdge||0)-(a.ouEdge||0)); }
-                                  else if(nbaDashFilter==='k'){ list = [...list].sort((a,b)=>(b.kEdge||0)-(a.kEdge||0)); }
-                                }
-                                if(q){ list = list.filter(g=> `${g.a||''} ${g.b||''}`.toLowerCase().includes(q)); }
-                                const MAX_NBA_CARDS = 30;
-                                const overflow = list.length > MAX_NBA_CARDS;
-                                const shown = overflow ? list.slice(0, MAX_NBA_CARDS) : list;
-                                const el = $('#nbaDashboardCards');
-                                if(el){
-                                  try{
-                                    const overflowNote = overflow ? `<div class="mini" style="grid-column:1/-1;padding:8px 12px;background:rgba(255,255,255,0.08);border-radius:12px;margin-bottom:8px;">Showing ${MAX_NBA_CARDS} of ${list.length}</div>` : '';
-                                    el.innerHTML = overflowNote + shown.map(g=>{
-                                      try{ return marketCard(g, (typeof nbaDashFilter!=='undefined' && nbaDashFilter!=='all'? nbaDashFilter : 'all')); }catch(e){ return `<article class="game"><div class="empty">Err</div></article>`; }
-                                    }).join('') || `<div class="empty">No matches</div>`;
-                                  }catch(e){
-                                    el.innerHTML = `<div class="empty"><b>Render error</b><span>${e.message}</span></div>`;
+                             function renderNBADashboard(){
+                               try{
+                                 const el = $('#nbaDashboardCards');
+                                 const scrollEl = el ? el.closest('.screen') || el : document.querySelector('.screen.active');
+                                 const scrollTop = scrollEl ? scrollEl.scrollTop : 0;
+                                 const q = ($('#nbaDashSearch')?.value||'').toLowerCase().trim();
+                                 let list = Array.isArray(gamesNBA) ? gamesNBA.slice() : [];
+                                 if(!list.length){
+                                   if(el) el.innerHTML = `<div class="empty" style="grid-column:1/-1;padding:28px;"><div style="font-size:32px;margin-bottom:8px;">🏀</div><b>No NBA games loaded</b></div>`;
+                                   return;
+                                 }
+                                  try{ const f = filterTodayGames(list); if(f.length || !list.length) list = f; }catch(e){}
+                                  const getEdge = (g, mk)=>{ const p = getModelMarketPrediction(g, mk); return p ? Math.abs(p.edge) : (g[mk+'Edge']||0); };
+                                  if(typeof nbaDashFilter !== 'undefined'){
+                                    if(nbaDashFilter==='edge'){ list = list.filter(g=> Math.max(getEdge(g,'ou'), getEdge(g,'k'), getEdge(g,'ml')) > .02); }
+                                    else if(nbaDashFilter==='ml'){ list = [...list].sort((a,b)=>(getEdge(b,'ml')-getEdge(a,'ml'))); }
+                                    else if(nbaDashFilter==='ou'){ list = [...list].sort((a,b)=>(getEdge(b,'ou')-getEdge(a,'ou'))); }
+                                    else if(nbaDashFilter==='k'){ list = [...list].sort((a,b)=>(getEdge(b,'k')-getEdge(a,'k'))); }
                                   }
-                                }
-                              }catch(e){
-                                console.warn('renderNBADashboard crash:', e);
-                              }
-                            }
+                                 if(q){ list = list.filter(g=> `${g.a||''} ${g.b||''}`.toLowerCase().includes(q)); }
+                                 const MAX_NBA_CARDS = 30;
+                                 const overflow = list.length > MAX_NBA_CARDS;
+                                 const shown = overflow ? list.slice(0, MAX_NBA_CARDS) : list;
+                                 if(el){
+                                   try{
+                                     const overflowNote = overflow ? `<div class="mini" style="grid-column:1/-1;padding:8px 12px;background:rgba(255,255,255,0.08);border-radius:12px;margin-bottom:8px;">Showing ${MAX_NBA_CARDS} of ${list.length}</div>` : '';
+                                     el.innerHTML = overflowNote + shown.map(g=>{
+                                       try{ return marketCard(g, (typeof nbaDashFilter!=='undefined' && nbaDashFilter!=='all'? nbaDashFilter : 'all')); }catch(e){ return `<article class="game"><div class="empty">Err</div></article>`; }
+                                     }).join('') || `<div class="empty">No matches</div>`;
+                                   }catch(e){
+                                     el.innerHTML = `<div class="empty"><b>Render error</b><span>${e.message}</span></div>`;
+                                   }
+                                   if(scrollEl && scrollTop) scrollEl.scrollTop = scrollTop;
+                                 }
+                               }catch(e){
+                                 console.warn('renderNBADashboard crash:', e);
+                               }
+                             }
 
                              function addNFLLegByToken(token){
                                window.__lastAddNFL = window.__lastAddNFL || {};
@@ -14586,11 +14796,23 @@ body.dark .table-card .mini-table td {
                                const cntEl=document.getElementById('nflParlayCount'); if(cntEl) cntEl.textContent=activeParlay.length+' / 20';
                                const showSlots=Math.min(20,activeParlay.length+3);
                                slotsEl.innerHTML=Array.from({length:showSlots},(_,i)=>{ const leg=activeParlay[i]; if(!leg) return `<div class="slot"><div class="top"><span class="mini">SLOT ${i+1} • EMPTY</span></div></div>`; const d=Number.isFinite(parseFloat(leg.dec))&&parseFloat(leg.dec)>1?parseFloat(leg.dec):1.909; return `<div class="slot filled"><div class="top"><span class="leg">${leg.label||'Pick'}</span><button class="btn" data-nfl-remove="${i}">✕</button></div><div class="mini">${(leg.market||'').toUpperCase()} • ${american(d)} • DEC ${d.toFixed(2)}</div></div>`; }).join('');
-                               const pool=[]; gamesNFL.forEach(g=>{
-                                 const candidates=[{mk:'ou',short:'O/U',edge:g.ouEdge||0},{mk:'k',short:'Spread',edge:g.kEdge||0},{mk:'ml',short:'ML',edge:g.mlEdge||0}];
-                                 const best=candidates.reduce((a,b)=> a.edge>=b.edge ? a:b);
-                                 pool.push({ id: buildLegId(g,best.mk)+'_nfl', g, market: best.mk, label: legLabel(g,best.mk), dec: legOdds(g,best.mk), prob: legProb(g,best.mk), edge: best.edge, short: best.short });
-                               });
+                                const pool=[]; 
+                                if(activeModel === 'final_combined'){
+                                  const recPicks = getFinalCombinedRecommendedPicks(gamesNFL, 'NFL');
+                                  recPicks.forEach(p=>{
+                                    pool.push({ id: buildLegId(p.g,p.market)+'_nfl', g: p.g, market: p.market, label: p.label, dec: p.dec, prob: p.prob, edge: p.edge, short: p.short });
+                                  });
+                                } else {
+                                  gamesNFL.forEach(g=>{
+                                    const mkPredOU = getModelMarketPrediction(g, 'ou');
+                                    const mkPredK  = getModelMarketPrediction(g, 'k');
+                                    const mkPredML = getModelMarketPrediction(g, 'ml');
+                                    const candidates=[{mk:'ou',short:'O/U',edge:mkPredOU?Math.abs(mkPredOU.edge):(g.ouEdge||0),pred:mkPredOU},{mk:'k',short:'Spread',edge:mkPredK?Math.abs(mkPredK.edge):(g.kEdge||0),pred:mkPredK},{mk:'ml',short:'ML',edge:mkPredML?Math.abs(mkPredML.edge):(g.mlEdge||0),pred:mkPredML}];
+                                    const best=candidates.reduce((a,b)=> a.edge>=b.edge ? a:b);
+                                    const prob = best.pred ? (best.pred.edge>=0?best.pred.pA:best.pred.pB) : legProb(g,best.mk);
+                                    pool.push({ id: buildLegId(g,best.mk)+'_nfl', g, market: best.mk, label: legLabel(g,best.mk), dec: legOdds(g,best.mk), prob: clamp(prob, best.mk==='ml'?.15:.30, best.mk==='ml'?.85:.75), edge: best.edge, short: best.short });
+                                  });
+                                }
                                const poolEl=$('#nflPoolList'); if(poolEl) poolEl.innerHTML = pool.length ? pool.map(p=>{ const disabled=activeParlay.some(l=> l.gameId===p.g.id)||activeParlay.length>=20; return `<button ${disabled?'disabled':''} class="${disabled?'picked':''}" data-nfl-pick="${p.id}"><span class="l">${p.label}</span><span class="r">${p.short} • ${american(p.dec)}</span></button>`; }).join('') : `<div class="mini">No games</div>`;
                                let dec=1,prob=1; activeParlay.forEach(l=>{ dec*=(Number.isFinite(l.dec)&&l.dec>1?l.dec:1.91); prob*=(Number.isFinite(l.prob)&&l.prob>0?l.prob:0.5); });
                                const decEl=$('#nflDecOdds'); if(decEl) decEl.textContent=activeParlay.length?dec.toFixed(2):'0.00';
@@ -14611,11 +14833,23 @@ body.dark .table-card .mini-table td {
                                const cntEl=document.getElementById('nbaParlayCount'); if(cntEl) cntEl.textContent=activeParlay.length+' / 20';
                                const showSlots=Math.min(20,activeParlay.length+3);
                                slotsEl.innerHTML=Array.from({length:showSlots},(_,i)=>{ const leg=activeParlay[i]; if(!leg) return `<div class="slot"><div class="top"><span class="mini">SLOT ${i+1} • EMPTY</span></div></div>`; const d=Number.isFinite(parseFloat(leg.dec))&&parseFloat(leg.dec)>1?parseFloat(leg.dec):1.909; return `<div class="slot filled"><div class="top"><span class="leg">${leg.label||'Pick'}</span><button class="btn" data-nba-remove="${i}">✕</button></div><div class="mini">${(leg.market||'').toUpperCase()} • ${american(d)} • DEC ${d.toFixed(2)}</div></div>`; }).join('');
-                               const pool=[]; gamesNBA.forEach(g=>{
-                                 const candidates=[{mk:'ou',short:'O/U',edge:g.ouEdge||0},{mk:'k',short:'Spread',edge:g.kEdge||0},{mk:'ml',short:'ML',edge:g.mlEdge||0}];
-                                 const best=candidates.reduce((a,b)=> a.edge>=b.edge ? a:b);
-                                 pool.push({ id: buildLegId(g,best.mk)+'_nba', g, market: best.mk, label: legLabel(g,best.mk), dec: legOdds(g,best.mk), prob: legProb(g,best.mk), edge: best.edge, short: best.short });
-                               });
+                                const pool=[]; 
+                                if(activeModel === 'final_combined'){
+                                  const recPicks = getFinalCombinedRecommendedPicks(gamesNBA, 'NBA');
+                                  recPicks.forEach(p=>{
+                                    pool.push({ id: buildLegId(p.g,p.market)+'_nba', g: p.g, market: p.market, label: p.label, dec: p.dec, prob: p.prob, edge: p.edge, short: p.short });
+                                  });
+                                } else {
+                                  gamesNBA.forEach(g=>{
+                                    const mkPredOU = getModelMarketPrediction(g, 'ou');
+                                    const mkPredK  = getModelMarketPrediction(g, 'k');
+                                    const mkPredML = getModelMarketPrediction(g, 'ml');
+                                    const candidates=[{mk:'ou',short:'O/U',edge:mkPredOU?Math.abs(mkPredOU.edge):(g.ouEdge||0),pred:mkPredOU},{mk:'k',short:'Spread',edge:mkPredK?Math.abs(mkPredK.edge):(g.kEdge||0),pred:mkPredK},{mk:'ml',short:'ML',edge:mkPredML?Math.abs(mkPredML.edge):(g.mlEdge||0),pred:mkPredML}];
+                                    const best=candidates.reduce((a,b)=> a.edge>=b.edge ? a:b);
+                                    const prob = best.pred ? (best.pred.edge>=0?best.pred.pA:best.pred.pB) : legProb(g,best.mk);
+                                    pool.push({ id: buildLegId(g,best.mk)+'_nba', g, market: best.mk, label: legLabel(g,best.mk), dec: legOdds(g,best.mk), prob: clamp(prob, best.mk==='ml'?.15:.30, best.mk==='ml'?.85:.75), edge: best.edge, short: best.short });
+                                  });
+                                }
                                const poolEl=$('#nbaPoolList'); if(poolEl) poolEl.innerHTML = pool.length ? pool.map(p=>{ const disabled=activeParlay.some(l=> l.gameId===p.g.id)||activeParlay.length>=20; return `<button ${disabled?'disabled':''} class="${disabled?'picked':''}" data-nba-pick="${p.id}"><span class="l">${p.label}</span><span class="r">${p.short} • ${american(p.dec)}</span></button>`; }).join('') : `<div class="mini">No games</div>`;
                                let dec=1,prob=1; activeParlay.forEach(l=>{ dec*=(Number.isFinite(l.dec)&&l.dec>1?l.dec:1.91); prob*=(Number.isFinite(l.prob)&&l.prob>0?l.prob:0.5); });
                                const decEl=$('#nbaDecOdds'); if(decEl) decEl.textContent=activeParlay.length?dec.toFixed(2):'0.00';
@@ -14626,21 +14860,35 @@ body.dark .table-card .mini-table td {
                                const meterEl=$('#nbaEvMeter'); if(meterEl) meterEl.style.width=`${clamp(18+ev*260,8,100)}%`;
                                try{ if(typeof updateParlayBubble==='function') updateParlayBubble(); }catch(e){}
                              }
-                            function getNFLPicks(){ const all=[]; let _t=[]; try{ _t=filterTodayGames(gamesNFL); if(!_t.length) _t=gamesNFL; }catch(e){ _t=gamesNFL; } _t.forEach(g=>{ /* FIX: was dec:g.mlPriceDec (undefined on NFL feed) -> TypeError in renderNFLPicks */ all.push({ id:g.id+':ou', game:g, market:'ou', pick:(g.ouPick||'O/U'), edge:(g.ouEdge||0), prob: legProb(g,'ou'), dec: legOdds(g,'ou') }); all.push({ id:g.id+':k', game:g, market:'k', pick:(g.kPick||'Spread'), edge:(g.kEdge||0), prob: legProb(g,'k'), dec: legOdds(g,'k') }); all.push({ id:g.id+':ml', game:g, market:'ml', pick:`${g.mlFav||'Fav'} ML`, edge:(g.mlEdge||0), prob: legProb(g,'ml'), dec: legOdds(g,'ml') }); }); return all.sort((a,b)=>(b.edge||0)-(a.edge||0)); }
+                             function getNFLPicks(){ const all=[]; let _t=[]; try{ _t=filterTodayGames(gamesNFL); if(!_t.length) _t=gamesNFL; }catch(e){ _t=gamesNFL; } _t.forEach(g=>{
+                                 const mkPredOU = getModelMarketPrediction(g, 'ou');
+                                 const mkPredK  = getModelMarketPrediction(g, 'k');
+                                 const mkPredML = getModelMarketPrediction(g, 'ml');
+                                 all.push({ id:g.id+':ou', game:g, market:'ou', pick:(g.ouPick||'O/U'), edge: mkPredOU?Math.abs(mkPredOU.edge):(g.ouEdge||0), prob: mkPredOU?clamp((mkPredOU.edge>=0?mkPredOU.pA:mkPredOU.pB),.30,.75):legProb(g,'ou'), dec: legOdds(g,'ou') });
+                                 all.push({ id:g.id+':k', game:g, market:'k', pick:(g.kPick||'Spread'), edge: mkPredK?Math.abs(mkPredK.edge):(g.kEdge||0), prob: mkPredK?clamp((mkPredK.edge>=0?mkPredK.pA:mkPredK.pB),.30,.75):legProb(g,'k'), dec: legOdds(g,'k') });
+                                 all.push({ id:g.id+':ml', game:g, market:'ml', pick:`${g.mlFav||'Fav'} ML`, edge: mkPredML?Math.abs(mkPredML.edge):(g.mlEdge||0), prob: mkPredML?clamp((mkPredML.pA>=mkPredML.pB?mkPredML.pA:mkPredML.pB),.15,.85):legProb(g,'ml'), dec: legOdds(g,'ml') });
+                               }); return all.sort((a,b)=>(b.edge||0)-(a.edge||0)); }
                             function filteredNFLPicks(){ let list=getNFLPicks(); if(nflPicksFilter!=='all') list=list.filter(p=>p.market===nflPicksFilter); return list; }
                              function renderNFLPicks(){
                                const mount=$('#nflPicksMount'); if(!mount) return; const list=filteredNFLPicks();
                                if(!list.length){ mount.innerHTML = gamesNFL.length ? `<div class="empty">No picks match filter</div>` : `<div class="empty" style="padding:28px;"><div style="font-size:32px;">🏈</div><b>No NFL picks — no games loaded</b><span> — mock removed.</span></div>`; return; }
                                const activeParlay = getActiveParlay('nfl');
-                               mount.innerHTML = `<div class="cards">${list.slice(0,20).map(p=>{ const g=p.game; const picked=activeParlay.some(l=> l.gameId===g.id); const _dec = Number.isFinite(p.dec)&&p.dec>1?p.dec:1.91; const _prob = Number.isFinite(p.prob)?p.prob:0.5; const _edge = Number.isFinite(p.edge)?p.edge:0; return `<article class="game" style="min-height:260px"><div class="game-head"><div class="tv">${g.a}@${g.b} • ${p.market.toUpperCase()}</div><span class="badge hot">EDGE ${(_edge*100).toFixed(1)}%</span></div><div style="padding:12px 14px 0"><b>${p.pick}</b><div class="mini">${g.a} @ ${g.b} • DEC ${_dec.toFixed(2)}</div></div><div class="odds-grid" style="padding-top:10px"><div class="market"><div class="row"><span class="label">Model prob</span><span class="badge">${fmtPct(_prob)}</span></div><div class="meter"><i style="width:${_prob*100}%"></i></div></div></div><div class="game-actions"><button class="btn${picked?' picked':''}" data-nfl-add="${g.id}:${p.market}" ${picked?'disabled':''}>${picked?'✓ Added':'Add'}</button><button class="btn primary" data-copy-nfl-pick="${p.id}">Copy</button></div></article>`; }).join('')}</div>`;
+                                mount.innerHTML = `<div class="cards">${list.slice(0,20).map(p=>{ const g=p.game; const picked=activeParlay.some(l=> l.gameId===g.id); const _dec = Number.isFinite(p.dec)&&p.dec>1?p.dec:1.91; const _prob = Number.isFinite(p.prob)?p.prob:0.5; const _edge = Number.isFinite(p.edge)?p.edge:0; return `<article class="game" style="min-height:260px"><div class="game-head"><div class="tv">${g.a}@${g.b} • ${p.market.toUpperCase()}</div><span class="badge hot">EDGE ${(_edge*100).toFixed(1)}%</span>${getModelBadgeHTML()}</div><div style="padding:12px 14px 0"><b>${p.pick}</b><div class="mini">${g.a} @ ${g.b} • DEC ${_dec.toFixed(2)}</div></div><div class="odds-grid" style="padding-top:10px"><div class="market"><div class="row"><span class="label">Model prob</span><span class="badge">${fmtPct(_prob)}</span></div><div class="meter"><i style="width:${_prob*100}%"></i></div></div></div><div class="game-actions"><button class="btn${picked?' picked':''}" data-nfl-add="${g.id}:${p.market}" ${picked?'disabled':''}>${picked?'✓ Added':'Add'}</button><button class="btn primary" data-copy-nfl-pick="${p.id}">Copy</button></div></article>`; }).join('')}</div>`;
                              }
-                             function getNBAPicks(){ const all=[]; let _t=[]; try{ _t=filterTodayGames(gamesNBA); if(!_t.length) _t=gamesNBA; }catch(e){ _t=gamesNBA; } _t.forEach(g=>{ /* FIX: was dec:g.mlPriceDec (undefined on NBA feed) -> TypeError in renderNBAPicks */ all.push({ id:g.id+':ou', game:g, market:'ou', pick:(g.ouPick||'O/U'), edge:(g.ouEdge||0), prob: legProb(g,'ou'), dec: legOdds(g,'ou') }); all.push({ id:g.id+':k', game:g, market:'k', pick:(g.kPick||'Spread'), edge:(g.kEdge||0), prob: legProb(g,'k'), dec: legOdds(g,'k') }); all.push({ id:g.id+':ml', game:g, market:'ml', pick:`${g.mlFav||'Fav'} ML`, edge:(g.mlEdge||0), prob: legProb(g,'ml'), dec: legOdds(g,'ml') }); }); return all.sort((a,b)=>(b.edge||0)-(a.edge||0)); }
+                             function getNBAPicks(){ const all=[]; let _t=[]; try{ _t=filterTodayGames(gamesNBA); if(!_t.length) _t=gamesNBA; }catch(e){ _t=gamesNBA; } _t.forEach(g=>{
+                                 const mkPredOU = getModelMarketPrediction(g, 'ou');
+                                 const mkPredK  = getModelMarketPrediction(g, 'k');
+                                 const mkPredML = getModelMarketPrediction(g, 'ml');
+                                 all.push({ id:g.id+':ou', game:g, market:'ou', pick:(g.ouPick||'O/U'), edge: mkPredOU?Math.abs(mkPredOU.edge):(g.ouEdge||0), prob: mkPredOU?clamp((mkPredOU.edge>=0?mkPredOU.pA:mkPredOU.pB),.30,.75):legProb(g,'ou'), dec: legOdds(g,'ou') });
+                                 all.push({ id:g.id+':k', game:g, market:'k', pick:(g.kPick||'Spread'), edge: mkPredK?Math.abs(mkPredK.edge):(g.kEdge||0), prob: mkPredK?clamp((mkPredK.edge>=0?mkPredK.pA:mkPredK.pB),.30,.75):legProb(g,'k'), dec: legOdds(g,'k') });
+                                 all.push({ id:g.id+':ml', game:g, market:'ml', pick:`${g.mlFav||'Fav'} ML`, edge: mkPredML?Math.abs(mkPredML.edge):(g.mlEdge||0), prob: mkPredML?clamp((mkPredML.pA>=mkPredML.pB?mkPredML.pA:mkPredML.pB),.15,.85):legProb(g,'ml'), dec: legOdds(g,'ml') });
+                               }); return all.sort((a,b)=>(b.edge||0)-(a.edge||0)); }
                              function filteredNBAPicks(){ let list=getNBAPicks(); if(nbaPicksFilter!=='all') list=list.filter(p=>p.market===nbaPicksFilter); return list; }
                              function renderNBAPicks(){
                                const mount=$('#nbaPicksMount'); if(!mount) return; const list=filteredNBAPicks();
                                if(!list.length){ mount.innerHTML = gamesNBA.length ? `<div class="empty">No picks match filter</div>` : `<div class="empty" style="padding:28px;"><div style="font-size:32px;">🏀</div><b>No NBA picks — no games loaded</b><span> — mock removed.</span></div>`; return; }
                                const activeParlay = getActiveParlay('nba');
-                               mount.innerHTML = `<div class="cards">${list.slice(0,20).map(p=>{ const g=p.game; const picked=activeParlay.some(l=> l.gameId===g.id); const _dec = Number.isFinite(p.dec)&&p.dec>1?p.dec:1.91; const _prob = Number.isFinite(p.prob)?p.prob:0.5; const _edge = Number.isFinite(p.edge)?p.edge:0; return `<article class="game" style="min-height:260px"><div class="game-head"><div class="tv">${g.a}@${g.b} • ${p.market.toUpperCase()}</div><span class="badge hot">EDGE ${(_edge*100).toFixed(1)}%</span></div><div style="padding:12px 14px 0"><b>${p.pick}</b><div class="mini">${g.a} @ ${g.b} • DEC ${_dec.toFixed(2)}</div></div><div class="odds-grid" style="padding-top:10px"><div class="market"><div class="row"><span class="label">Model prob</span><span class="badge">${fmtPct(_prob)}</span></div><div class="meter"><i style="width:${_prob*100}%"></i></div></div></div><div class="game-actions"><button class="btn${picked?' picked':''}" data-nba-add="${g.id}:${p.market}" ${picked?'disabled':''}>${picked?'✓ Added':'Add'}</button><button class="btn primary" data-copy-nba-pick="${p.id}">Copy</button></div></article>`; }).join('')}</div>`;
+                                mount.innerHTML = `<div class="cards">${list.slice(0,20).map(p=>{ const g=p.game; const picked=activeParlay.some(l=> l.gameId===g.id); const _dec = Number.isFinite(p.dec)&&p.dec>1?p.dec:1.91; const _prob = Number.isFinite(p.prob)?p.prob:0.5; const _edge = Number.isFinite(p.edge)?p.edge:0; return `<article class="game" style="min-height:260px"><div class="game-head"><div class="tv">${g.a}@${g.b} • ${p.market.toUpperCase()}</div><span class="badge hot">EDGE ${(_edge*100).toFixed(1)}%</span>${getModelBadgeHTML()}</div><div style="padding:12px 14px 0"><b>${p.pick}</b><div class="mini">${g.a} @ ${g.b} • DEC ${_dec.toFixed(2)}</div></div><div class="odds-grid" style="padding-top:10px"><div class="market"><div class="row"><span class="label">Model prob</span><span class="badge">${fmtPct(_prob)}</span></div><div class="meter"><i style="width:${_prob*100}%"></i></div></div></div><div class="game-actions"><button class="btn${picked?' picked':''}" data-nba-add="${g.id}:${p.market}" ${picked?'disabled':''}>${picked?'✓ Added':'Add'}</button><button class="btn primary" data-copy-nba-pick="${p.id}">Copy</button></div></article>`; }).join('')}</div>`;
                              }
                             function renderNFLStandings(){
                               const mount=$('#nflStandingsMount'); if(!mount) return;
