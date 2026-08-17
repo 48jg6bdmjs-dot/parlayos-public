@@ -11154,6 +11154,8 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
       <p style="margin:14px 0 0;"><a href="#" onclick="switchCleanTab('request');return false;" style="color:#5c7cff; text-decoration:none; font-weight:700;"><- Back to request access</a></p>
     </div>
 
+    <button id="cleanCoverSkip" style="display:block; margin:16px auto 0; padding:8px 16px; border:none; background:transparent; color:rgba(30,41,59,0.35); font-size:12px; font-weight:600; cursor:pointer; letter-spacing:0.02em;">Skip →</button>
+
   </div>
 </div>
 
@@ -12833,6 +12835,7 @@ body.dark .table-card .mini-table td {
                             document.body.classList.add('dark');
                             document.documentElement.style.colorScheme='dark';
                              let current = 'desktop';
+                             window.setCurrentScreen = function(screen){ current = screen; };
                              let forceEmpty = false;
 
                              // ============================================================
@@ -13495,9 +13498,9 @@ body.dark .table-card .mini-table td {
                               });
                             }
                              function switchScreen(next){
-                               if(next===current) return;
+                               const curEl = document.querySelector('.screen.active');
+                               if(curEl && curEl.dataset.screen === next) return;
                                beep('click');
-                               const curEl = $(`[data-screen="${current}"]`);
                                const nextEl = $(`[data-screen="${next}"]`);
                                if(curEl){ curEl.classList.remove('active'); curEl.classList.add('exit-left'); setTimeout(()=>curEl.classList.remove('exit-left'), 360); }
                                if(nextEl){ nextEl.classList.add('active'); }
@@ -15285,7 +15288,16 @@ body.dark .table-card .mini-table td {
                                 }catch(err){ console.warn('nba handler err:', err); }
                               });
 
-                              $$('[data-go]').forEach(b=> b.addEventListener('click', ()=>{ try{ switchScreen(b.dataset.go); }catch(err){ console.warn('switchScreen error:', err); } }));
+                              $$('[data-go]').forEach(b=> b.addEventListener('click', (e)=>{
+                                const go = b.dataset.go;
+                                if(!go) return;
+                                // Only handle destinations that have a screen element;
+                                const target = document.getElementById('screen-'+go) || document.querySelector('[data-screen="'+go+'"]');
+                                if(target){
+                                  e.stopPropagation();
+                                  try{ switchScreen(go); }catch(err){ console.warn('switchScreen error:', err); }
+                                }
+                              }));
                               $$('.backBtn').forEach(b=> b.addEventListener('click', goHome));
                               if ($('#homeBtn')) $('#homeBtn')?.addEventListener('click', goHome);
                               document.getElementById('titleBackBtn')?.addEventListener('click', goHome);
@@ -21204,15 +21216,19 @@ body.dark .table-card .mini-table td {
   }
   window.switchScreen=stableSwitch;
 
-  document.addEventListener('click',function(e){
-    const goBtn=e.target.closest&&e.target.closest('[data-go]');
-    if(!goBtn) return;
-    if(goBtn.closest('.parlay-bubble-btn')) return;
-    const go=goBtn.getAttribute('data-go');
-    if(!go) return;
-    e.preventDefault();
-    stableSwitch(go);
-  });
+   document.addEventListener('click',function(e){
+     const goBtn=e.target.closest&&e.target.closest('[data-go]');
+     if(!goBtn) return;
+     if(goBtn.closest('.parlay-bubble-btn')) return;
+     const go=goBtn.getAttribute('data-go');
+     if(!go) return;
+     e.preventDefault();
+     stableSwitch(go);
+     if(typeof window.setCurrentScreen === 'function'){
+       const active = document.querySelector('.screen.active');
+       if(active && active.dataset.screen) window.setCurrentScreen(active.dataset.screen);
+     }
+   });
 
   document.addEventListener('click',function(e){
     const chip=e.target.closest&&e.target.closest('.league-tab-row .chip');
