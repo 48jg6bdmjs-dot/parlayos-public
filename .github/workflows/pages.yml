@@ -39,13 +39,13 @@ jobs:
           cp parlayos.html index.html
           ls -lh parlayos.html index.html
       
-       - name: Upload artifact
-         uses: actions/upload-pages-artifact@v3
-         with:
-           path: |
-             index.html
-             parlayos.html
-             favicon.ico
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: |
+            index.html
+            parlayos.html
+            favicon.ico
   
   deploy:
     environment:
