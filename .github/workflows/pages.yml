@@ -25,8 +25,11 @@ jobs:
       
       - name: Prepare artifact
         run: |
-          mkdir -p site
-          cp index.html parlayos.html favicon.ico site/
+          mkdir -p site/data
+          cp index.html parlayos.html about.html favicon.ico site/
+          cp parlayos_chd_data.json parlayos_mlb_chd.json parlayos_nfl_chd.json parlayos_nba_chd.json live_scores.json site/
+          cp live_scores.json site/data/live_scores.json
+          ls -lh site
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
