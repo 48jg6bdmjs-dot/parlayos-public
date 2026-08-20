@@ -34820,10 +34820,7 @@ html body .game-actions .btn{flex:1 1 calc(33.333% - 6px) !important;min-width:8
   function esc(s){return String(s||'').replace(/'/g,"\\'").replace(/</g,'&lt;');}
   function mlbGames(){return getMLB().games||[];}
   function buildMLBPitching(){
-    const pitchers=[]; mlbGames().forEach(g=>{
-      if(g.pitcherA_era!=null) pitchers.push({name:g.abbrA||g.a,team:g.abbrA||g.a,era:g.pitcherA_era,fip:g.pitcherA_fip||0,k9:g.pitcherA_k9,whip:g.pitcherA_whip});
-      if(g.pitcherB_era!=null) pitchers.push({name:g.abbrB||g.b,team:g.abbrB||g.b,era:g.pitcherB_era,fip:g.pitcherB_fip||0,k9:g.pitcherB_k9,whip:g.pitcherB_whip});
-    });
+    const pitchers=[]; mlbGames().forEach(g=>{if(g.pitcherA)pitchers.push({name:g.pitcherA,team:g.a||g.abbrA,era:g.pitcherA_era,fip:g.pitcherA_fip,k9:g.pitcherA_k9,whip:g.pitcherA_whip,ip:g.pitcherA_ip,w:g.pitcherA_w,l:g.pitcherA_l,venue:g.venue});if(g.pitcherB)pitchers.push({name:g.pitcherB,team:g.b||g.abbrB,era:g.pitcherB_era,fip:g.pitcherB_fip,k9:g.pitcherB_k9,whip:g.pitcherB_whip,ip:g.pitcherB_ip,w:g.pitcherB_w,l:g.pitcherB_l,venue:g.venue});});
     const uniq=dedupe(pitchers,p=>p.name); if(!uniq.length)return'<div style="padding:24px;text-align:center;color:#eef2ff;">No CHD pitching data</div>';
     return '<div style="display:flex;flex-direction:column;gap:10px;">'+uniq.map(p=>`<div class="glass" style="border-radius:14px;padding:12px 14px;display:flex;justify-content:space-between;gap:12px;"><div><div style="font-weight:900;font-style:italic;color:#eef2ff;">⚾ ${esc(p.name)}</div><div class="mini" style="color:rgba(238,242,255,0.6);">${esc(p.team)} • ERA ${fmt(p.era)} • WHIP ${fmt(p.whip)}</div></div><div style="text-align:right;"><div style="font-weight:800;color:#eef2ff;">K/9 ${fmt(p.k9,1)} • FIP ${fmt(p.fip)}</div></div></div>`).join('')+'</div>';
   }
@@ -34834,7 +34831,7 @@ html body .game-actions .btn{flex:1 1 calc(33.333% - 6px) !important;min-width:8
   }
   function buildMLBLineups(){
     const games=dedupe(mlbGames(),g=>g.id); if(!games.length)return'<div style="padding:24px;text-align:center;color:#eef2ff;">No lineup data</div>';
-    return '<div style="display:flex;flex-direction:column;gap:14px;">'+games.map(g=>{const A=dedupe(g.lineupA||[],p=>p.name).slice(0,9);const B=dedupe(g.lineupB||[],p=>p.name).slice(0,9);function side(list,abbr){return `<div><b style="font-size:12px;color:#eef2ff;">${esc(abbr)}</b><div style="margin-top:6px;display:flex;flex-direction:column;gap:4px;">${list.map(p=>`<div class="mini" style="color:#eef2ff;">${esc(p.pos||'')} ${esc(p.name)} <span style="opacity:0.5;">${esc(p.avg||'')}</span></div>`).join('')}</div></div>`;} return `<div class="glass" style="border-radius:18px;padding:14px;"><div style="font-weight:800;color:#eef2ff;">${esc(g.a)} @ ${esc(g.b)} • Total ${fmt(g.total,1)}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">${side(A,g.abbrA)}${side(B,g.abbrB)}</div></div>`;}).join('')+'</div>';
+    return '<div style="display:flex;flex-direction:column;gap:14px;">'+games.map(g=>{const A=dedupe(g.lineupA||[],p=>p.name).slice(0,9);const B=dedupe(g.lineupB||[],p=>p.name).slice(0,9);function side(list,abbr){return `<div><b style="font-size:12px;color:#eef2ff;">${esc(abbr)}</b><div style="margin-top:6px;display:flex;flex-direction:column;gap:4px;">${list.map(p=>`<div class="mini" style="color:#eef2ff;">${esc(p.pos||'')} ${esc(p.name)} <span style="opacity:0.5;">${esc(p.avg||'')}</span></div>`).join('')}</div></div>`;} return `<div class="glass" style="border-radius:18px;padding:14px;"><div style="font-weight:800;color:#eef2ff;">${esc(g.a)} @ ${esc(g.b)} • ${esc(g.venue||'')} • Total ${fmt(g.total,1)}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">${side(A,g.a)}${side(B,g.b)}</div></div>`;}).join('')+'</div>';
   }
   function buildMLBPlayers(){
     const players=[]; mlbGames().forEach(g=>{(g.lineupA||[]).forEach(p=>players.push({...p,team:g.a}));(g.lineupB||[]).forEach(p=>players.push({...p,team:g.b}));}); const uniq=dedupe(players,p=>p.name); if(!uniq.length)return'<div style="padding:24px;text-align:center;color:#eef2ff;">No players</div>';
