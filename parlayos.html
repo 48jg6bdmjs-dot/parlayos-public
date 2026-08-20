@@ -23582,7 +23582,7 @@ body.no-fx #parlayos-emoji-canvas-v7 { display:none !important; }
     games.forEach(gRaw=>{
       const g=normalize(gRaw);
       const bg=g.final?'rgba(0,0,0,0.18)':'rgba(180,90,40,0.22)';
-      html+='<div class="live-card live" style="background:'+bg+'; border:1px solid rgba(255,255,255,0.14); border-radius:22px; padding:16px 18px;"><div style="display:flex; justify-content:space-between; font-size:11px; opacity:0.7; margin-bottom:12px;"><span>MLB • '+g.date+'</span><span>'+g.status+'</span></div>';
+      html+='<div class="live-card live" style="background:'+bg+'; border:1px solid rgba(255,255,255,0.14); border-radius:22px; padding:16px 18px;"><div style="display:flex; justify-content:space-between; font-size:11px; opacity:0.7; margin-bottom:12px;"><span>'+g.lg+' • '+g.date+'</span><span>'+g.status+'</span></div>';
       html+='<div style="display:flex; flex-direction:column; gap:18px;">';
       html+='<div style="display:flex; align-items:center; justify-content:space-between;"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:12px; font-weight:800; width:32px;">'+g.aAbbr+'</span><div><div style="font-weight:800; font-size:18px;">'+g.aName+'</div><div style="font-size:10px; opacity:0.6;">AWAY</div></div></div><div style="font-size:28px; font-weight:900;">'+g.aScore+'</div></div>';
       html+='<div style="height:1px; background:rgba(255,255,255,0.10);"></div>';
@@ -23599,7 +23599,7 @@ body.no-fx #parlayos-emoji-canvas-v7 { display:none !important; }
       if(rawBox.aErrors != null || rawBox.bErrors != null) boxParts.push('E: '+(rawBox.aErrors??'-')+'-'+(rawBox.bErrors??'-'));
       if(rawBox.aLob != null || rawBox.bLob != null) boxParts.push('LOB: '+(rawBox.aLob??'-')+'-'+(rawBox.bLob??'-'));
       if(boxParts.length) html+='<div style="font-size:10px; opacity:0.7; margin-top:2px; font-family:monospace;">BOX: '+boxParts.join(' • ')+'</div>';
-      html+='</div><div style="display:flex; justify-content:space-between; margin-top:14px; font-size:10px; opacity:0.5;"><span>LIVE • MLB</span><span>'+(g.final?'Final':'LIVE')+'</span></div></div>';
+      html+='</div><div style="display:flex; justify-content:space-between; margin-top:14px; font-size:10px; opacity:0.5;"><span>LIVE • '+g.lg+'</span><span>'+(g.final?'Final':'LIVE')+'</span></div></div>';
     });
     html+='</div><style>@keyframes pulseLive{0%,100%{opacity:1}50%{opacity:0.4}}</style>';
     mount.innerHTML=html;
