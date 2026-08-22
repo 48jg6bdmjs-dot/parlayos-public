@@ -1,62 +1,7 @@
 {
-  "runDate": "Aug 21 2026 09:10 PM",
+  "runDate": "Aug 21 2026 10:26 PM",
   "pickCount": 16,
   "games": [
-    {
-      "home": "New York Jets",
-      "away": "Pittsburgh Steelers",
-      "home_abbr": "NYJ",
-      "away_abbr": "PIT",
-      "factorsA": {
-        "epa_offense": 0.5,
-        "epa_defense": 0.1,
-        "success_rate": 0.5,
-        "dvoa": 0.5,
-        "rest": 0.5,
-        "weather": 0.5,
-        "injuries": 0.5
-      },
-      "factorsB": {
-        "epa_offense": 0.5,
-        "epa_defense": 0.1,
-        "success_rate": 0.5,
-        "dvoa": 0.5,
-        "rest": 0.5,
-        "weather": 0.5,
-        "injuries": 0.5
-      },
-      "chd": {
-        "pA": 0.5073694461031117,
-        "pB": 0.49263055389688826,
-        "raw_score": 0.029482758620689654,
-        "model": "ensemble(0.66*simple+0.34*wave_true)",
-        "simple_p": 0.5112481019468548,
-        "wave_p": 0.5,
-        "edge": 0.0,
-        "mag": 0.0,
-        "entropy": 0.0,
-        "confidence": 0.95
-      },
-      "total_line": 44.5,
-      "stats": {
-        "home": {
-          "abbr": "NYJ",
-          "off_eff": -0.5,
-          "def_eff": -0.5,
-          "epa": 0.0,
-          "source": "espn_parsed"
-        },
-        "away": {
-          "abbr": "PIT",
-          "off_eff": -0.5,
-          "def_eff": -0.5,
-          "epa": 0.0,
-          "source": "espn_parsed"
-        }
-      },
-      "synthetic": false,
-      "source": "espn_parsed"
-    },
     {
       "home": "Carolina Panthers",
       "away": "Jacksonville Jaguars",
@@ -158,6 +103,61 @@
         },
         "away": {
           "abbr": "DEN",
+          "off_eff": -0.5,
+          "def_eff": -0.5,
+          "epa": 0.0,
+          "source": "espn_parsed"
+        }
+      },
+      "synthetic": false,
+      "source": "espn_parsed"
+    },
+    {
+      "home": "New York Jets",
+      "away": "Pittsburgh Steelers",
+      "home_abbr": "NYJ",
+      "away_abbr": "PIT",
+      "factorsA": {
+        "epa_offense": 0.5,
+        "epa_defense": 0.1,
+        "success_rate": 0.5,
+        "dvoa": 0.5,
+        "rest": 0.5,
+        "weather": 0.5,
+        "injuries": 0.5
+      },
+      "factorsB": {
+        "epa_offense": 0.5,
+        "epa_defense": 0.1,
+        "success_rate": 0.5,
+        "dvoa": 0.5,
+        "rest": 0.5,
+        "weather": 0.5,
+        "injuries": 0.5
+      },
+      "chd": {
+        "pA": 0.5073694461031117,
+        "pB": 0.49263055389688826,
+        "raw_score": 0.029482758620689654,
+        "model": "ensemble(0.66*simple+0.34*wave_true)",
+        "simple_p": 0.5112481019468548,
+        "wave_p": 0.5,
+        "edge": 0.0,
+        "mag": 0.0,
+        "entropy": 0.0,
+        "confidence": 0.95
+      },
+      "total_line": 44.5,
+      "stats": {
+        "home": {
+          "abbr": "NYJ",
+          "off_eff": -0.5,
+          "def_eff": -0.5,
+          "epa": 0.0,
+          "source": "espn_parsed"
+        },
+        "away": {
+          "abbr": "PIT",
           "off_eff": -0.5,
           "def_eff": -0.5,
           "epa": 0.0,

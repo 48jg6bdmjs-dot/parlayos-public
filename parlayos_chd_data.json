@@ -1,6 +1,6 @@
 {
   "mlb": {
-    "runDate": "Aug 21 2026 09:10 PM",
+    "runDate": "Aug 21 2026 10:26 PM",
     "pickCount": 15,
     "games": [
       {
@@ -14,7 +14,7 @@
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.5,
-          "weather": 0.506,
+          "weather": 0.511,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
@@ -25,7 +25,7 @@
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.42,
-          "weather": 0.506,
+          "weather": 0.511,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
@@ -44,28 +44,28 @@
           "model": "ensemble(0.66*simple+0.34*wave_true)",
           "simple_p": 0.5121542718096812,
           "wave_p": 0.5,
-          "edge": -0.10731980477512926,
+          "edge": -0.10735125256127465,
           "mag": 0.0,
           "entropy": 0.0,
           "confidence": 0.95,
-          "devig_prob_home": 0.599356661175683,
+          "devig_prob_home": 0.5993881089618284,
           "market_price": -166,
           "book": "fanduel",
           "weather": {
-            "temp": 69.4,
-            "wind": 1.2,
+            "temp": 67.1,
+            "wind": 4.0,
             "precip": 0.0,
-            "factor": 0.506,
+            "factor": 0.511,
             "source": "open-meteo",
             "park": "MIL"
           }
         },
         "total": {
-          "mean": 4.8772,
+          "mean": 4.96,
           "median": 5,
-          "p_over_8_5": 0.094,
+          "p_over_8_5": 0.102,
           "ci_10": 2,
-          "ci_90": 8,
+          "ci_90": 9,
           "distribution": [
             0,
             0,
@@ -391,10 +391,10 @@
           "source": "boxscore"
         },
         "weather": {
-          "temp": 69.4,
-          "wind": 1.2,
+          "temp": 67.1,
+          "wind": 4.0,
           "precip": 0.0,
-          "factor": 0.506,
+          "factor": 0.511,
           "source": "open-meteo",
           "park": "MIL"
         },
@@ -402,21 +402,21 @@
           "h2h": {
             "Atlanta Braves": {
               "price": 140,
-              "devig_prob": 0.4006433388243171,
+              "devig_prob": 0.4006118910381717,
               "book": "fanduel",
-              "implied": 0.4154364534803417
+              "implied": 0.4155731438343778
             },
             "Milwaukee Brewers": {
               "price": -166,
-              "devig_prob": 0.599356661175683,
+              "devig_prob": 0.5993881089618284,
               "book": "fanduel",
-              "implied": 0.6214869475162526
+              "implied": 0.6217728589451068
             }
           },
           "totals": {
             "line": 8.0,
-            "over_price": 100,
-            "under_price": -120
+            "over_price": -110,
+            "under_price": -110
           },
           "raw_books": {
             "fanduel": {
@@ -435,6 +435,12 @@
               "h2h": {
                 "Atlanta Braves": 145,
                 "Milwaukee Brewers": -160
+              }
+            },
+            "mybookieag": {
+              "h2h": {
+                "Atlanta Braves": 140,
+                "Milwaukee Brewers": -166
               }
             },
             "draftkings": {
@@ -521,7 +527,7 @@
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.5,
-          "weather": 0.587,
+          "weather": 0.58,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
@@ -532,7 +538,7 @@
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.48,
-          "weather": 0.587,
+          "weather": 0.58,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
@@ -551,18 +557,18 @@
           "model": "ensemble(0.66*simple+0.34*wave_true)",
           "simple_p": 0.514099594243854,
           "wave_p": 0.5,
-          "edge": -0.058042034925922525,
+          "edge": -0.056966609204705754,
           "mag": 0.0,
           "entropy": 0.0,
           "confidence": 0.95,
-          "devig_prob_home": 0.5488043697316733,
+          "devig_prob_home": 0.5477289440104566,
           "market_price": -130,
           "book": "fanduel",
           "weather": {
-            "temp": 75.6,
-            "wind": 3.1,
+            "temp": 71.8,
+            "wind": 6.2,
             "precip": 0.0,
-            "factor": 0.587,
+            "factor": 0.58,
             "source": "open-meteo",
             "park": "PHI"
           }
@@ -677,15 +683,15 @@
           ],
           "overdispersion_r": 5.0,
           "simple": {
-            "line": 8.5,
-            "over_prob": 0.5018,
-            "under_prob": 0.4982,
+            "line": 9.0,
+            "over_prob": 0.3692,
+            "under_prob": 0.6308,
             "mean_total": 8.712,
             "n_sim": 5000,
             "home_mean": 4.397,
             "away_mean": 4.337000000000001
           },
-          "line": 8.5
+          "line": 9.0
         },
         "k_prop": {
           "line": 6.5,
@@ -753,6 +759,16 @@
               "war": 1.0
             },
             {
+              "name": "Edmundo Sosa",
+              "pos": "PR",
+              "avg": ".250",
+              "ops": ".750",
+              "hr": 0,
+              "team": "home",
+              "woba": 0.32,
+              "war": 1.0
+            },
+            {
               "name": "Alec Bohm",
               "pos": "1B",
               "avg": ".250",
@@ -783,18 +799,8 @@
               "war": 1.0
             },
             {
-              "name": "J.T. Realmuto",
-              "pos": "C",
-              "avg": ".250",
-              "ops": ".750",
-              "hr": 0,
-              "team": "home",
-              "woba": 0.32,
-              "war": 1.0
-            },
-            {
-              "name": "Justin Crawford",
-              "pos": "CF",
+              "name": "Bryan De La Cruz",
+              "pos": "LF",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -806,7 +812,7 @@
           "away": [
             {
               "name": "JJ Wetherholt",
-              "pos": "SS",
+              "pos": "2B",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -846,16 +852,6 @@
             },
             {
               "name": "Alec Burleson",
-              "pos": "PH",
-              "avg": ".250",
-              "ops": ".750",
-              "hr": 0,
-              "team": "away",
-              "woba": 0.32,
-              "war": 1.0
-            },
-            {
-              "name": "Blaze Jordan",
               "pos": "1B",
               "avg": ".250",
               "ops": ".750",
@@ -865,8 +861,18 @@
               "war": 1.0
             },
             {
-              "name": "Jos\u00e9 Ferm\u00edn",
+              "name": "Blaze Jordan",
               "pos": "3B",
+              "avg": ".250",
+              "ops": ".750",
+              "hr": 0,
+              "team": "away",
+              "woba": 0.32,
+              "war": 1.0
+            },
+            {
+              "name": "Jos\u00e9 Ferm\u00edn",
+              "pos": "CF",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -885,8 +891,8 @@
               "war": 1.0
             },
             {
-              "name": "Bryan Torres",
-              "pos": "2B",
+              "name": "Masyn Winn",
+              "pos": "SS",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -898,10 +904,10 @@
           "source": "boxscore"
         },
         "weather": {
-          "temp": 75.6,
-          "wind": 3.1,
+          "temp": 71.8,
+          "wind": 6.2,
           "precip": 0.0,
-          "factor": 0.587,
+          "factor": 0.58,
           "source": "open-meteo",
           "park": "PHI"
         },
@@ -909,27 +915,33 @@
           "h2h": {
             "Philadelphia Phillies": {
               "price": -130,
-              "devig_prob": 0.5488043697316733,
+              "devig_prob": 0.5477289440104566,
               "book": "fanduel",
-              "implied": 0.57387807935597
+              "implied": 0.5693882628063279
             },
             "St. Louis Cardinals": {
               "price": 110,
-              "devig_prob": 0.45119563026832654,
+              "devig_prob": 0.4522710559895435,
               "book": "fanduel",
-              "implied": 0.47180980326157523
+              "implied": 0.47015560105684945
             }
           },
           "totals": {
-            "line": 8.5,
-            "over_price": -118,
-            "under_price": -102
+            "line": 9.0,
+            "over_price": -105,
+            "under_price": -115
           },
           "raw_books": {
             "fanduel": {
               "h2h": {
                 "Philadelphia Phillies": -130,
                 "St. Louis Cardinals": 110
+              }
+            },
+            "mybookieag": {
+              "h2h": {
+                "Philadelphia Phillies": -134,
+                "St. Louis Cardinals": 114
               }
             },
             "draftkings": {
@@ -952,7 +964,19 @@
             },
             "betmgm": {
               "h2h": {
-                "Philadelphia Phillies": -145,
+                "Philadelphia Phillies": -135,
+                "St. Louis Cardinals": 110
+              }
+            },
+            "lowvig": {
+              "h2h": {
+                "Philadelphia Phillies": -130,
+                "St. Louis Cardinals": 118
+              }
+            },
+            "betonlineag": {
+              "h2h": {
+                "Philadelphia Phillies": -130,
                 "St. Louis Cardinals": 118
               }
             }
@@ -1010,56 +1034,56 @@
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.49,
-          "weather": 0.553,
+          "weather": 0.523,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
           "entropy": 0.5
         },
         "factorsB": {
-          "pitcher_dominance": 0.8230000000000001,
+          "pitcher_dominance": 0.8236666666666665,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.54,
-          "weather": 0.553,
+          "weather": 0.523,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
           "entropy": 0.5
         },
         "factors": {
-          "era_diff": 0.7450000000000001,
+          "era_diff": 0.75,
           "park_factor": 0.07000000000000006,
           "team_strength_diff": 0,
           "home_adv": 0.15
         },
         "chd": {
-          "pA": 0.4958136761885704,
-          "pB": 0.5041863238114296,
-          "raw_score": -0.016746206896551742,
+          "pA": 0.4957787394140765,
+          "pB": 0.5042212605859235,
+          "raw_score": -0.016885977011494233,
           "model": "ensemble(0.66*simple+0.34*wave_true)",
-          "simple_p": 0.4936103478667654,
+          "simple_p": 0.49355702331622203,
           "wave_p": 0.5,
-          "edge": -0.0215702482484198,
+          "edge": -0.01804139949771333,
           "mag": 0.0,
           "entropy": 0.0,
           "confidence": 0.95,
-          "devig_prob_home": 0.5257565720598494,
+          "devig_prob_home": 0.5222626600836369,
           "market_price": -116,
           "book": "fanduel",
           "weather": {
-            "temp": 70.3,
-            "wind": 5.0,
+            "temp": 69.6,
+            "wind": 2.7,
             "precip": 0.0,
-            "factor": 0.553,
+            "factor": 0.523,
             "source": "open-meteo",
             "park": "NYY"
           }
         },
         "total": {
-          "mean": 5.5602,
+          "mean": 5.5588,
           "median": 5,
-          "p_over_8_5": 0.1594,
+          "p_over_8_5": 0.159,
           "ci_10": 2,
           "ci_90": 9,
           "distribution": [
@@ -1167,29 +1191,29 @@
           "overdispersion_r": 5.0,
           "simple": {
             "line": 7.0,
-            "over_prob": 0.57,
-            "under_prob": 0.43000000000000005,
-            "mean_total": 8.22,
+            "over_prob": 0.5778,
+            "under_prob": 0.4222,
+            "mean_total": 8.2174,
             "n_sim": 5000,
-            "home_mean": 4.128500000000001,
-            "away_mean": 4.068500000000001
+            "home_mean": 4.126,
+            "away_mean": 4.066000000000001
           },
           "line": 7.0
         },
         "k_prop": {
           "line": 6.5,
-          "over_prob": 0.5516,
-          "under_prob": 0.4484,
-          "mean_k": 7.080160000000001,
+          "over_prob": 0.5534,
+          "under_prob": 0.4466,
+          "mean_k": 7.09954,
           "n_sim": 5000
         },
         "pitchers": {
           "home": 693645,
           "away": 689254,
           "home_stats": {
-            "era": 2.17,
-            "fip": 2.17,
-            "k9": 10.96,
+            "era": 2.16,
+            "fip": 2.16,
+            "k9": 10.99,
             "whip": 0.96
           },
           "away_stats": {
@@ -1242,6 +1266,26 @@
               "war": 1.0
             },
             {
+              "name": "Luis Garc\u00eda Jr.",
+              "pos": "PH",
+              "avg": ".250",
+              "ops": ".750",
+              "hr": 0,
+              "team": "home",
+              "woba": 0.32,
+              "war": 1.0
+            },
+            {
+              "name": "Max Schuemann",
+              "pos": "RF",
+              "avg": ".250",
+              "ops": ".750",
+              "hr": 0,
+              "team": "home",
+              "woba": 0.32,
+              "war": 1.0
+            },
+            {
               "name": "Ben Rice",
               "pos": "DH",
               "avg": ".250",
@@ -1270,26 +1314,6 @@
               "team": "home",
               "woba": 0.32,
               "war": 1.0
-            },
-            {
-              "name": "Spencer Jones",
-              "pos": "RF",
-              "avg": ".250",
-              "ops": ".750",
-              "hr": 1,
-              "team": "home",
-              "woba": 0.32,
-              "war": 1.0
-            },
-            {
-              "name": "Jos\u00e9 Caballero",
-              "pos": "3B",
-              "avg": ".250",
-              "ops": ".750",
-              "hr": 0,
-              "team": "home",
-              "woba": 0.32,
-              "war": 1.0
             }
           ],
           "away": [
@@ -1306,6 +1330,26 @@
             {
               "name": "Nathan Lukes",
               "pos": "RF",
+              "avg": ".250",
+              "ops": ".750",
+              "hr": 0,
+              "team": "away",
+              "woba": 0.32,
+              "war": 1.0
+            },
+            {
+              "name": "George Springer",
+              "pos": "PH",
+              "avg": ".250",
+              "ops": ".750",
+              "hr": 0,
+              "team": "away",
+              "woba": 0.32,
+              "war": 1.0
+            },
+            {
+              "name": "Davis Schneider",
+              "pos": "LF",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -1362,35 +1406,15 @@
               "team": "away",
               "woba": 0.32,
               "war": 1.0
-            },
-            {
-              "name": "Charles McAdoo",
-              "pos": "2B",
-              "avg": ".250",
-              "ops": ".750",
-              "hr": 0,
-              "team": "away",
-              "woba": 0.32,
-              "war": 1.0
-            },
-            {
-              "name": "Myles Straw",
-              "pos": "LF",
-              "avg": ".250",
-              "ops": ".750",
-              "hr": 0,
-              "team": "away",
-              "woba": 0.32,
-              "war": 1.0
             }
           ],
           "source": "boxscore"
         },
         "weather": {
-          "temp": 70.3,
-          "wind": 5.0,
+          "temp": 69.6,
+          "wind": 2.7,
           "precip": 0.0,
-          "factor": 0.553,
+          "factor": 0.523,
           "source": "open-meteo",
           "park": "NYY"
         },
@@ -1398,21 +1422,21 @@
           "h2h": {
             "New York Yankees": {
               "price": -116,
-              "devig_prob": 0.5257565720598494,
+              "devig_prob": 0.5222626600836369,
               "book": "fanduel",
-              "implied": 0.5444825296966637
+              "implied": 0.5418543651649677
             },
             "Toronto Blue Jays": {
               "price": -102,
-              "devig_prob": 0.47424342794015056,
+              "devig_prob": 0.47773733991636314,
               "book": "fanduel",
-              "implied": 0.49113463351529246
+              "implied": 0.4956587610428169
             }
           },
           "totals": {
             "line": 7.0,
-            "over_price": -105,
-            "under_price": -115
+            "over_price": -102,
+            "under_price": -118
           },
           "raw_books": {
             "fanduel": {
@@ -1423,14 +1447,20 @@
             },
             "lowvig": {
               "h2h": {
-                "New York Yankees": -120,
-                "Toronto Blue Jays": 109
+                "New York Yankees": -115,
+                "Toronto Blue Jays": 104
               }
             },
             "betonlineag": {
               "h2h": {
-                "New York Yankees": -120,
-                "Toronto Blue Jays": 109
+                "New York Yankees": -115,
+                "Toronto Blue Jays": 104
+              }
+            },
+            "mybookieag": {
+              "h2h": {
+                "New York Yankees": -123,
+                "Toronto Blue Jays": 104
               }
             },
             "draftkings": {
@@ -1453,8 +1483,14 @@
             },
             "betus": {
               "h2h": {
+                "New York Yankees": -115,
+                "Toronto Blue Jays": 105
+              }
+            },
+            "betmgm": {
+              "h2h": {
                 "New York Yankees": -120,
-                "Toronto Blue Jays": 109
+                "Toronto Blue Jays": 100
               }
             }
           }
@@ -1462,9 +1498,9 @@
         "ab_test_mode": "ensemble",
         "chd_all_modes": {
           "simple": {
-            "pA": 0.4936103478667654,
-            "pB": 0.5063896521332346,
-            "raw_score": -0.025560000000000027,
+            "pA": 0.49355702331622203,
+            "pB": 0.5064429766837779,
+            "raw_score": -0.0257733333333333,
             "model": "simple",
             "edge": 0.0
           },
@@ -1487,11 +1523,11 @@
             "model": "wave_true"
           },
           "ensemble": {
-            "pA": 0.4958136761885704,
-            "pB": 0.5041863238114296,
-            "raw_score": -0.016746206896551742,
+            "pA": 0.4957787394140765,
+            "pB": 0.5042212605859235,
+            "raw_score": -0.016885977011494233,
             "model": "ensemble(0.66*simple+0.34*wave_true)",
-            "simple_p": 0.4936103478667654,
+            "simple_p": 0.49355702331622203,
             "wave_p": 0.5,
             "edge": 0.0,
             "mag": 0.0,
@@ -1511,7 +1547,7 @@
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.54,
-          "weather": 0.532,
+          "weather": 0.542,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
@@ -1522,7 +1558,7 @@
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.56,
-          "weather": 0.532,
+          "weather": 0.542,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
@@ -1541,18 +1577,18 @@
           "model": "ensemble(0.66*simple+0.34*wave_true)",
           "simple_p": 0.5003433332793715,
           "wave_p": 0.5,
-          "edge": -0.15416096800096912,
+          "edge": -0.15409813418481189,
           "mag": 0.0,
           "entropy": 0.0,
           "confidence": 0.95,
-          "devig_prob_home": 0.6539360255075878,
+          "devig_prob_home": 0.6538731916914305,
           "market_price": -220,
           "book": "fanduel",
           "weather": {
-            "temp": 69.6,
-            "wind": 3.5,
+            "temp": 69.4,
+            "wind": 4.7,
             "precip": 0.0,
-            "factor": 0.532,
+            "factor": 0.542,
             "source": "open-meteo",
             "park": "BOS"
           }
@@ -1805,6 +1841,16 @@
               "war": 1.0
             },
             {
+              "name": "Jonah Cox",
+              "pos": "CF",
+              "avg": ".250",
+              "ops": ".750",
+              "hr": 0,
+              "team": "away",
+              "woba": 0.32,
+              "war": 1.0
+            },
+            {
               "name": "Rafael Devers",
               "pos": "DH",
               "avg": ".250",
@@ -1865,18 +1911,8 @@
               "war": 1.0
             },
             {
-              "name": "Drew Cavanaugh",
-              "pos": "C",
-              "avg": ".250",
-              "ops": ".750",
-              "hr": 0,
-              "team": "away",
-              "woba": 0.32,
-              "war": 1.0
-            },
-            {
-              "name": "Christian Koss",
-              "pos": "3B",
+              "name": "Victor Bericoto",
+              "pos": "PH",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -1888,10 +1924,10 @@
           "source": "boxscore"
         },
         "weather": {
-          "temp": 69.6,
-          "wind": 3.5,
+          "temp": 69.4,
+          "wind": 4.7,
           "precip": 0.0,
-          "factor": 0.532,
+          "factor": 0.542,
           "source": "open-meteo",
           "park": "BOS"
         },
@@ -1899,21 +1935,21 @@
           "h2h": {
             "Boston Red Sox": {
               "price": -220,
-              "devig_prob": 0.6539360255075878,
+              "devig_prob": 0.6538731916914305,
               "book": "fanduel",
-              "implied": 0.6777228655307473
+              "implied": 0.6785427482266563
             },
             "San Francisco Giants": {
               "price": 184,
-              "devig_prob": 0.34606397449241216,
+              "devig_prob": 0.3461268083085695,
               "book": "fanduel",
-              "implied": 0.35865200769128697
+              "implied": 0.3591856016257224
             }
           },
           "totals": {
             "line": 8.5,
-            "over_price": 100,
-            "under_price": -120
+            "over_price": -102,
+            "under_price": -118
           },
           "raw_books": {
             "fanduel": {
@@ -1932,6 +1968,12 @@
               "h2h": {
                 "Boston Red Sox": -200,
                 "San Francisco Giants": 180
+              }
+            },
+            "mybookieag": {
+              "h2h": {
+                "Boston Red Sox": -208,
+                "San Francisco Giants": 174
               }
             },
             "draftkings": {
@@ -1953,6 +1995,12 @@
               }
             },
             "bovada": {
+              "h2h": {
+                "Boston Red Sox": -220,
+                "San Francisco Giants": 180
+              }
+            },
+            "betmgm": {
               "h2h": {
                 "Boston Red Sox": -220,
                 "San Francisco Giants": 180
@@ -2042,16 +2090,16 @@
           "model": "ensemble(0.63*simple+0.37*wave_true)",
           "simple_p": 0.5215832459738193,
           "wave_p": 0.5014188517535644,
-          "edge": -0.13683571533588523,
+          "edge": -0.13594494271022972,
           "mag": 0.002968266775683413,
           "entropy": 0.14260007989457923,
           "confidence": 0.8573999201054208,
-          "devig_prob_home": 0.6226800498125971,
+          "devig_prob_home": 0.6217892771869415,
           "market_price": -188,
           "book": "fanduel",
           "weather": {
-            "temp": 82.0,
-            "wind": 5.1,
+            "temp": 82.4,
+            "wind": 4.7,
             "precip": 0.0,
             "factor": 0.671,
             "source": "open-meteo",
@@ -2168,15 +2216,15 @@
           ],
           "overdispersion_r": 5.0,
           "simple": {
-            "line": 7.5,
-            "over_prob": 0.669,
-            "under_prob": 0.33099999999999996,
+            "line": 8.0,
+            "over_prob": 0.5416,
+            "under_prob": 0.45840000000000003,
             "mean_total": 8.9706,
             "n_sim": 5000,
             "home_mean": 4.5275,
             "away_mean": 4.4675
           },
-          "line": 7.5
+          "line": 8.0
         },
         "k_prop": {
           "line": 6.5,
@@ -2235,7 +2283,7 @@
             },
             {
               "name": "Griffin Conine",
-              "pos": "RF",
+              "pos": "1B",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -2376,8 +2424,8 @@
               "war": 1.0
             },
             {
-              "name": "Jacob Young",
-              "pos": "CF",
+              "name": "Jos\u00e9 Tena",
+              "pos": "SS",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -2389,8 +2437,8 @@
           "source": "boxscore"
         },
         "weather": {
-          "temp": 82.0,
-          "wind": 5.1,
+          "temp": 82.4,
+          "wind": 4.7,
           "precip": 0.0,
           "factor": 0.671,
           "source": "open-meteo",
@@ -2400,21 +2448,21 @@
           "h2h": {
             "Miami Marlins": {
               "price": -188,
-              "devig_prob": 0.6226800498125971,
+              "devig_prob": 0.6217892771869415,
               "book": "fanduel",
-              "implied": 0.6462893835635961
+              "implied": 0.6456565079193162
             },
             "Washington Nationals": {
               "price": 158,
-              "devig_prob": 0.37731995018740294,
+              "devig_prob": 0.3782107228130585,
               "book": "fanduel",
-              "implied": 0.39162629039786223
+              "implied": 0.3927282497599305
             }
           },
           "totals": {
-            "line": 7.5,
-            "over_price": -115,
-            "under_price": -105
+            "line": 8.0,
+            "over_price": 100,
+            "under_price": -120
           },
           "raw_books": {
             "fanduel": {
@@ -2433,6 +2481,12 @@
               "h2h": {
                 "Miami Marlins": -175,
                 "Washington Nationals": 158
+              }
+            },
+            "mybookieag": {
+              "h2h": {
+                "Miami Marlins": -183,
+                "Washington Nationals": 154
               }
             },
             "draftkings": {
@@ -2461,8 +2515,8 @@
             },
             "betmgm": {
               "h2h": {
-                "Miami Marlins": -190,
-                "Washington Nationals": 155
+                "Miami Marlins": -185,
+                "Washington Nationals": 150
               }
             }
           }
@@ -2519,7 +2573,7 @@
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.51,
-          "weather": 0.561,
+          "weather": 0.565,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
@@ -2530,7 +2584,7 @@
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.44,
-          "weather": 0.561,
+          "weather": 0.565,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
@@ -2549,18 +2603,18 @@
           "model": "ensemble(0.28*simple+0.72*wave_true)",
           "simple_p": 0.49446355962187793,
           "wave_p": 0.4998053698827617,
-          "edge": 0.0442359458973563,
+          "edge": 0.04606178312635595,
           "mag": 0.00045416831578871193,
           "entropy": 0.8032637254992562,
           "confidence": 0.5,
-          "devig_prob_home": 0.4574670423867783,
+          "devig_prob_home": 0.4556412051577787,
           "market_price": 106,
           "book": "fanduel",
           "weather": {
-            "temp": 74.3,
-            "wind": 1.8,
+            "temp": 73.2,
+            "wind": 3.3,
             "precip": 0.0,
-            "factor": 0.561,
+            "factor": 0.565,
             "source": "open-meteo",
             "park": "BAL"
           }
@@ -2833,6 +2887,16 @@
               "war": 1.0
             },
             {
+              "name": "Jonathan Aranda",
+              "pos": "1B",
+              "avg": ".250",
+              "ops": ".750",
+              "hr": 0,
+              "team": "away",
+              "woba": 0.32,
+              "war": 1.0
+            },
+            {
               "name": "Junior Caminero",
               "pos": "3B",
               "avg": ".250",
@@ -2873,18 +2937,8 @@
               "war": 1.0
             },
             {
-              "name": "Liam Hicks",
-              "pos": "1B",
-              "avg": ".250",
-              "ops": ".750",
-              "hr": 0,
-              "team": "away",
-              "woba": 0.32,
-              "war": 1.0
-            },
-            {
-              "name": "Taylor Walls",
-              "pos": "SS",
+              "name": "Cedric Mullins",
+              "pos": "CF",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -2896,10 +2950,10 @@
           "source": "boxscore"
         },
         "weather": {
-          "temp": 74.3,
-          "wind": 1.8,
+          "temp": 73.2,
+          "wind": 3.3,
           "precip": 0.0,
-          "factor": 0.561,
+          "factor": 0.565,
           "source": "open-meteo",
           "park": "BAL"
         },
@@ -2907,21 +2961,21 @@
           "h2h": {
             "Baltimore Orioles": {
               "price": 106,
-              "devig_prob": 0.4574670423867783,
+              "devig_prob": 0.4556412051577787,
               "book": "fanduel",
-              "implied": 0.47332776470984345
+              "implied": 0.47246640121339045
             },
             "Tampa Bay Rays": {
               "price": -124,
-              "devig_prob": 0.5425329576132216,
+              "devig_prob": 0.5443587948422214,
               "book": "fanduel",
-              "implied": 0.5613429784333428
+              "implied": 0.5644600133978289
             }
           },
           "totals": {
             "line": 8.0,
-            "over_price": -125,
-            "under_price": -114
+            "over_price": -110,
+            "under_price": -110
           },
           "raw_books": {
             "fanduel": {
@@ -2942,10 +2996,16 @@
                 "Tampa Bay Rays": -130
               }
             },
+            "mybookieag": {
+              "h2h": {
+                "Baltimore Orioles": 112,
+                "Tampa Bay Rays": -131
+              }
+            },
             "draftkings": {
               "h2h": {
-                "Baltimore Orioles": 109,
-                "Tampa Bay Rays": -131
+                "Baltimore Orioles": 113,
+                "Tampa Bay Rays": -136
               }
             },
             "bovada": {
@@ -2964,6 +3024,12 @@
               "h2h": {
                 "Baltimore Orioles": 105,
                 "Tampa Bay Rays": -125
+              }
+            },
+            "betmgm": {
+              "h2h": {
+                "Baltimore Orioles": 110,
+                "Tampa Bay Rays": -135
               }
             }
           }
@@ -3016,60 +3082,60 @@
         "home_abbr": "CWS",
         "away_abbr": "NYM",
         "factorsA": {
-          "pitcher_dominance": 0.569,
+          "pitcher_dominance": 0.5316666666666667,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.5,
-          "weather": 0.553,
+          "weather": 0.554,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
           "entropy": 0.5
         },
         "factorsB": {
-          "pitcher_dominance": 0.6813333333333333,
+          "pitcher_dominance": 0.6803333333333332,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.44,
-          "weather": 0.553,
+          "weather": 0.554,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
           "entropy": 0.5
         },
         "factors": {
-          "era_diff": 0.41500000000000004,
+          "era_diff": 0.5199999999999998,
           "park_factor": 0.020000000000000018,
           "team_strength_diff": 0,
           "home_adv": 0.15
         },
         "chd": {
-          "pA": 0.5022690441712813,
-          "pB": 0.49773095582871874,
-          "raw_score": 0.009076321839080442,
+          "pA": 0.5003647124929897,
+          "pB": 0.49963528750701025,
+          "raw_score": 0.0014588505747126766,
           "model": "ensemble(0.66*simple+0.34*wave_true)",
-          "simple_p": 0.5034632779456398,
+          "simple_p": 0.5005566664366686,
           "wave_p": 0.5,
-          "edge": -0.017207125868813122,
+          "edge": -0.017018453210852935,
           "mag": 0.0,
           "entropy": 0.0,
           "confidence": 0.95,
-          "devig_prob_home": 0.5149380816975319,
+          "devig_prob_home": 0.5166537407178632,
           "market_price": -118,
           "book": "fanduel",
           "weather": {
-            "temp": 70.7,
-            "wind": 4.6,
+            "temp": 68.9,
+            "wind": 6.5,
             "precip": 0.0,
-            "factor": 0.553,
+            "factor": 0.554,
             "source": "open-meteo",
             "park": "CWS"
           }
         },
         "total": {
-          "mean": 5.5344,
+          "mean": 5.5826,
           "median": 5,
-          "p_over_8_5": 0.1554,
+          "p_over_8_5": 0.1596,
           "ci_10": 2,
           "ci_90": 9,
           "distribution": [
@@ -3176,37 +3242,37 @@
           ],
           "overdispersion_r": 5.0,
           "simple": {
-            "line": 8.5,
-            "over_prob": 0.4686,
-            "under_prob": 0.5314,
-            "mean_total": 8.445,
+            "line": 8.0,
+            "over_prob": 0.4552,
+            "under_prob": 0.5448,
+            "mean_total": 8.341,
             "n_sim": 5000,
-            "home_mean": 4.253500000000001,
-            "away_mean": 4.193500000000001
+            "home_mean": 4.2010000000000005,
+            "away_mean": 4.141000000000001
           },
-          "line": 8.5
+          "line": 8.0
         },
         "k_prop": {
           "line": 6.5,
-          "over_prob": 0.4482,
-          "under_prob": 0.5518000000000001,
-          "mean_k": 6.337260000000001,
+          "over_prob": 0.4368,
+          "under_prob": 0.5631999999999999,
+          "mean_k": 6.29204,
           "n_sim": 5000
         },
         "pitchers": {
           "home": 680732,
           "away": 640455,
           "home_stats": {
-            "era": 3.25,
-            "fip": 3.25,
-            "k9": 9.81,
-            "whip": 1.12
+            "era": 3.27,
+            "fip": 3.27,
+            "k9": 9.74,
+            "whip": 1.11
           },
           "away_stats": {
-            "era": 4.08,
-            "fip": 4.08,
-            "k9": 9.03,
-            "whip": 1.3
+            "era": 4.31,
+            "fip": 4.31,
+            "k9": 9.0,
+            "whip": 1.31
           }
         },
         "lineups": {
@@ -3236,13 +3302,23 @@
               "pos": "3B",
               "avg": ".250",
               "ops": ".750",
-              "hr": 0,
+              "hr": 1,
               "team": "home",
               "woba": 0.32,
               "war": 1.0
             },
             {
               "name": "Randal Grichuk",
+              "pos": "LF",
+              "avg": ".250",
+              "ops": ".750",
+              "hr": 1,
+              "team": "home",
+              "woba": 0.32,
+              "war": 1.0
+            },
+            {
+              "name": "Sam Antonacci",
               "pos": "LF",
               "avg": ".250",
               "ops": ".750",
@@ -3254,6 +3330,16 @@
             {
               "name": "Colson Montgomery",
               "pos": "DH",
+              "avg": ".250",
+              "ops": ".750",
+              "hr": 1,
+              "team": "home",
+              "woba": 0.32,
+              "war": 1.0
+            },
+            {
+              "name": "Braden Montgomery",
+              "pos": "PR",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -3274,26 +3360,6 @@
             {
               "name": "Luisangel Acu\u00f1a",
               "pos": "SS",
-              "avg": ".250",
-              "ops": ".750",
-              "hr": 0,
-              "team": "home",
-              "woba": 0.32,
-              "war": 1.0
-            },
-            {
-              "name": "Jake Rogers",
-              "pos": "C",
-              "avg": ".250",
-              "ops": ".750",
-              "hr": 0,
-              "team": "home",
-              "woba": 0.32,
-              "war": 1.0
-            },
-            {
-              "name": "Tristan Peters",
-              "pos": "RF",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -3328,7 +3394,7 @@
               "pos": "DH",
               "avg": ".250",
               "ops": ".750",
-              "hr": 0,
+              "hr": 1,
               "team": "away",
               "woba": 0.32,
               "war": 1.0
@@ -3397,10 +3463,10 @@
           "source": "boxscore"
         },
         "weather": {
-          "temp": 70.7,
-          "wind": 4.6,
+          "temp": 68.9,
+          "wind": 6.5,
           "precip": 0.0,
-          "factor": 0.553,
+          "factor": 0.554,
           "source": "open-meteo",
           "park": "CWS"
         },
@@ -3408,21 +3474,21 @@
           "h2h": {
             "Chicago White Sox": {
               "price": -118,
-              "devig_prob": 0.5149380816975319,
+              "devig_prob": 0.5166537407178632,
               "book": "fanduel",
-              "implied": 0.5325437462407548
+              "implied": 0.5359206478042804
             },
             "New York Mets": {
               "price": 100,
-              "devig_prob": 0.48506191830246814,
+              "devig_prob": 0.483346259282137,
               "book": "fanduel",
-              "implied": 0.5016461207917718
+              "implied": 0.5013710730678979
             }
           },
           "totals": {
-            "line": 8.5,
-            "over_price": 100,
-            "under_price": -120
+            "line": 8.0,
+            "over_price": -115,
+            "under_price": -105
           },
           "raw_books": {
             "draftkings": {
@@ -3443,6 +3509,12 @@
                 "New York Mets": 100
               }
             },
+            "mybookieag": {
+              "h2h": {
+                "Chicago White Sox": -118,
+                "New York Mets": 101
+              }
+            },
             "fanduel": {
               "h2h": {
                 "Chicago White Sox": -118,
@@ -3460,15 +3532,27 @@
                 "Chicago White Sox": -110,
                 "New York Mets": 100
               }
+            },
+            "betrivers": {
+              "h2h": {
+                "Chicago White Sox": -120,
+                "New York Mets": 100
+              }
+            },
+            "betmgm": {
+              "h2h": {
+                "Chicago White Sox": -118,
+                "New York Mets": -102
+              }
             }
           }
         },
         "ab_test_mode": "wave",
         "chd_all_modes": {
           "simple": {
-            "pA": 0.5034632779456398,
-            "pB": 0.49653672205436017,
-            "raw_score": 0.013853333333333308,
+            "pA": 0.5005566664366686,
+            "pB": 0.49944333356333137,
+            "raw_score": 0.002226666666666717,
             "model": "simple",
             "edge": 0.0
           },
@@ -3491,11 +3575,11 @@
             "model": "wave_true"
           },
           "ensemble": {
-            "pA": 0.5022690441712813,
-            "pB": 0.49773095582871874,
-            "raw_score": 0.009076321839080442,
+            "pA": 0.5003647124929897,
+            "pB": 0.49963528750701025,
+            "raw_score": 0.0014588505747126766,
             "model": "ensemble(0.66*simple+0.34*wave_true)",
-            "simple_p": 0.5034632779456398,
+            "simple_p": 0.5005566664366686,
             "wave_p": 0.5,
             "edge": 0.0,
             "mag": 0.0,
@@ -3515,56 +3599,56 @@
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.51,
-          "weather": 0.633,
+          "weather": 0.587,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
           "entropy": 0.5
         },
         "factorsB": {
-          "pitcher_dominance": 0.6053333333333334,
+          "pitcher_dominance": 0.6120000000000001,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.36,
-          "weather": 0.633,
+          "weather": 0.587,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
           "entropy": 0.5
         },
         "factors": {
-          "era_diff": -1.305,
+          "era_diff": -1.2099999999999997,
           "park_factor": -0.020000000000000018,
           "team_strength_diff": 0,
           "home_adv": 0.15
         },
         "chd": {
-          "pA": 0.5234476907008682,
-          "pB": 0.47655230929913184,
-          "raw_score": 0.09387103019892183,
+          "pA": 0.5231190958260956,
+          "pB": 0.4768809041739044,
+          "raw_score": 0.0925492208735275,
           "model": "ensemble(0.62*simple+0.38*wave_true)",
-          "simple_p": 0.537751351117045,
+          "simple_p": 0.5372210156245898,
           "wave_p": 0.5001499058658982,
-          "edge": -0.03020393814395539,
+          "edge": -0.029109042472359792,
           "mag": 0.0003416521076371714,
           "entropy": 0.1856006030239212,
           "confidence": 0.8143993969760788,
-          "devig_prob_home": 0.5067562474430872,
+          "devig_prob_home": 0.5059899466462642,
           "market_price": -116,
           "book": "fanduel",
           "weather": {
-            "temp": 80.4,
-            "wind": 2.9,
+            "temp": 75.4,
+            "wind": 3.4,
             "precip": 0.0,
-            "factor": 0.633,
+            "factor": 0.587,
             "source": "open-meteo",
             "park": "KC"
           }
         },
         "total": {
-          "mean": 4.9078,
+          "mean": 4.9008,
           "median": 5,
-          "p_over_8_5": 0.1006,
+          "p_over_8_5": 0.1002,
           "ci_10": 1,
           "ci_90": 9,
           "distribution": [
@@ -3672,36 +3756,36 @@
           "overdispersion_r": 5.0,
           "simple": {
             "line": 8.5,
-            "over_prob": 0.6744,
-            "under_prob": 0.3256,
-            "mean_total": 10.1158,
+            "over_prob": 0.6726,
+            "under_prob": 0.3274,
+            "mean_total": 10.004,
             "n_sim": 5000,
-            "home_mean": 5.0815,
-            "away_mean": 5.0215000000000005
+            "home_mean": 5.034,
+            "away_mean": 4.974
           },
           "line": 8.5
         },
         "k_prop": {
           "line": 6.5,
-          "over_prob": 0.2684,
-          "under_prob": 0.7316,
-          "mean_k": 5.22614,
+          "over_prob": 0.264,
+          "under_prob": 0.736,
+          "mean_k": 5.19384,
           "n_sim": 5000
         },
         "pitchers": {
           "home": 702070,
           "away": 675512,
           "home_stats": {
-            "era": 4.05,
-            "fip": 4.05,
-            "k9": 8.09,
-            "whip": 1.22
+            "era": 4.02,
+            "fip": 4.02,
+            "k9": 8.04,
+            "whip": 1.21
           },
           "away_stats": {
-            "era": 1.44,
-            "fip": 1.44,
-            "k9": 7.63,
-            "whip": 0.96
+            "era": 1.6,
+            "fip": 1.6,
+            "k9": 7.6,
+            "whip": 1.0
           }
         },
         "lineups": {
@@ -3711,7 +3795,7 @@
               "pos": "C",
               "avg": ".250",
               "ops": ".750",
-              "hr": 0,
+              "hr": 1,
               "team": "home",
               "woba": 0.32,
               "war": 1.0
@@ -3751,7 +3835,7 @@
               "pos": "1B",
               "avg": ".250",
               "ops": ".750",
-              "hr": 0,
+              "hr": 1,
               "team": "home",
               "woba": 0.32,
               "war": 1.0
@@ -3791,7 +3875,7 @@
               "pos": "CF",
               "avg": ".250",
               "ops": ".750",
-              "hr": 0,
+              "hr": 1,
               "team": "home",
               "woba": 0.32,
               "war": 1.0
@@ -3819,8 +3903,18 @@
               "war": 1.0
             },
             {
+              "name": "Zach McKinstry",
+              "pos": "RF",
+              "avg": ".250",
+              "ops": ".750",
+              "hr": 0,
+              "team": "away",
+              "woba": 0.32,
+              "war": 1.0
+            },
+            {
               "name": "Kevin McGonigle",
-              "pos": "SS",
+              "pos": "3B",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -3849,6 +3943,16 @@
               "war": 1.0
             },
             {
+              "name": "Colt Keith",
+              "pos": "DH",
+              "avg": ".250",
+              "ops": ".750",
+              "hr": 0,
+              "team": "away",
+              "woba": 0.32,
+              "war": 1.0
+            },
+            {
               "name": "Spencer Torkelson",
               "pos": "1B",
               "avg": ".250",
@@ -3867,35 +3971,15 @@
               "team": "away",
               "woba": 0.32,
               "war": 1.0
-            },
-            {
-              "name": "Max Clark",
-              "pos": "CF",
-              "avg": ".250",
-              "ops": ".750",
-              "hr": 0,
-              "team": "away",
-              "woba": 0.32,
-              "war": 1.0
-            },
-            {
-              "name": "Javier B\u00e1ez",
-              "pos": "LF",
-              "avg": ".250",
-              "ops": ".750",
-              "hr": 0,
-              "team": "away",
-              "woba": 0.32,
-              "war": 1.0
             }
           ],
           "source": "boxscore"
         },
         "weather": {
-          "temp": 80.4,
-          "wind": 2.9,
+          "temp": 75.4,
+          "wind": 3.4,
           "precip": 0.0,
-          "factor": 0.633,
+          "factor": 0.587,
           "source": "open-meteo",
           "park": "KC"
         },
@@ -3903,21 +3987,21 @@
           "h2h": {
             "Detroit Tigers": {
               "price": -102,
-              "devig_prob": 0.4932437525569127,
+              "devig_prob": 0.4940100533537357,
               "book": "fanduel",
-              "implied": 0.5111371020377338
+              "implied": 0.512662706669431
             },
             "Kansas City Royals": {
               "price": -116,
-              "devig_prob": 0.5067562474430872,
+              "devig_prob": 0.5059899466462642,
               "book": "fanduel",
-              "implied": 0.5251397882179748
+              "implied": 0.525094932449583
             }
           },
           "totals": {
             "line": 8.5,
-            "over_price": -120,
-            "under_price": 100
+            "over_price": -110,
+            "under_price": -110
           },
           "raw_books": {
             "fanduel": {
@@ -3936,6 +4020,12 @@
               "h2h": {
                 "Detroit Tigers": -105,
                 "Kansas City Royals": -105
+              }
+            },
+            "mybookieag": {
+              "h2h": {
+                "Detroit Tigers": -105,
+                "Kansas City Royals": -111
               }
             },
             "draftkings": {
@@ -3961,15 +4051,21 @@
                 "Detroit Tigers": -103,
                 "Kansas City Royals": -117
               }
+            },
+            "betmgm": {
+              "h2h": {
+                "Detroit Tigers": -110,
+                "Kansas City Royals": -110
+              }
             }
           }
         },
         "ab_test_mode": "simple",
         "chd_all_modes": {
           "simple": {
-            "pA": 0.537751351117045,
-            "pB": 0.462248648882955,
-            "raw_score": 0.15129333333333334,
+            "pA": 0.5372210156245898,
+            "pB": 0.4627789843754102,
+            "raw_score": 0.14915999999999996,
             "model": "simple",
             "edge": 0.0
           },
@@ -3992,11 +4088,11 @@
             "model": "wave_true"
           },
           "ensemble": {
-            "pA": 0.5234476907008682,
-            "pB": 0.47655230929913184,
-            "raw_score": 0.09387103019892183,
+            "pA": 0.5231190958260956,
+            "pB": 0.4768809041739044,
+            "raw_score": 0.0925492208735275,
             "model": "ensemble(0.62*simple+0.38*wave_true)",
-            "simple_p": 0.537751351117045,
+            "simple_p": 0.5372210156245898,
             "wave_p": 0.5001499058658982,
             "edge": 0.0002156773345418841,
             "mag": 0.0003416521076371714,
@@ -4012,59 +4108,60 @@
         "home_abbr": "HOU",
         "away_abbr": "ATH",
         "factorsA": {
-          "pitcher_dominance": 0.701,
+          "pitcher_dominance": 0.6823333333333333,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.5,
-          "weather": 0.5,
+          "weather": 0.73,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
           "entropy": 0.5
         },
         "factorsB": {
-          "pitcher_dominance": 0.5680000000000001,
+          "pitcher_dominance": 0.6063333333333333,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.38,
-          "weather": 0.5,
+          "weather": 0.73,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
           "entropy": 0.5
         },
         "factors": {
-          "era_diff": -0.5449999999999997,
+          "era_diff": -0.31500000000000017,
           "park_factor": -0.010000000000000009,
           "team_strength_diff": 0,
           "home_adv": 0.15
         },
         "chd": {
-          "pA": 0.5149337474042064,
-          "pB": 0.4850662525957936,
-          "raw_score": 0.05976879808545067,
+          "pA": 0.5121349606718443,
+          "pB": 0.4878650393281557,
+          "raw_score": 0.04855186633293352,
           "model": "ensemble(0.61*simple+0.39*wave_true)",
-          "simple_p": 0.5242709097549954,
+          "simple_p": 0.5197197659017015,
           "wave_p": 0.5000208476344354,
-          "edge": -0.1955527947674346,
+          "edge": -0.19345785317245412,
           "mag": 4.923603072988632e-05,
           "entropy": 0.20142227319679604,
           "confidence": 0.7985777268032039,
-          "devig_prob_home": 0.6806190473632282,
+          "devig_prob_home": 0.6813228925006098,
           "market_price": -255,
           "book": "fanduel",
           "weather": {
-            "temp": 72,
-            "wind": 5,
-            "precip": 0,
-            "factor": 0.5,
-            "source": "fallback"
+            "temp": 85.8,
+            "wind": 7.2,
+            "precip": 0.0,
+            "factor": 0.73,
+            "source": "open-meteo",
+            "park": "HOU"
           }
         },
         "total": {
-          "mean": 5.26,
+          "mean": 5.2392,
           "median": 5,
-          "p_over_8_5": 0.1326,
+          "p_over_8_5": 0.1294,
           "ci_10": 2,
           "ci_90": 9,
           "distribution": [
@@ -4172,36 +4269,36 @@
           "overdispersion_r": 5.0,
           "simple": {
             "line": 8.0,
-            "over_prob": 0.5932,
-            "under_prob": 0.40680000000000005,
-            "mean_total": 9.3974,
+            "over_prob": 0.571,
+            "under_prob": 0.42900000000000005,
+            "mean_total": 9.1846,
             "n_sim": 5000,
-            "home_mean": 4.7095,
-            "away_mean": 4.649500000000001
+            "home_mean": 4.5945,
+            "away_mean": 4.5345
           },
           "line": 8.0
         },
         "k_prop": {
           "line": 6.5,
-          "over_prob": 0.139,
-          "under_prob": 0.861,
-          "mean_k": 4.30236,
+          "over_prob": 0.1794,
+          "under_prob": 0.8206,
+          "mean_k": 4.625360000000001,
           "n_sim": 5000
         },
         "pitchers": {
           "home": 669713,
           "away": 669372,
           "home_stats": {
-            "era": 4.56,
-            "fip": 4.56,
-            "k9": 6.66,
-            "whip": 1.29
+            "era": 4.23,
+            "fip": 4.23,
+            "k9": 7.16,
+            "whip": 1.23
           },
           "away_stats": {
-            "era": 3.47,
-            "fip": 3.47,
-            "k9": 8.12,
-            "whip": 1.21
+            "era": 3.6,
+            "fip": 3.6,
+            "k9": 8.03,
+            "whip": 1.23
           }
         },
         "lineups": {
@@ -4392,25 +4489,26 @@
           "source": "boxscore"
         },
         "weather": {
-          "temp": 72,
-          "wind": 5,
-          "precip": 0,
-          "factor": 0.5,
-          "source": "fallback"
+          "temp": 85.8,
+          "wind": 7.2,
+          "precip": 0.0,
+          "factor": 0.73,
+          "source": "open-meteo",
+          "park": "HOU"
         },
         "odds": {
           "h2h": {
             "Athletics": {
               "price": 210,
-              "devig_prob": 0.3193809526367718,
+              "devig_prob": 0.3186771074993901,
               "book": "fanduel",
-              "implied": 0.33069955542033186
+              "implied": 0.33082852630447784
             },
             "Houston Astros": {
               "price": -255,
-              "devig_prob": 0.6806190473632282,
+              "devig_prob": 0.6813228925006098,
               "book": "fanduel",
-              "implied": 0.704739636209961
+              "implied": 0.707302291752828
             }
           },
           "totals": {
@@ -4437,6 +4535,12 @@
                 "Houston Astros": -225
               }
             },
+            "mybookieag": {
+              "h2h": {
+                "Athletics": 192,
+                "Houston Astros": -230
+              }
+            },
             "draftkings": {
               "h2h": {
                 "Athletics": 199,
@@ -4454,15 +4558,27 @@
                 "Athletics": 210,
                 "Houston Astros": -260
               }
+            },
+            "betrivers": {
+              "h2h": {
+                "Athletics": 215,
+                "Houston Astros": -265
+              }
+            },
+            "betmgm": {
+              "h2h": {
+                "Athletics": 200,
+                "Houston Astros": -250
+              }
             }
           }
         },
         "ab_test_mode": "wave",
         "chd_all_modes": {
           "simple": {
-            "pA": 0.5242709097549954,
-            "pB": 0.47572909024500465,
-            "raw_score": 0.09715999999999997,
+            "pA": 0.5197197659017015,
+            "pB": 0.48028023409829845,
+            "raw_score": 0.07892000000000002,
             "model": "simple",
             "edge": 0.0
           },
@@ -4485,11 +4601,11 @@
             "model": "wave_true"
           },
           "ensemble": {
-            "pA": 0.5149337474042064,
-            "pB": 0.4850662525957936,
-            "raw_score": 0.05976879808545067,
+            "pA": 0.5121349606718443,
+            "pB": 0.4878650393281557,
+            "raw_score": 0.04855186633293352,
             "model": "ensemble(0.61*simple+0.39*wave_true)",
-            "simple_p": 0.5242709097549954,
+            "simple_p": 0.5197197659017015,
             "wave_p": 0.5000208476344354,
             "edge": 2.9885722939967252e-05,
             "mag": 4.923603072988632e-05,
@@ -4505,22 +4621,22 @@
         "home_abbr": "TEX",
         "away_abbr": "LAA",
         "factorsA": {
-          "pitcher_dominance": 0.586,
+          "pitcher_dominance": 0.6003333333333333,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.5,
-          "weather": 0.5,
+          "weather": 0.771,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
           "entropy": 0.5
         },
         "factorsB": {
-          "pitcher_dominance": 0.4953333333333334,
+          "pitcher_dominance": 0.5083333333333334,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.48,
-          "weather": 0.5,
+          "weather": 0.771,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
@@ -4533,31 +4649,32 @@
           "home_adv": 0.15
         },
         "chd": {
-          "pA": 0.5123790451192022,
-          "pB": 0.4876209548807978,
-          "raw_score": 0.049539770114942504,
+          "pA": 0.5124488298183565,
+          "pB": 0.4875511701816435,
+          "raw_score": 0.049819310344827554,
           "model": "ensemble(0.66*simple+0.34*wave_true)",
-          "simple_p": 0.5188943320240454,
+          "simple_p": 0.5190008455122284,
           "wave_p": 0.5,
-          "edge": -0.11786764615583778,
+          "edge": -0.11920339840498617,
           "mag": 0.0,
           "entropy": 0.0,
           "confidence": 0.95,
-          "devig_prob_home": 0.6054886010366356,
+          "devig_prob_home": 0.6067545685866297,
           "market_price": -172,
           "book": "fanduel",
           "weather": {
-            "temp": 72,
-            "wind": 5,
-            "precip": 0,
-            "factor": 0.5,
-            "source": "fallback"
+            "temp": 93.0,
+            "wind": 4.1,
+            "precip": 0.0,
+            "factor": 0.771,
+            "source": "open-meteo",
+            "park": "TEX"
           }
         },
         "total": {
-          "mean": 5.851,
+          "mean": 5.8128,
           "median": 6,
-          "p_over_8_5": 0.1878,
+          "p_over_8_5": 0.1836,
           "ci_10": 2,
           "ci_90": 10,
           "distribution": [
@@ -4664,7 +4781,7 @@
           ],
           "overdispersion_r": 5.0,
           "simple": {
-            "line": 8.5,
+            "line": 8.0,
             "over_prob": 0.5848,
             "under_prob": 0.4152,
             "mean_total": 9.2872,
@@ -4672,29 +4789,29 @@
             "home_mean": 4.6370000000000005,
             "away_mean": 4.577000000000001
           },
-          "line": 8.5
+          "line": 8.0
         },
         "k_prop": {
           "line": 6.5,
-          "over_prob": 0.4514,
-          "under_prob": 0.5486,
-          "mean_k": 6.42124,
+          "over_prob": 0.4516,
+          "under_prob": 0.5484,
+          "mean_k": 6.427699999999999,
           "n_sim": 5000
         },
         "pitchers": {
           "home": 669022,
           "away": 672282,
           "home_stats": {
-            "era": 4.34,
-            "fip": 4.34,
-            "k9": 9.94,
-            "whip": 1.24
+            "era": 4.26,
+            "fip": 4.26,
+            "k9": 9.95,
+            "whip": 1.23
           },
           "away_stats": {
-            "era": 3.7,
-            "fip": 3.7,
-            "k9": 10.42,
-            "whip": 1.05
+            "era": 3.62,
+            "fip": 3.62,
+            "k9": 10.39,
+            "whip": 1.06
           }
         },
         "lineups": {
@@ -4770,8 +4887,8 @@
               "war": 1.0
             },
             {
-              "name": "Elias D\u00edaz",
-              "pos": "C",
+              "name": "Jarred Kelenic",
+              "pos": "PH",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -4780,8 +4897,8 @@
               "war": 1.0
             },
             {
-              "name": "Evan Carter",
-              "pos": "CF",
+              "name": "Nicky Lopez",
+              "pos": "2B",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -4885,31 +5002,32 @@
           "source": "boxscore"
         },
         "weather": {
-          "temp": 72,
-          "wind": 5,
-          "precip": 0,
-          "factor": 0.5,
-          "source": "fallback"
+          "temp": 93.0,
+          "wind": 4.1,
+          "precip": 0.0,
+          "factor": 0.771,
+          "source": "open-meteo",
+          "park": "TEX"
         },
         "odds": {
           "h2h": {
             "Los Angeles Angels": {
               "price": 144,
-              "devig_prob": 0.3945113989633643,
+              "devig_prob": 0.39324543141337037,
               "book": "fanduel",
-              "implied": 0.41067934965931324
+              "implied": 0.4098360655737705
             },
             "Texas Rangers": {
               "price": -172,
-              "devig_prob": 0.6054886010366356,
+              "devig_prob": 0.6067545685866297,
               "book": "fanduel",
-              "implied": 0.63030286464028
+              "implied": 0.6323529411764706
             }
           },
           "totals": {
-            "line": 8.5,
-            "over_price": -103,
-            "under_price": -119
+            "line": 8.0,
+            "over_price": -115,
+            "under_price": -105
           },
           "raw_books": {
             "fanduel": {
@@ -4917,21 +5035,15 @@
                 "Los Angeles Angels": 144,
                 "Texas Rangers": -172
               }
-            },
-            "mybookieag": {
-              "h2h": {
-                "Los Angeles Angels": 143,
-                "Texas Rangers": -169
-              }
             }
           }
         },
         "ab_test_mode": "ensemble",
         "chd_all_modes": {
           "simple": {
-            "pA": 0.5188943320240454,
-            "pB": 0.48110566797595455,
-            "raw_score": 0.0756133333333333,
+            "pA": 0.5190008455122284,
+            "pB": 0.48099915448777164,
+            "raw_score": 0.07603999999999995,
             "model": "simple",
             "edge": 0.0
           },
@@ -4954,11 +5066,11 @@
             "model": "wave_true"
           },
           "ensemble": {
-            "pA": 0.5123790451192022,
-            "pB": 0.4876209548807978,
-            "raw_score": 0.049539770114942504,
+            "pA": 0.5124488298183565,
+            "pB": 0.4875511701816435,
+            "raw_score": 0.049819310344827554,
             "model": "ensemble(0.66*simple+0.34*wave_true)",
-            "simple_p": 0.5188943320240454,
+            "simple_p": 0.5190008455122284,
             "wave_p": 0.5,
             "edge": 0.0,
             "mag": 0.0,
@@ -4974,59 +5086,60 @@
         "home_abbr": "COL",
         "away_abbr": "CLE",
         "factorsA": {
-          "pitcher_dominance": 0.576,
+          "pitcher_dominance": 0.597,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.51,
-          "weather": 0.5,
+          "weather": 0.657,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
           "entropy": 0.5
         },
         "factorsB": {
-          "pitcher_dominance": 0.3963333333333333,
+          "pitcher_dominance": 0.36133333333333334,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.9,
-          "weather": 0.5,
+          "weather": 0.657,
           "rest": 0.5,
           "umpire": 0.5,
           "form": 0.4,
           "entropy": 0.5
         },
         "factors": {
-          "era_diff": -0.7800000000000002,
+          "era_diff": -0.95,
           "park_factor": 0.28,
           "team_strength_diff": 0,
           "home_adv": 0.15
         },
         "chd": {
-          "pA": 0.5116724127546098,
-          "pB": 0.48832758724539016,
-          "raw_score": 0.04670942528735631,
-          "model": "ensemble(0.66*simple+0.34*wave_true)",
-          "simple_p": 0.517815787888615,
-          "wave_p": 0.5,
-          "edge": 0.05032567506844965,
-          "mag": 0.0,
-          "entropy": 0.0,
-          "confidence": 0.95,
-          "devig_prob_home": 0.4380019121769405,
+          "pA": 0.5140177448162426,
+          "pB": 0.4859822551837574,
+          "raw_score": 0.05574006731265285,
+          "model": "ensemble(0.62*simple+0.38*wave_true)",
+          "simple_p": 0.5222885523765554,
+          "wave_p": 0.500559993795986,
+          "edge": 0.04988417607115314,
+          "mag": 0.0012744209224836143,
+          "entropy": 0.1864306525016225,
+          "confidence": 0.8135693474983775,
+          "devig_prob_home": 0.43609807911260423,
           "market_price": 120,
           "book": "fanduel",
           "weather": {
-            "temp": 72,
-            "wind": 5,
-            "precip": 0,
-            "factor": 0.5,
-            "source": "fallback"
+            "temp": 82.8,
+            "wind": 2.9,
+            "precip": 0.0,
+            "factor": 0.657,
+            "source": "open-meteo",
+            "park": "COL"
           }
         },
         "total": {
-          "mean": 7.4794,
+          "mean": 7.5054,
           "median": 7,
-          "p_over_8_5": 0.3792,
+          "p_over_8_5": 0.3814,
           "ci_10": 3,
           "ci_90": 12,
           "distribution": [
@@ -5113,7 +5226,7 @@
             0,
             0,
             0,
-            1,
+            0,
             1,
             1,
             1,
@@ -5134,35 +5247,35 @@
           "overdispersion_r": 5.0,
           "simple": {
             "line": 11.0,
-            "over_prob": 0.3086,
-            "under_prob": 0.6914,
-            "mean_total": 10.0864,
+            "over_prob": 0.3418,
+            "under_prob": 0.6582,
+            "mean_total": 10.271,
             "n_sim": 5000,
-            "home_mean": 5.059000000000001,
-            "away_mean": 4.999000000000001
+            "home_mean": 5.144,
+            "away_mean": 5.0840000000000005
           },
           "line": 11.0
         },
         "k_prop": {
           "line": 6.5,
-          "over_prob": 0.2298,
-          "under_prob": 0.7702,
-          "mean_k": 4.91606,
+          "over_prob": 0.2198,
+          "under_prob": 0.7802,
+          "mean_k": 4.85146,
           "n_sim": 5000
         },
         "pitchers": {
           "home": 685299,
           "away": 676282,
           "home_stats": {
-            "era": 5.4,
-            "fip": 5.4,
-            "k9": 7.61,
-            "whip": 1.43
+            "era": 5.63,
+            "fip": 5.63,
+            "k9": 7.51,
+            "whip": 1.49
           },
           "away_stats": {
-            "era": 3.84,
-            "fip": 3.84,
-            "k9": 10.02,
+            "era": 3.73,
+            "fip": 3.73,
+            "k9": 9.94,
             "whip": 1.45
           }
         },
@@ -5210,7 +5323,7 @@
             },
             {
               "name": "Willi Castro",
-              "pos": "2B",
+              "pos": "SS",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -5345,7 +5458,7 @@
               "pos": "CF",
               "avg": ".250",
               "ops": ".750",
-              "hr": 0,
+              "hr": 1,
               "team": "away",
               "woba": 0.32,
               "war": 1.0
@@ -5354,31 +5467,32 @@
           "source": "boxscore"
         },
         "weather": {
-          "temp": 72,
-          "wind": 5,
-          "precip": 0,
-          "factor": 0.5,
-          "source": "fallback"
+          "temp": 82.8,
+          "wind": 2.9,
+          "precip": 0.0,
+          "factor": 0.657,
+          "source": "open-meteo",
+          "park": "COL"
         },
         "odds": {
           "h2h": {
             "Cleveland Guardians": {
               "price": -142,
-              "devig_prob": 0.5619980878230596,
+              "devig_prob": 0.5639019208873958,
               "book": "fanduel",
-              "implied": 0.5821934510952349
+              "implied": 0.5851470708771537
             },
             "Colorado Rockies": {
               "price": 120,
-              "devig_prob": 0.4380019121769405,
+              "devig_prob": 0.43609807911260423,
               "book": "fanduel",
-              "implied": 0.45374148126441705
+              "implied": 0.4525281864731406
             }
           },
           "totals": {
             "line": 11.0,
-            "over_price": -115,
-            "under_price": -108
+            "over_price": -110,
+            "under_price": -110
           },
           "raw_books": {
             "fanduel": {
@@ -5399,6 +5513,12 @@
                 "Colorado Rockies": 122
               }
             },
+            "mybookieag": {
+              "h2h": {
+                "Cleveland Guardians": -141,
+                "Colorado Rockies": 120
+              }
+            },
             "draftkings": {
               "h2h": {
                 "Cleveland Guardians": -142,
@@ -5410,27 +5530,33 @@
                 "Cleveland Guardians": -143,
                 "Colorado Rockies": 120
               }
+            },
+            "betmgm": {
+              "h2h": {
+                "Cleveland Guardians": -150,
+                "Colorado Rockies": 125
+              }
             }
           }
         },
         "ab_test_mode": "simple",
         "chd_all_modes": {
           "simple": {
-            "pA": 0.517815787888615,
-            "pB": 0.48218421211138496,
-            "raw_score": 0.07129333333333332,
+            "pA": 0.5222885523765554,
+            "pB": 0.47771144762344464,
+            "raw_score": 0.08921333333333331,
             "model": "simple",
             "edge": 0.0
           },
           "wave": {
-            "pA": 0.5,
-            "pB": 0.5,
-            "edge": 0.0,
-            "mag": 0.0,
-            "ang": 0.0,
+            "pA": 0.500559993795986,
+            "pB": 0.49944000620401396,
+            "edge": 0.0008055386910808163,
+            "mag": 0.0012744209224836143,
+            "ang": 0.5856891683030488,
             "wave_A": "(-0.0017950983692452257-0.011240508196972226j)",
-            "wave_B": "(-0.0017950983692452257-0.011240508196972226j)",
-            "entropy": 0.0,
+            "wave_B": "(-0.002857113251072638-0.011944974717426601j)",
+            "entropy": 0.1864306525016225,
             "calibration": {
               "brier": 0.215,
               "logloss": 0.582,
@@ -5441,16 +5567,16 @@
             "model": "wave_true"
           },
           "ensemble": {
-            "pA": 0.5116724127546098,
-            "pB": 0.48832758724539016,
-            "raw_score": 0.04670942528735631,
-            "model": "ensemble(0.66*simple+0.34*wave_true)",
-            "simple_p": 0.517815787888615,
-            "wave_p": 0.5,
-            "edge": 0.0,
-            "mag": 0.0,
-            "entropy": 0.0,
-            "confidence": 0.95
+            "pA": 0.5140177448162426,
+            "pB": 0.4859822551837574,
+            "raw_score": 0.05574006731265285,
+            "model": "ensemble(0.62*simple+0.38*wave_true)",
+            "simple_p": 0.5222885523765554,
+            "wave_p": 0.500559993795986,
+            "edge": 0.0008055386910808163,
+            "mag": 0.0012744209224836143,
+            "entropy": 0.1864306525016225,
+            "confidence": 0.8135693474983775
           }
         }
       },
@@ -5461,7 +5587,7 @@
         "home_abbr": "AZ",
         "away_abbr": "CIN",
         "factorsA": {
-          "pitcher_dominance": 0.558,
+          "pitcher_dominance": 0.4943333333333333,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.455,
@@ -5472,7 +5598,7 @@
           "entropy": 0.5
         },
         "factorsB": {
-          "pitcher_dominance": 0.8853333333333333,
+          "pitcher_dominance": 0.8893333333333332,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.4,
@@ -5483,23 +5609,23 @@
           "entropy": 0.5
         },
         "factors": {
-          "era_diff": 0.9049999999999998,
+          "era_diff": 1.115,
           "park_factor": 0.0,
           "team_strength_diff": 0,
           "home_adv": 0.15
         },
         "chd": {
-          "pA": 0.4909369111279425,
-          "pB": 0.5090630888720575,
-          "raw_score": -0.03626160919540228,
+          "pA": 0.4873941587551679,
+          "pB": 0.5126058412448321,
+          "raw_score": -0.05044827586206895,
           "model": "ensemble(0.66*simple+0.34*wave_true)",
-          "simple_p": 0.4861668643531754,
+          "simple_p": 0.48075950546841417,
           "wave_p": 0.5,
-          "edge": -0.09186684501564646,
+          "edge": -0.08789954920040477,
           "mag": 0.0,
           "entropy": 0.0,
           "confidence": 0.95,
-          "devig_prob_home": 0.600929933887704,
+          "devig_prob_home": 0.6005053904452369,
           "market_price": -180,
           "book": "fanduel",
           "weather": {
@@ -5511,9 +5637,9 @@
           }
         },
         "total": {
-          "mean": 5.1036,
+          "mean": 5.1844,
           "median": 5,
-          "p_over_8_5": 0.1188,
+          "p_over_8_5": 0.126,
           "ci_10": 2,
           "ci_90": 9,
           "distribution": [
@@ -5621,36 +5747,36 @@
           "overdispersion_r": 5.0,
           "simple": {
             "line": 8.0,
-            "over_prob": 0.403,
-            "under_prob": 0.597,
-            "mean_total": 7.9766,
+            "over_prob": 0.3736,
+            "under_prob": 0.6264000000000001,
+            "mean_total": 7.7654,
             "n_sim": 5000,
-            "home_mean": 3.9925000000000006,
-            "away_mean": 3.9325000000000006
+            "home_mean": 3.8875,
+            "away_mean": 3.8275
           },
           "line": 8.0
         },
         "k_prop": {
           "line": 6.5,
-          "over_prob": 0.124,
-          "under_prob": 0.876,
-          "mean_k": 4.127940000000001,
+          "over_prob": 0.1262,
+          "under_prob": 0.8738,
+          "mean_k": 4.14732,
           "n_sim": 5000
         },
         "pitchers": {
           "home": 593958,
           "away": 666157,
           "home_stats": {
-            "era": 2.71,
-            "fip": 2.71,
-            "k9": 6.39,
-            "whip": 1.21
+            "era": 2.68,
+            "fip": 2.68,
+            "k9": 6.42,
+            "whip": 1.2
           },
           "away_stats": {
-            "era": 4.52,
-            "fip": 4.52,
-            "k9": 7.16,
-            "whip": 1.42
+            "era": 4.91,
+            "fip": 4.91,
+            "k9": 7.12,
+            "whip": 1.47
           }
         },
         "lineups": {
@@ -5720,7 +5846,7 @@
               "pos": "CF",
               "avg": ".250",
               "ops": ".750",
-              "hr": 0,
+              "hr": 1,
               "team": "home",
               "woba": 0.32,
               "war": 1.0
@@ -5828,8 +5954,8 @@
               "war": 1.0
             },
             {
-              "name": "Ke'Bryan Hayes",
-              "pos": "3B",
+              "name": "TJ Friedl",
+              "pos": "LF",
               "avg": ".250",
               "ops": ".750",
               "hr": 0,
@@ -5851,21 +5977,21 @@
           "h2h": {
             "Arizona Diamondbacks": {
               "price": -180,
-              "devig_prob": 0.600929933887704,
+              "devig_prob": 0.6005053904452369,
               "book": "fanduel",
-              "implied": 0.6241411957535326
+              "implied": 0.6237750614358561
             },
             "Cincinnati Reds": {
               "price": 152,
-              "devig_prob": 0.39907006611229595,
+              "devig_prob": 0.3994946095547632,
               "book": "fanduel",
-              "implied": 0.4144843753104079
+              "implied": 0.4149750836267324
             }
           },
           "totals": {
             "line": 8.0,
-            "over_price": 100,
-            "under_price": -120
+            "over_price": -105,
+            "under_price": -115
           },
           "raw_books": {
             "draftkings": {
@@ -5884,6 +6010,12 @@
               "h2h": {
                 "Arizona Diamondbacks": -155,
                 "Cincinnati Reds": 140
+              }
+            },
+            "mybookieag": {
+              "h2h": {
+                "Arizona Diamondbacks": -164,
+                "Cincinnati Reds": 139
               }
             },
             "fanduel": {
@@ -5915,9 +6047,9 @@
         "ab_test_mode": "wave",
         "chd_all_modes": {
           "simple": {
-            "pA": 0.4861668643531754,
-            "pB": 0.5138331356468246,
-            "raw_score": -0.05534666666666664,
+            "pA": 0.48075950546841417,
+            "pB": 0.5192404945315858,
+            "raw_score": -0.07699999999999999,
             "model": "simple",
             "edge": 0.0
           },
@@ -5940,11 +6072,11 @@
             "model": "wave_true"
           },
           "ensemble": {
-            "pA": 0.4909369111279425,
-            "pB": 0.5090630888720575,
-            "raw_score": -0.03626160919540228,
+            "pA": 0.4873941587551679,
+            "pB": 0.5126058412448321,
+            "raw_score": -0.05044827586206895,
             "model": "ensemble(0.66*simple+0.34*wave_true)",
-            "simple_p": 0.4861668643531754,
+            "simple_p": 0.48075950546841417,
             "wave_p": 0.5,
             "edge": 0.0,
             "mag": 0.0,
@@ -5960,7 +6092,7 @@
         "home_abbr": "SD",
         "away_abbr": "MIN",
         "factorsA": {
-          "pitcher_dominance": 0.3383333333333333,
+          "pitcher_dominance": 0.3323333333333332,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.49,
@@ -5971,7 +6103,7 @@
           "entropy": 0.5
         },
         "factorsB": {
-          "pitcher_dominance": 0.6413333333333333,
+          "pitcher_dominance": 0.6663333333333333,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.28,
@@ -5982,24 +6114,24 @@
           "entropy": 0.5
         },
         "factors": {
-          "era_diff": 0.52,
+          "era_diff": 0.5900000000000003,
           "park_factor": -0.06000000000000005,
           "team_strength_diff": 0,
           "home_adv": 0.15
         },
         "chd": {
-          "pA": 0.4946280652688583,
-          "pB": 0.5053719347311417,
-          "raw_score": -0.022304319617656457,
-          "model": "ensemble(0.66*simple+0.34*wave_true)",
-          "simple_p": 0.4912109054233214,
-          "wave_p": 0.5011206689753783,
-          "edge": -0.0927590153519593,
-          "mag": 0.002121473108796298,
-          "entropy": 0.014746548062590526,
-          "confidence": 0.95,
-          "devig_prob_home": 0.598130950083101,
-          "market_price": -154,
+          "pA": 0.4929100680892769,
+          "pB": 0.5070899319107232,
+          "raw_score": -0.028902606662444656,
+          "model": "ensemble(0.65*simple+0.35*wave_true)",
+          "simple_p": 0.48873190819272744,
+          "wave_p": 0.5007480286112955,
+          "edge": -0.09457508899697387,
+          "mag": 0.0014451477242753872,
+          "entropy": 0.0620320049872147,
+          "confidence": 0.9379679950127853,
+          "devig_prob_home": 0.601665020907697,
+          "market_price": -164,
           "book": "fanduel",
           "weather": {
             "temp": 72,
@@ -6010,9 +6142,9 @@
           }
         },
         "total": {
-          "mean": 5.307,
+          "mean": 5.2864,
           "median": 5,
-          "p_over_8_5": 0.1364,
+          "p_over_8_5": 0.1348,
           "ci_10": 2,
           "ci_90": 9,
           "distribution": [
@@ -6120,35 +6252,35 @@
           "overdispersion_r": 5.0,
           "simple": {
             "line": 8.0,
-            "over_prob": 0.4536,
-            "under_prob": 0.5464,
-            "mean_total": 8.2762,
+            "over_prob": 0.426,
+            "under_prob": 0.5740000000000001,
+            "mean_total": 8.1956,
             "n_sim": 5000,
-            "home_mean": 4.1370000000000005,
-            "away_mean": 4.077000000000001
+            "home_mean": 4.102,
+            "away_mean": 4.042000000000001
           },
           "line": 8.0
         },
         "k_prop": {
           "line": 6.5,
-          "over_prob": 0.0842,
-          "under_prob": 0.9158,
-          "mean_k": 3.7209600000000003,
+          "over_prob": 0.0756,
+          "under_prob": 0.9244,
+          "mean_k": 3.6240600000000005,
           "n_sim": 5000
         },
         "pitchers": {
           "home": 681190,
           "away": 687570,
           "home_stats": {
-            "era": 4.3,
-            "fip": 4.3,
-            "k9": 5.76,
-            "whip": 1.38
+            "era": 4.18,
+            "fip": 4.18,
+            "k9": 5.61,
+            "whip": 1.35
           },
           "away_stats": {
-            "era": 5.34,
-            "fip": 5.34,
-            "k9": 9.65,
+            "era": 5.36,
+            "fip": 5.36,
+            "k9": 9.73,
             "whip": 1.38
           }
         },
@@ -6189,7 +6321,7 @@
               "pos": "1B",
               "avg": ".250",
               "ops": ".750",
-              "hr": 0,
+              "hr": 1,
               "team": "home",
               "woba": 0.32,
               "war": 1.0
@@ -6349,28 +6481,28 @@
         "odds": {
           "h2h": {
             "Minnesota Twins": {
-              "price": 130,
-              "devig_prob": 0.40186904991689903,
+              "price": 138,
+              "devig_prob": 0.398334979092303,
               "book": "fanduel",
-              "implied": 0.41625397383960844
+              "implied": 0.41337580111799477
             },
             "San Diego Padres": {
-              "price": -154,
-              "devig_prob": 0.598130950083101,
+              "price": -164,
+              "devig_prob": 0.601665020907697,
               "book": "fanduel",
-              "implied": 0.6195410791152883
+              "implied": 0.6243834287140569
             }
           },
           "totals": {
             "line": 8.0,
-            "over_price": -112,
-            "under_price": -112
+            "over_price": -105,
+            "under_price": -115
           },
           "raw_books": {
             "fanduel": {
               "h2h": {
-                "Minnesota Twins": 130,
-                "San Diego Padres": -154
+                "Minnesota Twins": 138,
+                "San Diego Padres": -164
               }
             },
             "lowvig": {
@@ -6385,6 +6517,12 @@
                 "San Diego Padres": -165
               }
             },
+            "mybookieag": {
+              "h2h": {
+                "Minnesota Twins": 141,
+                "San Diego Padres": -167
+              }
+            },
             "draftkings": {
               "h2h": {
                 "Minnesota Twins": 142,
@@ -6393,8 +6531,8 @@
             },
             "bovada": {
               "h2h": {
-                "Minnesota Twins": 130,
-                "San Diego Padres": -155
+                "Minnesota Twins": 139,
+                "San Diego Padres": -165
               }
             },
             "betrivers": {
@@ -6402,27 +6540,33 @@
                 "Minnesota Twins": 143,
                 "San Diego Padres": -167
               }
+            },
+            "betmgm": {
+              "h2h": {
+                "Minnesota Twins": 135,
+                "San Diego Padres": -165
+              }
             }
           }
         },
         "ab_test_mode": "simple",
         "chd_all_modes": {
           "simple": {
-            "pA": 0.4912109054233214,
-            "pB": 0.5087890945766786,
-            "raw_score": -0.03516000000000001,
+            "pA": 0.48873190819272744,
+            "pB": 0.5112680918072725,
+            "raw_score": -0.04508000000000005,
             "model": "simple",
             "edge": 0.0
           },
           "wave": {
-            "pA": 0.5011206689753783,
-            "pB": 0.4988793310246217,
-            "edge": 0.0016755498834279564,
-            "mag": 0.002121473108796298,
-            "ang": 0.04632764705924319,
-            "wave_A": "(-0.004671819677058466-0.012994118996528912j)",
+            "pA": 0.5007480286112955,
+            "pB": 0.4992519713887045,
+            "edge": 0.0011067303511429559,
+            "mag": 0.0014451477242753872,
+            "ang": -0.1948792911552791,
+            "wave_A": "(-0.005373223988470926-0.013372216830094232j)",
             "wave_B": "(-0.006791016586240913-0.01309236670111988j)",
-            "entropy": 0.014746548062590526,
+            "entropy": 0.0620320049872147,
             "calibration": {
               "brier": 0.215,
               "logloss": 0.582,
@@ -6433,16 +6577,16 @@
             "model": "wave_true"
           },
           "ensemble": {
-            "pA": 0.4946280652688583,
-            "pB": 0.5053719347311417,
-            "raw_score": -0.022304319617656457,
-            "model": "ensemble(0.66*simple+0.34*wave_true)",
-            "simple_p": 0.4912109054233214,
-            "wave_p": 0.5011206689753783,
-            "edge": 0.0016755498834279564,
-            "mag": 0.002121473108796298,
-            "entropy": 0.014746548062590526,
-            "confidence": 0.95
+            "pA": 0.4929100680892769,
+            "pB": 0.5070899319107232,
+            "raw_score": -0.028902606662444656,
+            "model": "ensemble(0.65*simple+0.35*wave_true)",
+            "simple_p": 0.48873190819272744,
+            "wave_p": 0.5007480286112955,
+            "edge": 0.0011067303511429559,
+            "mag": 0.0014451477242753872,
+            "entropy": 0.0620320049872147,
+            "confidence": 0.9379679950127853
           }
         }
       },
@@ -6453,7 +6597,7 @@
         "home_abbr": "LAD",
         "away_abbr": "PIT",
         "factorsA": {
-          "pitcher_dominance": 0.578,
+          "pitcher_dominance": 0.5796666666666667,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.51,
@@ -6464,7 +6608,7 @@
           "entropy": 0.5
         },
         "factorsB": {
-          "pitcher_dominance": 0.836,
+          "pitcher_dominance": 0.8290000000000001,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.4,
@@ -6475,23 +6619,23 @@
           "entropy": 0.5
         },
         "factors": {
-          "era_diff": 0.8150000000000002,
+          "era_diff": 0.78,
           "park_factor": 0.0,
           "team_strength_diff": 0,
           "home_adv": 0.15
         },
         "chd": {
-          "pA": 0.4952896350170174,
-          "pB": 0.5047103649829826,
-          "raw_score": -0.01884275862068966,
+          "pA": 0.4957438027356237,
+          "pB": 0.5042561972643763,
+          "raw_score": -0.017025747126436792,
           "model": "ensemble(0.66*simple+0.34*wave_true)",
-          "simple_p": 0.49281049555228973,
+          "simple_p": 0.4935036989122677,
           "wave_p": 0.5,
-          "edge": -0.18992140153274062,
+          "edge": -0.1893882178538654,
           "mag": 0.0,
           "entropy": 0.0,
           "confidence": 0.95,
-          "devig_prob_home": 0.6946317665157232,
+          "devig_prob_home": 0.6936444151182417,
           "market_price": -255,
           "book": "fanduel",
           "weather": {
@@ -6503,9 +6647,9 @@
           }
         },
         "total": {
-          "mean": 5.1254,
+          "mean": 5.1314,
           "median": 5,
-          "p_over_8_5": 0.1168,
+          "p_over_8_5": 0.118,
           "ci_10": 2,
           "ci_90": 9,
           "distribution": [
@@ -6613,35 +6757,35 @@
           "overdispersion_r": 5.0,
           "simple": {
             "line": 7.5,
-            "over_prob": 0.5466,
-            "under_prob": 0.4534,
-            "mean_total": 8.0006,
+            "over_prob": 0.5536,
+            "under_prob": 0.4464,
+            "mean_total": 8.0352,
             "n_sim": 5000,
-            "home_mean": 4.0375000000000005,
-            "away_mean": 3.9775
+            "home_mean": 4.055000000000001,
+            "away_mean": 3.9950000000000006
           },
           "line": 7.5
         },
         "k_prop": {
           "line": 6.5,
-          "over_prob": 0.3052,
-          "under_prob": 0.6948,
-          "mean_k": 5.4393199999999995,
+          "over_prob": 0.3076,
+          "under_prob": 0.6924,
+          "mean_k": 5.445780000000001,
           "n_sim": 5000
         },
         "pitchers": {
           "home": 808967,
           "away": 696149,
           "home_stats": {
-            "era": 2.6,
-            "fip": 2.6,
-            "k9": 8.42,
-            "whip": 0.89
+            "era": 2.64,
+            "fip": 2.64,
+            "k9": 8.43,
+            "whip": 0.9
           },
           "away_stats": {
-            "era": 4.23,
-            "fip": 4.23,
-            "k9": 8.01,
+            "era": 4.2,
+            "fip": 4.2,
+            "k9": 8.11,
             "whip": 1.37
           }
         },
@@ -6843,15 +6987,15 @@
           "h2h": {
             "Los Angeles Dodgers": {
               "price": -255,
-              "devig_prob": 0.6946317665157232,
+              "devig_prob": 0.6936444151182417,
               "book": "fanduel",
-              "implied": 0.7204418905293596
+              "implied": 0.7204604079024298
             },
             "Pittsburgh Pirates": {
               "price": 210,
-              "devig_prob": 0.30536823348427683,
+              "devig_prob": 0.3063555848817582,
               "book": "fanduel",
-              "implied": 0.31671466530035736
+              "implied": 0.3181991591606408
             }
           },
           "totals": {
@@ -6868,14 +7012,20 @@
             },
             "lowvig": {
               "h2h": {
-                "Los Angeles Dodgers": -250,
-                "Pittsburgh Pirates": 223
+                "Los Angeles Dodgers": -248,
+                "Pittsburgh Pirates": 221
               }
             },
             "betonlineag": {
               "h2h": {
-                "Los Angeles Dodgers": -250,
-                "Pittsburgh Pirates": 223
+                "Los Angeles Dodgers": -248,
+                "Pittsburgh Pirates": 221
+              }
+            },
+            "mybookieag": {
+              "h2h": {
+                "Los Angeles Dodgers": -246,
+                "Pittsburgh Pirates": 204
               }
             },
             "draftkings": {
@@ -6895,15 +7045,21 @@
                 "Los Angeles Dodgers": -260,
                 "Pittsburgh Pirates": 210
               }
+            },
+            "betmgm": {
+              "h2h": {
+                "Los Angeles Dodgers": -275,
+                "Pittsburgh Pirates": 220
+              }
             }
           }
         },
         "ab_test_mode": "ensemble",
         "chd_all_modes": {
           "simple": {
-            "pA": 0.49281049555228973,
-            "pB": 0.5071895044477103,
-            "raw_score": -0.028760000000000008,
+            "pA": 0.4935036989122677,
+            "pB": 0.5064963010877324,
+            "raw_score": -0.025986666666666686,
             "model": "simple",
             "edge": 0.0
           },
@@ -6926,11 +7082,11 @@
             "model": "wave_true"
           },
           "ensemble": {
-            "pA": 0.4952896350170174,
-            "pB": 0.5047103649829826,
-            "raw_score": -0.01884275862068966,
+            "pA": 0.4957438027356237,
+            "pB": 0.5042561972643763,
+            "raw_score": -0.017025747126436792,
             "model": "ensemble(0.66*simple+0.34*wave_true)",
-            "simple_p": 0.49281049555228973,
+            "simple_p": 0.4935036989122677,
             "wave_p": 0.5,
             "edge": 0.0,
             "mag": 0.0,
@@ -6957,7 +7113,7 @@
           "entropy": 0.5
         },
         "factorsB": {
-          "pitcher_dominance": 0.7210000000000001,
+          "pitcher_dominance": 0.6893333333333334,
           "lineup_ops": 0.7666666666666666,
           "bullpen": 0.5,
           "park": 0.3,
@@ -6968,23 +7124,23 @@
           "entropy": 0.5
         },
         "factors": {
-          "era_diff": 0.3599999999999999,
+          "era_diff": 0.2649999999999997,
           "park_factor": -0.050000000000000044,
           "team_strength_diff": 0,
           "home_adv": 0.15
         },
         "chd": {
-          "pA": 0.5059353353431288,
-          "pB": 0.49406466465687116,
-          "raw_score": 0.022746282942655235,
+          "pA": 0.5075348895062093,
+          "pB": 0.4924651104937907,
+          "raw_score": 0.029146989957377065,
           "model": "ensemble(0.63*simple+0.37*wave_true)",
-          "simple_p": 0.5085691608682171,
+          "simple_p": 0.5111015085419872,
           "wave_p": 0.5014188517535644,
-          "edge": -0.02596019743737088,
+          "edge": -0.027391123941888917,
           "mag": 0.002968266775683413,
           "entropy": 0.14260007989457923,
           "confidence": 0.8573999201054208,
-          "devig_prob_home": 0.520024862094242,
+          "devig_prob_home": 0.5198562344356796,
           "market_price": -120,
           "book": "fanduel",
           "weather": {
@@ -6996,9 +7152,9 @@
           }
         },
         "total": {
-          "mean": 4.9346,
+          "mean": 4.9744,
           "median": 5,
-          "p_over_8_5": 0.1006,
+          "p_over_8_5": 0.1046,
           "ci_10": 2,
           "ci_90": 9,
           "distribution": [
@@ -7106,12 +7262,12 @@
           "overdispersion_r": 5.0,
           "simple": {
             "line": 8.0,
-            "over_prob": 0.465,
-            "under_prob": 0.5349999999999999,
-            "mean_total": 8.3904,
+            "over_prob": 0.4754,
+            "under_prob": 0.5246,
+            "mean_total": 8.4836,
             "n_sim": 5000,
-            "home_mean": 4.2250000000000005,
-            "away_mean": 4.165000000000001
+            "home_mean": 4.272500000000001,
+            "away_mean": 4.212500000000001
           },
           "line": 8.0
         },
@@ -7126,10 +7282,10 @@
           "home": 676106,
           "away": 571510,
           "home_stats": {
-            "era": 3.3,
-            "fip": 3.3,
+            "era": 3.49,
+            "fip": 3.49,
             "k9": 8.37,
-            "whip": 1.11
+            "whip": 1.13
           },
           "away_stats": {
             "era": 4.02,
@@ -7237,7 +7393,7 @@
               "pos": "CF",
               "avg": ".250",
               "ops": ".750",
-              "hr": 0,
+              "hr": 1,
               "team": "away",
               "woba": 0.32,
               "war": 1.0
@@ -7267,7 +7423,7 @@
               "pos": "3B",
               "avg": ".250",
               "ops": ".750",
-              "hr": 0,
+              "hr": 1,
               "team": "away",
               "woba": 0.32,
               "war": 1.0
@@ -7336,15 +7492,15 @@
           "h2h": {
             "Chicago Cubs": {
               "price": 102,
-              "devig_prob": 0.4799751379057579,
+              "devig_prob": 0.4801437655643204,
               "book": "fanduel",
-              "implied": 0.4975247524752475
+              "implied": 0.49787835926449786
             },
             "Seattle Mariners": {
               "price": -120,
-              "devig_prob": 0.520024862094242,
+              "devig_prob": 0.5198562344356796,
               "book": "fanduel",
-              "implied": 0.53903883839336
+              "implied": 0.5390576481818005
             }
           },
           "totals": {
@@ -7371,6 +7527,12 @@
                 "Seattle Mariners": -112
               }
             },
+            "mybookieag": {
+              "h2h": {
+                "Chicago Cubs": 100,
+                "Seattle Mariners": -117
+              }
+            },
             "draftkings": {
               "h2h": {
                 "Chicago Cubs": -101,
@@ -7394,9 +7556,9 @@
         "ab_test_mode": "simple",
         "chd_all_modes": {
           "simple": {
-            "pA": 0.5085691608682171,
-            "pB": 0.49143083913178287,
-            "raw_score": 0.03427999999999998,
+            "pA": 0.5111015085419872,
+            "pB": 0.4888984914580128,
+            "raw_score": 0.04441333333333333,
             "model": "simple",
             "edge": 0.0
           },
@@ -7419,11 +7581,11 @@
             "model": "wave_true"
           },
           "ensemble": {
-            "pA": 0.5059353353431288,
-            "pB": 0.49406466465687116,
-            "raw_score": 0.022746282942655235,
+            "pA": 0.5075348895062093,
+            "pB": 0.4924651104937907,
+            "raw_score": 0.029146989957377065,
             "model": "ensemble(0.63*simple+0.37*wave_true)",
-            "simple_p": 0.5085691608682171,
+            "simple_p": 0.5111015085419872,
             "wave_p": 0.5014188517535644,
             "edge": 0.002061509267119006,
             "mag": 0.002968266775683413,
@@ -7445,64 +7607,9 @@
     }
   },
   "nfl": {
-    "runDate": "Aug 21 2026 09:10 PM",
+    "runDate": "Aug 21 2026 10:26 PM",
     "pickCount": 16,
     "games": [
-      {
-        "home": "New York Jets",
-        "away": "Pittsburgh Steelers",
-        "home_abbr": "NYJ",
-        "away_abbr": "PIT",
-        "factorsA": {
-          "epa_offense": 0.5,
-          "epa_defense": 0.1,
-          "success_rate": 0.5,
-          "dvoa": 0.5,
-          "rest": 0.5,
-          "weather": 0.5,
-          "injuries": 0.5
-        },
-        "factorsB": {
-          "epa_offense": 0.5,
-          "epa_defense": 0.1,
-          "success_rate": 0.5,
-          "dvoa": 0.5,
-          "rest": 0.5,
-          "weather": 0.5,
-          "injuries": 0.5
-        },
-        "chd": {
-          "pA": 0.5073694461031117,
-          "pB": 0.49263055389688826,
-          "raw_score": 0.029482758620689654,
-          "model": "ensemble(0.66*simple+0.34*wave_true)",
-          "simple_p": 0.5112481019468548,
-          "wave_p": 0.5,
-          "edge": 0.0,
-          "mag": 0.0,
-          "entropy": 0.0,
-          "confidence": 0.95
-        },
-        "total_line": 44.5,
-        "stats": {
-          "home": {
-            "abbr": "NYJ",
-            "off_eff": -0.5,
-            "def_eff": -0.5,
-            "epa": 0.0,
-            "source": "espn_parsed"
-          },
-          "away": {
-            "abbr": "PIT",
-            "off_eff": -0.5,
-            "def_eff": -0.5,
-            "epa": 0.0,
-            "source": "espn_parsed"
-          }
-        },
-        "synthetic": false,
-        "source": "espn_parsed"
-      },
       {
         "home": "Carolina Panthers",
         "away": "Jacksonville Jaguars",
@@ -7604,6 +7711,61 @@
           },
           "away": {
             "abbr": "DEN",
+            "off_eff": -0.5,
+            "def_eff": -0.5,
+            "epa": 0.0,
+            "source": "espn_parsed"
+          }
+        },
+        "synthetic": false,
+        "source": "espn_parsed"
+      },
+      {
+        "home": "New York Jets",
+        "away": "Pittsburgh Steelers",
+        "home_abbr": "NYJ",
+        "away_abbr": "PIT",
+        "factorsA": {
+          "epa_offense": 0.5,
+          "epa_defense": 0.1,
+          "success_rate": 0.5,
+          "dvoa": 0.5,
+          "rest": 0.5,
+          "weather": 0.5,
+          "injuries": 0.5
+        },
+        "factorsB": {
+          "epa_offense": 0.5,
+          "epa_defense": 0.1,
+          "success_rate": 0.5,
+          "dvoa": 0.5,
+          "rest": 0.5,
+          "weather": 0.5,
+          "injuries": 0.5
+        },
+        "chd": {
+          "pA": 0.5073694461031117,
+          "pB": 0.49263055389688826,
+          "raw_score": 0.029482758620689654,
+          "model": "ensemble(0.66*simple+0.34*wave_true)",
+          "simple_p": 0.5112481019468548,
+          "wave_p": 0.5,
+          "edge": 0.0,
+          "mag": 0.0,
+          "entropy": 0.0,
+          "confidence": 0.95
+        },
+        "total_line": 44.5,
+        "stats": {
+          "home": {
+            "abbr": "NYJ",
+            "off_eff": -0.5,
+            "def_eff": -0.5,
+            "epa": 0.0,
+            "source": "espn_parsed"
+          },
+          "away": {
+            "abbr": "PIT",
             "off_eff": -0.5,
             "def_eff": -0.5,
             "epa": 0.0,
@@ -8340,7 +8502,7 @@
     }
   },
   "nba": {
-    "runDate": "Aug 21 2026 09:10 PM",
+    "runDate": "Aug 21 2026 10:26 PM",
     "pickCount": 1,
     "games": [
       {

@@ -33851,7 +33851,7 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
   const overlay = document.createElement('div');
   overlay.id = 'sectionModalOverlay';
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(10,12,20,0.78);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);z-index:10040;display:none;align-items:center;justify-content:center;padding:16px;';
-  overlay.innerHTML = '<div id="sectionModalCard" style="width:100%;max-width:460px;max-height:88vh;overflow-y:auto;background:linear-gradient(165deg,rgba(255,255,255,0.16) 0%,rgba(255,255,255,0.06) 55%,rgba(255,255,255,0.10) 100%);backdrop-filter:blur(22px) saturate(1.7);-webkit-backdrop-filter:blur(22px) saturate(1.7);border:1px solid rgba(255,255,255,0.20);border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.20);animation:sectionModalIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;"><div style="display:flex;justify-content:space-between;align-items:center;padding:20px 20px 0;"><div id="sectionModalTitle" style="font-size:18px;font-weight:900;color:#f8fafc;"></div><button id="sectionModalClose" style="width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.10);backdrop-filter:blur(8px);color:white;font-weight:800;cursor:pointer;display:grid;place-items:center;font-size:16px;">✕</button></div><div id="sectionModalBody" style="padding:16px 20px 24px;"></div></div>';
+  overlay.innerHTML = '<div id="sectionModalCard" style="width:100%;max-width:90vw;max-height:90vh;overflow-y:auto;background:linear-gradient(165deg,rgba(255,255,255,0.16) 0%,rgba(255,255,255,0.06) 55%,rgba(255,255,255,0.10) 100%);backdrop-filter:blur(22px) saturate(1.7);-webkit-backdrop-filter:blur(22px) saturate(1.7);border:1px solid rgba(255,255,255,0.20);border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.20);animation:sectionModalIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;"><div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px 0;"><div id="sectionModalTitle" style="font-size:20px;font-weight:900;color:#f8fafc;"></div><button id="sectionModalClose" style="width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.10);backdrop-filter:blur(8px);color:white;font-weight:800;cursor:pointer;display:grid;place-items:center;font-size:18px;">✕</button></div><div id="sectionModalBody" style="padding:18px 24px 28px;"></div></div>';
   document.body.appendChild(overlay);
   
   const style = document.createElement('style');
@@ -34815,7 +34815,7 @@ html body .game-actions .btn{flex:1 1 calc(33.333% - 6px) !important;min-width:8
   function getMLB(){return window.PARLAYOS_DATA||{games:[],teamStats:{},standings:[],schedules:{}};}
   function getNFL(){return window.PARLAYOS_NFL_DATA||{games:[],teamStats:{},standings:[],schedules:{}};}
   function getNBA(){return window.PARLAYOS_NBA_DATA||{games:[],teamStats:{},standings:[],schedules:{}};}
-  function dedupe(arr,keyFn){const m=new Map();(arr||[]).forEach(it=>{if(!it)return;const k=keyFn(it);if(k==null||k==='')return;const low=String(k).toLowerCase().trim();if(!m.has(low))m.set(low,it);});return Array.from(m.values());}
+  function dedupe(arr,keyFn){const m=new Map();if(!Array.isArray(arr)) return Array.from(m.values());(arr||[]).forEach(it=>{if(!it)return;const k=keyFn(it);if(k==null||k==='')return;const low=String(k).toLowerCase().trim();if(!m.has(low))m.set(low,it);});return Array.from(m.values());}
   function fmt(v,d=2){if(v==null||v===''||v==='—')return'—';if(typeof v==='number')return v.toFixed(d);return String(v);}
   function esc(s){return String(s||'').replace(/'/g,"\\'").replace(/</g,'&lt;');}
   function mlbGames(){return getMLB().games||[];}
@@ -34837,18 +34837,35 @@ html body .game-actions .btn{flex:1 1 calc(33.333% - 6px) !important;min-width:8
     const players=[]; mlbGames().forEach(g=>{(g.lineupA||[]).forEach(p=>players.push({...p,team:g.a}));(g.lineupB||[]).forEach(p=>players.push({...p,team:g.b}));}); const uniq=dedupe(players,p=>p.name); if(!uniq.length)return'<div style="padding:24px;text-align:center;color:#eef2ff;">No players</div>';
     return '<div style="display:flex;flex-direction:column;gap:8px;"><div class="mini" style="color:rgba(238,242,255,0.6);">Active roster • '+uniq.length+' unique • tap for details</div>'+uniq.map(p=>`<div class="glass" style="border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;"><div><div style="font-weight:800;color:#eef2ff;">👤 ${esc(p.name)}</div><div class="mini" style="color:rgba(238,242,255,0.6);">${esc(p.team)} • ${esc(p.pos)} • ${esc(p.avg)} / ${esc(p.ops)}</div></div><div class="mini" style="color:#eef2ff;">WAR ${fmt(p.war,1)}</div></div>`).join('')+'</div>';
   }
+function buildMLBStandings(){
+    const st=getMLB().standings||[]; const uniq=dedupe(st,s=>s.abbr); if(!uniq.length)return'<div style="padding:24px;text-align:center;color:#eef2ff;">Loading standings... CHD missing</div>';
+    const sorted=[...uniq].sort((a,b)=> (b.w/(b.w+b.l||1)) - (a.w/(a.w+a.l||1)) ); return '<div style="display:flex;flex-direction:column;gap:6px;"><div class="mini" style="color:rgba(238,242,255,0.6);">'+sorted.length+' teams • deduped by abbr</div>'+sorted.map(s=>{const pct=s.pct||(s.w/(s.w+s.l||1)).toFixed(3); return `<div class="glass" style="border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;"><b style="color:#eef2ff;">${esc(s.abbr)}</b><span class="mini" style="color:#eef2ff;">${s.w}-${s.l} • ${pct}</span></div>`;}).join('')+'</div>';
+  }
+  function buildNBAB Standings(){
+    const st=getNBA().standings||[]; const uniq=dedupe(st,s=>s.abbr); if(!uniq.length)return'<div style="padding:24px;text-align:center;color:#eef2ff;">No NBA standings</div>';
+    const sorted=[...uniq].sort((a,b)=> (b.wins/(b.wins+b.losses||1)) - (a.wins/(a.wins+a.losses||1)) ); return '<div style="display:flex;flex-direction:column;gap:6px;"><div class="mini" style="color:rgba(238,242,255,0.6);">'+sorted.length+' teams • sorted by win%: '+sorted.length+' teams</div>'+sorted.map(s=>`<div class="glass" style="border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;"><b style="color:#eef2ff;">${esc(s.abbr)}</b><span class="mini" style="color:#eef2ff;">${s.wins}-${s.losses} • ${s.pct||'0.000'}</span></div>`).join('')+'</div>';
+  }
+  function buildNFLStandings(){
+    const st=getNFL().standings||[]; const uniq=dedupe(st,s=>s.abbr); if(!uniq.length)return'<div style="padding:24px;text-align:center;color:#eef2ff;">No NFL standings</div>';
+    const sorted=[...uniq].sort((a,b)=> (b.wins/(b.wins+b.losses||1)) - (a.wins/(a.wins+a.losses||1)) ); return '<div style="display:flex;flex-direction:column;gap:6px;"><div class="mini" style="color:rgba(238,242,255,0.6);">'+sorted.length+' teams • sorted by win%: '+sorted.length+' teams</div>'+sorted.map(s=>`<div class="glass" style="border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;"><b style="color:#eef2ff;">${esc(s.abbr)}</b><span class="mini" style="color:#eef2ff;">${s.wins}-${s.losses} • ${s.pct||'0.000'}</span></div>`).join('')+'</div>';
+  }
+  function buildMLBPlayers(){
+    const players=[]; mlbGames().forEach(g=>{(g.lineupA||[]).forEach(p=>players.push({...p,team:g.a}));(g.lineupB||[]).forEach(p=>players.push({...p,team:g.b}));}); const uniq=dedupe(players,p=>p.name); if(!uniq.length)return'<div style="padding:24px;text-align:center;color:#eef2ff;">No players</div>';
+    return '<div style="display:flex;flex-direction:column;gap:8px;"><div class="mini" style="color:rgba(238,242,255,0.6);">Active roster • '+uniq.length+' unique • tap for details</div>'+uniq.map(p=>`<div class="glass" style="border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;"><div><div style="font-weight:800;color:#eef2ff;">👤 ${esc(p.name)}</div><div class="mini" style="color:rgba(238,242,255,0.6);">${esc(p.team)} • ${esc(p.pos)} • ${esc(p.avg)} / ${esc(p.ops)}</div></div><div class="mini" style="color:#eef2ff;">WAR ${fmt(p.war,1)}</div></div>`).join('')+'</div>';
+  }
+  function buildNBAPlayers(){
+    const players=[]; mlbGames().forEach(g=>{(g.lineupA||[]).forEach(p=>players.push({...p,team:g.a}));(g.lineupB||[]).forEach(p=>players.push({...p,team:g.b}));}); const uniq=dedupe(players,p=>p.name); if(!uniq.length)return'<div style="padding:24px;text-align:center;color:#eef2ff;">No players</div>';
+    return '<div style="display:flex;flex-direction:column;gap:8px;"><div class="mini" style="color:rgba(238,242,255,0.6);">Active roster • '+uniq.length+' unique • tap for details</div>'+uniq.map(p=>`<div class="glass" style="border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;"><div><div style="font-weight:800;color:#eef2ff;">👤 ${esc(p.name)}</div><div class="mini" style="color:rgba(238,242,255,0.6);">${esc(p.team)} • ${esc(p.pos)} • ${esc(p.avg)} / ${esc(p.ops)}</div></div><div class="mini" style="color:#eef2ff;">WAR ${fmt(p.war,1)}</div></div>`).join('')+'</div>';
+  }
+  function buildNFLPlayers(){
+    const players=[]; mlbGames().forEach(g=>{(g.lineupA||[]).forEach(p=>players.push({...p,team:g.a}));(g.lineupB||[]).forEach(p=>players.push({...p,team:g.b}));}); const uniq=dedupe(players,p=>p.name); if(!uniq.length)return'<div style="padding:24px;text-align:center;color:#eef2ff;">No players</div>';
+    return '<div style="display:flex;flex-direction:column;gap:8px;"><div class="mini" style="color:rgba(238,242,255,0.6);">Active roster • '+uniq.length+' unique • tap for details</div>'+uniq.map(p=>`<div class="glass" style="border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;"><div><div style="font-weight:800;color:#eef2ff;">👤 ${esc(p.name)}</div><div class="mini" style="color:rgba(238,242,255,0.6);">${esc(p.team)} • ${esc(p.pos)} • ${esc(p.avg)} / ${esc(p.ops)}</div></div><div class="mini" style="color:#eef2ff;">WAR ${fmt(p.war,1)}</div></div>`).join('')+'</div>';
+  }
   function buildMLBStandings(){
     const st=getMLB().standings||[]; const uniq=dedupe(st,s=>s.abbr); if(!uniq.length)return'<div style="padding:24px;text-align:center;color:#eef2ff;">Loading standings... CHD missing</div>';
     const sorted=[...uniq].sort((a,b)=> (b.w/(b.w+b.l||1)) - (a.w/(a.w+a.l||1)) ); return '<div style="display:flex;flex-direction:column;gap:6px;"><div class="mini" style="color:rgba(238,242,255,0.6);">'+sorted.length+' teams • deduped by abbr</div>'+sorted.map(s=>{const pct=s.pct||(s.w/(s.w+s.l||1)).toFixed(3); return `<div class="glass" style="border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;"><b style="color:#eef2ff;">${esc(s.abbr)}</b><span class="mini" style="color:#eef2ff;">${s.w}-${s.l} • ${pct}</span></div>`;}).join('')+'</div>';
   }
-  function buildMLBSchedule(){
-    const mp=getMLB().schedules||{}; const teams=Object.keys(mp); if(!teams.length)return'<div style="padding:24px;text-align:center;color:#eef2ff;">Loading schedule...</div>';
-    const sample=teams.includes('WSH')?'WSH':teams[0]; const raw=mp[sample]||[]; const uniq=dedupe(raw,s=>s.date+'_'+s.opp);
-    let html='<div style="display:flex;flex-direction:column;gap:12px;"><div class="glass" style="border-radius:16px;padding:14px;"><b style="color:#eef2ff;">August 2026 • MLB • '+esc(sample)+' • '+uniq.length+' unique</b></div>';
-    html+='<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;">'; ['S','M','T','W','T','F','S'].forEach(d=> html+=`<div class="mini" style="text-align:center;color:rgba(238,242,255,0.5);">${d}</div>`);
-    const byDay=new Map(); uniq.forEach(e=>{try{const day=new Date(e.date).getDate(); if(day>=1&&day<=31) byDay.set(day,e);}catch(_){}}); for(let d=1; d<=31; d++){const e=byDay.get(d); if(e){const bg=e.result==='W'?'rgba(34,197,94,0.22)':e.result==='L'?'rgba(239,68,68,0.18)':'rgba(255,255,255,0.08)'; const txt=e.result? `${e.result} ${e.myScore||''}-${e.oppScore||''} vs ${e.opp}` : `vs ${e.opp}`; html+=`<div class="glass" style="border-radius:10px;padding:6px;min-height:52px;background:${bg};"><div style="font-size:11px;font-weight:800;color:#eef2ff;">${d}</div><div class="mini" style="font-size:9px;color:#eef2ff;word-break:break-word;">${esc(txt)}</div></div>`;}else{ html+=`<div class="glass" style="border-radius:10px;padding:6px;min-height:52px;"><div style="font-size:11px;font-weight:800;color:#eef2ff;">${d}</div></div>`;}} html+='</div></div>'; return html;
-  }
-  window.CHD_BUILDERS={mlb:{pitching:buildMLBPitching,batting:buildMLBBatting,lineups:buildMLBLineups,players:buildMLBPlayers,standings:buildMLBStandings,schedule:buildMLBSchedule}};
+  window.CHD_BUILDERS={mlb:{pitching:buildMLBPitching,batting:buildMLBBatting,lineups:buildMLBLineups,players:buildMLBPlayers,standings:buildMLBStandings,schedule:buildMLBSchedule},nba:{standings:buildNBABStandings,players:buildNBAPlayers},nfl:{standings:buildNFLStandings,players:buildNFLPlayers}};
   const orig=window.openSectionModal;
   window.openSectionModal=function(title,oldHtml){
     const low=String(title||'').toLowerCase(); let html='';
@@ -34857,8 +34874,12 @@ html body .game-actions .btn{flex:1 1 calc(33.333% - 6px) !important;min-width:8
       else if(low.includes('batting')) html=buildMLBBatting();
       else if(low.includes('lineup')) html=buildMLBLineups();
       else if(low.includes('player')) html=buildMLBPlayers();
+      else if(low.includes('standing') && low.includes('nba')) html=buildNBABStandings();
+      else if(low.includes('standing') && low.includes('nfl')) html=buildNFLStandings();
       else if(low.includes('standing')) html=buildMLBStandings();
       else if(low.includes('schedule')) html=buildMLBSchedule();
+      else if(low.includes('player')) html=buildMLBPlayers();
+      else if(low.includes('scoring') || low.includes('rebounding') || low.includes('assists')) html=oldHtml||'<div style="padding:20px;color:#eef2ff;">NBA stats not yet wired — use CHD data loader to populate team stats</div>';
       else html=oldHtml||'<div style="padding:20px;color:#eef2ff;">No data</div>';
     }catch(e){ html='<div style="padding:20px;color:#ff7a7a;">Error '+esc(e.message)+'</div>'; }
     if(typeof orig==='function') return orig.call(window,title,html);
@@ -34892,6 +34913,53 @@ html body .game-actions .btn{flex:1 1 calc(33.333% - 6px) !important;min-width:8
   window.addEventListener('load',()=>{setTimeout(init,500); setTimeout(init,2000);});
   let last=0; setInterval(()=>{const c=(window.PARLAYOS_DATA&&window.PARLAYOS_DATA.games||[]).length; if(c!==last){last=c; init();}},1500);
   console.log('[CHD GROUND UP] All modals deduped per name');
+});
+
+// Add NBA/NFL dashboard render functions
+(function(){
+  function renderNBADashboard(){
+    // Render NBA dashboard with games and standings
+    const games = window.PARLAYOS_NBA_DATA.games || [];
+    const standings = window.PARLAYOS_NBA_DATA.standings || [];
+    document.getElementById('nbaDashboardCards')?.innerHTML = `<!-- NBA Games -->
+<div style="display:grid;gap:16px;padding:16px;">
+  <div style="flex:1"><h3 style="color:#eef2ff;">Today's Games</h3>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">
+    ${games.map(g=>`<div class="glass" style="border-radius:8px;padding:8px;"><b>${g.a} @ ${g.b}</b><span style="color:rgba(238,242,255,0.6);">${g.date || ''}</span></div>`).join('')}
+  </div>
+</div>
+
+<!-- NBA Standings -->
+<div style="flex:1"><h3 style="color:#eef2ff;">Standings</h3>
+<div style="display:grid;gap:8px;">
+  ${standings.map(s=>`<div class="glass" style="border-radius:8px;padding:6px;"><b>${s.abbr}</b><span style="color:rgba(238,242,255,0.6);">${s.wins}-${s.losses} • ${s.pct||'0.000'}</span></div>`).join('')}
+</div>
+</div>` || '<div style="padding:24px;text-align:center;color:#eef2ff;">Loading NBA data</div>';
+  }
+
+  function renderNFLDashboard(){
+    // Render NFL dashboard with games and standings
+    const games = window.PARLAYOS_NFL_DATA.games || [];
+    const standings = window.PARLAYOS_NFL_DATA.standings || [];
+    document.getElementById('nflDashboardCards')?.innerHTML = `<!-- NFL Games -->
+<div style="display:grid;gap:16px;padding:16px;">
+  <div style="flex:1"><h3 style="color:#eef2ff;">Today's Games</h3>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">
+    ${games.map(g=>`<div class="glass" style="border-radius:8px;padding:8px;"><b>${g.a} ${g.home_abbr || ''} @ ${g.b} ${g.away_abbr || ''}</b><span style="color:rgba(238,242,255,0.6);">${g.date || ''}</span></div>`).join('')}
+  </div>
+</div>
+
+<!-- NFL Standings -->
+<div style="flex:1"><h3 style="color:#eef2ff;">Standings</h3>
+<div style="display:grid;gap:8px;">
+  ${standings.map(s=>`<div class="glass" style="border-radius:8px;padding:6px;"><b>${s.abbr}</b><span style="color:rgba(238,242,255,0.6);">${s.wins}-${s.losses} • ${s.pct||'0.000'}</span></div>`).join('')}
+</div>
+</div>` || '<div style="padding:24px;text-align:center;color:#eef2ff;">Loading NFL data</div>';
+  }
+
+  // Expose functions to window
+  window.renderNBADashboard = renderNBADashboard;
+  window.renderNFLDashboard = renderNFLDashboard;
 })();
 </script>
 <script id="COVER_UNLOCK_FIX_FINAL">
