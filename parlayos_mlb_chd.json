@@ -1,5 +1,5 @@
 {
-  "runDate": "Aug 25 2026 08:45 AM",
+  "runDate": "Aug 25 2026 02:37 PM",
   "pickCount": 15,
   "games": [
     {
@@ -13,7 +13,7 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.51,
-        "weather": 0.436,
+        "weather": 0.621,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5727458138251721,
@@ -24,7 +24,7 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.36,
-        "weather": 0.436,
+        "weather": 0.621,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.6191113004593705,
@@ -43,24 +43,24 @@
         "model": "ensemble(0.62*simple+0.38*wave_true)",
         "simple_p": 0.5074554709865886,
         "wave_p": 0.5001499058658982,
-        "edge": 0.04141751702413393,
+        "edge": -0.025479153428870527,
         "mag": 0.0003416521076371714,
         "entropy": 0.1856006030239212,
         "confidence": 0.8143993969760788,
-        "devig_prob_home": 0.4539060626863098,
-        "market_price": 114,
+        "devig_prob_home": 0.5208027331393142,
+        "market_price": -118,
         "book": "fanduel",
         "weather": {
-          "temp": 60.1,
-          "wind": 3.5,
+          "temp": 79.2,
+          "wind": 2.9,
           "precip": 0.0,
-          "factor": 0.436,
+          "factor": 0.621,
           "source": "open-meteo",
           "park": "DET"
         }
       },
       "total": {
-        "mean": 6.417,
+        "mean": 6.4288,
         "median": 6,
         "p_over_8_5": 0.257,
         "ci_10": 2,
@@ -169,15 +169,15 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 7.5,
-          "over_prob": 0.6742,
-          "under_prob": 0.3258,
+          "line": 8.0,
+          "over_prob": 0.5472,
+          "under_prob": 0.4528,
           "mean_total": 8.963,
           "n_sim": 5000,
           "home_mean": 4.5115,
           "away_mean": 4.4515
         },
-        "line": 7.5
+        "line": 8.0
       },
       "k_prop": {
         "line": 6.5,
@@ -426,86 +426,56 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 60.1,
-        "wind": 3.5,
+        "temp": 79.2,
+        "wind": 2.9,
         "precip": 0.0,
-        "factor": 0.436,
+        "factor": 0.621,
         "source": "open-meteo",
         "park": "DET"
       },
       "odds": {
         "h2h": {
           "Detroit Tigers": {
-            "price": 114,
-            "devig_prob": 0.4539060626863098,
+            "price": -118,
+            "devig_prob": 0.5208027331393142,
             "book": "fanduel",
-            "implied": 0.4681305811338391
+            "implied": 0.5380840622999786
           },
           "Tampa Bay Rays": {
-            "price": -122,
-            "devig_prob": 0.5460939373136902,
+            "price": 100,
+            "devig_prob": 0.47919726686068587,
             "book": "fanduel",
-            "implied": 0.5632074414590861
+            "implied": 0.4950980392156863
           }
         },
         "totals": {
-          "line": 7.5,
-          "over_price": -107,
-          "under_price": -114
+          "line": 8.0,
+          "over_price": -110,
+          "under_price": -112
         },
         "raw_books": {
           "fanduel": {
             "h2h": {
-              "Detroit Tigers": 114,
-              "Tampa Bay Rays": -122
+              "Detroit Tigers": -118,
+              "Tampa Bay Rays": 100
             }
           },
           "lowvig": {
             "h2h": {
-              "Detroit Tigers": 117,
-              "Tampa Bay Rays": -129
+              "Detroit Tigers": -115,
+              "Tampa Bay Rays": 104
             }
           },
           "betonlineag": {
             "h2h": {
-              "Detroit Tigers": 117,
-              "Tampa Bay Rays": -129
+              "Detroit Tigers": -115,
+              "Tampa Bay Rays": 104
             }
           },
           "mybookieag": {
             "h2h": {
-              "Detroit Tigers": 110,
-              "Tampa Bay Rays": -130
-            }
-          },
-          "draftkings": {
-            "h2h": {
-              "Detroit Tigers": 116,
-              "Tampa Bay Rays": -125
-            }
-          },
-          "bovada": {
-            "h2h": {
-              "Detroit Tigers": 109,
-              "Tampa Bay Rays": -131
-            }
-          },
-          "betmgm": {
-            "h2h": {
-              "Detroit Tigers": 110,
-              "Tampa Bay Rays": -130
-            }
-          },
-          "betus": {
-            "h2h": {
-              "Detroit Tigers": 118,
-              "Tampa Bay Rays": -129
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Detroit Tigers": 112,
-              "Tampa Bay Rays": -136
+              "Detroit Tigers": -118,
+              "Tampa Bay Rays": 100
             }
           }
         }
@@ -562,58 +532,58 @@
         "lineup_ops": 0.8725925925925921,
         "bullpen": 0.5,
         "park": 0.46,
-        "weather": 0.627,
+        "weather": 0.779,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.54400395043137,
         "entropy": 0.5
       },
       "factorsB": {
-        "pitcher_dominance": 0.5666666666666667,
+        "pitcher_dominance": 0.703,
         "lineup_ops": 0.8117777777777775,
         "bullpen": 0.5,
         "park": 0.3,
-        "weather": 0.627,
+        "weather": 0.779,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5123775856085608,
         "entropy": 0.5
       },
       "factors": {
-        "era_diff": -0.56,
+        "era_diff": -0.29499999999999993,
         "park_factor": -0.050000000000000044,
         "team_strength_diff": 0,
         "home_adv": 0.15
       },
       "chd": {
-        "pA": 0.5258748213850681,
-        "pB": 0.47412517861493186,
-        "raw_score": 0.07570728963319795,
+        "pA": 0.5190018614499095,
+        "pB": 0.48099813855009055,
+        "raw_score": 0.048150561538237734,
         "model": "ensemble(0.63*simple+0.37*wave_true)",
-        "simple_p": 0.5294971247241538,
+        "simple_p": 0.5186161401939418,
         "wave_p": 0.5196632961980088,
-        "edge": 0.07305382070556721,
+        "edge": 0.07018567715902074,
         "mag": 0.002968266775683413,
         "entropy": 0.14260007989457923,
         "confidence": 0.8573999201054208,
-        "devig_prob_home": 0.40107135790936466,
-        "market_price": 146,
+        "devig_prob_home": 0.4108124613910698,
+        "market_price": 134,
         "book": "fanduel",
         "weather": {
-          "temp": 80.1,
-          "wind": 2.7,
+          "temp": 90.1,
+          "wind": 7.8,
           "precip": 0.0,
-          "factor": 0.627,
+          "factor": 0.779,
           "source": "open-meteo",
           "park": "MIA"
         }
       },
       "total": {
-        "mean": 5.5122,
+        "mean": 5.3302,
         "median": 5,
-        "p_over_8_5": 0.1588,
+        "p_over_8_5": 0.139,
         "ci_10": 2,
-        "ci_90": 10,
+        "ci_90": 9,
         "distribution": [
           0,
           0,
@@ -719,30 +689,30 @@
         "overdispersion_r": 5.0,
         "simple": {
           "line": 7.5,
-          "over_prob": 0.7148,
-          "under_prob": 0.2852,
-          "mean_total": 9.3276,
+          "over_prob": 0.6844,
+          "under_prob": 0.3156,
+          "mean_total": 9.0764,
           "n_sim": 5000,
-          "home_mean": 4.6850000000000005,
-          "away_mean": 4.625000000000001
+          "home_mean": 4.5525,
+          "away_mean": 4.492500000000001
         },
         "line": 7.5
       },
       "k_prop": {
         "line": 6.5,
-        "over_prob": 0.316,
-        "under_prob": 0.6839999999999999,
-        "mean_k": 5.4910000000000005,
+        "over_prob": 0.1658,
+        "under_prob": 0.8342,
+        "mean_k": 4.560759999999999,
         "n_sim": 5000
       },
       "pitchers": {
-        "home": null,
+        "home": 663969,
         "away": 801139,
         "home_stats": {
-          "era": 4.2,
-          "fip": 4.2,
-          "k9": 8.5,
-          "whip": 1.3
+          "era": 3.67,
+          "fip": 3.67,
+          "k9": 7.06,
+          "whip": 1.37
         },
         "away_stats": {
           "era": 3.08,
@@ -975,10 +945,10 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 80.1,
-        "wind": 2.7,
+        "temp": 90.1,
+        "wind": 7.8,
         "precip": 0.0,
-        "factor": 0.627,
+        "factor": 0.779,
         "source": "open-meteo",
         "park": "MIA"
       },
@@ -986,75 +956,45 @@
         "h2h": {
           "Boston Red Sox": {
             "price": -158,
-            "devig_prob": 0.5989286420906353,
+            "devig_prob": 0.5891875386089303,
             "book": "fanduel",
-            "implied": 0.6172878850551141
+            "implied": 0.6078160666957747
           },
           "Miami Marlins": {
-            "price": 146,
-            "devig_prob": 0.40107135790936466,
+            "price": 134,
+            "devig_prob": 0.4108124613910698,
             "book": "fanduel",
-            "implied": 0.41336558795361283
+            "implied": 0.4238012484477641
           }
         },
         "totals": {
           "line": 7.5,
-          "over_price": -115,
-          "under_price": -105
+          "over_price": -118,
+          "under_price": -103
         },
         "raw_books": {
-          "draftkings": {
-            "h2h": {
-              "Boston Red Sox": -158,
-              "Miami Marlins": 147
-            }
-          },
-          "mybookieag": {
-            "h2h": {
-              "Boston Red Sox": -166,
-              "Miami Marlins": 140
-            }
-          },
           "fanduel": {
             "h2h": {
               "Boston Red Sox": -158,
-              "Miami Marlins": 146
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Boston Red Sox": -159,
-              "Miami Marlins": 135
-            }
-          },
-          "betmgm": {
-            "h2h": {
-              "Boston Red Sox": -160,
-              "Miami Marlins": 135
-            }
-          },
-          "bovada": {
-            "h2h": {
-              "Boston Red Sox": -168,
-              "Miami Marlins": 140
-            }
-          },
-          "lowvig": {
-            "h2h": {
-              "Boston Red Sox": -161,
-              "Miami Marlins": 146
+              "Miami Marlins": 134
             }
           },
           "betonlineag": {
             "h2h": {
-              "Boston Red Sox": -161,
-              "Miami Marlins": 146
+              "Boston Red Sox": -153,
+              "Miami Marlins": 139
             }
           },
-          "betus": {
+          "lowvig": {
             "h2h": {
-              "Boston Red Sox": -161,
-              "Miami Marlins": 143
+              "Boston Red Sox": -153,
+              "Miami Marlins": 139
+            }
+          },
+          "mybookieag": {
+            "h2h": {
+              "Boston Red Sox": -156,
+              "Miami Marlins": 132
             }
           }
         }
@@ -1062,9 +1002,9 @@
       "ab_test_mode": "simple",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.5294971247241538,
-          "pB": 0.4705028752758462,
-          "raw_score": 0.11812566474138024,
+          "pA": 0.5186161401939418,
+          "pB": 0.48138385980605825,
+          "raw_score": 0.0744989980747136,
           "model": "simple",
           "edge": 0.0
         },
@@ -1087,11 +1027,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.5258748213850681,
-          "pB": 0.47412517861493186,
-          "raw_score": 0.07570728963319795,
+          "pA": 0.5190018614499095,
+          "pB": 0.48099813855009055,
+          "raw_score": 0.048150561538237734,
           "model": "ensemble(0.63*simple+0.37*wave_true)",
-          "simple_p": 0.5294971247241538,
+          "simple_p": 0.5186161401939418,
           "wave_p": 0.5196632961980088,
           "edge": 0.002061509267119006,
           "mag": 0.002968266775683413,
@@ -1111,7 +1051,7 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.36,
-        "weather": 0.478,
+        "weather": 0.715,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.6295976638998851,
@@ -1122,7 +1062,7 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.4,
-        "weather": 0.478,
+        "weather": 0.715,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5833784920842218,
@@ -1141,28 +1081,28 @@
         "model": "ensemble(0.27*simple+0.73*wave_true)",
         "simple_p": 0.5029210168714889,
         "wave_p": 0.49985009413410175,
-        "edge": -0.08312740390468998,
+        "edge": -0.08552969355255469,
         "mag": 0.0003416521076371714,
         "entropy": 0.8143993969760789,
         "confidence": 0.5,
-        "devig_prob_home": 0.5824459728239971,
+        "devig_prob_home": 0.5848482624718618,
         "market_price": -146,
         "book": "fanduel",
         "weather": {
-          "temp": 65.1,
-          "wind": 2.7,
+          "temp": 82.9,
+          "wind": 8.6,
           "precip": 0.0,
-          "factor": 0.478,
+          "factor": 0.715,
           "source": "open-meteo",
           "park": "WSH"
         }
       },
       "total": {
-        "mean": 6.2482,
+        "mean": 6.289,
         "median": 6,
-        "p_over_8_5": 0.228,
+        "p_over_8_5": 0.2456,
         "ci_10": 2,
-        "ci_90": 11,
+        "ci_90": 10,
         "distribution": [
           0,
           0,
@@ -1524,10 +1464,10 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 65.1,
-        "wind": 2.7,
+        "temp": 82.9,
+        "wind": 8.6,
         "precip": 0.0,
-        "factor": 0.478,
+        "factor": 0.715,
         "source": "open-meteo",
         "park": "WSH"
       },
@@ -1535,15 +1475,15 @@
         "h2h": {
           "Colorado Rockies": {
             "price": 136,
-            "devig_prob": 0.4175540271760028,
+            "devig_prob": 0.415151737528138,
             "book": "fanduel",
-            "implied": 0.4305608187814532
+            "implied": 0.4284506192956925
           },
           "Washington Nationals": {
             "price": -146,
-            "devig_prob": 0.5824459728239971,
+            "devig_prob": 0.5848482624718618,
             "book": "fanduel",
-            "implied": 0.6005891420832946
+            "implied": 0.603583166343114
           }
         },
         "totals": {
@@ -1560,20 +1500,20 @@
           },
           "mybookieag": {
             "h2h": {
-              "Colorado Rockies": 131,
-              "Washington Nationals": -155
+              "Colorado Rockies": 130,
+              "Washington Nationals": -153
             }
           },
           "betonlineag": {
             "h2h": {
-              "Colorado Rockies": 131,
-              "Washington Nationals": -145
+              "Colorado Rockies": 132,
+              "Washington Nationals": -146
             }
           },
           "lowvig": {
             "h2h": {
-              "Colorado Rockies": 131,
-              "Washington Nationals": -145
+              "Colorado Rockies": 132,
+              "Washington Nationals": -146
             }
           },
           "draftkings": {
@@ -1584,26 +1524,26 @@
           },
           "betmgm": {
             "h2h": {
-              "Colorado Rockies": 125,
-              "Washington Nationals": -150
+              "Colorado Rockies": 130,
+              "Washington Nationals": -155
             }
           },
           "bovada": {
             "h2h": {
-              "Colorado Rockies": 130,
-              "Washington Nationals": -155
+              "Colorado Rockies": 131,
+              "Washington Nationals": -157
             }
           },
           "betrivers": {
             "h2h": {
               "Colorado Rockies": 140,
-              "Washington Nationals": -167
+              "Washington Nationals": -175
             }
           },
           "betus": {
             "h2h": {
-              "Colorado Rockies": 130,
-              "Washington Nationals": -145
+              "Colorado Rockies": 133,
+              "Washington Nationals": -148
             }
           }
         }
@@ -1660,7 +1600,7 @@
         "lineup_ops": 0.8830370370370366,
         "bullpen": 0.5,
         "park": 0.505,
-        "weather": 0.525,
+        "weather": 0.683,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5453689173278411,
@@ -1671,7 +1611,7 @@
         "lineup_ops": 0.8954814814814811,
         "bullpen": 0.5,
         "park": 0.54,
-        "weather": 0.525,
+        "weather": 0.683,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5732970913097264,
@@ -1690,18 +1630,18 @@
         "model": "ensemble(0.66*simple+0.34*wave_true)",
         "simple_p": 0.5006581028069967,
         "wave_p": 0.49626666666666663,
-        "edge": -0.06799271769012227,
+        "edge": -0.0689521760165116,
         "mag": 0.0,
         "entropy": 0.0,
         "confidence": 0.95,
-        "devig_prob_home": 0.5688489032073774,
-        "market_price": -138,
+        "devig_prob_home": 0.5698083615337667,
+        "market_price": -140,
         "book": "fanduel",
         "weather": {
-          "temp": 66.7,
-          "wind": 5.7,
+          "temp": 77.9,
+          "wind": 10.4,
           "precip": 0.0,
-          "factor": 0.525,
+          "factor": 0.683,
           "source": "open-meteo",
           "park": "NYY"
         }
@@ -1816,15 +1756,15 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 9.0,
-          "over_prob": 0.379,
-          "under_prob": 0.621,
+          "line": 8.5,
+          "over_prob": 0.5042,
+          "under_prob": 0.4958,
           "mean_total": 8.7202,
           "n_sim": 5000,
           "home_mean": 4.381,
           "away_mean": 4.321000000000001
         },
-        "line": 9.0
+        "line": 8.5
       },
       "k_prop": {
         "line": 6.5,
@@ -2073,38 +2013,38 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 66.7,
-        "wind": 5.7,
+        "temp": 77.9,
+        "wind": 10.4,
         "precip": 0.0,
-        "factor": 0.525,
+        "factor": 0.683,
         "source": "open-meteo",
         "park": "NYY"
       },
       "odds": {
         "h2h": {
           "Houston Astros": {
-            "price": 128,
-            "devig_prob": 0.43115109679262265,
+            "price": 130,
+            "devig_prob": 0.43019163846623326,
             "book": "fanduel",
-            "implied": 0.44455577776967714
+            "implied": 0.4432321143487376
           },
           "New York Yankees": {
-            "price": -138,
-            "devig_prob": 0.5688489032073774,
+            "price": -140,
+            "devig_prob": 0.5698083615337667,
             "book": "fanduel",
-            "implied": 0.5865346707454102
+            "implied": 0.5870810640500748
           }
         },
         "totals": {
-          "line": 9.0,
-          "over_price": -106,
-          "under_price": -113
+          "line": 8.5,
+          "over_price": -120,
+          "under_price": 100
         },
         "raw_books": {
           "fanduel": {
             "h2h": {
-              "Houston Astros": 128,
-              "New York Yankees": -138
+              "Houston Astros": 130,
+              "New York Yankees": -140
             }
           },
           "betonlineag": {
@@ -2121,8 +2061,8 @@
           },
           "mybookieag": {
             "h2h": {
-              "Houston Astros": 124,
-              "New York Yankees": -146
+              "Houston Astros": 123,
+              "New York Yankees": -144
             }
           },
           "draftkings": {
@@ -2139,8 +2079,8 @@
           },
           "betmgm": {
             "h2h": {
-              "Houston Astros": 120,
-              "New York Yankees": -145
+              "Houston Astros": 125,
+              "New York Yankees": -150
             }
           },
           "betus": {
@@ -2152,7 +2092,7 @@
           "betrivers": {
             "h2h": {
               "Houston Astros": 120,
-              "New York Yankees": -143
+              "New York Yankees": -141
             }
           }
         }
@@ -2209,7 +2149,7 @@
         "lineup_ops": 0.8257777777777775,
         "bullpen": 0.5,
         "park": 0.51,
-        "weather": 0.476,
+        "weather": 0.617,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.693813693144961,
@@ -2220,7 +2160,7 @@
         "lineup_ops": 0.8500740740740734,
         "bullpen": 0.5,
         "park": 0.44,
-        "weather": 0.476,
+        "weather": 0.617,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.506794615214698,
@@ -2239,18 +2179,18 @@
         "model": "ensemble(0.56*simple+0.44*wave_true)",
         "simple_p": 0.5493844043857368,
         "wave_p": 0.5947367356116277,
-        "edge": -0.11036826372207786,
+        "edge": -0.11905773486626259,
         "mag": 0.2334513465795332,
         "entropy": 0.35689589172025116,
         "confidence": 0.6431041082797488,
-        "devig_prob_home": 0.5411465011738631,
-        "market_price": -126,
+        "devig_prob_home": 0.5498359723180478,
+        "market_price": -134,
         "book": "fanduel",
         "weather": {
-          "temp": 63.1,
-          "wind": 4.4,
+          "temp": 73.6,
+          "wind": 8.1,
           "precip": 0.0,
-          "factor": 0.476,
+          "factor": 0.617,
           "source": "open-meteo",
           "park": "TOR"
         }
@@ -2622,86 +2562,56 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 63.1,
-        "wind": 4.4,
+        "temp": 73.6,
+        "wind": 8.1,
         "precip": 0.0,
-        "factor": 0.476,
+        "factor": 0.617,
         "source": "open-meteo",
         "park": "TOR"
       },
       "odds": {
         "h2h": {
           "Kansas City Royals": {
-            "price": 116,
-            "devig_prob": 0.45885349882613674,
+            "price": 114,
+            "devig_prob": 0.450164027681952,
             "book": "fanduel",
-            "implied": 0.4730771877292669
+            "implied": 0.4646636403939546
           },
           "Toronto Blue Jays": {
-            "price": -126,
-            "devig_prob": 0.5411465011738631,
+            "price": -134,
+            "devig_prob": 0.5498359723180478,
             "book": "fanduel",
-            "implied": 0.55792113513308
+            "implied": 0.5675459805894588
           }
         },
         "totals": {
           "line": 8.5,
-          "over_price": -110,
-          "under_price": -108
+          "over_price": -108,
+          "under_price": -113
         },
         "raw_books": {
           "fanduel": {
             "h2h": {
-              "Kansas City Royals": 116,
-              "Toronto Blue Jays": -126
-            }
-          },
-          "betonlineag": {
-            "h2h": {
-              "Kansas City Royals": 113,
-              "Toronto Blue Jays": -125
+              "Kansas City Royals": 114,
+              "Toronto Blue Jays": -134
             }
           },
           "lowvig": {
             "h2h": {
-              "Kansas City Royals": 113,
-              "Toronto Blue Jays": -125
+              "Kansas City Royals": 118,
+              "Toronto Blue Jays": -130
+            }
+          },
+          "betonlineag": {
+            "h2h": {
+              "Kansas City Royals": 118,
+              "Toronto Blue Jays": -130
             }
           },
           "mybookieag": {
             "h2h": {
-              "Kansas City Royals": 109,
-              "Toronto Blue Jays": -128
-            }
-          },
-          "draftkings": {
-            "h2h": {
-              "Kansas City Royals": 116,
-              "Toronto Blue Jays": -124
-            }
-          },
-          "bovada": {
-            "h2h": {
-              "Kansas City Royals": 109,
+              "Kansas City Royals": 111,
               "Toronto Blue Jays": -131
-            }
-          },
-          "betmgm": {
-            "h2h": {
-              "Kansas City Royals": 105,
-              "Toronto Blue Jays": -125
-            }
-          },
-          "betus": {
-            "h2h": {
-              "Kansas City Royals": 114,
-              "Toronto Blue Jays": -125
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Kansas City Royals": 108,
-              "Toronto Blue Jays": -127
             }
           }
         }
@@ -2758,7 +2668,7 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.495,
-        "weather": 0.515,
+        "weather": 0.669,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5447761453864687,
@@ -2769,7 +2679,7 @@
         "lineup_ops": 0.6632592592592593,
         "bullpen": 0.5,
         "park": 0.4,
-        "weather": 0.515,
+        "weather": 0.669,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5560691028910262,
@@ -2788,18 +2698,18 @@
         "model": "ensemble(0.66*simple+0.34*wave_true)",
         "simple_p": 0.5171751585977183,
         "wave_p": 0.5710222222222222,
-        "edge": 0.06522126730260108,
+        "edge": 0.05597744093639151,
         "mag": 0.0,
         "entropy": 0.0,
         "confidence": 0.95,
-        "devig_prob_home": 0.3990356211257137,
-        "market_price": 144,
+        "devig_prob_home": 0.4082794474919233,
+        "market_price": 130,
         "book": "fanduel",
         "weather": {
-          "temp": 66.6,
-          "wind": 5.0,
+          "temp": 77.4,
+          "wind": 9.5,
           "precip": 0.0,
-          "factor": 0.515,
+          "factor": 0.669,
           "source": "open-meteo",
           "park": "NYM"
         }
@@ -2914,15 +2824,15 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 7.5,
-          "over_prob": 0.665,
-          "under_prob": 0.33499999999999996,
+          "line": 8.0,
+          "over_prob": 0.5304,
+          "under_prob": 0.4696,
           "mean_total": 8.8688,
           "n_sim": 5000,
           "home_mean": 4.495,
           "away_mean": 4.4350000000000005
         },
-        "line": 7.5
+        "line": 8.0
       },
       "k_prop": {
         "line": 6.5,
@@ -3171,86 +3081,56 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 66.6,
-        "wind": 5.0,
+        "temp": 77.4,
+        "wind": 9.5,
         "precip": 0.0,
-        "factor": 0.515,
+        "factor": 0.669,
         "source": "open-meteo",
         "park": "NYM"
       },
       "odds": {
         "h2h": {
           "Milwaukee Brewers": {
-            "price": -156,
-            "devig_prob": 0.6009643788742862,
+            "price": -154,
+            "devig_prob": 0.5917205525080768,
             "book": "fanduel",
-            "implied": 0.6190882184322682
+            "implied": 0.6108419139915203
           },
           "New York Mets": {
-            "price": 144,
-            "devig_prob": 0.3990356211257137,
+            "price": 130,
+            "devig_prob": 0.4082794474919233,
             "book": "fanduel",
-            "implied": 0.41106970805237825
+            "implied": 0.4214729370008873
           }
         },
         "totals": {
-          "line": 7.5,
-          "over_price": -105,
-          "under_price": -114
+          "line": 8.0,
+          "over_price": -120,
+          "under_price": -102
         },
         "raw_books": {
           "fanduel": {
             "h2h": {
-              "Milwaukee Brewers": -156,
-              "New York Mets": 144
-            }
-          },
-          "betonlineag": {
-            "h2h": {
-              "Milwaukee Brewers": -163,
-              "New York Mets": 147
+              "Milwaukee Brewers": -154,
+              "New York Mets": 130
             }
           },
           "lowvig": {
             "h2h": {
-              "Milwaukee Brewers": -163,
-              "New York Mets": 147
+              "Milwaukee Brewers": -160,
+              "New York Mets": 145
+            }
+          },
+          "betonlineag": {
+            "h2h": {
+              "Milwaukee Brewers": -160,
+              "New York Mets": 145
             }
           },
           "mybookieag": {
             "h2h": {
-              "Milwaukee Brewers": -165,
-              "New York Mets": 140
-            }
-          },
-          "draftkings": {
-            "h2h": {
-              "Milwaukee Brewers": -161,
-              "New York Mets": 150
-            }
-          },
-          "bovada": {
-            "h2h": {
-              "Milwaukee Brewers": -165,
-              "New York Mets": 139
-            }
-          },
-          "betmgm": {
-            "h2h": {
-              "Milwaukee Brewers": -165,
-              "New York Mets": 140
-            }
-          },
-          "betus": {
-            "h2h": {
-              "Milwaukee Brewers": -163,
-              "New York Mets": 145
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Milwaukee Brewers": -162,
-              "New York Mets": 138
+              "Milwaukee Brewers": -154,
+              "New York Mets": 130
             }
           }
         }
@@ -3307,7 +3187,7 @@
         "lineup_ops": 0.8599999999999992,
         "bullpen": 0.5,
         "park": 0.5,
-        "weather": 0.493,
+        "weather": 0.705,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5585121360986944,
@@ -3318,7 +3198,7 @@
         "lineup_ops": 0.7967407407407404,
         "bullpen": 0.5,
         "park": 0.4,
-        "weather": 0.493,
+        "weather": 0.705,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.660828719038048,
@@ -3337,18 +3217,18 @@
         "model": "ensemble(0.66*simple+0.34*wave_true)",
         "simple_p": 0.5210401251029221,
         "wave_p": 0.5189777777777776,
-        "edge": 0.06651288977927378,
+        "edge": 0.019326583289742016,
         "mag": 0.0,
         "entropy": 0.0,
         "confidence": 0.95,
-        "devig_prob_home": 0.4131581393678539,
-        "market_price": 140,
+        "devig_prob_home": 0.46034444585738565,
+        "market_price": 110,
         "book": "fanduel",
         "weather": {
-          "temp": 67.3,
-          "wind": 2.1,
+          "temp": 88.5,
+          "wind": 2.0,
           "precip": 0.0,
-          "factor": 0.493,
+          "factor": 0.705,
           "source": "open-meteo",
           "park": "ATL"
         }
@@ -3463,15 +3343,15 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 8.5,
-          "over_prob": 0.6018,
-          "under_prob": 0.3982,
+          "line": 9.0,
+          "over_prob": 0.474,
+          "under_prob": 0.526,
           "mean_total": 9.4494,
           "n_sim": 5000,
           "home_mean": 4.745,
           "away_mean": 4.6850000000000005
         },
-        "line": 8.5
+        "line": 9.0
       },
       "k_prop": {
         "line": 6.5,
@@ -3720,86 +3600,56 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 67.3,
-        "wind": 2.1,
+        "temp": 88.5,
+        "wind": 2.0,
         "precip": 0.0,
-        "factor": 0.493,
+        "factor": 0.705,
         "source": "open-meteo",
         "park": "ATL"
       },
       "odds": {
         "h2h": {
           "Atlanta Braves": {
-            "price": 140,
-            "devig_prob": 0.4131581393678539,
+            "price": 110,
+            "devig_prob": 0.46034444585738565,
             "book": "fanduel",
-            "implied": 0.42584443726028165
+            "implied": 0.4750620627397879
           },
           "Los Angeles Dodgers": {
-            "price": -150,
-            "devig_prob": 0.586841860632146,
+            "price": -130,
+            "devig_prob": 0.5396555541426145,
             "book": "fanduel",
-            "implied": 0.6048612337252597
+            "implied": 0.5569088169240058
           }
         },
         "totals": {
-          "line": 8.5,
-          "over_price": -108,
-          "under_price": -110
+          "line": 9.0,
+          "over_price": 100,
+          "under_price": -122
         },
         "raw_books": {
           "fanduel": {
             "h2h": {
-              "Atlanta Braves": 140,
-              "Los Angeles Dodgers": -150
+              "Atlanta Braves": 110,
+              "Los Angeles Dodgers": -130
             }
           },
           "lowvig": {
             "h2h": {
-              "Atlanta Braves": 136,
-              "Los Angeles Dodgers": -150
+              "Atlanta Braves": 111,
+              "Los Angeles Dodgers": -122
             }
           },
           "betonlineag": {
             "h2h": {
-              "Atlanta Braves": 136,
-              "Los Angeles Dodgers": -150
+              "Atlanta Braves": 111,
+              "Los Angeles Dodgers": -122
             }
           },
           "mybookieag": {
             "h2h": {
-              "Atlanta Braves": 132,
-              "Los Angeles Dodgers": -156
-            }
-          },
-          "draftkings": {
-            "h2h": {
-              "Atlanta Braves": 142,
-              "Los Angeles Dodgers": -153
-            }
-          },
-          "bovada": {
-            "h2h": {
-              "Atlanta Braves": 131,
-              "Los Angeles Dodgers": -157
-            }
-          },
-          "betmgm": {
-            "h2h": {
-              "Atlanta Braves": 130,
-              "Los Angeles Dodgers": -155
-            }
-          },
-          "betus": {
-            "h2h": {
-              "Atlanta Braves": 134,
-              "Los Angeles Dodgers": -150
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Atlanta Braves": 133,
-              "Los Angeles Dodgers": -157
+              "Atlanta Braves": 110,
+              "Los Angeles Dodgers": -129
             }
           }
         }
@@ -3856,7 +3706,7 @@
         "lineup_ops": 0.6764444444444443,
         "bullpen": 0.5,
         "park": 0.48,
-        "weather": 0.5,
+        "weather": 0.632,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5716940835073355,
@@ -3867,7 +3717,7 @@
         "lineup_ops": 0.7585925925925925,
         "bullpen": 0.5,
         "park": 0.44,
-        "weather": 0.5,
+        "weather": 0.632,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.46182932948536715,
@@ -3882,23 +3732,24 @@
       "chd": {
         "pA": 0.49261029254730243,
         "pB": 0.5073897074526976,
-        "raw_score": 0.004433524272109307,
+        "raw_score": 0.004433524272109302,
         "model": "ensemble(0.66*simple+0.34*wave_true)",
         "simple_p": 0.5016917330692745,
         "wave_p": 0.47535555555555553,
-        "edge": 0.031327580787852694,
+        "edge": -0.04393654225270527,
         "mag": 0.0,
         "entropy": 0.0,
         "confidence": 0.95,
-        "devig_prob_home": 0.47606212666484493,
-        "market_price": 108,
+        "devig_prob_home": 0.5513262497054029,
+        "market_price": -134,
         "book": "fanduel",
         "weather": {
-          "temp": 72,
-          "wind": 5,
-          "precip": 0,
-          "factor": 0.5,
-          "source": "fallback"
+          "temp": 75.2,
+          "wind": 8.0,
+          "precip": 0.0,
+          "factor": 0.632,
+          "source": "open-meteo",
+          "park": "CWS"
         }
       },
       "total": {
@@ -4011,15 +3862,15 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 7.5,
-          "over_prob": 0.6688,
-          "under_prob": 0.33120000000000005,
+          "line": 8.0,
+          "over_prob": 0.5332,
+          "under_prob": 0.4668,
           "mean_total": 8.9612,
           "n_sim": 5000,
           "home_mean": 4.508500000000001,
           "away_mean": 4.448500000000001
         },
-        "line": 7.5
+        "line": 8.0
       },
       "k_prop": {
         "line": 6.5,
@@ -4268,85 +4119,56 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 72,
-        "wind": 5,
-        "precip": 0,
-        "factor": 0.5,
-        "source": "fallback"
+        "temp": 75.2,
+        "wind": 8.0,
+        "precip": 0.0,
+        "factor": 0.632,
+        "source": "open-meteo",
+        "park": "CWS"
       },
       "odds": {
         "h2h": {
           "Chicago White Sox": {
-            "price": 108,
-            "devig_prob": 0.47606212666484493,
+            "price": -134,
+            "devig_prob": 0.5513262497054029,
             "book": "fanduel",
-            "implied": 0.4910903715027602
+            "implied": 0.5689334819769603
           },
           "Texas Rangers": {
-            "price": -118,
-            "devig_prob": 0.5239378733351551,
+            "price": 114,
+            "devig_prob": 0.4486737502945971,
             "book": "fanduel",
-            "implied": 0.5404774512585228
+            "implied": 0.46300265797822177
           }
         },
         "totals": {
-          "line": 7.5,
-          "over_price": 104,
-          "under_price": -122
+          "line": 8.0,
+          "over_price": -108,
+          "under_price": -113
         },
         "raw_books": {
           "fanduel": {
             "h2h": {
-              "Chicago White Sox": 108,
-              "Texas Rangers": -118
-            }
-          },
-          "betonlineag": {
-            "h2h": {
-              "Chicago White Sox": 104,
-              "Texas Rangers": -115
+              "Chicago White Sox": -134,
+              "Texas Rangers": 114
             }
           },
           "lowvig": {
             "h2h": {
-              "Chicago White Sox": 104,
-              "Texas Rangers": -115
+              "Chicago White Sox": -130,
+              "Texas Rangers": 118
+            }
+          },
+          "betonlineag": {
+            "h2h": {
+              "Chicago White Sox": -130,
+              "Texas Rangers": 118
             }
           },
           "mybookieag": {
             "h2h": {
-              "Chicago White Sox": 103,
-              "Texas Rangers": -121
-            }
-          },
-          "draftkings": {
-            "h2h": {
-              "Chicago White Sox": 107,
-              "Texas Rangers": -115
-            }
-          },
-          "bovada": {
-            "h2h": {
-              "Chicago White Sox": 101,
-              "Texas Rangers": -121
-            }
-          },
-          "betmgm": {
-            "h2h": {
-              "Chicago White Sox": -105,
-              "Texas Rangers": -115
-            }
-          },
-          "betus": {
-            "h2h": {
-              "Chicago White Sox": 105,
-              "Texas Rangers": -115
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Chicago White Sox": 106,
-              "Texas Rangers": -124
+              "Chicago White Sox": -134,
+              "Texas Rangers": 114
             }
           }
         }
@@ -4356,7 +4178,7 @@
         "simple": {
           "pA": 0.5016917330692745,
           "pB": 0.4983082669307255,
-          "raw_score": 0.0067669580995352585,
+          "raw_score": 0.006766958099535252,
           "model": "simple",
           "edge": 0.0
         },
@@ -4381,7 +4203,7 @@
         "ensemble": {
           "pA": 0.49261029254730243,
           "pB": 0.5073897074526976,
-          "raw_score": 0.004433524272109307,
+          "raw_score": 0.004433524272109302,
           "model": "ensemble(0.66*simple+0.34*wave_true)",
           "simple_p": 0.5016917330692745,
           "wave_p": 0.47535555555555553,
@@ -4403,7 +4225,7 @@
         "lineup_ops": 0.7215555555555553,
         "bullpen": 0.5,
         "park": 0.49,
-        "weather": 0.5,
+        "weather": 0.72,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5032576129967745,
@@ -4414,7 +4236,7 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.4,
-        "weather": 0.5,
+        "weather": 0.72,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.4398492140745519,
@@ -4429,23 +4251,24 @@
       "chd": {
         "pA": 0.48032478229901265,
         "pB": 0.5196752177009873,
-        "raw_score": -0.0048618126541916,
+        "raw_score": -0.004861812654191605,
         "model": "ensemble(0.66*simple+0.34*wave_true)",
         "simple_p": 0.4981448431581422,
         "wave_p": 0.44646666666666657,
-        "edge": -0.023145773684898452,
+        "edge": 0.01912204692610575,
         "mag": 0.0,
         "entropy": 0.0,
         "confidence": 0.95,
-        "devig_prob_home": 0.5428209913858858,
-        "market_price": -126,
+        "devig_prob_home": 0.5005531707748816,
+        "market_price": -108,
         "book": "fanduel",
         "weather": {
-          "temp": 72,
-          "wind": 5,
-          "precip": 0,
-          "factor": 0.5,
-          "source": "fallback"
+          "temp": 85.8,
+          "wind": 6.2,
+          "precip": 0.0,
+          "factor": 0.72,
+          "source": "open-meteo",
+          "park": "STL"
         }
       },
       "total": {
@@ -4558,7 +4381,7 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 8.5,
+          "line": 8.0,
           "over_prob": 0.4462,
           "under_prob": 0.5538000000000001,
           "mean_total": 8.3066,
@@ -4566,7 +4389,7 @@
           "home_mean": 4.2250000000000005,
           "away_mean": 4.165000000000001
         },
-        "line": 8.5
+        "line": 8.0
       },
       "k_prop": {
         "line": 6.5,
@@ -4815,85 +4638,44 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 72,
-        "wind": 5,
-        "precip": 0,
-        "factor": 0.5,
-        "source": "fallback"
+        "temp": 85.8,
+        "wind": 6.2,
+        "precip": 0.0,
+        "factor": 0.72,
+        "source": "open-meteo",
+        "park": "STL"
       },
       "odds": {
         "h2h": {
           "Baltimore Orioles": {
-            "price": 116,
-            "devig_prob": 0.45717900861411415,
+            "price": -108,
+            "devig_prob": 0.49944682922511835,
             "book": "fanduel",
-            "implied": 0.47131221093758136
+            "implied": 0.5192307692307693
           },
           "St. Louis Cardinals": {
-            "price": -126,
-            "devig_prob": 0.5428209913858858,
+            "price": -108,
+            "devig_prob": 0.5005531707748816,
             "book": "fanduel",
-            "implied": 0.5596017244294653
+            "implied": 0.5203809348546191
           }
         },
         "totals": {
-          "line": 8.5,
-          "over_price": -120,
-          "under_price": 100
+          "line": 8.0,
+          "over_price": -114,
+          "under_price": -107
         },
         "raw_books": {
-          "draftkings": {
+          "fanduel": {
             "h2h": {
-              "Baltimore Orioles": 116,
-              "St. Louis Cardinals": -124
-            }
-          },
-          "betonlineag": {
-            "h2h": {
-              "Baltimore Orioles": 113,
-              "St. Louis Cardinals": -125
-            }
-          },
-          "lowvig": {
-            "h2h": {
-              "Baltimore Orioles": 113,
-              "St. Louis Cardinals": -125
+              "Baltimore Orioles": -108,
+              "St. Louis Cardinals": -108
             }
           },
           "mybookieag": {
             "h2h": {
-              "Baltimore Orioles": 110,
-              "St. Louis Cardinals": -129
-            }
-          },
-          "betmgm": {
-            "h2h": {
-              "Baltimore Orioles": 105,
-              "St. Louis Cardinals": -125
-            }
-          },
-          "fanduel": {
-            "h2h": {
-              "Baltimore Orioles": 116,
-              "St. Louis Cardinals": -126
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Baltimore Orioles": 112,
-              "St. Louis Cardinals": -132
-            }
-          },
-          "bovada": {
-            "h2h": {
-              "Baltimore Orioles": 111,
-              "St. Louis Cardinals": -133
-            }
-          },
-          "betus": {
-            "h2h": {
-              "Baltimore Orioles": 114,
-              "St. Louis Cardinals": -125
+              "Baltimore Orioles": -108,
+              "St. Louis Cardinals": -109
             }
           }
         }
@@ -4903,7 +4685,7 @@
         "simple": {
           "pA": 0.4981448431581422,
           "pB": 0.5018551568418578,
-          "raw_score": -0.007420661419555601,
+          "raw_score": -0.0074206614195556075,
           "model": "simple",
           "edge": 0.0
         },
@@ -4928,7 +4710,7 @@
         "ensemble": {
           "pA": 0.48032478229901265,
           "pB": 0.5196752177009873,
-          "raw_score": -0.0048618126541916,
+          "raw_score": -0.004861812654191605,
           "model": "ensemble(0.66*simple+0.34*wave_true)",
           "simple_p": 0.4981448431581422,
           "wave_p": 0.44646666666666657,
@@ -4950,7 +4732,7 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.51,
-        "weather": 0.5,
+        "weather": 0.723,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.69331336054349,
@@ -4961,7 +4743,7 @@
         "lineup_ops": 0.784222222222222,
         "bullpen": 0.5,
         "park": 0.4,
-        "weather": 0.5,
+        "weather": 0.723,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.6180637790339187,
@@ -4980,19 +4762,20 @@
         "model": "ensemble(0.66*simple+0.34*wave_true)",
         "simple_p": 0.5016616521795272,
         "wave_p": 0.5347333333333334,
-        "edge": 0.054883354973896126,
+        "edge": 0.048583630062880634,
         "mag": 0.0,
         "entropy": 0.0,
         "confidence": 0.95,
-        "devig_prob_home": 0.43205096486250566,
-        "market_price": 122,
+        "devig_prob_home": 0.43835068977352115,
+        "market_price": 116,
         "book": "fanduel",
         "weather": {
-          "temp": 72,
-          "wind": 5,
-          "precip": 0,
-          "factor": 0.5,
-          "source": "fallback"
+          "temp": 88.9,
+          "wind": 3.4,
+          "precip": 0.0,
+          "factor": 0.723,
+          "source": "open-meteo",
+          "park": "LAA"
         }
       },
       "total": {
@@ -5105,15 +4888,15 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 7.5,
-          "over_prob": 0.5888,
-          "under_prob": 0.4112,
+          "line": 9.0,
+          "over_prob": 0.3226,
+          "under_prob": 0.6774,
           "mean_total": 8.3176,
           "n_sim": 5000,
           "home_mean": 4.215,
           "away_mean": 4.155
         },
-        "line": 7.5
+        "line": 9.0
       },
       "k_prop": {
         "line": 6.5,
@@ -5362,85 +5145,56 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 72,
-        "wind": 5,
-        "precip": 0,
-        "factor": 0.5,
-        "source": "fallback"
+        "temp": 88.9,
+        "wind": 3.4,
+        "precip": 0.0,
+        "factor": 0.723,
+        "source": "open-meteo",
+        "park": "LAA"
       },
       "odds": {
         "h2h": {
           "Cleveland Guardians": {
-            "price": -144,
-            "devig_prob": 0.5679490351374943,
+            "price": -136,
+            "devig_prob": 0.561649310226479,
             "book": "fanduel",
-            "implied": 0.589330074492914
+            "implied": 0.5793775436221569
           },
           "Los Angeles Angels": {
-            "price": 122,
-            "devig_prob": 0.43205096486250566,
+            "price": 116,
+            "devig_prob": 0.43835068977352115,
             "book": "fanduel",
-            "implied": 0.44831597829110653
+            "implied": 0.4521870520657275
           }
         },
         "totals": {
-          "line": 7.5,
-          "over_price": -103,
-          "under_price": -121
+          "line": 9.0,
+          "over_price": -119,
+          "under_price": -103
         },
         "raw_books": {
-          "draftkings": {
+          "fanduel": {
             "h2h": {
-              "Cleveland Guardians": -149,
-              "Los Angeles Angels": 123
-            }
-          },
-          "betonlineag": {
-            "h2h": {
-              "Cleveland Guardians": -140,
-              "Los Angeles Angels": 127
+              "Cleveland Guardians": -136,
+              "Los Angeles Angels": 116
             }
           },
           "lowvig": {
             "h2h": {
-              "Cleveland Guardians": -140,
-              "Los Angeles Angels": 127
+              "Cleveland Guardians": -139,
+              "Los Angeles Angels": 126
             }
           },
-          "fanduel": {
+          "betonlineag": {
             "h2h": {
-              "Cleveland Guardians": -144,
-              "Los Angeles Angels": 122
+              "Cleveland Guardians": -139,
+              "Los Angeles Angels": 126
             }
           },
           "mybookieag": {
             "h2h": {
-              "Cleveland Guardians": -144,
-              "Los Angeles Angels": 122
-            }
-          },
-          "bovada": {
-            "h2h": {
-              "Cleveland Guardians": -147,
-              "Los Angeles Angels": 123
-            }
-          },
-          "betmgm": {
-            "h2h": {
-              "Cleveland Guardians": -140,
-              "Los Angeles Angels": 115
-            }
-          },
-          "betus": {
-            "h2h": {
-              "Cleveland Guardians": -140,
-              "Los Angeles Angels": 126
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Cleveland Guardians": -148,
-              "Los Angeles Angels": 123
+              "Cleveland Guardians": -137,
+              "Los Angeles Angels": 117
             }
           }
         }
@@ -5527,11 +5281,11 @@
         "model": "ensemble(0.66*simple+0.34*wave_true)",
         "simple_p": 0.5297455016549041,
         "wave_p": 0.5267555555555555,
-        "edge": -0.026119323524905425,
+        "edge": -0.028714485758577046,
         "mag": 0.0,
         "entropy": 0.0,
         "confidence": 0.95,
-        "devig_prob_home": 0.4974048377663284,
+        "devig_prob_home": 0.5,
         "market_price": -108,
         "book": "fanduel",
         "weather": {
@@ -5652,7 +5406,7 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 8.0,
+          "line": 8.5,
           "over_prob": 0.5858,
           "under_prob": 0.4142,
           "mean_total": 9.3114,
@@ -5660,7 +5414,7 @@
           "home_mean": 4.67,
           "away_mean": 4.61
         },
-        "line": 8.0
+        "line": 8.5
       },
       "k_prop": {
         "line": 6.5,
@@ -5810,75 +5564,45 @@
         "h2h": {
           "Arizona Diamondbacks": {
             "price": -108,
-            "devig_prob": 0.4974048377663284,
+            "devig_prob": 0.5,
             "book": "fanduel",
-            "implied": 0.5158155712275163
+            "implied": 0.5157129455909943
           },
           "Chicago Cubs": {
             "price": -108,
-            "devig_prob": 0.5025951622336716,
+            "devig_prob": 0.5,
             "book": "fanduel",
-            "implied": 0.5211980081816912
+            "implied": 0.5157129455909943
           }
         },
         "totals": {
-          "line": 8.0,
-          "over_price": -120,
-          "under_price": 100
+          "line": 8.5,
+          "over_price": -117,
+          "under_price": -105
         },
         "raw_books": {
-          "draftkings": {
-            "h2h": {
-              "Arizona Diamondbacks": -108,
-              "Chicago Cubs": -112
-            }
-          },
-          "betonlineag": {
-            "h2h": {
-              "Arizona Diamondbacks": -104,
-              "Chicago Cubs": -106
-            }
-          },
-          "lowvig": {
-            "h2h": {
-              "Arizona Diamondbacks": -104,
-              "Chicago Cubs": -106
-            }
-          },
-          "mybookieag": {
-            "h2h": {
-              "Arizona Diamondbacks": -106,
-              "Chicago Cubs": -110
-            }
-          },
           "fanduel": {
             "h2h": {
               "Arizona Diamondbacks": -108,
               "Chicago Cubs": -108
             }
           },
-          "bovada": {
+          "lowvig": {
             "h2h": {
-              "Arizona Diamondbacks": -106,
-              "Chicago Cubs": -114
+              "Arizona Diamondbacks": -105,
+              "Chicago Cubs": -105
             }
           },
-          "betmgm": {
+          "betonlineag": {
             "h2h": {
-              "Arizona Diamondbacks": -110,
-              "Chicago Cubs": -110
+              "Arizona Diamondbacks": -105,
+              "Chicago Cubs": -105
             }
           },
-          "betrivers": {
+          "mybookieag": {
             "h2h": {
-              "Arizona Diamondbacks": -109,
+              "Arizona Diamondbacks": -108,
               "Chicago Cubs": -108
-            }
-          },
-          "betus": {
-            "h2h": {
-              "Arizona Diamondbacks": -104,
-              "Chicago Cubs": -106
             }
           }
         }
@@ -5935,7 +5659,7 @@
         "lineup_ops": 0.8955555555555557,
         "bullpen": 0.5,
         "park": 0.51,
-        "weather": 0.5,
+        "weather": 0.768,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5146232222798687,
@@ -5946,7 +5670,7 @@
         "lineup_ops": 0.7838518518518518,
         "bullpen": 0.5,
         "park": 0.28,
-        "weather": 0.5,
+        "weather": 0.768,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5898296984789354,
@@ -5965,19 +5689,20 @@
         "model": "ensemble(0.64*simple+0.36*wave_true)",
         "simple_p": 0.5045413011492018,
         "wave_p": 0.5361818564679907,
-        "edge": -0.04639233697791589,
+        "edge": -0.05230860245727642,
         "mag": 0.005328093350373411,
         "entropy": 0.11299138207108833,
         "confidence": 0.8870086179289116,
-        "devig_prob_home": 0.5304449944711503,
-        "market_price": -116,
+        "devig_prob_home": 0.5363612599505109,
+        "market_price": -126,
         "book": "fanduel",
         "weather": {
-          "temp": 72,
-          "wind": 5,
-          "precip": 0,
-          "factor": 0.5,
-          "source": "fallback"
+          "temp": 91.0,
+          "wind": 5.8,
+          "precip": 0.0,
+          "factor": 0.768,
+          "source": "open-meteo",
+          "park": "SD"
         }
       },
       "total": {
@@ -6090,15 +5815,15 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 7.5,
-          "over_prob": 0.6094,
-          "under_prob": 0.39059999999999995,
+          "line": 8.5,
+          "over_prob": 0.4708,
+          "under_prob": 0.5292,
           "mean_total": 8.4318,
           "n_sim": 5000,
           "home_mean": 4.2545,
           "away_mean": 4.194500000000001
         },
-        "line": 7.5
+        "line": 8.5
       },
       "k_prop": {
         "line": 6.5,
@@ -6347,85 +6072,44 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 72,
-        "wind": 5,
-        "precip": 0,
-        "factor": 0.5,
-        "source": "fallback"
+        "temp": 91.0,
+        "wind": 5.8,
+        "precip": 0.0,
+        "factor": 0.768,
+        "source": "open-meteo",
+        "park": "SD"
       },
       "odds": {
         "h2h": {
           "Pittsburgh Pirates": {
-            "price": -102,
-            "devig_prob": 0.4695550055288497,
+            "price": 108,
+            "devig_prob": 0.4636387400494891,
             "book": "fanduel",
-            "implied": 0.48641726596645835
+            "implied": 0.48193050910442214
           },
           "San Diego Padres": {
-            "price": -116,
-            "devig_prob": 0.5304449944711503,
+            "price": -126,
+            "devig_prob": 0.5363612599505109,
             "book": "fanduel",
-            "implied": 0.5494938844612047
+            "implied": 0.5575221238938053
           }
         },
         "totals": {
-          "line": 7.5,
-          "over_price": 100,
-          "under_price": -120
+          "line": 8.5,
+          "over_price": -110,
+          "under_price": -111
         },
         "raw_books": {
-          "draftkings": {
+          "fanduel": {
             "h2h": {
-              "Pittsburgh Pirates": 103,
-              "San Diego Padres": -124
-            }
-          },
-          "betonlineag": {
-            "h2h": {
-              "Pittsburgh Pirates": 111,
-              "San Diego Padres": -122
-            }
-          },
-          "lowvig": {
-            "h2h": {
-              "Pittsburgh Pirates": 111,
-              "San Diego Padres": -122
+              "Pittsburgh Pirates": 108,
+              "San Diego Padres": -126
             }
           },
           "mybookieag": {
             "h2h": {
-              "Pittsburgh Pirates": 104,
-              "San Diego Padres": -122
-            }
-          },
-          "fanduel": {
-            "h2h": {
-              "Pittsburgh Pirates": -102,
-              "San Diego Padres": -116
-            }
-          },
-          "bovada": {
-            "h2h": {
-              "Pittsburgh Pirates": 104,
-              "San Diego Padres": -124
-            }
-          },
-          "betmgm": {
-            "h2h": {
-              "Pittsburgh Pirates": 105,
-              "San Diego Padres": -125
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Pittsburgh Pirates": 104,
-              "San Diego Padres": -121
-            }
-          },
-          "betus": {
-            "h2h": {
-              "Pittsburgh Pirates": 111,
-              "San Diego Padres": -122
+              "Pittsburgh Pirates": 107,
+              "San Diego Padres": -126
             }
           }
         }
@@ -6512,12 +6196,12 @@
         "model": "ensemble(0.66*simple+0.34*wave_true)",
         "simple_p": 0.5349220215075352,
         "wave_p": 0.54,
-        "edge": 0.04910396038672832,
+        "edge": 0.023823266927203768,
         "mag": 0.0,
         "entropy": 0.0,
         "confidence": 0.95,
-        "devig_prob_home": 0.41422299103936927,
-        "market_price": 130,
+        "devig_prob_home": 0.4395036844988938,
+        "market_price": 120,
         "book": "fanduel",
         "weather": {
           "temp": 72,
@@ -6637,15 +6321,15 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 9.5,
-          "over_prob": 0.4522,
-          "under_prob": 0.5478000000000001,
+          "line": 10.0,
+          "over_prob": 0.3366,
+          "under_prob": 0.6634,
           "mean_total": 9.2992,
           "n_sim": 5000,
           "home_mean": 4.6775,
           "away_mean": 4.617500000000001
         },
-        "line": 9.5
+        "line": 10.0
       },
       "k_prop": {
         "line": 6.5,
@@ -6794,76 +6478,46 @@
       "odds": {
         "h2h": {
           "Athletics": {
-            "price": 130,
-            "devig_prob": 0.41422299103936927,
+            "price": 120,
+            "devig_prob": 0.4395036844988938,
             "book": "fanduel",
-            "implied": 0.4291075287295066
+            "implied": 0.45351707116413
           },
           "Minnesota Twins": {
-            "price": -154,
-            "devig_prob": 0.5857770089606308,
+            "price": -142,
+            "devig_prob": 0.5604963155011063,
             "book": "fanduel",
-            "implied": 0.6068261060810312
+            "implied": 0.5783675003638966
           }
         },
         "totals": {
-          "line": 9.5,
+          "line": 10.0,
           "over_price": -120,
           "under_price": 100
         },
         "raw_books": {
-          "draftkings": {
+          "fanduel": {
             "h2h": {
-              "Athletics": 130,
-              "Minnesota Twins": -157
-            }
-          },
-          "betonlineag": {
-            "h2h": {
-              "Athletics": 135,
-              "Minnesota Twins": -149
+              "Athletics": 120,
+              "Minnesota Twins": -142
             }
           },
           "lowvig": {
             "h2h": {
-              "Athletics": 135,
-              "Minnesota Twins": -149
+              "Athletics": 121,
+              "Minnesota Twins": -133
+            }
+          },
+          "betonlineag": {
+            "h2h": {
+              "Athletics": 121,
+              "Minnesota Twins": -133
             }
           },
           "mybookieag": {
             "h2h": {
-              "Athletics": 131,
-              "Minnesota Twins": -154
-            }
-          },
-          "fanduel": {
-            "h2h": {
-              "Athletics": 130,
-              "Minnesota Twins": -154
-            }
-          },
-          "bovada": {
-            "h2h": {
-              "Athletics": 130,
-              "Minnesota Twins": -155
-            }
-          },
-          "betmgm": {
-            "h2h": {
-              "Athletics": 130,
-              "Minnesota Twins": -155
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Athletics": 143,
-              "Minnesota Twins": -167
-            }
-          },
-          "betus": {
-            "h2h": {
-              "Athletics": 134,
-              "Minnesota Twins": -150
+              "Athletics": 120,
+              "Minnesota Twins": -141
             }
           }
         }
@@ -6920,7 +6574,7 @@
         "lineup_ops": 0.8454814814814807,
         "bullpen": 0.5,
         "park": 0.48,
-        "weather": 0.5,
+        "weather": 0.542,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5664481058131694,
@@ -6931,7 +6585,7 @@
         "lineup_ops": 0.9,
         "bullpen": 0.5,
         "park": 0.3,
-        "weather": 0.5,
+        "weather": 0.542,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.6725636416266333,
@@ -6950,19 +6604,20 @@
         "model": "ensemble(0.63*simple+0.37*wave_true)",
         "simple_p": 0.49140409185420525,
         "wave_p": 0.484911540008343,
-        "edge": 0.005676050628558582,
+        "edge": 0.05063003049745829,
         "mag": 0.0026252497321394425,
         "entropy": 0.13519746434818186,
         "confidence": 0.8648025356518181,
-        "devig_prob_home": 0.5052984257262854,
-        "market_price": -116,
+        "devig_prob_home": 0.46034444585738565,
+        "market_price": 110,
         "book": "fanduel",
         "weather": {
-          "temp": 72,
-          "wind": 5,
-          "precip": 0,
-          "factor": 0.5,
-          "source": "fallback"
+          "temp": 70.0,
+          "wind": 4.2,
+          "precip": 0.0,
+          "factor": 0.542,
+          "source": "open-meteo",
+          "park": "SEA"
         }
       },
       "total": {
@@ -7075,7 +6730,7 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 7.5,
+          "line": 7.0,
           "over_prob": 0.5944,
           "under_prob": 0.40559999999999996,
           "mean_total": 8.325,
@@ -7083,7 +6738,7 @@
           "home_mean": 4.17,
           "away_mean": 4.11
         },
-        "line": 7.5
+        "line": 7.0
       },
       "k_prop": {
         "line": 6.5,
@@ -7332,85 +6987,56 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 72,
-        "wind": 5,
-        "precip": 0,
-        "factor": 0.5,
-        "source": "fallback"
+        "temp": 70.0,
+        "wind": 4.2,
+        "precip": 0.0,
+        "factor": 0.542,
+        "source": "open-meteo",
+        "park": "SEA"
       },
       "odds": {
         "h2h": {
           "Philadelphia Phillies": {
-            "price": -102,
-            "devig_prob": 0.4947015742737147,
+            "price": -130,
+            "devig_prob": 0.5396555541426145,
             "book": "fanduel",
-            "implied": 0.513436966310444
+            "implied": 0.5569088169240058
           },
           "Seattle Mariners": {
-            "price": -116,
-            "devig_prob": 0.5052984257262854,
+            "price": 110,
+            "devig_prob": 0.46034444585738565,
             "book": "fanduel",
-            "implied": 0.5244351428782832
+            "implied": 0.4750620627397879
           }
         },
         "totals": {
-          "line": 7.5,
-          "over_price": -115,
-          "under_price": -105
+          "line": 7.0,
+          "over_price": -109,
+          "under_price": -113
         },
         "raw_books": {
-          "draftkings": {
+          "fanduel": {
             "h2h": {
-              "Philadelphia Phillies": -108,
-              "Seattle Mariners": -112
-            }
-          },
-          "betonlineag": {
-            "h2h": {
-              "Philadelphia Phillies": -104,
-              "Seattle Mariners": -106
+              "Philadelphia Phillies": -130,
+              "Seattle Mariners": 110
             }
           },
           "lowvig": {
             "h2h": {
-              "Philadelphia Phillies": -104,
-              "Seattle Mariners": -106
+              "Philadelphia Phillies": -122,
+              "Seattle Mariners": 111
+            }
+          },
+          "betonlineag": {
+            "h2h": {
+              "Philadelphia Phillies": -122,
+              "Seattle Mariners": 111
             }
           },
           "mybookieag": {
             "h2h": {
-              "Philadelphia Phillies": -105,
-              "Seattle Mariners": -112
-            }
-          },
-          "fanduel": {
-            "h2h": {
-              "Philadelphia Phillies": -102,
-              "Seattle Mariners": -116
-            }
-          },
-          "bovada": {
-            "h2h": {
-              "Philadelphia Phillies": -109,
-              "Seattle Mariners": -111
-            }
-          },
-          "betmgm": {
-            "h2h": {
-              "Philadelphia Phillies": -110,
-              "Seattle Mariners": -110
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Philadelphia Phillies": -104,
-              "Seattle Mariners": -114
-            }
-          },
-          "betus": {
-            "h2h": {
-              "Philadelphia Phillies": -104,
-              "Seattle Mariners": -106
+              "Philadelphia Phillies": -129,
+              "Seattle Mariners": 110
             }
           }
         }
@@ -7467,7 +7093,7 @@
         "lineup_ops": 0.5980740740740738,
         "bullpen": 0.5,
         "park": 0.455,
-        "weather": 0.455,
+        "weather": 0.511,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5751565734546579,
@@ -7478,7 +7104,7 @@
         "lineup_ops": 0.6212592592592591,
         "bullpen": 0.5,
         "park": 0.24,
-        "weather": 0.455,
+        "weather": 0.511,
         "rest": 0.5,
         "umpire": 0.5,
         "form": 0.5760936441681621,
@@ -7497,18 +7123,18 @@
         "model": "ensemble(0.66*simple+0.34*wave_true)",
         "simple_p": 0.5023267973447366,
         "wave_p": 0.500991533984083,
-        "edge": -0.005845184921786095,
+        "edge": -0.004107631683233692,
         "mag": 0.01449554765761961,
         "entropy": 0.032114179702660166,
         "confidence": 0.95,
-        "devig_prob_home": 0.5039788232186542,
+        "devig_prob_home": 0.5022412699801018,
         "market_price": -110,
         "book": "fanduel",
         "weather": {
-          "temp": 58.6,
-          "wind": 6.9,
+          "temp": 65.1,
+          "wind": 6.0,
           "precip": 0.0,
-          "factor": 0.455,
+          "factor": 0.511,
           "source": "open-meteo",
           "park": "SF"
         }
@@ -7623,15 +7249,15 @@
         ],
         "overdispersion_r": 5.0,
         "simple": {
-          "line": 8.0,
-          "over_prob": 0.457,
-          "under_prob": 0.5429999999999999,
+          "line": 7.5,
+          "over_prob": 0.5922,
+          "under_prob": 0.40780000000000005,
           "mean_total": 8.38,
           "n_sim": 5000,
           "home_mean": 4.221,
           "away_mean": 4.1610000000000005
         },
-        "line": 8.0
+        "line": 7.5
       },
       "k_prop": {
         "line": 6.5,
@@ -7880,10 +7506,10 @@
         "source": "roster"
       },
       "weather": {
-        "temp": 58.6,
-        "wind": 6.9,
+        "temp": 65.1,
+        "wind": 6.0,
         "precip": 0.0,
-        "factor": 0.455,
+        "factor": 0.511,
         "source": "open-meteo",
         "park": "SF"
       },
@@ -7891,21 +7517,21 @@
         "h2h": {
           "Cincinnati Reds": {
             "price": -106,
-            "devig_prob": 0.4960211767813459,
+            "devig_prob": 0.49775873001989807,
             "book": "fanduel",
-            "implied": 0.514496997345379
+            "implied": 0.513379114373668
           },
           "San Francisco Giants": {
             "price": -110,
-            "devig_prob": 0.5039788232186542,
+            "devig_prob": 0.5022412699801018,
             "book": "fanduel",
-            "implied": 0.5227510505785458
+            "implied": 0.5180023228803716
           }
         },
         "totals": {
-          "line": 8.0,
-          "over_price": -110,
-          "under_price": -110
+          "line": 7.5,
+          "over_price": -118,
+          "under_price": -104
         },
         "raw_books": {
           "fanduel": {
@@ -7916,50 +7542,20 @@
           },
           "lowvig": {
             "h2h": {
-              "Cincinnati Reds": -103,
-              "San Francisco Giants": -107
+              "Cincinnati Reds": -105,
+              "San Francisco Giants": -105
             }
           },
           "betonlineag": {
             "h2h": {
-              "Cincinnati Reds": -103,
-              "San Francisco Giants": -107
+              "Cincinnati Reds": -105,
+              "San Francisco Giants": -105
             }
           },
           "mybookieag": {
             "h2h": {
               "Cincinnati Reds": -106,
-              "San Francisco Giants": -111
-            }
-          },
-          "draftkings": {
-            "h2h": {
-              "Cincinnati Reds": -108,
-              "San Francisco Giants": -112
-            }
-          },
-          "bovada": {
-            "h2h": {
-              "Cincinnati Reds": -107,
-              "San Francisco Giants": -113
-            }
-          },
-          "betmgm": {
-            "h2h": {
-              "Cincinnati Reds": -110,
               "San Francisco Giants": -110
-            }
-          },
-          "betrivers": {
-            "h2h": {
-              "Cincinnati Reds": -108,
-              "San Francisco Giants": -109
-            }
-          },
-          "betus": {
-            "h2h": {
-              "Cincinnati Reds": -103,
-              "San Francisco Giants": -107
             }
           }
         }
