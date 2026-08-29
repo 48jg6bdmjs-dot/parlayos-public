@@ -11471,9 +11471,9 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
 .parlayos-model-switcher .pms-title{display:block;margin:0 0 8px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.72}
 .parlayos-model-switcher .pms-row{display:flex;flex-direction:column;gap:8px;overflow:visible;padding:0}
 .parlayos-model-switcher .pms-chip{box-sizing:border-box;width:100%;min-height:40px;margin:0;padding:9px 14px;border:1px solid rgba(255,255,255,.30);border-radius:999px;background:rgba(255,255,255,.10);color:inherit;font:700 13px/1.15 inherit;cursor:pointer;white-space:nowrap;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.20);transition:background .15s ease,border-color .15s ease,transform .15s ease}
-.parlayos-model-switcher .pms-chip:hover,.parlayos-model-switcher .pms-chip:focus-visible{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.46);outline:none}
+.parlayos-model-switcher .pms-chip:hover,.parlayos-model-switcher .pms-chip:focus-visible{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.46);outline:none;transform:translateY(-1px)}
 .parlayos-model-switcher .pms-chip[aria-pressed="true"]{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.62);box-shadow:0 0 0 1px rgba(255,255,255,.10) inset}
-.parlayos-model-switcher .pms-chip[disabled]{opacity:.34;cursor:not-allowed}
+.parlayos-model-switcher .pms-chip[disabled]{opacity:.34;cursor:not-allowed;transform:none}
 /* Every model/card uses one bettor-facing Add-to-Parlay control language. */
 .parlayos-final-card [data-add],.parlayos-final-card [data-nfl-add],.parlayos-final-card [data-nba-add]{box-sizing:border-box;min-height:40px;padding:9px 15px;border:1px solid rgba(255,255,255,.34);border-radius:999px;background:rgba(255,255,255,.13);color:inherit;font:700 13px/1.1 inherit;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.22);transition:background .15s ease,border-color .15s ease,transform .15s ease}
 .parlayos-final-card [data-add]:hover,.parlayos-final-card [data-nfl-add]:hover,.parlayos-final-card [data-nba-add]:hover,.parlayos-final-card [data-add]:focus-visible,.parlayos-final-card [data-nfl-add]:focus-visible,.parlayos-final-card [data-nba-add]:focus-visible{background:rgba(255,255,255,.24);border-color:rgba(255,255,255,.58);outline:none;transform:translateY(-1px)}
@@ -11489,8 +11489,10 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
 (function(){
   'use strict';
   const HOSTS=['dashChips','nflDashChips','nbaDashChips'];
+  let cleanupScheduled=false;
 
   function cleanup(){
+    cleanupScheduled=false;
     const sections=[...document.querySelectorAll('.parlayos-model-switcher')];
     const grouped=new Map();
 
@@ -11520,6 +11522,24 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
       host.parentElement.querySelectorAll('.parlayos-model-switcher .pms-chip').forEach(chip=>chip.type='button');
     });
     document.querySelectorAll('.parlayos-model-switcher .pms-chip').forEach(chip=>chip.type='button');
+  }
+
+  function scheduleCleanup(){
+    if(cleanupScheduled)return;
+    cleanupScheduled=true;
+    const run=()=>cleanup();
+    if(typeof window.requestAnimationFrame==='function')window.requestAnimationFrame(run);
+    else window.setTimeout(run,0);
+  }
+
+  function installObserver(){
+    if(!document.body||typeof MutationObserver==='undefined')return;
+    if(window.__PARLAYOS_SWITCHER_CLEANUP_OBSERVER)return;
+    const observer=new MutationObserver(mutations=>{
+      if(mutations.some(m=>m.type==='childList'&&(m.addedNodes.length||m.removedNodes.length)))scheduleCleanup();
+    });
+    observer.observe(document.body,{subtree:true,childList:true});
+    window.__PARLAYOS_SWITCHER_CLEANUP_OBSERVER=observer;
   }
 
   function firstDefined(...values){return values.find(v=>v!==undefined&&v!==null&&v!=='');}
@@ -11582,7 +11602,7 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
     });
   }
 
-  function run(){cleanup();normalizeAddButtons();renderPlayerInfo();}
+  function run(){cleanup();normalizeAddButtons();renderPlayerInfo();installObserver();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
   window.addEventListener('chd:ready',()=>setTimeout(run,0));
   document.addEventListener('parlayos:chd-data-ready',()=>setTimeout(run,0));
