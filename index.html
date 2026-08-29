@@ -11479,23 +11479,45 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
 <script id="PARLAYOS_SWITCHER_CLEANUP">
 (function(){
   'use strict';
+  const HOSTS=['dashChips','nflDashChips','nbaDashChips'];
+
   function cleanup(){
-    const hosts=['dashChips','nflDashChips','nbaDashChips'];
-    hosts.forEach(id=>{
+    HOSTS.forEach(id=>{
       const host=document.getElementById(id);
-      if(!host)return;
+      if(!host||!host.parentElement)return;
+
+      // The older QA layer used data-parlayos-sport; the finalizer uses
+      // data-parlayos-final-sport. Treat both as the same component so the
+      // legacy section cannot survive beside the canonical one.
       const sections=[...host.parentElement.querySelectorAll('.parlayos-model-switcher')];
-      const bySport=new Map();
+      const sportFor=section=>section.dataset.parlayosFinalSport||section.dataset.parlayosSport||'';
+      const grouped=new Map();
+
       sections.forEach(section=>{
-        const sport=section.dataset.parlayosFinalSport||'';
+        const sport=sportFor(section);
         if(!sport)return;
-        const prior=bySport.get(sport);
-        if(prior){section.remove();return;}
-        bySport.set(sport,section);
+        const prior=grouped.get(sport);
+        if(!prior){
+          grouped.set(sport,section);
+          return;
+        }
+        // Prefer the canonical finalizer section over the legacy enhancer.
+        const priorCanonical=prior.dataset.parlayosFinalSport===sport;
+        const currentCanonical=section.dataset.parlayosFinalSport===sport;
+        if(currentCanonical&&!priorCanonical){
+          prior.remove();
+          grouped.set(sport,section);
+        }else{
+          section.remove();
+        }
+      });
+
+      grouped.forEach(section=>{
         section.querySelectorAll('.pms-chip').forEach(chip=>chip.type='button');
       });
     });
   }
+
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',cleanup,{once:true});else cleanup();
   window.addEventListener('chd:ready',()=>setTimeout(cleanup,0));
   document.addEventListener('parlayos:chd-data-ready',()=>setTimeout(cleanup,0));
