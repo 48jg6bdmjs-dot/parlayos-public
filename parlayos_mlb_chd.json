@@ -1,5 +1,5 @@
 {
-  "runDate": "Aug 29 2026 06:10 PM",
+  "runDate": "Aug 29 2026 06:12 PM",
   "pickCount": 16,
   "games": [
     {
@@ -60,9 +60,9 @@
         }
       },
       "total": {
-        "mean": 5.5104,
+        "mean": 5.4314,
         "median": 5,
-        "p_over_8_5": 0.159,
+        "p_over_8_5": 0.1494,
         "ci_10": 2,
         "ci_90": 9,
         "distribution": [
@@ -11469,7 +11469,7 @@
       "chd": {
         "pA": 0.5340518444653763,
         "pB": 0.46594815553462365,
-        "raw_score": 0.07012934190408165,
+        "raw_score": 0.07012934190408167,
         "model": "ensemble(0.66*simple+0.34*wave_true)",
         "simple_p": 0.5248321248356477,
         "wave_p": 0.5515693117618609,
@@ -11836,7 +11836,7 @@
         "simple": {
           "pA": 0.5248321248356477,
           "pB": 0.4751678751643523,
-          "raw_score": 0.09941028624432484,
+          "raw_score": 0.09941028624432485,
           "model": "simple",
           "edge": 0.0
         },
@@ -11861,7 +11861,7 @@
         "ensemble": {
           "pA": 0.5340518444653763,
           "pB": 0.46594815553462365,
-          "raw_score": 0.07012934190408165,
+          "raw_score": 0.07012934190408167,
           "model": "ensemble(0.66*simple+0.34*wave_true)",
           "simple_p": 0.5248321248356477,
           "wave_p": 0.5515693117618609,
@@ -13077,7 +13077,7 @@
           },
           {
             "name": "Javier Sanoja",
-            "pos": "3B",
+            "pos": "RF",
             "avg": ".250",
             "ops": ".750",
             "hr": 0,
@@ -13097,7 +13097,7 @@
           },
           {
             "name": "Leo Jiménez",
-            "pos": "PH",
+            "pos": "3B",
             "avg": ".250",
             "ops": ".750",
             "hr": 0,
@@ -15610,16 +15610,16 @@
       "factorsA": {},
       "factorsB": {},
       "factors": {
-        "era_diff": 1.7199999999999998,
+        "era_diff": 1.7299999999999998,
         "park_factor": 0.0,
         "team_strength_diff": 0,
         "home_adv": 0.15
       },
       "chd": null,
       "total": {
-        "mean": 5.9,
+        "mean": 5.899,
         "median": 6,
-        "p_over_8_5": 0.208,
+        "p_over_8_5": 0.2078,
         "ci_10": 2,
         "ci_90": 10,
         "distribution": [
@@ -15727,30 +15727,30 @@
         "overdispersion_r": 5.0,
         "simple": {
           "line": 9.0,
-          "over_prob": 0.1836,
-          "under_prob": 0.8164,
-          "mean_total": 7.1514,
+          "over_prob": 0.1828,
+          "under_prob": 0.8172,
+          "mean_total": 7.141,
           "n_sim": 5000,
-          "home_mean": 3.5850000000000004,
-          "away_mean": 3.5250000000000004
+          "home_mean": 3.5800000000000005,
+          "away_mean": 3.5200000000000005
         },
         "line": 9.0
       },
       "k_prop": {
         "line": 6.5,
-        "over_prob": 0.4738,
-        "under_prob": 0.5262,
-        "mean_k": 6.3760200000000005,
+        "over_prob": 0.4814,
+        "under_prob": 0.5186,
+        "mean_k": 6.42124,
         "n_sim": 5000
       },
       "pitchers": {
         "home": 690997,
         "away": 656986,
         "home_stats": {
-          "era": 3.08,
-          "fip": 3.08,
-          "k9": 9.87,
-          "whip": 1.13
+          "era": 3.06,
+          "fip": 3.06,
+          "k9": 9.94,
+          "whip": 1.12
         },
         "away_stats": {
           "era": 6.52,
@@ -15997,9 +15997,9 @@
       "ab_test_mode": "ensemble",
       "chd_all_modes": {
         "simple": {
-          "pA": 0.46776809244720274,
-          "pB": 0.5322319075527973,
-          "raw_score": -0.12910666666666665,
+          "pA": 0.4676884257162586,
+          "pB": 0.5323115742837414,
+          "raw_score": -0.12942666666666663,
           "model": "simple",
           "edge": 0.0
         },
@@ -16022,11 +16022,11 @@
           "model": "wave_true"
         },
         "ensemble": {
-          "pA": 0.3884138261384032,
-          "pB": 0.6115861738615969,
-          "raw_score": 0.11214490612149582,
+          "pA": 0.3883875611047962,
+          "pB": 0.6116124388952038,
+          "raw_score": 0.11203940649003558,
           "model": "ensemble(0.33*simple+0.67*wave_true)",
-          "simple_p": 0.46776809244720274,
+          "simple_p": 0.4676884257162586,
           "wave_p": 0.34938430881230637,
           "edge": -0.18844333762152507,
           "mag": 0.23080182121970236,
@@ -16571,57 +16571,15 @@
       "away": "Colorado Rockies",
       "home_abbr": "ATL",
       "away_abbr": "COL",
-      "factorsA": {
-        "pitcher_dominance": 0.43666666666666665,
-        "lineup_ops": 0.7666666666666666,
-        "bullpen": 0.5,
-        "park": 0.36,
-        "weather": 0.639,
-        "rest": 0.5,
-        "umpire": 0.5,
-        "form": 0.4,
-        "entropy": 0.5
-      },
-      "factorsB": {
-        "pitcher_dominance": 0.8160000000000001,
-        "lineup_ops": 0.7666666666666666,
-        "bullpen": 0.5,
-        "park": 0.4,
-        "weather": 0.639,
-        "rest": 0.5,
-        "umpire": 0.5,
-        "form": 0.4,
-        "entropy": 0.5
-      },
+      "factorsA": {},
+      "factorsB": {},
       "factors": {
         "era_diff": 1.2200000000000002,
         "park_factor": 0.0,
         "team_strength_diff": 0,
         "home_adv": 0.15
       },
-      "chd": {
-        "pA": 0.4945072418699519,
-        "pB": 0.5054927581300481,
-        "raw_score": -0.021295937033575123,
-        "model": "ensemble(0.27*simple+0.73*wave_true)",
-        "simple_p": 0.4801138288715545,
-        "wave_p": 0.49985009413410175,
-        "edge": -0.16068372132461606,
-        "mag": 0.0003416521076371714,
-        "entropy": 0.8143993969760789,
-        "confidence": 0.5,
-        "devig_prob_home": 0.6661764794546642,
-        "market_price": -230,
-        "book": "fanduel",
-        "weather": {
-          "temp": 81.0,
-          "wind": 2.9,
-          "precip": 0.0,
-          "factor": 0.639,
-          "source": "open-meteo",
-          "park": "ATL"
-        }
-      },
+      "chd": null,
       "total": {
         "mean": 5.3328,
         "median": 5,
@@ -16953,12 +16911,11 @@
         "source": "boxscore"
       },
       "weather": {
-        "temp": 81.0,
-        "wind": 2.9,
-        "precip": 0.0,
-        "factor": 0.639,
-        "source": "open-meteo",
-        "park": "ATL"
+        "temp": 72,
+        "wind": 5,
+        "precip": 0,
+        "factor": 0.5,
+        "source": "fallback"
       },
       "odds": {
         "h2h": {
@@ -17067,944 +17024,40 @@
       },
       "models": {
         "monte_carlo": {
-          "model_id": "monte_carlo",
-          "model_name": "Monte Carlo",
-          "model_version": "1.0.0",
-          "methodology": "Genuine Monte Carlo simulation with deterministic seed for reproducibility. MLB O/U and K props reuse the real CHD Poisson simulation outputs; ML uses a Poisson run/point-differential simulation driven by real lineup, pitcher, efficiency and park/weather inputs.",
-          "sport": "MLB",
-          "status": "available",
-          "reason": null,
-          "markets": {
-            "ml": {
-              "model_id": "monte_carlo",
-              "model_name": "Monte Carlo",
-              "model_version": "1.0.0",
-              "methodology": "Genuine Monte Carlo simulation with deterministic seed for reproducibility. MLB O/U and K props reuse the real CHD Poisson simulation outputs; ML uses a Poisson run/point-differential simulation driven by real lineup, pitcher, efficiency and park/weather inputs.",
-              "sport": "MLB",
-              "market": "ml",
-              "selection": "Atlanta Braves",
-              "player_id": null,
-              "player_name": null,
-              "line": null,
-              "odds": null,
-              "probability": 0.8013125,
-              "pA": 0.1986875,
-              "pB": 0.8013125,
-              "implied_probability": null,
-              "edge": -0.3013125,
-              "ev": null,
-              "confidence": 0.6506562499999999,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "sims": 8000,
-                "away_mean": 3.2752,
-                "home_mean": 5.8953
-              },
-              "sims": 8000,
-              "sim_type": "score_differential_poisson"
-            },
-            "ou": {
-              "model_id": "monte_carlo",
-              "model_name": "Monte Carlo",
-              "model_version": "1.0.0",
-              "methodology": "Genuine Monte Carlo simulation with deterministic seed for reproducibility. MLB O/U and K props reuse the real CHD Poisson simulation outputs; ML uses a Poisson run/point-differential simulation driven by real lineup, pitcher, efficiency and park/weather inputs.",
-              "sport": "MLB",
-              "market": "ou",
-              "selection": "UNDER",
-              "player_id": null,
-              "player_name": null,
-              "line": 8.5,
-              "odds": null,
-              "probability": 0.6514,
-              "pA": 0.3486,
-              "pB": 0.6514,
-              "implied_probability": null,
-              "edge": -0.15139999999999998,
-              "ev": null,
-              "confidence": 0.5757,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "sims": 5000
-              },
-              "sims": 5000,
-              "sim_type": "total_poisson"
-            },
-            "k": {
-              "model_id": "monte_carlo",
-              "model_name": "Monte Carlo",
-              "model_version": "1.0.0",
-              "methodology": "Genuine Monte Carlo simulation with deterministic seed for reproducibility. MLB O/U and K props reuse the real CHD Poisson simulation outputs; ML uses a Poisson run/point-differential simulation driven by real lineup, pitcher, efficiency and park/weather inputs.",
-              "sport": "MLB",
-              "market": "k",
-              "selection": "UNDER",
-              "player_id": null,
-              "player_name": "pitcher",
-              "line": 6.5,
-              "odds": null,
-              "probability": 0.8553999999999999,
-              "pA": 0.1446,
-              "pB": 0.8553999999999999,
-              "implied_probability": null,
-              "edge": -0.3554,
-              "ev": null,
-              "confidence": 0.6777,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "sims": 5000
-              },
-              "sims": 5000,
-              "sim_type": "k_prop_poisson"
-            }
-          }
+          "status": "unavailable",
+          "reason": "Synthetic/mock/fallback source marker detected"
         },
         "zips": {
-          "model_id": "zips",
-          "model_name": "ZiPS",
-          "model_version": "1.0.0",
-          "methodology": "ZiPS-style baseball projection methodology (regression to the mean weighted by playing time). Inspired by the ZiPS methodology; uses real player roster stats and is NOT official FanGraphs ZiPS data.",
-          "sport": "MLB",
-          "status": "available",
-          "reason": null,
-          "markets": {
-            "ml": {
-              "model_id": "zips",
-              "model_name": "ZiPS",
-              "model_version": "1.0.0",
-              "methodology": "ZiPS-style baseball projection methodology (regression to the mean weighted by playing time). Inspired by the ZiPS methodology; uses real player roster stats and is NOT official FanGraphs ZiPS data.",
-              "sport": "MLB",
-              "market": "ml",
-              "selection": "Colorado Rockies",
-              "player_id": null,
-              "player_name": null,
-              "line": null,
-              "odds": null,
-              "probability": 0.8064375,
-              "pA": 0.8064375,
-              "pB": 0.19356249999999997,
-              "implied_probability": null,
-              "edge": 0.30643750000000003,
-              "ev": null,
-              "confidence": 0.6,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "proj_a": {
-                  "woba": 0.32,
-                  "ops": 0.738,
-                  "hr": 0.0
-                },
-                "proj_b": {
-                  "woba": 0.32,
-                  "ops": 0.738,
-                  "hr": 0.0
-                },
-                "sims": 8000
-              },
-              "proj_type": "zips_style"
-            },
-            "ou": {
-              "model_id": "zips",
-              "model_name": "ZiPS",
-              "model_version": "1.0.0",
-              "methodology": "ZiPS-style baseball projection methodology (regression to the mean weighted by playing time). Inspired by the ZiPS methodology; uses real player roster stats and is NOT official FanGraphs ZiPS data.",
-              "sport": "MLB",
-              "market": "ou",
-              "selection": "OVER",
-              "player_id": null,
-              "player_name": null,
-              "line": 8.5,
-              "odds": null,
-              "probability": 0.572125,
-              "pA": 0.572125,
-              "pB": 0.427875,
-              "implied_probability": null,
-              "edge": 0.072125,
-              "ev": null,
-              "confidence": 0.55,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "proj_a_ops": 0.738,
-                "proj_b_ops": 0.738,
-                "sims": 8000
-              },
-              "proj_type": "zips_style"
-            },
-            "k": {
-              "model_id": "zips",
-              "model_name": "ZiPS",
-              "model_version": "1.0.0",
-              "methodology": "ZiPS-style baseball projection methodology (regression to the mean weighted by playing time). Inspired by the ZiPS methodology; uses real player roster stats and is NOT official FanGraphs ZiPS data.",
-              "sport": "MLB",
-              "market": "k",
-              "selection": "UNDER",
-              "player_id": null,
-              "player_name": "pitcher",
-              "line": 6.5,
-              "odds": null,
-              "probability": 0.912625,
-              "pA": 0.087375,
-              "pB": 0.912625,
-              "implied_probability": null,
-              "edge": -0.412625,
-              "ev": null,
-              "confidence": 0.5,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "k9": 5.95,
-                "sims": 8000
-              },
-              "proj_type": "zips_style"
-            }
-          }
+          "status": "unavailable",
+          "reason": "Synthetic/mock/fallback source marker detected"
         },
         "steamer": {
-          "model_id": "steamer",
-          "model_name": "Steamer",
-          "model_version": "1.0.0",
-          "methodology": "Steamer-style baseball projection (recency-weighted single-season projection with age adjustment). Inspired by Steamer methodology; uses real player roster stats and is NOT official Steamer projection data.",
-          "sport": "MLB",
-          "status": "available",
-          "reason": null,
-          "markets": {
-            "ml": {
-              "model_id": "steamer",
-              "model_name": "Steamer",
-              "model_version": "1.0.0",
-              "methodology": "Steamer-style baseball projection (recency-weighted single-season projection with age adjustment). Inspired by Steamer methodology; uses real player roster stats and is NOT official Steamer projection data.",
-              "sport": "MLB",
-              "market": "ml",
-              "selection": "Colorado Rockies",
-              "player_id": null,
-              "player_name": null,
-              "line": null,
-              "odds": null,
-              "probability": 0.8064375,
-              "pA": 0.8064375,
-              "pB": 0.19356249999999997,
-              "implied_probability": null,
-              "edge": 0.30643750000000003,
-              "ev": null,
-              "confidence": 0.55,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "proj_a_ops": 0.744,
-                "proj_b_ops": 0.744,
-                "sims": 8000
-              },
-              "proj_type": "steamer_style"
-            },
-            "ou": {
-              "model_id": "steamer",
-              "model_name": "Steamer",
-              "model_version": "1.0.0",
-              "methodology": "Steamer-style baseball projection (recency-weighted single-season projection with age adjustment). Inspired by Steamer methodology; uses real player roster stats and is NOT official Steamer projection data.",
-              "sport": "MLB",
-              "market": "ou",
-              "selection": "OVER",
-              "player_id": null,
-              "player_name": null,
-              "line": 8.5,
-              "odds": null,
-              "probability": 0.572125,
-              "pA": 0.572125,
-              "pB": 0.427875,
-              "implied_probability": null,
-              "edge": 0.072125,
-              "ev": null,
-              "confidence": 0.5,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "proj_a_ops": 0.744,
-                "proj_b_ops": 0.744,
-                "sims": 8000
-              },
-              "proj_type": "steamer_style"
-            },
-            "k": {
-              "model_id": "steamer",
-              "model_name": "Steamer",
-              "model_version": "1.0.0",
-              "methodology": "Steamer-style baseball projection (recency-weighted single-season projection with age adjustment). Inspired by Steamer methodology; uses real player roster stats and is NOT official Steamer projection data.",
-              "sport": "MLB",
-              "market": "k",
-              "selection": "UNDER",
-              "player_id": null,
-              "player_name": "pitcher",
-              "line": 6.5,
-              "odds": null,
-              "probability": 0.912625,
-              "pA": 0.087375,
-              "pB": 0.912625,
-              "implied_probability": null,
-              "edge": -0.412625,
-              "ev": null,
-              "confidence": 0.45,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "k9": 5.95,
-                "sims": 8000
-              },
-              "proj_type": "steamer_style"
-            }
-          }
+          "status": "unavailable",
+          "reason": "Synthetic/mock/fallback source marker detected"
         },
         "my_chd": {
-          "model_id": "my_chd",
-          "model_name": "My CHD",
-          "model_version": "3.4",
-          "methodology": "Existing CHD head-to-head prediction methodology (chd_predict). Unaltered math.",
-          "sport": "MLB",
-          "status": "available",
-          "reason": null,
-          "markets": {
-            "ml": {
-              "model_id": "my_chd",
-              "model_name": "My CHD",
-              "model_version": "3.4",
-              "methodology": "Existing CHD head-to-head prediction methodology (chd_predict). Unaltered math.",
-              "sport": "MLB",
-              "market": "ml",
-              "selection": "Atlanta Braves",
-              "player_id": null,
-              "player_name": null,
-              "line": 8.5,
-              "odds": -230,
-              "probability": 0.5054927581300481,
-              "pA": 0.4945072418699519,
-              "pB": 0.5054927581300481,
-              "implied_probability": 0.3338235205453358,
-              "edge": -0.16068372132461606,
-              "ev": null,
-              "confidence": 0.5,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "model": "ensemble(0.27*simple+0.73*wave_true)",
-                "raw_score": -0.0213
-              }
-            },
-            "ou": {
-              "model_id": "my_chd",
-              "model_name": "My CHD",
-              "model_version": "3.4",
-              "methodology": "Existing CHD head-to-head prediction methodology (chd_predict). Unaltered math.",
-              "sport": "MLB",
-              "market": "ou",
-              "selection": null,
-              "player_id": null,
-              "player_name": null,
-              "line": null,
-              "odds": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "implied_probability": null,
-              "edge": null,
-              "ev": null,
-              "confidence": null,
-              "status": "unavailable",
-              "reason": "CHD models the head-to-head matchup (ML); O/U and K props are modeled by the Monte Carlo model",
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {}
-            },
-            "k": {
-              "model_id": "my_chd",
-              "model_name": "My CHD",
-              "model_version": "3.4",
-              "methodology": "Existing CHD head-to-head prediction methodology (chd_predict). Unaltered math.",
-              "sport": "MLB",
-              "market": "k",
-              "selection": null,
-              "player_id": null,
-              "player_name": null,
-              "line": null,
-              "odds": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "implied_probability": null,
-              "edge": null,
-              "ev": null,
-              "confidence": null,
-              "status": "unavailable",
-              "reason": "CHD models the head-to-head matchup (ML); O/U and K props are modeled by the Monte Carlo model",
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {}
-            }
-          }
+          "status": "unavailable",
+          "reason": "Synthetic/mock/fallback source marker detected"
         },
         "season_stats": {
-          "model_id": "season_stats",
-          "model_name": "Season Stats",
-          "model_version": "1.0.0",
-          "methodology": "Season-statistics-based prediction using real current-season data: MLB lineup/pitching stats, NFL EPA/DE, NBA offensive/defensive rating and pace.",
-          "sport": "MLB",
-          "status": "available",
-          "reason": null,
-          "markets": {
-            "ml": {
-              "model_id": "season_stats",
-              "model_name": "Season Stats",
-              "model_version": "1.0.0",
-              "methodology": "Season-statistics-based prediction using real current-season data: MLB lineup/pitching stats, NFL EPA/DE, NBA offensive/defensive rating and pace.",
-              "sport": "MLB",
-              "market": "ml",
-              "selection": "Colorado Rockies",
-              "player_id": null,
-              "player_name": null,
-              "line": null,
-              "odds": null,
-              "probability": 0.5075579576246672,
-              "pA": 0.5075579576246672,
-              "pB": 0.49244204237533284,
-              "implied_probability": null,
-              "edge": 0.007557957624667155,
-              "ev": null,
-              "confidence": 0.509447447030834,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "lineup_a_woba": 0.32,
-                "lineup_b_woba": 0.32,
-                "era_a": 5.49,
-                "era_b": 3.05
-              }
-            },
-            "ou": {
-              "model_id": "season_stats",
-              "model_name": "Season Stats",
-              "model_version": "1.0.0",
-              "methodology": "Season-statistics-based prediction using real current-season data: MLB lineup/pitching stats, NFL EPA/DE, NBA offensive/defensive rating and pace.",
-              "sport": "MLB",
-              "market": "ou",
-              "selection": "OVER",
-              "player_id": null,
-              "player_name": null,
-              "line": 8.5,
-              "odds": null,
-              "probability": 0.604,
-              "pA": 0.604,
-              "pB": 0.396,
-              "implied_probability": null,
-              "edge": 0.10399999999999998,
-              "ev": null,
-              "confidence": 0.5,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "lineup_a_woba": 0.32,
-                "lineup_b_woba": 0.32,
-                "era_a": 5.49,
-                "era_b": 3.05
-              }
-            },
-            "k": {
-              "model_id": "season_stats",
-              "model_name": "Season Stats",
-              "model_version": "1.0.0",
-              "methodology": "Season-statistics-based prediction using real current-season data: MLB lineup/pitching stats, NFL EPA/DE, NBA offensive/defensive rating and pace.",
-              "sport": "MLB",
-              "market": "k",
-              "selection": "UNDER",
-              "player_id": null,
-              "player_name": "pitcher",
-              "line": 6.5,
-              "odds": null,
-              "probability": 0.911,
-              "pA": 0.089,
-              "pB": 0.911,
-              "implied_probability": null,
-              "edge": -0.41100000000000003,
-              "ev": null,
-              "confidence": 0.45,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "lineup_a_woba": 0.32,
-                "lineup_b_woba": 0.32,
-                "era_a": 5.49,
-                "era_b": 3.05,
-                "k9": 5.95,
-                "sims": 4000
-              }
-            }
-          }
+          "status": "unavailable",
+          "reason": "Synthetic/mock/fallback source marker detected"
         },
         "chd_master_predictor": {
-          "model_id": "chd_master_predictor",
-          "model_name": "CHD Master Predictor",
-          "model_version": "3.4",
-          "methodology": "Existing CHD Master Predictor pipeline: CHD probability plus market integration (de-vig, odds, edge vs market). Separate from My CHD which exposes the bare model probability.",
-          "sport": "MLB",
-          "status": "available",
-          "reason": null,
-          "markets": {
-            "ml": {
-              "model_id": "chd_master_predictor",
-              "model_name": "CHD Master Predictor",
-              "model_version": "3.4",
-              "methodology": "Existing CHD Master Predictor pipeline: CHD probability plus market integration (de-vig, odds, edge vs market). Separate from My CHD which exposes the bare model probability.",
-              "sport": "MLB",
-              "market": "ml",
-              "selection": "Atlanta Braves",
-              "player_id": null,
-              "player_name": null,
-              "line": 8.5,
-              "odds": -230,
-              "probability": 0.5054927581300481,
-              "pA": 0.4945072418699519,
-              "pB": 0.5054927581300481,
-              "implied_probability": 0.3338235205453358,
-              "edge": 0.1607,
-              "ev": -0.2905,
-              "confidence": 0.5,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {
-                "model": "ensemble(0.27*simple+0.73*wave_true)",
-                "raw_score": -0.0213
-              }
-            },
-            "ou": {
-              "model_id": "chd_master_predictor",
-              "model_name": "CHD Master Predictor",
-              "model_version": "3.4",
-              "methodology": "Existing CHD Master Predictor pipeline: CHD probability plus market integration (de-vig, odds, edge vs market). Separate from My CHD which exposes the bare model probability.",
-              "sport": "MLB",
-              "market": "ou",
-              "selection": null,
-              "player_id": null,
-              "player_name": null,
-              "line": null,
-              "odds": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "implied_probability": null,
-              "edge": null,
-              "ev": null,
-              "confidence": null,
-              "status": "unavailable",
-              "reason": "CHD Master Predictor provides the market-aware head-to-head (ML); O/U and K props are modeled by the Monte Carlo model",
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {}
-            },
-            "k": {
-              "model_id": "chd_master_predictor",
-              "model_name": "CHD Master Predictor",
-              "model_version": "3.4",
-              "methodology": "Existing CHD Master Predictor pipeline: CHD probability plus market integration (de-vig, odds, edge vs market). Separate from My CHD which exposes the bare model probability.",
-              "sport": "MLB",
-              "market": "k",
-              "selection": null,
-              "player_id": null,
-              "player_name": null,
-              "line": null,
-              "odds": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "implied_probability": null,
-              "edge": null,
-              "ev": null,
-              "confidence": null,
-              "status": "unavailable",
-              "reason": "CHD Master Predictor provides the market-aware head-to-head (ML); O/U and K props are modeled by the Monte Carlo model",
-              "timestamp": "2028-11-18T04:50:32+00:00",
-              "inputs": {}
-            }
-          }
+          "status": "unavailable",
+          "reason": "Synthetic/mock/fallback source marker detected"
         }
       },
       "ensemble": {
-        "ensemble_version": "1.0.0",
-        "sport": "MLB",
-        "markets": {
-          "ml": {
-            "model_id": "final_combined",
-            "model_name": "Final Combined All Models",
-            "model_version": "1.0.0",
-            "methodology": "Ensemble meta-model: confidence-weighted combination of available model predictions with disagreement discounting and market-implied probability blending. Not a naive average.",
-            "sport": "MLB",
-            "market": "ml",
-            "selection": "Atlanta Braves",
-            "player_id": null,
-            "player_name": null,
-            "line": 8.5,
-            "odds": -230,
-            "probability": 0.5239842158066367,
-            "pA": 0.4760157841933633,
-            "pB": 0.5239842158066367,
-            "implied_probability": 0.3338235205453358,
-            "edge": 0.1422,
-            "ev": -0.317,
-            "confidence": 0.2345,
-            "status": "available",
-            "reason": null,
-            "timestamp": "2028-11-18T04:50:32+00:00",
-            "inputs": {
-              "available_models": [
-                "monte_carlo",
-                "zips",
-                "steamer",
-                "my_chd",
-                "season_stats",
-                "chd_master_predictor"
-              ],
-              "unavailable_models": [],
-              "n_votes": 6,
-              "market_available": true
-            },
-            "agreement": {
-              "total": 6,
-              "available": 6,
-              "supporting": [
-                "ZiPS",
-                "Steamer",
-                "Season Stats"
-              ],
-              "opposing": [
-                "Monte Carlo",
-                "My CHD",
-                "CHD Master Predictor"
-              ],
-              "unavailable": [],
-              "agreement_ratio": 0.5,
-              "majority_side": "away",
-              "disagreement": 3,
-              "model_votes": {
-                "monte_carlo": {
-                  "pA": 0.1987,
-                  "vote": "B"
-                },
-                "zips": {
-                  "pA": 0.8064,
-                  "vote": "A"
-                },
-                "steamer": {
-                  "pA": 0.8064,
-                  "vote": "A"
-                },
-                "my_chd": {
-                  "pA": 0.4945,
-                  "vote": "B"
-                },
-                "season_stats": {
-                  "pA": 0.5076,
-                  "vote": "A"
-                },
-                "chd_master_predictor": {
-                  "pA": 0.4945,
-                  "vote": "B"
-                }
-              },
-              "market_available": true,
-              "ensemble_version": "1.0.0"
-            },
-            "ensemble_version": "1.0.0"
-          },
-          "ou": {
-            "model_id": "final_combined",
-            "model_name": "Final Combined All Models",
-            "model_version": "1.0.0",
-            "methodology": "Ensemble meta-model: confidence-weighted combination of available model predictions with disagreement discounting and market-implied probability blending. Not a naive average.",
-            "sport": "MLB",
-            "market": "ou",
-            "selection": "UNDER",
-            "player_id": null,
-            "player_name": null,
-            "line": 8.5,
-            "odds": -230,
-            "probability": 0.5378586930683447,
-            "pA": 0.4621413069316554,
-            "pB": 0.5378586930683447,
-            "implied_probability": 0.3338235205453358,
-            "edge": 0.1283,
-            "ev": -0.3369,
-            "confidence": 0.3388,
-            "status": "available",
-            "reason": null,
-            "timestamp": "2028-11-18T04:50:32+00:00",
-            "inputs": {
-              "available_models": [
-                "monte_carlo",
-                "zips",
-                "steamer",
-                "season_stats"
-              ],
-              "unavailable_models": [
-                "my_chd",
-                "chd_master_predictor"
-              ],
-              "n_votes": 4,
-              "market_available": true
-            },
-            "agreement": {
-              "total": 4,
-              "available": 4,
-              "supporting": [
-                "ZiPS",
-                "Steamer",
-                "Season Stats"
-              ],
-              "opposing": [
-                "Monte Carlo"
-              ],
-              "unavailable": [
-                "my_chd",
-                "chd_master_predictor"
-              ],
-              "agreement_ratio": 0.75,
-              "majority_side": "away",
-              "disagreement": 1,
-              "model_votes": {
-                "monte_carlo": {
-                  "pA": 0.3486,
-                  "vote": "B"
-                },
-                "zips": {
-                  "pA": 0.5721,
-                  "vote": "A"
-                },
-                "steamer": {
-                  "pA": 0.5721,
-                  "vote": "A"
-                },
-                "season_stats": {
-                  "pA": 0.604,
-                  "vote": "A"
-                }
-              },
-              "market_available": true,
-              "ensemble_version": "1.0.0"
-            },
-            "ensemble_version": "1.0.0"
-          },
-          "k": {
-            "model_id": "final_combined",
-            "model_name": "Final Combined All Models",
-            "model_version": "1.0.0",
-            "methodology": "Ensemble meta-model: confidence-weighted combination of available model predictions with disagreement discounting and market-implied probability blending. Not a naive average.",
-            "sport": "MLB",
-            "market": "k",
-            "selection": "UNDER",
-            "player_id": null,
-            "player_name": null,
-            "line": 8.5,
-            "odds": -230,
-            "probability": 0.8186130750842661,
-            "pA": 0.18138692491573394,
-            "pB": 0.8186130750842661,
-            "implied_probability": 0.3338235205453358,
-            "edge": -0.1524,
-            "ev": -0.7397,
-            "confidence": 0.5194,
-            "status": "available",
-            "reason": null,
-            "timestamp": "2028-11-18T04:50:32+00:00",
-            "inputs": {
-              "available_models": [
-                "monte_carlo",
-                "zips",
-                "steamer",
-                "season_stats"
-              ],
-              "unavailable_models": [
-                "my_chd",
-                "chd_master_predictor"
-              ],
-              "n_votes": 4,
-              "market_available": true
-            },
-            "agreement": {
-              "total": 4,
-              "available": 4,
-              "supporting": [
-                "Monte Carlo",
-                "ZiPS",
-                "Steamer",
-                "Season Stats"
-              ],
-              "opposing": [],
-              "unavailable": [
-                "my_chd",
-                "chd_master_predictor"
-              ],
-              "agreement_ratio": 1.0,
-              "majority_side": "home",
-              "disagreement": 0,
-              "model_votes": {
-                "monte_carlo": {
-                  "pA": 0.1446,
-                  "vote": "B"
-                },
-                "zips": {
-                  "pA": 0.0874,
-                  "vote": "B"
-                },
-                "steamer": {
-                  "pA": 0.0874,
-                  "vote": "B"
-                },
-                "season_stats": {
-                  "pA": 0.089,
-                  "vote": "B"
-                }
-              },
-              "market_available": true,
-              "ensemble_version": "1.0.0"
-            },
-            "ensemble_version": "1.0.0"
-          }
-        },
-        "agreement": {
-          "ml": {
-            "total": 6,
-            "available": 6,
-            "supporting": [
-              "ZiPS",
-              "Steamer",
-              "Season Stats"
-            ],
-            "opposing": [
-              "Monte Carlo",
-              "My CHD",
-              "CHD Master Predictor"
-            ],
-            "unavailable": [],
-            "agreement_ratio": 0.5,
-            "majority_side": "away",
-            "disagreement": 3,
-            "model_votes": {
-              "monte_carlo": {
-                "pA": 0.1987,
-                "vote": "B"
-              },
-              "zips": {
-                "pA": 0.8064,
-                "vote": "A"
-              },
-              "steamer": {
-                "pA": 0.8064,
-                "vote": "A"
-              },
-              "my_chd": {
-                "pA": 0.4945,
-                "vote": "B"
-              },
-              "season_stats": {
-                "pA": 0.5076,
-                "vote": "A"
-              },
-              "chd_master_predictor": {
-                "pA": 0.4945,
-                "vote": "B"
-              }
-            },
-            "market_available": true,
-            "ensemble_version": "1.0.0"
-          },
-          "ou": {
-            "total": 4,
-            "available": 4,
-            "supporting": [
-              "ZiPS",
-              "Steamer",
-              "Season Stats"
-            ],
-            "opposing": [
-              "Monte Carlo"
-            ],
-            "unavailable": [
-              "my_chd",
-              "chd_master_predictor"
-            ],
-            "agreement_ratio": 0.75,
-            "majority_side": "away",
-            "disagreement": 1,
-            "model_votes": {
-              "monte_carlo": {
-                "pA": 0.3486,
-                "vote": "B"
-              },
-              "zips": {
-                "pA": 0.5721,
-                "vote": "A"
-              },
-              "steamer": {
-                "pA": 0.5721,
-                "vote": "A"
-              },
-              "season_stats": {
-                "pA": 0.604,
-                "vote": "A"
-              }
-            },
-            "market_available": true,
-            "ensemble_version": "1.0.0"
-          },
-          "k": {
-            "total": 4,
-            "available": 4,
-            "supporting": [
-              "Monte Carlo",
-              "ZiPS",
-              "Steamer",
-              "Season Stats"
-            ],
-            "opposing": [],
-            "unavailable": [
-              "my_chd",
-              "chd_master_predictor"
-            ],
-            "agreement_ratio": 1.0,
-            "majority_side": "home",
-            "disagreement": 0,
-            "model_votes": {
-              "monte_carlo": {
-                "pA": 0.1446,
-                "vote": "B"
-              },
-              "zips": {
-                "pA": 0.0874,
-                "vote": "B"
-              },
-              "steamer": {
-                "pA": 0.0874,
-                "vote": "B"
-              },
-              "season_stats": {
-                "pA": 0.089,
-                "vote": "B"
-              }
-            },
-            "market_available": true,
-            "ensemble_version": "1.0.0"
-          }
-        }
-      }
+        "status": "unavailable",
+        "reason": "Synthetic/mock/fallback source marker detected"
+      },
+      "data_quality": {
+        "status": "insufficient",
+        "reason": "Synthetic/mock/fallback source marker detected",
+        "prediction_available": false
+      },
+      "stats": {}
     },
     {
       "gamePk": 823741,
@@ -19921,7 +18974,7 @@
     }
   },
   "data_quality_gate": {
-    "invalid_games": 3,
+    "invalid_games": 4,
     "policy": "fail-closed: unavailable data never becomes a prediction"
   }
 }
