@@ -39988,6 +39988,93 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
 </script>
+<style id="PARLAYOS_GAME_DETAILS_STYLE">
+.parlayos-game-context{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 12px}
+.parlayos-game-context-item{min-width:0;padding:9px 10px;border:1px solid rgba(255,255,255,.20);border-radius:13px;background:rgba(0,0,0,.045)}
+.parlayos-game-context-label{font-size:9px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.62}
+.parlayos-game-context-value{margin-top:3px;font-size:12px;font-weight:800;overflow-wrap:anywhere}
+.parlayos-lineups{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.parlayos-lineup-team{min-width:0;border:1px solid rgba(255,255,255,.18);border-radius:15px;padding:10px;background:rgba(255,255,255,.045)}
+.parlayos-lineup-title{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.66;margin-bottom:7px}
+.parlayos-player-button{display:block;width:100%;text-align:left;appearance:none;border:1px solid rgba(255,255,255,.16);border-radius:11px;padding:8px 9px;margin:5px 0;background:rgba(255,255,255,.075);color:inherit;font:inherit;cursor:pointer}
+.parlayos-player-button:hover,.parlayos-player-button:focus-visible{background:rgba(255,255,255,.16);outline:2px solid rgba(255,255,255,.42);outline-offset:1px}
+.parlayos-player-name{display:block;font-size:12px;font-weight:850;line-height:1.2}
+.parlayos-player-mini-stats{display:block;margin-top:3px;font-size:10px;line-height:1.4;opacity:.72;overflow-wrap:anywhere}
+.parlayos-player-modal-backdrop{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:18px;background:rgba(0,0,0,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.parlayos-player-modal{width:min(520px,100%);max-height:min(760px,90vh);overflow:auto;border:1px solid rgba(255,255,255,.28);border-radius:22px;padding:18px;background:rgba(35,35,45,.92);color:#fff;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+.parlayos-player-modal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.parlayos-player-modal-name{font-size:22px;font-weight:900;line-height:1.1}
+.parlayos-player-modal-meta{margin-top:4px;font-size:11px;opacity:.68}
+.parlayos-player-modal-close{min-width:40px;min-height:40px;border:1px solid rgba(255,255,255,.25);border-radius:999px;background:rgba(255,255,255,.10);color:inherit;font-size:20px;cursor:pointer}
+.parlayos-player-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.parlayos-player-modal-stat{border:1px solid rgba(255,255,255,.16);border-radius:13px;padding:10px;background:rgba(255,255,255,.06)}
+.parlayos-player-modal-stat-label{font-size:9px;text-transform:uppercase;letter-spacing:.06em;opacity:.62}
+.parlayos-player-modal-stat-value{margin-top:3px;font-size:15px;font-weight:850;overflow-wrap:anywhere}
+@media(max-width:620px){.parlayos-game-context{grid-template-columns:1fr 1fr}.parlayos-lineups{grid-template-columns:1fr}.parlayos-player-modal{border-radius:18px;padding:15px}}
+</style>
+<script id="PARLAYOS_GAME_DETAILS_LAYER">
+(function(){
+  'use strict';
+  if(window.__PARLAYOS_GAME_DETAILS_READY)return;
+  window.__PARLAYOS_GAME_DETAILS_READY=true;
+  const DATA={MLB:()=>window.PARLAYOS_DATA||{},NFL:()=>window.PARLAYOS_NFL_DATA||{},NBA:()=>window.PARLAYOS_NBA_DATA||{}};
+  const esc=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
+  const val=v=>v===null||v===undefined||v===''?'N/A':String(v);
+  const arr=v=>Array.isArray(v)?v:[];
+  const gameId=g=>String(g?.gamePk??g?.game_id??g?.id??'');
+  const games=s=>arr(DATA[s]().games);
+  function sport(card){const id=String(card?.dataset?.sport||'').toUpperCase();if(DATA[id])return id;const h=card.closest('[id*="nfl" i],[id*="nba" i],[id*="mlb" i]');const x=String(h?.id||'').toUpperCase();return x.includes('NFL')?'NFL':x.includes('NBA')?'NBA':'MLB'}
+  function game(card,s){const id=card.dataset.gameId||'';return games(s).find(g=>gameId(g)===String(id))||null}
+  function start(g){return g?.start_time??g?.startAt??g?.game_date??g?.date??g?.commence_time??null}
+  function weather(g){const w=g?.weather??g?.game_weather??g?.venue_weather??{};if(typeof w==='string')return w;return [w.condition??w.conditions??w.description,w.temp_f??w.temperature_f??w.temp,w.wind_mph!=null?`Wind ${w.wind_mph} mph`:w.wind,w.precip_pct!=null?`Rain ${w.precip_pct}%`:null].filter(v=>v!==null&&v!==undefined&&v!=='').join(' · ')}
+  function playerStats(p,s){if(s==='MLB')return [['AVG',p.avg],['OPS',p.ops],['HR',p.hr],['wOBA',p.woba],['WAR',p.war],['K%',p.k_pct],['BB%',p.bb_pct]];if(s==='NBA')return [['PTS',p.pts??p.points],['REB',p.reb??p.rebounds],['AST',p.ast??p.assists],['FG%',p.fg_pct??p.fgPct],['3P%',p.tp_pct??p.three_pct],['MIN',p.minutes??p.mpg]];return [['Pass YDS',p.pass_yds??p.passing_yards],['Pass TD',p.pass_td??p.passing_tds],['Rush YDS',p.rush_yds??p.rushing_yards],['Rush TD',p.rush_td??p.rushing_tds],['Rec YDS',p.rec_yds??p.receiving_yards],['Rec TD',p.rec_td??p.receiving_tds]]}
+  function players(g,side){return [g?.lineups?.[side],g?.rosters?.[side],g?.players?.[side],g?.[`${side}_players`]].find(Array.isArray)||[]}
+  function mini(p,s){return playerStats(p,s).filter(([,v])=>v!==null&&v!==undefined&&v!=='').slice(0,4).map(([k,v])=>`${k} ${val(v)}`).join(' · ')||'Player stats unavailable'}
+  function openPlayer(p,g,s){
+    let back=document.getElementById('parlayos-player-modal');if(back)back.remove();
+    back=document.createElement('div');back.id='parlayos-player-modal';back.className='parlayos-player-modal-backdrop';back.setAttribute('role','dialog');back.setAttribute('aria-modal','true');
+    const stats=playerStats(p,s).map(([k,v])=>`<div class="parlayos-player-modal-stat"><div class="parlayos-player-modal-stat-label">${esc(k)}</div><div class="parlayos-player-modal-stat-value">${esc(val(v))}</div></div>`).join('');
+    const team=p.team??p.team_name??'';const pos=p.pos??p.position??'';
+    back.innerHTML=`<div class="parlayos-player-modal"><div class="parlayos-player-modal-head"><div><div class="parlayos-player-modal-name">${esc(p.name||p.fullName||p.player_name||'Player')}</div><div class="parlayos-player-modal-meta">${esc(team)}${team&&pos?' · ':''}${esc(pos)}</div></div><button type="button" class="parlayos-player-modal-close" aria-label="Close player details">×</button></div><div class="parlayos-player-modal-grid">${stats||'<div class="parlayos-player-modal-stat"><div class="parlayos-player-modal-stat-label">Stats</div><div class="parlayos-player-modal-stat-value">Unavailable</div></div>'}</div></div>`;
+    const close=()=>back.remove();back.querySelector('.parlayos-player-modal-close').addEventListener('click',close);back.addEventListener('click',e=>{if(e.target===back)close()});document.addEventListener('keydown',function escKey(e){if(e.key==='Escape'){close();document.removeEventListener('keydown',escKey)}});document.body.appendChild(back);back.querySelector('.parlayos-player-modal-close').focus();
+  }
+  function decorate(card){
+    if(card.dataset.parlayosGameDetails==='1')return;const s=sport(card),g=game(card,s);if(!g)return;
+    card.querySelectorAll('.parlayos-player-stats').forEach(x=>x.remove());
+    const context=document.createElement('div');context.className='parlayos-game-context';
+    const w=weather(g),t=start(g),venue=g.venue??g.stadium??g.venue_name??null;
+    [['Start time',t],['Weather',w||null],['Venue',venue]].forEach(([l,v])=>{if(v!==null&&v!==undefined&&v!=='')context.insertAdjacentHTML('beforeend',`<div class="parlayos-game-context-item"><div class="parlayos-game-context-label">${esc(l)}</div><div class="parlayos-game-context-value">${esc(val(v))}</div></div>`)});
+    const anchor=card.querySelector('.parlayos-final-matchup,.game-head');if(anchor)anchor.insertAdjacentElement('afterend',context);else card.prepend(context);
+    const lineups=document.createElement('section');lineups.className='parlayos-lineups';
+    [['away',g.away||g.away_abbr||'Away'],['home',g.home||g.home_abbr||'Home']].forEach(([side,title])=>{const ps=players(g,side).filter(p=>p&&typeof p==='object'&&(p.name||p.fullName||p.player_name));if(!ps.length)return;const team=document.createElement('div');team.className='parlayos-lineup-team';team.innerHTML=`<div class="parlayos-lineup-title">${esc(title)} lineup</div>`;ps.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='parlayos-player-button';b.innerHTML=`<span class="parlayos-player-name">${esc(p.name||p.fullName||p.player_name)}</span><span class="parlayos-player-mini-stats">${esc(mini(p,s))}</span>`;b.addEventListener('click',()=>openPlayer(p,g,s));team.appendChild(b)});lineups.appendChild(team)});
+    if(lineups.children.length){const actions=card.querySelector('.parlayos-final-actions,.game-actions');if(actions)actions.before(lineups);else card.appendChild(lineups)}
+    card.dataset.parlayosGameDetails='1';
+  }
+  function removeStats(){document.querySelectorAll('button,a,[role="tab"],[role="button"]').forEach(el=>{const text=(el.textContent||'').trim().replace(/\s+/g,' ');if(text==='Stats'||text==='Statistics'){const host=el.closest('.hub-tabs,.screen-tabs,.dashboard-tabs,.nav-tabs,.screen-header,.dashboard-header');if(host||/stats/i.test(el.id||'')||/stats/i.test(el.getAttribute('data-target')||'')){el.hidden=true;el.setAttribute('aria-hidden','true')}}});document.querySelectorAll('[id*="stats" i]').forEach(el=>{if(el.matches('.screen,section,main,.panel,.tab-panel')&&el.querySelector('.stat-card,.stats-card,.stats-grid'))el.hidden=true})}
+  function run(){removeStats();document.querySelectorAll('.parlayos-final-card,.parlayos-product-card,.game[data-game-id],[data-game-id].game').forEach(decorate)}
+  run();const ob=new MutationObserver(()=>{clearTimeout(window.__PARLAYOS_GAME_DETAILS_TIMER);window.__PARLAYOS_GAME_DETAILS_TIMER=setTimeout(run,100)});ob.observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+<script id="PARLAYOS_STATS_NAV_REMOVAL">
+(function(){
+  'use strict';
+  if(window.__PARLAYOS_STATS_NAV_REMOVAL_READY)return;
+  window.__PARLAYOS_STATS_NAV_REMOVAL_READY=true;
+  function remove(){
+    document.querySelectorAll('button,a,[role="tab"],[role="button"]').forEach(el=>{
+      const text=(el.textContent||'').trim().replace(/\s+/g,' ');
+      if(text==='Stats'||text==='Statistics'){
+        el.hidden=true;
+        el.setAttribute('aria-hidden','true');
+        el.setAttribute('tabindex','-1');
+      }
+    });
+  }
+  remove();
+  const observer=new MutationObserver(remove);
+  observer.observe(document.body,{childList:true,subtree:true});
+})();
+</script>
 </body>
 
 </html>
