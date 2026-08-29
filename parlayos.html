@@ -11474,7 +11474,16 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
 .parlayos-model-switcher .pms-chip:hover,.parlayos-model-switcher .pms-chip:focus-visible{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.46);outline:none}
 .parlayos-model-switcher .pms-chip[aria-pressed="true"]{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.62);box-shadow:0 0 0 1px rgba(255,255,255,.10) inset}
 .parlayos-model-switcher .pms-chip[disabled]{opacity:.34;cursor:not-allowed}
-@media(max-width:780px){.parlayos-model-switcher{width:min(100%,390px);padding:9px}.parlayos-model-switcher .pms-chip{min-height:42px;font-size:13px}}
+/* Every model/card uses one bettor-facing Add-to-Parlay control language. */
+.parlayos-final-card [data-add],.parlayos-final-card [data-nfl-add],.parlayos-final-card [data-nba-add]{box-sizing:border-box;min-height:40px;padding:9px 15px;border:1px solid rgba(255,255,255,.34);border-radius:999px;background:rgba(255,255,255,.13);color:inherit;font:700 13px/1.1 inherit;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.22);transition:background .15s ease,border-color .15s ease,transform .15s ease}
+.parlayos-final-card [data-add]:hover,.parlayos-final-card [data-nfl-add]:hover,.parlayos-final-card [data-nba-add]:hover,.parlayos-final-card [data-add]:focus-visible,.parlayos-final-card [data-nfl-add]:focus-visible,.parlayos-final-card [data-nba-add]:focus-visible{background:rgba(255,255,255,.24);border-color:rgba(255,255,255,.58);outline:none;transform:translateY(-1px)}
+.parlayos-final-card [data-add][disabled],.parlayos-final-card [data-nfl-add][disabled],.parlayos-final-card [data-nba-add][disabled]{opacity:.38;cursor:not-allowed;transform:none}
+.parlayos-final-player-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
+.parlayos-final-player{min-width:0;padding:10px 11px;border:1px solid rgba(255,255,255,.20);border-radius:14px;background:rgba(0,0,0,.045)}
+.parlayos-final-player .role{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.62}
+.parlayos-final-player .name{margin-top:3px;font-size:14px;font-weight:900;overflow-wrap:anywhere}
+.parlayos-final-player .meta{margin-top:3px;font-size:10px;opacity:.68;overflow-wrap:anywhere}
+@media(max-width:780px){.parlayos-model-switcher{width:min(100%,390px);padding:9px}.parlayos-model-switcher .pms-chip{min-height:42px;font-size:13px}.parlayos-final-player-info{grid-template-columns:1fr 1fr}.parlayos-final-player{padding:9px}}
 </style>
 <script id="PARLAYOS_SWITCHER_CLEANUP">
 (function(){
@@ -11518,10 +11527,71 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
     });
   }
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',cleanup,{once:true});else cleanup();
-  window.addEventListener('chd:ready',()=>setTimeout(cleanup,0));
-  document.addEventListener('parlayos:chd-data-ready',()=>setTimeout(cleanup,0));
-  document.addEventListener('click',()=>setTimeout(cleanup,0));
+  function firstDefined(...values){return values.find(v=>v!==undefined&&v!==null&&v!=='');}
+  function asArray(v){return Array.isArray(v)?v:[];}
+  function playerName(p){return firstDefined(p&&p.fullName,p&&p.name,p&&p.player&&p.player.fullName,p&&p.person&&p.person.fullName,'Player unavailable');}
+  function playerMeta(p){
+    if(!p)return '';
+    const pos=firstDefined(p.position&&p.position.abbreviation,p.position&&p.position.name,p.pos,'');
+    const number=firstDefined(p.jerseyNumber,p.primaryNumber,'');
+    return [pos,number?`#${number}`:''].filter(Boolean).join(' · ');
+  }
+  function playerList(game){
+    const pitchers=game&&game.pitchers||{};
+    const lineups=game&&game.lineups||{};
+    const awayLineup=asArray(firstDefined(lineups.away,game&&game.lineupA));
+    const homeLineup=asArray(firstDefined(lineups.home,game&&game.lineupB));
+    const out=[];
+    const pa=firstDefined(pitchers.away,game&&game.pitcherA);
+    const ph=firstDefined(pitchers.home,game&&game.pitcherB);
+    if(pa)out.push({role:'Away starter',player:pa});
+    if(ph)out.push({role:'Home starter',player:ph});
+    awayLineup.slice(0,5).forEach(p=>out.push({role:'Away lineup',player:p}));
+    homeLineup.slice(0,5).forEach(p=>out.push({role:'Home lineup',player:p}));
+    return out;
+  }
+
+  function normalizeAddButtons(){
+    document.querySelectorAll('.parlayos-final-card [data-add],.parlayos-final-card [data-nfl-add],.parlayos-final-card [data-nba-add]').forEach(btn=>{
+      btn.classList.add('parlayos-add-button');
+      btn.setAttribute('aria-label',btn.getAttribute('aria-label')||`Add ${btn.textContent.trim().replace(/^Add\s+/i,'')} to parlay`);
+    });
+  }
+
+  function renderPlayerInfo(){
+    const sources={
+      MLB:window.PARLAYOS_DATA,
+      NFL:window.PARLAYOS_NFL_DATA,
+      NBA:window.PARLAYOS_NBA_DATA
+    };
+    const gamesById={};
+    Object.values(sources).forEach(data=>{
+      (data&&Array.isArray(data.games)?data.games:[]).forEach(game=>{
+        if(game&&game.id!=null)gamesById[String(game.id)]=game;
+        if(game&&game.gamePk!=null)gamesById[String(game.gamePk)]=game;
+      });
+    });
+    document.querySelectorAll('.parlayos-final-card').forEach(card=>{
+      if(card.querySelector('.parlayos-final-player-info'))return;
+      const key=firstDefined(card.dataset.gameId,card.dataset.parlayosGameId,card.getAttribute('data-game-id'));
+      const game=key!=null?gamesById[String(key)]:null;
+      if(!game)return;
+      const players=playerList(game);
+      if(!players.length)return;
+      const section=document.createElement('section');
+      section.className='parlayos-final-player-info';
+      section.setAttribute('aria-label','Player information');
+      section.innerHTML=players.map(item=>`<div class="parlayos-final-player"><div class="role">${String(item.role).replace(/[&<>]/g,'')}</div><div class="name">${String(playerName(item.player)).replace(/[&<>]/g,'')}</div><div class="meta">${String(playerMeta(item.player)).replace(/[&<>]/g,'')}</div></div>`).join('');
+      const actions=card.querySelector('.parlayos-final-actions');
+      if(actions)actions.before(section);else card.appendChild(section);
+    });
+  }
+
+  function run(){cleanup();normalizeAddButtons();renderPlayerInfo();}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
+  window.addEventListener('chd:ready',()=>setTimeout(run,0));
+  document.addEventListener('parlayos:chd-data-ready',()=>setTimeout(run,0));
+  document.addEventListener('click',()=>setTimeout(run,0));
 })();
 </script>
 </head>
