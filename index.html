@@ -11240,6 +11240,231 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
 })();
 </script>
 
+<style id="PARLAYOS_PRODUCT_FINALIZER_STYLE">
+/* Final product UI layer: consistent, compact bettor-facing dashboards. */
+.parlayos-model-switcher{margin:14px 0 18px;padding:12px;border:1px solid rgba(255,255,255,.24);border-radius:16px;background:rgba(255,255,255,.10);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.parlayos-model-switcher .pms-title{display:block;margin:0 0 10px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.76}
+.parlayos-model-switcher .pms-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;overflow:visible;padding:0}
+.parlayos-model-switcher .pms-chip{width:100%;min-height:40px;padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.30);background:rgba(255,255,255,.10);color:inherit;font:700 12px/1.1 inherit;cursor:pointer;white-space:normal;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.24)}
+.parlayos-model-switcher .pms-chip:hover,.parlayos-model-switcher .pms-chip:focus-visible{background:rgba(255,255,255,.19);outline:none}
+.parlayos-model-switcher .pms-chip[aria-pressed="true"]{background:rgba(255,255,255,.34);border-color:rgba(255,255,255,.58);box-shadow:0 0 0 2px rgba(255,255,255,.10) inset}
+.parlayos-model-switcher .pms-chip[disabled]{opacity:.34;cursor:not-allowed}
+
+.parlayos-final-cards{display:grid;gap:18px}
+.parlayos-final-card{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.28);border-radius:24px;background:rgba(255,255,255,.13);box-shadow:0 14px 34px rgba(0,0,0,.10);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:18px}
+.parlayos-final-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+.parlayos-final-model{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.72;text-align:right}
+.parlayos-final-matchup{display:grid;grid-template-columns:76px minmax(0,1fr) 76px;align-items:center;gap:12px;margin-bottom:14px}
+.parlayos-final-team-badge{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:18px;font-weight:900;background:rgba(20,65,130,.88);color:#fff;box-shadow:0 5px 12px rgba(0,0,0,.16)}
+.parlayos-final-team-badge.home{justify-self:end;background:rgba(220,70,45,.88)}
+.parlayos-final-teams{text-align:center;min-width:0}
+.parlayos-final-teams .names{font-size:24px;font-weight:900;line-height:1.08;letter-spacing:.01em;overflow-wrap:anywhere}
+.parlayos-final-teams .sub{margin-top:6px;font-size:11px;font-weight:700;opacity:.66;overflow-wrap:anywhere}
+.parlayos-final-stat-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}
+.parlayos-final-stat{border:1px solid rgba(255,255,255,.22);border-radius:15px;padding:12px;background:rgba(0,0,0,.055);min-width:0}
+.parlayos-final-stat-title{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;opacity:.72}
+.parlayos-final-stat-main{margin-top:5px;font-size:17px;font-weight:900;overflow-wrap:anywhere}
+.parlayos-final-stat-sub{margin-top:3px;font-size:11px;opacity:.68;overflow-wrap:anywhere}
+.parlayos-final-markets{display:grid;gap:10px;margin-top:12px}
+.parlayos-final-market{border-top:1px solid rgba(255,255,255,.18);padding-top:12px}
+.parlayos-final-market-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.parlayos-final-market-title{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.68}
+.parlayos-final-market-prob{font-size:20px;font-weight:900}
+.parlayos-final-pick{margin-top:4px;font-size:21px;font-weight:900;overflow-wrap:anywhere}
+.parlayos-final-market-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:4px;font-size:12px;opacity:.74}
+.parlayos-final-bar{height:7px;margin-top:9px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}
+.parlayos-final-bar>span{display:block;height:100%;width:0;background:rgba(94,230,150,.82);border-radius:999px}
+.parlayos-final-bar.negative>span{background:rgba(255,100,100,.75)}
+.parlayos-final-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.parlayos-final-actions .btn{min-height:40px}
+.parlayos-final-unavailable{border:1px dashed rgba(255,255,255,.28);border-radius:14px;padding:12px;font-size:12px;opacity:.74}
+.parlayos-final-source{margin-top:10px;font-size:10px;opacity:.54}
+
+@media(max-width:780px){
+  .parlayos-model-switcher .pms-row{grid-template-columns:1fr}
+  .parlayos-final-card{padding:14px;border-radius:20px}
+  .parlayos-final-matchup{grid-template-columns:58px minmax(0,1fr) 58px;gap:8px}
+  .parlayos-final-team-badge{width:52px;height:52px;font-size:14px}
+  .parlayos-final-teams .names{font-size:18px}
+  .parlayos-final-stat-row{grid-template-columns:1fr 1fr;gap:8px}
+  .parlayos-final-stat{padding:10px}
+  .parlayos-final-stat-main{font-size:15px}
+  .parlayos-final-pick{font-size:18px}
+  .parlayos-final-market-prob{font-size:18px}
+}
+</style>
+<script id="PARLAYOS_PRODUCT_FINALIZER">
+(function(){
+  'use strict';
+  if(window.__PARLAYOS_PRODUCT_FINALIZER_READY)return;
+  window.__PARLAYOS_PRODUCT_FINALIZER_READY=true;
+
+  const MODELS=[
+    ['monte_carlo','Monte Carlo'],['zips','ZiPS'],['steamer','Steamer'],
+    ['my_chd','My CHD'],['season_stats','Season Stats'],
+    ['chd_master_predictor','CHD Master Predictor'],['final_combined','Final Combined All Models']
+  ];
+  const LABELS=Object.fromEntries(MODELS);
+  const DATA={
+    MLB:()=>window.PARLAYOS_DATA||{},
+    NFL:()=>window.PARLAYOS_NFL_DATA||{},
+    NBA:()=>window.PARLAYOS_NBA_DATA||{}
+  };
+  const MOUNT={MLB:'dashboardCards',NFL:'nflDashboardCards',NBA:'nbaDashboardCards'};
+  const SWITCHER={MLB:'dashChips',NFL:'nflDashChips',NBA:'nbaDashChips'};
+  const SEL=window.PARLAYOS_MODEL_SELECTION=window.PARLAYOS_MODEL_SELECTION||{MLB:'final_combined',NFL:'final_combined',NBA:'final_combined'};
+
+  const esc=s=>String(s==null?'':s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
+  const num=v=>Number.isFinite(Number(v));
+  const val=v=>(v===null||v===undefined||v==='')?'N/A':String(v);
+  const pct=v=>num(v)?`${(Number(v)*100).toFixed(1)}%`:'N/A';
+  const odds=v=>{if(!num(v)||Number(v)===0)return'N/A';const n=Number(v);return n>0?`+${n}`:String(n)};
+  const arr=v=>Array.isArray(v)?v:[];
+  const sourceGames=sport=>{const d=DATA[sport]();return arr(d.games)};
+  const record=(g,id)=>id==='final_combined'?(g&&g.ensemble||null):(g&&g.models&&g.models[id]||null);
+  const market=(r,k)=>r&&r.markets&&r.markets[k]||null;
+
+  function first(...xs){return xs.find(v=>v!==undefined&&v!==null&&v!=='');}
+  function initials(name){const parts=String(name||'').trim().split(/\s+/).filter(Boolean);return parts.length?parts.map(x=>x[0]).join('').slice(0,3).toUpperCase():'--';}
+  function gamesFor(sport){return sourceGames(sport)}
+
+  function modelAvailable(g,id){
+    const r=record(g,id); if(!r||r.status==='unavailable')return false;
+    return Object.values(r.markets||{}).some(m=>m&&m.status==='available');
+  }
+
+  function syncSwitcher(sport){
+    const host=document.getElementById(SWITCHER[sport]); if(!host)return;
+    let section=document.querySelector(`.parlayos-model-switcher[data-parlayos-final-sport="${sport}"]`);
+    if(!section){
+      section=document.createElement('section');
+      section.className='parlayos-model-switcher';
+      section.dataset.parlayosFinalSport=sport;
+      section.innerHTML='<span class="pms-title">Prediction model</span><div class="pms-row" role="group"></div>';
+      host.parentNode.insertBefore(section,host.nextSibling);
+    }
+    const row=section.querySelector('.pms-row'); row.innerHTML='';
+    MODELS.forEach(([id,label])=>{
+      const b=document.createElement('button');
+      b.type='button'; b.className='pms-chip'; b.textContent=label; b.dataset.parlayosFinalModel=id;
+      b.disabled=!gamesFor(sport).some(g=>modelAvailable(g,id));
+      b.setAttribute('aria-pressed',String(SEL[sport]===id));
+      b.addEventListener('click',()=>{SEL[sport]=id; syncSwitcher(sport); render(sport);});
+      row.appendChild(b);
+    });
+    if(!gamesFor(sport).some(g=>modelAvailable(g,SEL[sport])))SEL[sport]='my_chd';
+    row.querySelectorAll('.pms-chip').forEach(b=>b.setAttribute('aria-pressed',String(SEL[sport]===b.dataset.parlayosFinalModel)));
+  }
+
+  function lineupSummary(side){
+    const players=arr(side);
+    const avg=(key)=>{const v=players.map(p=>Number(p&&p[key])).filter(Number.isFinite);return v.length?(v.reduce((a,b)=>a+b,0)/v.length):null};
+    const hr=players.map(p=>Number(p&&p.hr)).filter(Number.isFinite); return {
+      avg:avg('avg'),ops:avg('ops'),hr:hr.length?hr.reduce((a,b)=>a+b,0):null,count:players.length
+    };
+  }
+  function sportStats(g,sport){
+    if(sport==='MLB'){
+      const pa=g.pitchers&&g.pitchers.away_stats||{}, ph=g.pitchers&&g.pitchers.home_stats||{};
+      const pA=g.pitchers&&g.pitchers.away||{}, pH=g.pitchers&&g.pitchers.home||{};
+      const la=lineupSummary(g.lineups&&g.lineups.away), lh=lineupSummary(g.lineups&&g.lineups.home);
+      return [
+        ['Pitching',first(pA.name,pA.fullName,'N/A'),`ERA ${val(pa.era)} · WHIP ${val(pa.whip)} · K/9 ${val(pa.k9)}`],
+        ['Pitching',first(pH.name,pH.fullName,'N/A'),`ERA ${val(ph.era)} · WHIP ${val(ph.whip)} · K/9 ${val(ph.k9)}`],
+        ['Lineup',val(la.avg),`AVG · OPS ${val(la.ops)} · HR ${val(la.hr)}`],
+        ['Lineup',val(lh.avg),`AVG · OPS ${val(lh.ops)} · HR ${val(lh.hr)}`]
+      ];
+    }
+    const a=g.stats&&g.stats.away||{}, h=g.stats&&g.stats.home||{};
+    if(sport==='NFL')return [
+      ['Offense',`${val(a.off_eff)}`,`EPA ${val(a.epa)} · source ${val(a.source)}`],
+      ['Offense',`${val(h.off_eff)}`,`EPA ${val(h.epa)} · source ${val(h.source)}`],
+      ['Defense',`${val(a.def_eff)}`,`EPA ${val(a.epa)} · ${g.away_abbr||'Away'}`],
+      ['Defense',`${val(h.def_eff)}`,`EPA ${val(h.epa)} · ${g.home_abbr||'Home'}`]
+    ];
+    return [
+      ['ORtg',val(a.off_rtg),`DRtg ${val(a.def_rtg)} · Pace ${val(a.pace)}`],
+      ['ORtg',val(h.off_rtg),`DRtg ${val(h.def_rtg)} · Pace ${val(h.pace)}`],
+      ['Net',val(a.net),`${g.away_abbr||'Away'} · Pace ${val(a.pace)}`],
+      ['Net',val(h.net),`${g.home_abbr||'Home'} · Pace ${val(h.pace)}`]
+    ];
+  }
+
+  function marketBlock(title,m){
+    if(!m||m.status==='unavailable')return `<div class="parlayos-final-unavailable"><b>${esc(title)}</b> · Unavailable from the selected model.</div>`;
+    const p=num(m.probability)?Number(m.probability):null;
+    const edge=num(m.edge)?Number(m.edge):null;
+    const line=m.line!=null?` · Line ${val(m.line)}`:'';
+    const price=m.odds!=null?` · ${odds(m.odds)}`:'';
+    const meta=`${edge===null?'Edge N/A':`Edge ${edge>=0?'+':''}${(edge*100).toFixed(1)}%`}${line}${price}`;
+    const width=p===null?0:Math.max(0,Math.min(100,p*100));
+    const negative=edge!==null&&edge<0;
+    return `<section class="parlayos-final-market">
+      <div class="parlayos-final-market-head"><span class="parlayos-final-market-title">${esc(title)}</span><span class="parlayos-final-market-prob">${p===null?'N/A':pct(p)}</span></div>
+      <div class="parlayos-final-pick">${esc(val(m.selection))}</div>
+      <div class="parlayos-final-market-meta"><span>${esc(meta)}</span><span>${esc(val(m.confidence!=null?`Confidence ${pct(m.confidence)}`:''))}</span></div>
+      <div class="parlayos-final-bar${negative?' negative':''}"><span style="width:${width.toFixed(1)}%"></span></div>
+    </section>`;
+  }
+
+  function addAction(sport,g,m){
+    if(!m||m.status!=='available'||m.selection==null)return '';
+    const attr=sport==='MLB'?'data-add':sport==='NFL'?'data-nfl-add':'data-nba-add';
+    return `<button class="btn" type="button" ${attr}="${esc(`${g.id||''}:${m.market||'ml'}`)}">Add ${esc(m.selection)}</button>`;
+  }
+
+  function card(g,sport){
+    const id=SEL[sport]||'final_combined', r=record(g,id), ml=market(r,'ml'), ou=market(r,'ou'), k=market(r,'k');
+    const away=first(g.away,g.a,'Away'), home=first(g.home,g.b,'Home');
+    const stats=sportStats(g,sport);
+    const action=[addAction(sport,g,ml),addAction(sport,g,ou),addAction(sport,g,k)].join('');
+    const unavailable=!r||r.status==='unavailable';
+    const date=first(g.date,g.game_date,g.startAt,g.start_time,g.commence_time,'Start time unavailable');
+    const mainMarket=ml||ou||k;
+    return `<article class="parlayos-final-card" data-parlayos-final-card="1" data-game-id="${esc(g.id||'')}">
+      <div class="parlayos-final-top"><div><div class="parlayos-final-stat-title">${esc(sport)} · ${esc(val(date))}</div></div><div class="parlayos-final-model">${esc(LABELS[id]||id)}</div></div>
+      <div class="parlayos-final-matchup">
+        <div class="parlayos-final-team-badge">${esc(g.away_abbr||initials(away))}</div>
+        <div class="parlayos-final-teams"><div class="names">${esc(away)} <span style="opacity:.45">VS</span> ${esc(home)}</div><div class="sub">${esc(g.away_abbr||'')} · ${esc(g.home_abbr||'')}</div></div>
+        <div class="parlayos-final-team-badge home">${esc(g.home_abbr||initials(home))}</div>
+      </div>
+      <div class="parlayos-final-stat-row">${stats.map(([t,v,s])=>`<div class="parlayos-final-stat"><div class="parlayos-final-stat-title"><span>${esc(t)}</span></div><div class="parlayos-final-stat-main">${esc(v)}</div><div class="parlayos-final-stat-sub">${esc(s)}</div></div>`).join('')}</div>
+      <div class="parlayos-final-markets">
+        ${unavailable?`<div class="parlayos-final-unavailable">${esc(LABELS[id]||id)} is unavailable for this game. Select another enabled prediction model.</div>`:''}
+        ${!unavailable?marketBlock('Moneyline',ml):''}
+        ${!unavailable?marketBlock('Over / Under',ou):''}
+        ${!unavailable?marketBlock(sport==='MLB'?'Pitcher K Prop':'Additional Market',k):''}
+      </div>
+      <div class="parlayos-final-actions">${action}</div>
+      <div class="parlayos-final-source">Source: ${esc(g.source||'CHD runtime JSON')} · Model lens: ${esc(LABELS[id]||id)}</div>
+    </article>`;
+  }
+
+  function findMount(sport){return document.getElementById(MOUNT[sport])}
+  function render(sport){
+    const mount=findMount(sport); if(!mount)return;
+    const games=gamesFor(sport); if(!games.length)return;
+    mount.querySelectorAll('.parlayos-product-card').forEach(n=>n.remove());
+    const nodes=mount.querySelectorAll('.game:not([data-parlayos-final-card]), .cards');
+    nodes.forEach(n=>{if(n.classList.contains('cards')||n.closest('.cards'))n.remove()});
+    let host=mount.querySelector('.parlayos-final-cards');
+    if(!host){host=document.createElement('div');host.className='parlayos-final-cards';mount.replaceChildren(host)}
+    host.innerHTML=games.slice(0,20).map(g=>card(g,sport)).join('');
+  }
+
+  function bootstrap(){
+    ['MLB','NFL','NBA'].forEach(syncSwitcher);
+    ['MLB','NFL','NBA'].forEach(render);
+  }
+  window.addEventListener('chd:ready',()=>setTimeout(bootstrap,0));
+  document.addEventListener('parlayos:chd-data-ready',()=>setTimeout(bootstrap,0));
+  document.addEventListener('click',e=>{
+    const nav=e.target.closest&&e.target.closest('[data-go]');
+    if(nav)setTimeout(()=>{const s=(document.querySelector('.screen.active')?.id||'').toUpperCase();const sport=s.includes('NFL')?'NFL':s.includes('NBA')?'NBA':'MLB';syncSwitcher(sport);render(sport)},100);
+  });
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bootstrap,{once:true});else bootstrap();
+})();
+</script>
 </head>
 
 <body class="dark">
