@@ -11491,40 +11491,35 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
   const HOSTS=['dashChips','nflDashChips','nbaDashChips'];
 
   function cleanup(){
+    const sections=[...document.querySelectorAll('.parlayos-model-switcher')];
+    const grouped=new Map();
+
+    sections.forEach(section=>{
+      const sport=section.dataset.parlayosFinalSport||section.dataset.parlayosSport||'';
+      if(!sport)return;
+      const prior=grouped.get(sport);
+      if(!prior){
+        grouped.set(sport,section);
+        return;
+      }
+      // Prefer the canonical finalizer section over the legacy enhancer.
+      const priorCanonical=prior.dataset.parlayosFinalSport===sport;
+      const currentCanonical=section.dataset.parlayosFinalSport===sport;
+      if(currentCanonical&&!priorCanonical){
+        prior.remove();
+        grouped.set(sport,section);
+      }else{
+        section.remove();
+      }
+    });
+
+    // Enforce one panel per sport after any layer has inserted/reinserted it.
     HOSTS.forEach(id=>{
       const host=document.getElementById(id);
       if(!host||!host.parentElement)return;
-
-      // The older QA layer used data-parlayos-sport; the finalizer uses
-      // data-parlayos-final-sport. Treat both as the same component so the
-      // legacy section cannot survive beside the canonical one.
-      const sections=[...host.parentElement.querySelectorAll('.parlayos-model-switcher')];
-      const sportFor=section=>section.dataset.parlayosFinalSport||section.dataset.parlayosSport||'';
-      const grouped=new Map();
-
-      sections.forEach(section=>{
-        const sport=sportFor(section);
-        if(!sport)return;
-        const prior=grouped.get(sport);
-        if(!prior){
-          grouped.set(sport,section);
-          return;
-        }
-        // Prefer the canonical finalizer section over the legacy enhancer.
-        const priorCanonical=prior.dataset.parlayosFinalSport===sport;
-        const currentCanonical=section.dataset.parlayosFinalSport===sport;
-        if(currentCanonical&&!priorCanonical){
-          prior.remove();
-          grouped.set(sport,section);
-        }else{
-          section.remove();
-        }
-      });
-
-      grouped.forEach(section=>{
-        section.querySelectorAll('.pms-chip').forEach(chip=>chip.type='button');
-      });
+      host.parentElement.querySelectorAll('.parlayos-model-switcher .pms-chip').forEach(chip=>chip.type='button');
     });
+    document.querySelectorAll('.parlayos-model-switcher .pms-chip').forEach(chip=>chip.type='button');
   }
 
   function firstDefined(...values){return values.find(v=>v!==undefined&&v!==null&&v!=='');}
@@ -11592,6 +11587,265 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
   window.addEventListener('chd:ready',()=>setTimeout(run,0));
   document.addEventListener('parlayos:chd-data-ready',()=>setTimeout(run,0));
   document.addEventListener('click',()=>setTimeout(run,0));
+})();
+</script>
+<style id="PARLAYOS_DASHBOARD_ROBUSTNESS_STYLE">
+/* Final product hardening: navigation fallbacks, persistent favorites, filters,
+   data-state feedback, keyboard/touch affordances, and safe empty states. */
+.parlayos-robust-tools{box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:center;margin:0 0 14px;padding:9px 10px;border:1px solid rgba(255,255,255,.22);border-radius:16px;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.parlayos-robust-search{min-width:0;width:100%;min-height:40px;padding:9px 13px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.10);color:inherit;font:600 13px/1.1 inherit;outline:none}
+.parlayos-robust-search::placeholder{color:inherit;opacity:.52}
+.parlayos-robust-search:focus{border-color:rgba(255,255,255,.62);box-shadow:0 0 0 2px rgba(255,255,255,.10)}
+.parlayos-robust-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+.parlayos-robust-btn{box-sizing:border-box;min-height:40px;padding:9px 13px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.10);color:inherit;font:800 12px/1 inherit;cursor:pointer;white-space:nowrap}
+.parlayos-robust-btn:hover,.parlayos-robust-btn:focus-visible{background:rgba(255,255,255,.20);border-color:rgba(255,255,255,.54);outline:none}
+.parlayos-robust-btn[aria-pressed="true"]{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.62)}
+.parlayos-robust-status{grid-column:1/-1;display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:11px;opacity:.72;min-width:0}
+.parlayos-robust-status .state{font-weight:800}
+.parlayos-robust-status .detail{overflow-wrap:anywhere;text-align:right}
+.parlayos-robust-empty{display:none;margin:12px 0;padding:18px 14px;border:1px dashed rgba(255,255,255,.25);border-radius:14px;text-align:center;font-size:12px;opacity:.72}
+.parlayos-robust-empty.is-visible{display:block}
+.parlayos-robust-favorite{position:absolute;top:12px;right:12px;z-index:4;width:38px;height:38px;border:1px solid rgba(255,255,255,.30);border-radius:999px;background:rgba(255,255,255,.12);color:inherit;font:800 18px/1 inherit;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.parlayos-robust-favorite:hover,.parlayos-robust-favorite:focus-visible{background:rgba(255,255,255,.22);outline:none}
+.parlayos-robust-favorite[aria-pressed="true"]{background:rgba(255,255,255,.30);border-color:rgba(255,255,255,.65)}
+.parlayos-robust-card-hidden{display:none!important}
+.parlayos-robust-data-error{margin:10px 0;padding:12px 14px;border:1px solid rgba(255,255,255,.25);border-radius:14px;background:rgba(255,255,255,.08);font-size:12px}
+@media(max-width:780px){.parlayos-robust-tools{grid-template-columns:1fr;margin-bottom:12px}.parlayos-robust-actions{justify-content:stretch}.parlayos-robust-btn{flex:1 1 calc(33.33% - 6px);min-width:0}.parlayos-robust-status{font-size:10px}.parlayos-robust-favorite{top:9px;right:9px;width:36px;height:36px}}
+</style>
+<script id="PARLAYOS_DASHBOARD_ROBUSTNESS">
+(function(){
+  'use strict';
+  if(window.__PARLAYOS_DASHBOARD_ROBUSTNESS_READY)return;
+  window.__PARLAYOS_DASHBOARD_ROBUSTNESS_READY=true;
+
+  const SPORTS=['MLB','NFL','NBA'];
+  const CARD_SELECTORS='.parlayos-final-card,.parlayos-product-card';
+  const STORAGE_KEY='parlayos:favorites:v1';
+  const MODEL_KEY='parlayos:model-selection:v1';
+  const selectors={
+    MLB:{host:'dashChips',cards:'dashboardCards'},
+    NFL:{host:'nflDashChips',cards:'nflDashboardCards'},
+    NBA:{host:'nbaDashChips',cards:'nbaDashboardCards'}
+  };
+  let favorites=loadJSON(STORAGE_KEY,{});
+  let modelSelections=loadJSON(MODEL_KEY,{});
+  let activeSport='MLB';
+  let screenStack=[];
+  let lastScreen='';
+  let scheduled=false;
+
+  const esc=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
+  const asArray=v=>Array.isArray(v)?v:[];
+  const isNum=v=>Number.isFinite(Number(v));
+  const loadJSON=(key,fallback)=>{try{const v=JSON.parse(localStorage.getItem(key)||'null');return v&&typeof v==='object'?v:fallback}catch(_){return fallback}};
+  const saveJSON=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value))}catch(_){} };
+  const pct=v=>isNum(v)?`${(Number(v)*100).toFixed(1)}%`:'N/A';
+
+  function source(sport){
+    return sport==='MLB'?(window.PARLAYOS_DATA||{}):sport==='NFL'?(window.PARLAYOS_NFL_DATA||{}):(window.PARLAYOS_NBA_DATA||{});
+  }
+  function games(sport){const d=source(sport);return asArray(d.games)}
+  function modelId(sport){
+    const selected=(modelSelections[sport]||window.PARLAYOS_MODEL_SELECTION?.[sport]||'final_combined');
+    return selected;
+  }
+  function syncModelStorage(){
+    if(window.PARLAYOS_MODEL_SELECTION&&typeof window.PARLAYOS_MODEL_SELECTION==='object'){
+      SPORTS.forEach(s=>{if(window.PARLAYOS_MODEL_SELECTION[s])modelSelections[s]=window.PARLAYOS_MODEL_SELECTION[s]});
+      saveJSON(MODEL_KEY,modelSelections);
+    }
+  }
+  function getModelRecord(game,id){
+    if(id==='final_combined')return game&&game.ensemble||null;
+    return game&&game.models&&game.models[id]||null;
+  }
+  function modelLens(game,sport){
+    if(typeof window.parlayosModelLens==='function'){
+      try{return window.parlayosModelLens(game,sport)}catch(_){}
+    }
+    return game;
+  }
+  function edgeFor(game,sport){
+    const id=modelId(sport);
+    const rec=getModelRecord(game,id);
+    const markets=rec&&rec.markets||{};
+    const vals=['ml','ou','k'].map(k=>Number(markets[k]?.edge)).filter(Number.isFinite).filter(v=>v>0);
+    if(vals.length)return Math.max(...vals);
+    const lens=modelLens(game,sport);
+    const fallback=Number(lens?.mlEdge);
+    return Number.isFinite(fallback)&&fallback>0?fallback:null;
+  }
+  function cardId(card){return card?.dataset?.gameId||card?.dataset?.parlayosGameId||card?.getAttribute('data-game-id')||''}
+  function cards(sport){
+    const container=document.getElementById(selectors[sport].cards);
+    if(!container)return [];
+    return [...container.querySelectorAll(CARD_SELECTORS)].filter(c=>cardId(c));
+  }
+  function currentScreen(){return document.querySelector('.screen.active')||null}
+  function screenId(el){return el?.id||el?.dataset?.screen||''}
+  function recordScreen(){
+    const el=currentScreen();const id=screenId(el);if(!id||id===lastScreen)return;
+    lastScreen=id;
+    screenStack=screenStack.filter(x=>x!==id);screenStack.push(id);
+    if(screenStack.length>12)screenStack.shift();
+    const low=id.toLowerCase();
+    if(low.includes('nfl'))activeSport='NFL';else if(low.includes('nba'))activeSport='NBA';else if(low.includes('mlb'))activeSport='MLB';
+  }
+
+  function targetMenu(){
+    const direct=[
+      '#main-menu','#mainMenu','#menu','#home-screen','#homeScreen',
+      '[data-screen="main-menu"]','[data-screen="mainMenu"]','[data-screen="menu"]','[data-screen="home"]'
+    ];
+    for(const sel of direct){const el=document.querySelector(sel);if(el&&el.classList.contains('screen'))return el}
+    const candidates=[...document.querySelectorAll('.screen')];
+    return candidates.find(el=>/main[-_ ]?menu|^menu$|^home$|home[-_ ]?screen/i.test(`${el.id} ${el.dataset.screen||''}`))||null;
+  }
+  function activateByExistingAPI(target){
+    const id=screenId(target);if(!id)return false;
+    const before=screenId(currentScreen());
+    const names=['setCurrentScreen','showScreen','navigateTo','goToScreen','switchScreen'];
+    for(const name of names){
+      const fn=window[name];
+      if(typeof fn!=='function')continue;
+      try{fn(id)}catch(_){continue}
+      if(screenId(currentScreen())===id)return true;
+      if(screenId(currentScreen())!==before)return true;
+    }
+    return false;
+  }
+  function activateDirect(target){
+    if(!target)return false;
+    document.querySelectorAll('.screen').forEach(el=>{
+      const on=el===target;
+      el.classList.toggle('active',on);
+      el.setAttribute('aria-hidden',String(!on));
+    });
+    target.hidden=false;
+    return screenId(currentScreen())===screenId(target);
+  }
+  function fallbackToMenu(){
+    const target=targetMenu();if(!target)return false;
+    if(activateByExistingAPI(target))return true;
+    return activateDirect(target);
+  }
+  function fallbackBack(){
+    if(screenStack.length<2)return fallbackToMenu();
+    const previousId=screenStack[screenStack.length-2];
+    const target=document.getElementById(previousId)||document.querySelector(`.screen[data-screen="${CSS.escape(previousId)}"]`);
+    if(!target)return fallbackToMenu();
+    if(activateByExistingAPI(target)||activateDirect(target)){
+      screenStack.pop();
+      lastScreen=screenId(currentScreen());
+      return true;
+    }
+    return false;
+  }
+  function isMenuControl(el){
+    const text=(el.textContent||'').trim().toLowerCase();
+    const label=(el.getAttribute('aria-label')||'').toLowerCase();
+    return (text.includes('menu')||label.includes('menu'))&&!text.includes('document');
+  }
+  function isBackControl(el){
+    const text=(el.textContent||'').trim().toLowerCase();
+    const label=(el.getAttribute('aria-label')||'').toLowerCase();
+    return text==='back'||text.startsWith('← back')||label.includes('back')||el.dataset.nav==='back';
+  }
+  function wireNavigation(){
+    document.addEventListener('click',ev=>{
+      const raw=ev.target?.closest?.('button,a,[role="button"],[data-nav]');if(!raw)return;
+      if(raw.closest('.parlayos-model-switcher,.parlayos-robust-tools,.parlayos-robust-favorite'))return;
+      const menu=isMenuControl(raw);const back=isBackControl(raw);if(!menu&&!back)return;
+      const before=screenId(currentScreen());
+      setTimeout(()=>{
+        recordScreen();
+        if(screenId(currentScreen())!==before)return;
+        if(menu)fallbackToMenu();else if(back)fallbackBack();
+      },90);
+    },true);
+  }
+
+  function labelForData(sport){
+    const d=source(sport);const gs=games(sport);const when=d.runDate||d.generated_at||d.updated_at||d.timestamp||'';
+    if(!gs.length)return ['Data unavailable','No games were supplied by the current runtime feed.'];
+    return [`${gs.length} games loaded`,when?`Updated ${when}`:'Current runtime data loaded'];
+  }
+  function makeToolbar(sport){
+    const switcher=document.querySelector(`.parlayos-model-switcher[data-parlayos-final-sport="${sport}"],.parlayos-model-switcher[data-parlayos-sport="${sport}"]`);
+    if(!switcher||document.querySelector(`.parlayos-robust-tools[data-sport="${sport}"]`))return;
+    const el=document.createElement('section');
+    el.className='parlayos-robust-tools';el.dataset.sport=sport;
+    el.innerHTML=`<input class="parlayos-robust-search" type="search" inputmode="search" autocomplete="off" placeholder="Search teams, players, markets…" aria-label="Search ${sport} games"><div class="parlayos-robust-actions" role="group" aria-label="${sport} game filters"><button type="button" class="parlayos-robust-btn" data-filter="all" aria-pressed="true">All</button><button type="button" class="parlayos-robust-btn" data-filter="favorites" aria-pressed="false">Favorites</button><button type="button" class="parlayos-robust-btn" data-filter="edge" aria-pressed="false">Positive edge</button><button type="button" class="parlayos-robust-btn" data-refresh="1">Refresh</button></div><div class="parlayos-robust-status" aria-live="polite"><span class="state"></span><span class="detail"></span></div><div class="parlayos-robust-empty" aria-live="polite">No games match the current filters.</div>`;
+    switcher.insertAdjacentElement('afterend',el);
+    el.querySelectorAll('[data-filter]').forEach(btn=>btn.addEventListener('click',()=>{
+      el.querySelectorAll('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));
+      apply(sport);
+    }));
+    el.querySelector('.parlayos-robust-search').addEventListener('input',()=>apply(sport));
+    el.querySelector('[data-refresh]').addEventListener('click',refreshData);
+  }
+  function refreshStatus(sport){
+    const bar=document.querySelector(`.parlayos-robust-tools[data-sport="${sport}"]`);if(!bar)return;
+    const [state,detail]=labelForData(sport);bar.querySelector('.state').textContent=state;bar.querySelector('.detail').textContent=detail;
+  }
+  function decorateCard(card,sport){
+    const id=cardId(card);if(!id)return;
+    let btn=card.querySelector('.parlayos-robust-favorite');
+    if(!btn){
+      btn=document.createElement('button');btn.type='button';btn.className='parlayos-robust-favorite';btn.title='Save game';btn.setAttribute('aria-label','Save game to favorites');
+      btn.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();favorites[id]=!favorites[id];saveJSON(STORAGE_KEY,favorites);decorateCard(card,sport);apply(sport)});
+      card.style.position='relative';card.insertBefore(btn,card.firstChild);
+    }
+    const saved=!!favorites[id];btn.setAttribute('aria-pressed',String(saved));btn.textContent=saved?'★':'☆';btn.title=saved?'Remove from favorites':'Save game';btn.setAttribute('aria-label',saved?'Remove game from favorites':'Save game to favorites');
+    const edge=edgeFor(games(sport).find(g=>String(g.id)===String(id)||String(g.gamePk)===String(id))||{},sport);
+    if(edge!=null)card.dataset.parlayosEdge=String(edge);
+  }
+  function apply(sport){
+    const bar=document.querySelector(`.parlayos-robust-tools[data-sport="${sport}"]`);if(!bar)return;
+    syncModelStorage();refreshStatus(sport);
+    const query=(bar.querySelector('.parlayos-robust-search')?.value||'').trim().toLowerCase();
+    const filter=bar.querySelector('[data-filter][aria-pressed="true"]')?.dataset.filter||'all';
+    const gs=games(sport);const byId={};gs.forEach(g=>{if(g?.id!=null)byId[String(g.id)]=g;if(g?.gamePk!=null)byId[String(g.gamePk)]=g});
+    let visible=0;
+    cards(sport).forEach(card=>{
+      const id=String(cardId(card));const game=byId[id];decorateCard(card,sport);
+      const hay=card.textContent.toLowerCase();
+      const textMatch=!query||hay.includes(query)||(game&&JSON.stringify(game).toLowerCase().includes(query));
+      const favMatch=filter!=='favorites'||!!favorites[id];
+      const edge=game?edgeFor(game,sport):null;const edgeMatch=filter!=='edge'||(edge!=null&&edge>0);
+      const show=textMatch&&favMatch&&edgeMatch;card.classList.toggle('parlayos-robust-card-hidden',!show);if(show)visible++;
+    });
+    const empty=bar.querySelector('.parlayos-robust-empty');
+    empty.classList.toggle('is-visible',cards(sport).length>0&&visible===0);
+  }
+  async function refreshData(){
+    const btn=document.activeElement;
+    if(btn?.matches('[data-refresh]')){btn.disabled=true;btn.textContent='Refreshing…';}
+    try{
+      const names=['loadParlayOSCHDData','loadCHDData','loadParlayOSData'];
+      let ran=false;
+      for(const name of names){if(typeof window[name]==='function'){ran=true;const result=window[name]();if(result&&typeof result.then==='function')await result;break}}
+      if(!ran)location.reload();
+    }catch(err){
+      console.error('[ParlayOS] data refresh failed',err);
+      SPORTS.forEach(s=>{const bar=document.querySelector(`.parlayos-robust-tools[data-sport="${s}"]`);if(bar){bar.querySelector('.state').textContent='Data refresh failed';bar.querySelector('.detail').textContent='Existing data remains visible.'}});
+    }finally{
+      if(btn?.matches('[data-refresh]')){btn.disabled=false;btn.textContent='Refresh';}
+      setTimeout(run,150);
+    }
+  }
+  function setupObservers(){
+    const rerun=()=>{if(scheduled)return;scheduled=true;setTimeout(()=>{scheduled=false;run()},100)};
+    document.addEventListener('chd:ready',rerun);document.addEventListener('parlayos:chd-data-ready',rerun);
+    ['dashboardCards','nflDashboardCards','nbaDashboardCards'].forEach(id=>{const root=document.getElementById(id);if(root)new MutationObserver(rerun).observe(root,{childList:true,subtree:true})});
+    SPORTS.forEach(s=>{const host=document.getElementById(selectors[s].host);if(host)new MutationObserver(rerun).observe(host,{childList:true,subtree:true})});
+    setInterval(recordScreen,750);
+  }
+  function run(){
+    syncModelStorage();recordScreen();
+    SPORTS.forEach(s=>{makeToolbar(s);cards(s).forEach(c=>decorateCard(c,s));apply(s)});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{wireNavigation();setupObservers();run()},{once:true});else{wireNavigation();setupObservers();run()}
 })();
 </script>
 </head>
