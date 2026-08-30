@@ -38788,8 +38788,10 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     if(!note){note=document.createElement('div');note.className='parlayos-model-availability-note';section.appendChild(note)}
     const unavailable=[];const gs=games(s);
     models.forEach(id=>{if(!selectable(s,id))return;if(gs.length&&!gs.some(g=>hasPayload(g,id)))unavailable.push(names[id])});
-    note.textContent=unavailable.length?`No validated ${unavailable.join(', ')} payloads are available on the current ${s} slate. Selecting one will show its unavailable state instead of inventing a prediction.`:'';
-    note.hidden=!unavailable.length;
+    const message=unavailable.length?`No validated ${unavailable.join(', ')} payloads are available on the current ${s} slate. Selecting one will show its unavailable state instead of inventing a prediction.`:'';
+    if(note.textContent!==message)note.textContent=message;
+    const hidden=!unavailable.length;
+    if(note.hidden!==hidden)note.hidden=hidden;
   }
   function rerenderSelectedModel(s){
     const mount=document.getElementById(CARD_IDS[s]);
@@ -38804,7 +38806,6 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   function run(){
     Object.keys(SPORTS).forEach(s=>{
       document.querySelectorAll(`.parlayos-model-switcher[data-parlayos-final-sport="${s}"],.parlayos-model-switcher[data-parlayos-sport="${s}"]`).forEach(section=>{
-        const gs=games(s);
         section.querySelectorAll('.pms-chip').forEach(b=>{
           const id=b.dataset.parlayosFinalModel||b.dataset.parlayosModel||'';
           if(!names[id])return;
