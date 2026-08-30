@@ -38775,24 +38775,69 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   if(window.__PARLAYOS_MODEL_CHIP_RUNTIME_READY)return;
   window.__PARLAYOS_MODEL_CHIP_RUNTIME_READY=true;
   const SPORTS={NFL:'PARLAYOS_NFL_DATA',NBA:'PARLAYOS_NBA_DATA',MLB:'PARLAYOS_DATA'};
+  const CARD_IDS={MLB:'dashboardCards',NFL:'nflDashboardCards',NBA:'nbaDashboardCards'};
   const MLB_ONLY=new Set(['zips','steamer']);
+  const models=['monte_carlo','zips','steamer','my_chd','season_stats','chd_master_predictor','final_combined'];
+  const names={monte_carlo:'Monte Carlo',zips:'ZiPS',steamer:'Steamer',my_chd:'My CHD',season_stats:'Season Stats',chd_master_predictor:'CHD Master Predictor',final_combined:'Final Combined All Models'};
+  function games(s){const d=window[SPORTS[s]]||{};return Array.isArray(d.games)?d.games:[]}
+  function rec(g,id){return id==='final_combined'?(g&&g.ensemble)||null:(g&&g.models&&g.models[id])||null}
+  function hasPayload(g,id){const r=rec(g,id);return !!(r&&r.status!=='unavailable')}
+  function selectable(s,id){return !MLB_ONLY.has(id)||s==='MLB'}
+  function renderNote(section,s){
+    let note=section.querySelector('.parlayos-model-availability-note');
+    if(!note){note=document.createElement('div');note.className='parlayos-model-availability-note';section.appendChild(note)}
+    const unavailable=[];const gs=games(s);
+    models.forEach(id=>{if(!selectable(s,id))return;if(gs.length&&!gs.some(g=>hasPayload(g,id)))unavailable.push(names[id])});
+    note.textContent=unavailable.length?`No validated ${unavailable.join(', ')} payloads are available on the current ${s} slate. Selecting one will show its unavailable state instead of inventing a prediction.`:'';
+    note.hidden=!unavailable.length;
+  }
+  function rerenderSelectedModel(s){
+    const mount=document.getElementById(CARD_IDS[s]);
+    const gs=games(s);
+    if(!mount||!gs.length)return;
+    /* The product QA layer owns the model-specific fallback renderer. Clear the
+       current sport cards so that renderer cannot retain the previous model's
+       cards after the final runtime intercepts the chip click. */
+    mount.replaceChildren();
+    document.dispatchEvent(new CustomEvent('parlayos:chd-data-ready'));
+  }
   function run(){
     Object.keys(SPORTS).forEach(s=>{
       document.querySelectorAll(`.parlayos-model-switcher[data-parlayos-final-sport="${s}"],.parlayos-model-switcher[data-parlayos-sport="${s}"]`).forEach(section=>{
-        section.querySelectorAll('.pms-chip').forEach(btn=>{
-          const id=btn.dataset.parlayosFinalModel||btn.dataset.parlayosModel||'';
-          const baseballOnly=MLB_ONLY.has(id)&&s!=='MLB';
-          btn.disabled=baseballOnly;
-          btn.setAttribute('aria-disabled',String(baseballOnly));
-          btn.style.pointerEvents=baseballOnly?'none':'auto';
-          btn.title=baseballOnly?'MLB model — not applicable to '+s:'Select this model. If the real payload is unavailable, the dashboard will show unavailable rather than fake a prediction.';
+        const gs=games(s);
+        section.querySelectorAll('.pms-chip').forEach(b=>{
+          const id=b.dataset.parlayosFinalModel||b.dataset.parlayosModel||'';
+          if(!names[id])return;
+          const incompatible=MLB_ONLY.has(id)&&s!=='MLB';
+          b.disabled=false;
+          b.removeAttribute('aria-disabled');
+          b.style.pointerEvents='auto';
+          b.classList.toggle('model-reference-only',incompatible);
+          b.title=incompatible?'MLB-only model. Selectable for reference; no non-MLB prediction will be fabricated.':'';
         });
+        renderNote(section,s);
+        const current=window.PARLAYOS_MODEL_SELECTION?.[s];
+        if(current&&names[current])section.querySelectorAll('.pms-chip').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.parlayosFinalModel||b.dataset.parlayosModel)===current)));
       });
     });
   }
-  run();
-  setInterval(run,400);
-  const ob=new MutationObserver(run);if(document.body)ob.observe(document.body,{childList:true,subtree:true});
+  run();setInterval(run,500);
+  const ob=new MutationObserver(()=>run());if(document.body)ob.observe(document.body,{childList:true,subtree:true});
+
+  /* qa_dashboard_final_runtime.py intercepts model-chip clicks in the capture
+     phase and stops the enhancer's own chip handler. Mirror the selection here,
+     then force the product QA layer to rebuild cards from the selected real
+     model payload. No prediction values are synthesized. */
+  window.addEventListener('click',e=>{
+    const b=e.target?.closest?.('.pms-chip');if(!b)return;
+    const section=b.closest('.parlayos-model-switcher');
+    const s=String(section?.dataset?.parlayosSport||section?.dataset?.parlayosFinalSport||'').toUpperCase();
+    const id=b.dataset.parlayosFinalModel||b.dataset.parlayosModel||'';
+    if(!SPORTS[s]||!names[id])return;
+    window.PARLAYOS_MODEL_SELECTION=window.PARLAYOS_MODEL_SELECTION||{};
+    window.PARLAYOS_MODEL_SELECTION[s]=id;
+    setTimeout(()=>rerenderSelectedModel(s),0);
+  },true);
 })();
 </script>
 <script id="PARLAYOS_FINAL_RUNTIME">
@@ -39368,6 +39413,140 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   const observer=new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(run,80)});
   if(document.body)observer.observe(document.body,{childList:true,subtree:true});
   [100,250,500,900,1500,2500].forEach(ms=>setTimeout(run,ms));
+})();
+</script>
+
+<script id="PARLAYOS_VIDEO_RUNTIME">
+(function(){
+  'use strict';
+  if(window.__PARLAYOS_VIDEO_RUNTIME_READY)return;
+  window.__PARLAYOS_VIDEO_RUNTIME_READY=true;
+  const S={MLB:{data:'PARLAYOS_DATA',array:'games',add:'data-add',handler:'addLegByToken'},NFL:{data:'PARLAYOS_NFL_DATA',array:'gamesNFL',add:'data-nfl-add',handler:'addNFLLegByToken'},NBA:{data:'PARLAYOS_NBA_DATA',array:'gamesNBA',add:'data-nba-add',handler:'addNBALegByToken'}};
+  const MODELS={monte_carlo:'Monte Carlo',zips:'ZiPS',steamer:'Steamer',my_chd:'My CHD',season_stats:'Season Stats',chd_master_predictor:'CHD Master Predictor',final_combined:'Final Combined All Models'};
+  const MLB_ONLY=new Set(['zips','steamer']);
+  const A=v=>Array.isArray(v)?v:[];
+  const T=v=>v==null?'':String(v);
+  const esc=v=>T(v).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
+  const id=g=>T(g?.id??g?.gamePk??g?.game_id);
+  const data=s=>window[S[s].data]||{};
+  const games=s=>{const out=[],seen=new Set();const add=g=>{const k=id(g);if(k&&!seen.has(k)){seen.add(k);out.push(g)}};A(data(s).games).forEach(add);A(window[S[s].array]).forEach(add);return out};
+  const rec=(g,m)=>m==='final_combined'?(g?.ensemble||null):(g?.models?.[m]||null);
+  const markets=(g,m)=>rec(g,m)?.markets||{};
+  const activeSport=()=>{const idtxt=T(document.querySelector('.screen.active')?.id).toLowerCase();return idtxt.includes('nfl')?'NFL':idtxt.includes('nba')?'NBA':'MLB'};
+  const cardSport=el=>{const d=T(el?.dataset?.sport).toUpperCase();if(S[d])return d;const h=T(el?.closest?.('[id]')?.id).toUpperCase();return h.includes('NFL')?'NFL':h.includes('NBA')?'NBA':'MLB'};
+  const findGame=(card,s)=>{const wanted=T(card?.dataset?.gameId);const gs=games(s);let g=wanted&&gs.find(x=>id(x)===wanted);if(g)return g;const tx=T(card?.textContent).toLowerCase();return gs.find(x=>T(x.away||x.a).toLowerCase()&&T(x.home||x.b).toLowerCase()&&tx.includes(T(x.away||x.a).toLowerCase())&&tx.includes(T(x.home||x.b).toLowerCase()))||null};
+
+  const style=document.createElement('style');
+  style.id='PARLAYOS_VIDEO_RUNTIME_STYLE';
+  style.textContent=`
+    @media(min-width:900px) and (orientation:landscape){
+      .screen.active{padding-inline:24px!important}.screen.active>.content,.screen.active .content{width:min(1220px,calc(100vw - 48px))!important;margin-inline:auto!important}
+      .parlayos-final-card,.parlayos-product-card,.game{max-width:1220px!important;margin-inline:auto!important}
+      .parlayos-model-switcher{width:min(1220px,calc(100vw - 48px))!important;margin-inline:auto!important}
+    }
+    .parlayos-video-actions{display:flex!important;gap:8px!important;flex-wrap:wrap!important;margin-top:10px!important}
+    .parlayos-video-add{min-height:38px!important;min-width:96px!important;pointer-events:auto!important;position:relative!important;z-index:50!important}
+    .parlayos-video-model-note{margin-top:6px;font-size:11px;line-height:1.35;opacity:.68}
+    .parlayos-video-search-hidden{display:none!important}
+    .parlayos-video-player-stat{display:block;margin-top:3px;font-size:10px;line-height:1.35;opacity:.78;white-space:normal;overflow-wrap:anywhere}
+    .parlayos-video-player-stat:empty{display:none}
+    .parlayos-video-fantasy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+    .parlayos-video-fantasy-player{width:100%;text-align:left;border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:10px;background:rgba(255,255,255,.06);color:inherit;cursor:pointer}
+    .parlayos-video-fantasy-player:focus-visible{outline:2px solid rgba(255,255,255,.55);outline-offset:2px}
+    .parlayos-video-player-name{font-weight:850;font-size:12px}.parlayos-video-player-meta{font-size:10px;opacity:.65;margin-top:2px}.parlayos-video-player-stats{font-size:10px;opacity:.8;margin-top:4px}
+    @media(max-width:620px){.parlayos-video-fantasy-grid{grid-template-columns:1fr}.parlayos-video-actions button{flex:1 1 120px}}
+    #brDkImportBtn{margin-bottom:12px!important;position:relative!important;z-index:5!important}#brChart{position:relative!important;z-index:1!important;clear:both!important}
+  `;
+  document.head.appendChild(style);
+
+  function enableModelChips(){
+    document.querySelectorAll('.parlayos-model-switcher').forEach(section=>{
+      const s=T(section.dataset.parlayosFinalSport||section.dataset.parlayosSport).toUpperCase();if(!S[s])return;
+      section.querySelectorAll('.pms-chip').forEach(btn=>{
+        const m=T(btn.dataset.parlayosFinalModel||btn.dataset.parlayosModel);if(!MODELS[m])return;
+        const incompatible=MLB_ONLY.has(m)&&s!=='MLB';
+        btn.disabled=false;btn.removeAttribute('aria-disabled');btn.style.pointerEvents='auto';
+        btn.classList.toggle('parlayos-video-model-reference',incompatible);
+        btn.title=incompatible?'MLB-only model; selectable for reference, but it will not fabricate a non-MLB prediction.':'';
+      });
+    });
+  }
+  function selectModel(section,btn){
+    const s=T(section.dataset.parlayosFinalSport||section.dataset.parlayosSport).toUpperCase();const m=T(btn.dataset.parlayosFinalModel||btn.dataset.parlayosModel);if(!S[s]||!MODELS[m])return;
+    window.PARLAYOS_MODEL_SELECTION=window.PARLAYOS_MODEL_SELECTION||{};window.PARLAYOS_MODEL_SELECTION[s]=m;
+    section.querySelectorAll('.pms-chip').forEach(b=>b.setAttribute('aria-pressed',String(T(b.dataset.parlayosFinalModel||b.dataset.parlayosModel)===m)));
+    const fns={MLB:['renderDashboard','renderPicks'],NFL:['renderNFLDashboard','renderNFLPicks'],NBA:['renderNBADashboard','renderNBAPicks']}[s]||[];
+    fns.forEach(n=>{try{if(typeof window[n]==='function')window[n]()}catch(e){console.warn('[ParlayOS] model render',e)}});
+    if(!games(s).some(g=>{const r=rec(g,m);return r&&r.status!=='unavailable'&&Object.values(r.markets||{}).some(x=>x&&x.status==='available')})){
+      let note=section.querySelector('.parlayos-video-model-note');if(!note){note=document.createElement('div');note.className='parlayos-video-model-note';section.appendChild(note)}
+      note.textContent='No validated prediction payload is available for this model on the current slate. The model remains selectable so the state is explicit rather than silently disabled.';
+    }
+  }
+  document.addEventListener('click',e=>{const b=e.target?.closest?.('.pms-chip');if(!b)return;const sec=b.closest('.parlayos-model-switcher');if(!sec)return;e.preventDefault();e.stopImmediatePropagation();selectModel(sec,b)},true);
+
+  function normalizeMarketKey(k){const x=T(k).toLowerCase();if(/money.?line|^ml$/.test(x))return 'ml';if(/over|under|total|ou/.test(x))return 'ou';if(/strike|pitcher.?k|\bk\b/.test(x))return 'k';return x.replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')||'ml'}
+  function marketLabel(k,p){return p?.selection??p?.pick??p?.label??(k==='ml'?'Moneyline':k==='ou'?'Over/Under':k==='k'?'Player K':k)}
+  function availableMarkets(g,s){
+    const selected=T(window.PARLAYOS_MODEL_SELECTION?.[s]||'final_combined');const source=markets(g,selected);const entries=[];
+    Object.entries(source||{}).forEach(([k,p])=>{if(!p||p.status!=='available'||(p.selection==null&&p.pick==null&&p.label==null))return;entries.push([normalizeMarketKey(k),p])});
+    if(!entries.length&&selected!=='final_combined'){Object.entries(markets(g,'final_combined')||{}).forEach(([k,p])=>{if(p&&p.status==='available'&&(p.selection!=null||p.pick!=null||p.label!=null))entries.push([normalizeMarketKey(k),p])})}
+    return [...new Map(entries.map(([k,p])=>[k,p])).entries()];
+  }
+  function nativeAdd(s){return window[S[s].handler]}
+  function parlay(s){return s==='MLB'?A(window.parlay):s==='NFL'?A(window.parlayNFL):A(window.parlayNBA)}
+  function addTokenFor(btn,g,s,key){
+    const attr=S[s].add;const existing=T(btn.getAttribute(attr)||btn.getAttribute('data-add')||btn.getAttribute('data-nfl-add')||btn.getAttribute('data-nba-add'));
+    if(existing)return existing;
+    return `${id(g)}:${key}`;
+  }
+  function ensureAddRow(card,g,s){
+    let row=card.querySelector(':scope > .parlayos-video-actions');if(!row){row=document.createElement('div');row.className='parlayos-video-actions';card.appendChild(row)}
+    const wanted=availableMarkets(g,s);const present=new Set([...row.querySelectorAll('button')].map(b=>T(b.dataset.parlayosVideoMarket)));
+    wanted.forEach(([key,p])=>{if(present.has(key))return;const b=document.createElement('button');b.type='button';b.className='btn pill parlayos-video-add';b.dataset.parlayosVideoMarket=key;b.dataset.market=key;b.setAttribute(S[s].add,`${id(g)}:${key}`);b.textContent=`+ ${marketLabel(key,p)}`;row.appendChild(b)});
+    if(!wanted.length&&row.children.length){row.querySelectorAll('button').forEach(b=>b.remove());}
+    if(!row.children.length){row.remove();return}
+  }
+  function handleAdd(e){
+    const btn=e.target?.closest?.('.parlayos-video-add,[data-add],[data-nfl-add],[data-nba-add]');if(!btn)return;
+    const card=btn.closest('.game,.parlayos-final-card,.parlayos-product-card');if(!card)return;const s=btn.hasAttribute('data-nfl-add')?'NFL':btn.hasAttribute('data-nba-add')?'NBA':cardSport(card);const g=findGame(card,s);const fn=nativeAdd(s);if(!g||typeof fn!=='function')return;
+    const key=T(btn.dataset.parlayosVideoMarket)||normalizeMarketKey((T(btn.getAttribute(S[s].add)||btn.getAttribute('data-add'))||'').split(':')[1]);const token=addTokenFor(btn,g,s,key);const before=parlay(s).length;
+    e.preventDefault();e.stopImmediatePropagation();try{fn(token)}catch(err){console.warn('[ParlayOS] native add failed',err);return}
+    setTimeout(()=>{const after=parlay(s).length;if(after>before){const old=btn.textContent;btn.textContent='Added ✓';setTimeout(()=>{if(document.body.contains(btn))btn.textContent=old},1000);try{window.updateParlayBubble?.();window.newUpdateParlayBubble?.()}catch(_){}try{if(s==='MLB')window.renderParlay?.();if(s==='NFL')window.renderNFLParlay?.();if(s==='NBA')window.renderNBAParlay?.()}catch(_){}}},100);
+  }
+  document.addEventListener('click',handleAdd,true);
+  function repairGameCards(){
+    document.querySelectorAll('.game,.parlayos-final-card,.parlayos-product-card').forEach(card=>{const s=cardSport(card);const g=findGame(card,s);if(!g)return;card.dataset.gameId=id(g);ensureAddRow(card,g,s)});
+  }
+
+  function playerArrays(g,side){const modern=g?.lineups?.[side];if(Array.isArray(modern))return modern;const legacy=side==='away'?g?.lineupA:g?.lineupB;return Array.isArray(legacy)?legacy:[]}
+  function playerName(p){return T(p?.name||p?.fullName||p?.player_name)}
+  const teamCache=new Map();
+  async function mlbTeamStats(abbr){
+    const key=T(abbr).toUpperCase();if(!key||teamCache.has(key))return teamCache.get(key);
+    const p=(async()=>{try{const tr=await fetch(`https://statsapi.mlb.com/api/v1/teams?sportId=1&abbreviation=${encodeURIComponent(key)}`,{cache:'no-store'});if(!tr.ok)return [];const tj=await tr.json();const tid=tj?.teams?.[0]?.id;if(!tid)return [];const [h,pit]=await Promise.all([fetch(`https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&teamId=${tid}&season=${new Date().getUTCFullYear()}&limit=1000`,{cache:'no-store'}),fetch(`https://statsapi.mlb.com/api/v1/stats?stats=season&group=pitching&teamId=${tid}&season=${new Date().getUTCFullYear()}&limit=1000`,{cache:'no-store'})]);const hj=h.ok?await h.json():null;const pj=pit.ok?await pit.json():null;const out=[];for(const split of A(hj?.stats?.[0]?.splits))out.push({...split.stat,personId:split?.player?.id,name:split?.player?.fullName});for(const split of A(pj?.stats?.[0]?.splits))out.push({...split.stat,personId:split?.player?.id,name:split?.player?.fullName,pitching:true});return out}catch(_){return []}})();teamCache.set(key,p);return p;
+  }
+  function statText(p,pitch){const pairs=pitch?[['ERA',p.era],['FIP',p.fip],['K/9',p.strikeoutRate??p.k9],['WHIP',p.whip]]:[['AVG',p.avg],['OPS',p.ops],['HR',p.homeRuns??p.hr],['RBI',p.rbi],['wOBA',p.woba],['WAR',p.war]];return pairs.filter(([,v])=>v!=null&&v!=='').slice(0,5).map(([k,v])=>`${k} ${v}`).join(' · ')}
+  async function enrichMLBPlayers(card,g){
+    if(card.dataset.parlayosVideoPlayerStats==='1')return;card.dataset.parlayosVideoPlayerStats='1';const byTeam=new Map();for(const side of ['away','home']){const abbr=g?.[`${side}_abbr`];if(abbr)byTeam.set(abbr,await mlbTeamStats(abbr))}
+    const all=[...playerArrays(g,'away'),...playerArrays(g,'home')];const find=(name,abbr)=>{const ls=byTeam.get(abbr)||[];return ls.find(x=>T(x.name).toLowerCase()===T(name).toLowerCase())||all.find(x=>playerName(x).toLowerCase()===T(name).toLowerCase())};
+    card.querySelectorAll('.parlayos-player-button,.player-row,.pitcher-btn,.parlayos-player-button button,[data-player-id]').forEach(el=>{const nameEl=el.querySelector('.parlayos-player-name,.player-name,.lb-player-name')||el;const name=T(nameEl.textContent).trim();if(!name)return;const side=all.find(p=>playerName(p).toLowerCase()===name.toLowerCase());const abbr=side?.team||side?.team_abbr||side?.teamAbbr;const rec=find(name,abbr);if(!rec)return;let out=el.querySelector('.parlayos-video-player-stat');if(!out){out=document.createElement('span');out.className='parlayos-video-player-stat';nameEl.insertAdjacentElement('afterend',out)}const text=statText(rec,!!rec.pitching);if(text)out.textContent=text;const open=()=>{try{window.openPlayerDetail?.({...rec,sport:'MLB'});window.openPlayer?.({...rec,sport:'MLB'})}catch(_){}};if(el.tagName!=='BUTTON'){el.setAttribute('role','button');el.setAttribute('tabindex','0')}if(!el.dataset.parlayosVideoPlayerBound){el.addEventListener('click',e=>{if(e.target?.closest?.('[data-add],[data-nfl-add],[data-nba-add],.parlayos-video-add'))return;open()});el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});el.dataset.parlayosVideoPlayerBound='1'}});
+  }
+
+  function fantasyRealPool(){
+    const out=[];for(const g of games('MLB'))for(const side of ['away','home'])for(const p of playerArrays(g,side)){if(!playerName(p))continue;out.push({...p,name:playerName(p),team:p.team||g?.[`${side}_abbr`]||g?.[side]||'',gameId:id(g),sport:'MLB',pos:p.pos||p.position||'',source:'chd_runtime'})}
+    return [...new Map(out.map(p=>[`${p.team}:${p.name}`,p])).values()];
+  }
+  function repairFantasy(){
+    const pool=fantasyRealPool();if(pool.length){window.PARLAYOS_REAL_MLB_PLAYER_POOL=pool;try{window.fantasyPlayerPool=pool}catch(_){}try{window._fantasyPoolSig='video-runtime:'+pool.map(p=>p.name+':'+p.team).join('|')}catch(_){}try{window.renderFantasy?.()}catch(_){} }
+    document.querySelectorAll('[id*="fantasy" i],[class*="fantasy" i]').forEach(el=>{if(!pool.length)return;const text=T(el.textContent).trim();if(/real player pool unavailable from the upstream roster feed/i.test(text)){el.innerHTML='';const h=document.createElement('div');h.className='parlayos-video-fantasy-grid';pool.slice(0,40).forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='parlayos-video-fantasy-player';b.innerHTML=`<div class="parlayos-video-player-name">${esc(p.name)}</div><div class="parlayos-video-player-meta">${esc(p.team)}${p.pos?' · '+esc(p.pos):''}</div>`;b.addEventListener('click',()=>{try{window.addFantasyPlayer?.(p);window.addToCrew?.(p);window.openPlayerDetail?.(p)}catch(_){}});h.appendChild(b)});el.appendChild(h)}});
+  }
+
+  function bindSearch(){document.querySelectorAll('input[type="search"],.search input,#dashSearch,#nflDashSearch,#nbaDashSearch,#fantasySearch').forEach(input=>{if(input.dataset.parlayosVideoSearch)return;input.dataset.parlayosVideoSearch='1';input.addEventListener('input',()=>{const q=T(input.value).trim().toLowerCase();const s=activeSport();const mount=document.getElementById(S[s].cards||'')||document.querySelector(`#screen-${s.toLowerCase()} .cards,#screen-${s.toLowerCase()} .game-list`);if(!mount)return;mount.querySelectorAll('.game,.parlayos-final-card,.parlayos-product-card').forEach(c=>c.classList.toggle('parlayos-video-search-hidden',!!q&&!T(c.textContent).toLowerCase().includes(q)))})})}
+  function resetParlayScroll(){for(const s of ['NFL','NBA']){const el=document.getElementById(`screen-${s.toLowerCase()}-parlay`);if(!el||!el.classList.contains('active'))continue;for(const t of [0,40,120,300])setTimeout(()=>{try{window.scrollTo({top:0,left:0,behavior:'auto'});el.scrollTop=0;el.querySelectorAll('.viewport,.build').forEach(x=>x.scrollTop=0)}catch(_){}},t)}}
+  function run(){enableModelChips();repairGameCards();bindSearch();resetParlayScroll();repairFantasy();document.querySelectorAll('.game,.parlayos-final-card,.parlayos-product-card').forEach(card=>{const s=cardSport(card),g=findGame(card,s);if(g&&s==='MLB')enrichMLBPlayers(card,g)})}
+  function boot(){run();setTimeout(run,500);setTimeout(run,1500);setTimeout(run,3000)}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+  new MutationObserver(()=>{clearTimeout(window.__PARLAYOS_VIDEO_TIMER);window.__PARLAYOS_VIDEO_TIMER=setTimeout(run,120)}).observe(document.body,{childList:true,subtree:true});
 })();
 </script>
 
