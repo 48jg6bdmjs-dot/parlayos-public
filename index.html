@@ -39002,6 +39002,25 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   const games=()=>arr((window.PARLAYOS_DATA||{}).games);
   const gid=g=>str(g?.id??g?.game_id??g?.gamePk);
   const cache=new Map();
+  const pending=new WeakSet();
+
+  const style=document.createElement('style');
+  style.id='PARLAYOS_MLB_PLAYER_RUNTIME_STYLE';
+  style.textContent=`
+    .parlayos-final-player-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px;width:100%}
+    .parlayos-final-player{display:flex;flex-direction:column;align-items:stretch;min-width:0;width:100%;border:1px solid rgba(255,255,255,.18);border-radius:13px;padding:10px;background:rgba(255,255,255,.06);cursor:pointer;text-align:left;box-sizing:border-box}
+    .parlayos-final-player:hover,.parlayos-final-player:focus-visible{background:rgba(255,255,255,.13);outline:2px solid rgba(255,255,255,.28)}
+    .parlayos-final-player-name{font-weight:850;font-size:12px;line-height:1.2;overflow-wrap:anywhere}
+    .parlayos-final-player-meta{font-size:10px;line-height:1.2;opacity:.68;margin-top:3px}
+    .parlayos-final-player-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin-top:7px}
+    .parlayos-final-player-stat{display:flex;align-items:baseline;justify-content:space-between;gap:6px;min-width:0;padding:4px 5px;border-radius:7px;background:rgba(0,0,0,.12)}
+    .parlayos-final-player-stat-label{font-size:8px;font-weight:800;letter-spacing:.04em;opacity:.66;white-space:nowrap}
+    .parlayos-final-player-stat-value{font-size:9px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .parlayos-final-pool-empty{padding:14px;border:1px dashed rgba(255,255,255,.25);border-radius:14px;font-size:12px;opacity:.72}
+    @media(max-width:620px){.parlayos-final-player-grid{grid-template-columns:1fr}.parlayos-final-player-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  `;
+  document.head.appendChild(style);
+
   async function getJson(url){try{const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error(String(r.status));return await r.json()}catch(e){return null}}
   async function teamId(abbr){
     const key='team:'+abbr;if(cache.has(key))return cache.get(key);
@@ -39017,11 +39036,16 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   function statFor(person){
     const splits=arr(person?.stats?.[0]?.splits);return splits[0]?.stat||null;
   }
-  function summarize(stat,pos){
-    if(!stat)return 'Season stats unavailable';
+  function statPairs(stat,pos){
+    if(!stat)return[];
     const pitching=['P','SP','RP'].includes(String(pos||'').toUpperCase());
     const pairs=pitching?[['ERA',stat.era],['WHIP',stat.whip],['K/9',stat.strikeoutsPer9Inn],['FIP',stat.fip],['IP',stat.inningsPitched]]:[['AVG',stat.avg],['OPS',stat.ops],['HR',stat.homeRuns],['RBI',stat.rbi],['wOBA',stat.woba],['WAR',stat.war],['K%',stat.strikeoutRate],['BB%',stat.walkRate]];
-    return pairs.filter(([,v])=>v!=null&&v!=='').slice(0,5).map(([k,v])=>`${k} ${v}`).join(' · ')||'Season stats unavailable';
+    return pairs.filter(([,v])=>v!=null&&v!=='').slice(0,6);
+  }
+  function statsMarkup(stat,pos){
+    const pairs=statPairs(stat,pos);
+    if(!pairs.length)return '<span class="parlayos-final-pool-empty">Season stats unavailable</span>';
+    return pairs.map(([k,v])=>`<span class="parlayos-final-player-stat"><span class="parlayos-final-player-stat-label">${esc(k)}</span><span class="parlayos-final-player-stat-value">${esc(v)}</span></span>`).join('');
   }
   async function playersForGame(g){
     const out=[];
@@ -39036,28 +39060,41 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     return out;
   }
   function add(card,players){
-    if(!players.length)return;
+    if(!players.length||!card.isConnected)return;
     let grid=card.querySelector('.parlayos-final-player-grid');if(!grid){grid=document.createElement('div');grid.className='parlayos-final-player-grid';const anchor=card.querySelector('.parlayos-lineups,.game-actions,.parlayos-final-actions')||card.lastElementChild;anchor?anchor.before(grid):card.appendChild(grid)}
-    grid.innerHTML=players.slice(0,18).map(p=>`<button type="button" class="parlayos-final-player" data-mlb-player-id="${esc(p.id)}"><span class="parlayos-final-player-name">${esc(p.name)}</span><span class="parlayos-final-player-meta">${esc(p.team)}${p.pos?' · '+esc(p.pos):''}</span><span class="parlayos-final-player-stats">${esc(summarize(p.stats,p.pos))}</span></button>`).join('');
+    grid.innerHTML=players.slice(0,18).map(p=>`<button type="button" class="parlayos-final-player" data-mlb-player-id="${esc(p.id)}"><span class="parlayos-final-player-name">${esc(p.name)}</span><span class="parlayos-final-player-meta">${esc(p.team)}${p.pos?' · '+esc(p.pos):''}</span><span class="parlayos-final-player-stats">${statsMarkup(p.stats,p.pos)}</span></button>`).join('');
     grid.querySelectorAll('[data-mlb-player-id]').forEach((b,i)=>b.addEventListener('click',()=>{const p=players[i];try{window.openPlayerDetail?.(p);window.openPlayer?.(p)}catch(_){} }));
+  }
+  async function enrichCard(card,g){
+    if(pending.has(card))return;
+    const id=gid(g);const existing=card.querySelector('.parlayos-final-player-grid');
+    if(card.dataset.parlayosMlbPlayers===id&&existing?.children.length)return;
+    pending.add(card);
+    try{
+      const ps=await playersForGame(g);
+      if(ps.length&&card.isConnected){add(card,ps);card.dataset.parlayosMlbPlayers=id}else if(card.isConnected){delete card.dataset.parlayosMlbPlayers}
+    }finally{pending.delete(card)}
   }
   async function run(){
     const mount=document.getElementById('dashboardCards');if(!mount)return;
-    for(const card of mount.querySelectorAll('.game,.parlayos-final-card,.parlayos-product-card')){
-      if(card.dataset.parlayosMlbPlayers==='1')continue;
+    const activeCards=[...mount.querySelectorAll('.game,.parlayos-final-card,.parlayos-product-card')];
+    await Promise.all(activeCards.map(async card=>{
       const idWanted=str(card.dataset.gameId);const g=games().find(x=>gid(x)===idWanted)||games().find(x=>{const t=str(card.textContent).toLowerCase();return t.includes(str(x.away).toLowerCase())&&t.includes(str(x.home).toLowerCase())});
-      if(!g)continue;
-      const ps=await playersForGame(g);if(ps.length)add(card,ps);card.dataset.parlayosMlbPlayers='1';
-    }
+      if(g)await enrichCard(card,g);
+    }));
     const fantasy=document.getElementById('fantasyPlayerPool');
     if(fantasy&&fantasy.children.length===0&&!fantasy.dataset.parlayosMlbFantasy){
       const pool=[];for(const g of games().slice(0,12)){const ps=await playersForGame(g);pool.push(...ps)}
       const uniq=[...new Map(pool.map(p=>[`${p.team}:${p.id}`,p])).values()];
-      if(uniq.length){fantasy.innerHTML=uniq.slice(0,80).map(p=>`<button type="button" class="parlayos-final-player" data-mlb-fantasy="${esc(p.id)}"><span class="parlayos-final-player-name">${esc(p.name)}</span><span class="parlayos-final-player-meta">${esc(p.team)}${p.pos?' · '+esc(p.pos):''}</span><span class="parlayos-final-player-stats">${esc(summarize(p.stats,p.pos))}</span></button>`).join('');fantasy.dataset.parlayosMlbFantasy='1';window.PARLAYOS_REAL_MLB_PLAYER_POOL=uniq}
+      if(uniq.length){fantasy.innerHTML=uniq.slice(0,80).map(p=>`<button type="button" class="parlayos-final-player" data-mlb-fantasy="${esc(p.id)}"><span class="parlayos-final-player-name">${esc(p.name)}</span><span class="parlayos-final-player-meta">${esc(p.team)}${p.pos?' · '+esc(p.pos):''}</span><span class="parlayos-final-player-stats">${statsMarkup(p.stats,p.pos)}</span></button>`).join('');fantasy.dataset.parlayosMlbFantasy='1';window.PARLAYOS_REAL_MLB_PLAYER_POOL=uniq}
       else fantasy.innerHTML='<div class="parlayos-final-pool-empty">Real MLB player pool unavailable from the upstream roster feed. No synthetic players were inserted.</div>';
     }
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(run,700),{once:true});else setTimeout(run,700);
+  let timer=0;
+  const scheduleRun=()=>{clearTimeout(timer);timer=setTimeout(()=>{run().catch(()=>{})},80)};
+  function boot(){scheduleRun();setTimeout(scheduleRun,350);setTimeout(scheduleRun,1000);setTimeout(scheduleRun,2500);}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+  new MutationObserver(scheduleRun).observe(document.body,{childList:true,subtree:true});
 })();
 </script>
 </item.count;i++){><script id="parlayos-shuffle-odds-cleanup">
