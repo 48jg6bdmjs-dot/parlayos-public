@@ -11721,7 +11721,94 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{wireNavigation();setupObservers();run()},{once:true});else{wireNavigation();setupObservers();run()}
 })();
 </script>
-</head>
+<style id="PARLAYOS_UNIFIED_SPORTS_UI_TUNING">
+/* UI-only tuning for the existing unified sports runtime. No data or events are changed. */
+#parlayos-unified-shell{
+  position:relative!important;
+  z-index:100000!important;
+  isolation:isolate!important;
+  margin:0 auto 24px!important;
+  padding:18px 18px 24px!important;
+  max-width:1180px!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  border-radius:24px!important;
+  background:rgba(10,12,22,.94)!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.24)!important;
+  overflow:hidden!important;
+}
+#parlayos-unified-shell .parlayos-unified-head{margin-bottom:10px!important}
+#parlayos-unified-shell .parlayos-unified-title{font-size:clamp(24px,4vw,32px)!important;line-height:1.08!important}
+#parlayos-unified-shell .parlayos-unified-subtitle{font-size:13px!important;line-height:1.45!important;max-width:68ch!important;opacity:.72!important}
+#parlayos-unified-shell .parlayos-unified-sport-tabs{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin:12px 0 14px!important;
+}
+#parlayos-unified-shell .parlayos-unified-sport-tab{
+  width:100%!important;
+  min-width:0!important;
+  min-height:44px!important;
+  padding:9px 10px!important;
+  font-size:13px!important;
+  white-space:nowrap!important;
+}
+#parlayos-unified-shell .parlayos-unified-models{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:8px!important;
+  padding:8px 0 12px!important;
+}
+#parlayos-unified-shell .parlayos-unified-model{
+  width:100%!important;
+  min-width:0!important;
+  min-height:40px!important;
+  padding:8px 9px!important;
+  font-size:12px!important;
+  line-height:1.15!important;
+}
+#parlayos-unified-shell .parlayos-unified-model:last-child{grid-column:span 4!important}
+#parlayos-unified-shell .parlayos-unified-models-note{
+  margin:2px 0 10px!important;
+  padding:8px 10px!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  border-radius:12px!important;
+  background:rgba(255,255,255,.045)!important;
+  line-height:1.35!important;
+}
+#parlayos-unified-shell .parlayos-unified-grid{gap:12px!important}
+#parlayos-unified-shell .parlayos-unified-card{border-radius:18px!important;padding:13px!important}
+#parlayos-unified-shell .parlayos-unified-teams .names{font-size:16px!important;line-height:1.12!important}
+#parlayos-unified-shell .parlayos-unified-badge{width:44px!important;height:44px!important}
+#parlayos-unified-shell .parlayos-unified-actions{gap:6px!important;margin-top:11px!important}
+#parlayos-unified-shell .parlayos-unified-add{min-height:40px!important;padding:8px 6px!important}
+@media(max-width:900px){
+  #parlayos-unified-shell .parlayos-unified-sport-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #parlayos-unified-shell .parlayos-unified-models{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #parlayos-unified-shell .parlayos-unified-model:last-child{grid-column:span 3!important}
+}
+@media(max-width:680px){
+  #parlayos-unified-shell{margin:0 8px 18px!important;padding:14px 12px 20px!important;border-radius:20px!important}
+  #parlayos-unified-shell .parlayos-unified-title{font-size:22px!important}
+  #parlayos-unified-shell .parlayos-unified-subtitle{font-size:11px!important}
+  #parlayos-unified-shell .parlayos-unified-sport-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+  #parlayos-unified-shell .parlayos-unified-sport-tab{min-height:42px!important;font-size:12px!important;padding:8px 6px!important}
+  #parlayos-unified-shell .parlayos-unified-models{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+  #parlayos-unified-shell .parlayos-unified-model{min-height:42px!important;font-size:11px!important;padding:8px 6px!important}
+  #parlayos-unified-shell .parlayos-unified-model:last-child{grid-column:span 2!important}
+  #parlayos-unified-shell .parlayos-unified-card{padding:12px!important}
+  #parlayos-unified-shell .parlayos-unified-actions{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #parlayos-unified-shell .parlayos-unified-add{font-size:9px!important}
+  #parlayos-unified-shell .parlayos-unified-live-grid,
+  #parlayos-unified-shell .parlayos-unified-fantasy-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:420px){
+  #parlayos-unified-shell .parlayos-unified-sport-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #parlayos-unified-shell .parlayos-unified-models{grid-template-columns:1fr 1fr!important}
+  #parlayos-unified-shell .parlayos-unified-live-grid,
+  #parlayos-unified-shell .parlayos-unified-fantasy-grid{grid-template-columns:1fr!important}
+}
+</style>\n</head>
 <body class="dark">
 <div aria-hidden="true" class="morph-bg">
 <div class="morph-blob blob1"></div>
