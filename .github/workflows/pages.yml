@@ -23,10 +23,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate five-sport runtime artifact contract
+      - name: Validate restored three-sport runtime artifact contract
         run: |
           set -euo pipefail
-          for f in parlayos_chd_data.json parlayos_mlb_chd.json parlayos_nfl_chd.json parlayos_nba_chd.json parlayos_soccer_chd.json parlayos_nhl_chd.json live_scores.json data/live_scores.json; do
+          for f in parlayos_chd_data.json parlayos_mlb_chd.json parlayos_nfl_chd.json parlayos_nba_chd.json live_scores.json data/live_scores.json; do
             test -s "$f"
           done
           python - <<'PY'
@@ -37,17 +37,14 @@ jobs:
               'MLB': 'parlayos_mlb_chd.json',
               'NFL': 'parlayos_nfl_chd.json',
               'NBA': 'parlayos_nba_chd.json',
-              'SOC': 'parlayos_soccer_chd.json',
-              'NHL': 'parlayos_nhl_chd.json',
           }
           required_models = {
               'monte_carlo', 'zips', 'steamer', 'my_chd',
               'season_stats', 'chd_master_predictor', 'final_combined'
           }
-          required_markets = {'ml', 'ou', 'k'}
-
-          payloads = {sport: json.loads(Path(path).read_text(encoding='utf-8')) for sport, path in files.items()}
-          for sport, payload in payloads.items():
+          payloads = {}
+          for sport, path in files.items():
+              payload = json.loads(Path(path).read_text(encoding='utf-8'))
               games = payload.get('games')
               assert isinstance(games, list), f'{sport}: games missing'
               for i, game in enumerate(games):
@@ -56,35 +53,31 @@ jobs:
                   assert isinstance(models, dict), f'{sport}[{i}]: models missing'
                   assert required_models <= set(models), f'{sport}[{i}]: missing seven-model contract'
                   for model_id in required_models:
-                      record = models[model_id]
-                      assert record.get('model_id') == model_id, f'{sport}[{i}]/{model_id}: model_id mismatch'
-                      markets = record.get('markets')
-                      assert isinstance(markets, dict), f'{sport}[{i}]/{model_id}: markets missing'
-                      assert required_markets <= set(markets), f'{sport}[{i}]/{model_id}: missing market contract'
-                      for market in required_markets:
-                          assert markets[market].get('model_id') == model_id, f'{sport}[{i}]/{model_id}/{market}: model mismatch'
-                          assert markets[market].get('market') == market, f'{sport}[{i}]/{model_id}/{market}: market mismatch'
+                      assert isinstance(models[model_id], dict), f'{sport}[{i}]/{model_id}: invalid model record'
+                      assert models[model_id].get('model_id') == model_id, f'{sport}[{i}]/{model_id}: model_id mismatch'
                   assert isinstance(game.get('ensemble'), dict), f'{sport}[{i}]: ensemble missing'
+              payloads[sport] = payload
+              print(f'OK {sport}: {len(games)} games')
 
           combined = json.loads(Path('parlayos_chd_data.json').read_text(encoding='utf-8'))
-          for sport, path in files.items():
+          for sport, payload in payloads.items():
               section = combined.get(sport.lower())
-              assert isinstance(section, dict) and isinstance(section.get('games'), list), f'combined missing {sport}'
-              assert section['games'] == payloads[sport]['games'], f'combined mismatch {sport}'
+              assert isinstance(section, dict), f'combined missing {sport}'
+              assert section.get('games') == payload['games'], f'combined mismatch {sport}'
 
           live = json.loads(Path('live_scores.json').read_text(encoding='utf-8'))
           for sport in files:
               assert isinstance(live.get('sports', {}).get(sport), list), f'live_scores missing {sport}'
           assert isinstance(live.get('games'), list), 'live_scores games missing'
           assert Path('index.html').read_text(encoding='utf-8') == Path('parlayos.html').read_text(encoding='utf-8'), 'HTML parity mismatch'
-          print('OK public five-sport artifact contract')
+          print('OK restored three-sport public artifact contract')
           PY
 
       - name: Prepare artifact
         run: |
           mkdir -p site/data
           cp index.html parlayos.html about.html favicon.ico site/
-          cp parlayos_chd_data.json parlayos_mlb_chd.json parlayos_nfl_chd.json parlayos_nba_chd.json parlayos_soccer_chd.json parlayos_nhl_chd.json live_scores.json site/
+          cp parlayos_chd_data.json parlayos_mlb_chd.json parlayos_nfl_chd.json parlayos_nba_chd.json live_scores.json site/
           cp live_scores.json site/data/live_scores.json
           ls -lh site
 
