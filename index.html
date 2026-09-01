@@ -11721,94 +11721,7 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{wireNavigation();setupObservers();run()},{once:true});else{wireNavigation();setupObservers();run()}
 })();
 </script>
-<style id="PARLAYOS_UNIFIED_SPORTS_UI_TUNING">
-/* UI-only tuning for the existing unified sports runtime. No data or events are changed. */
-#parlayos-unified-shell{
-  position:relative!important;
-  z-index:100000!important;
-  isolation:isolate!important;
-  margin:0 auto 24px!important;
-  padding:18px 18px 24px!important;
-  max-width:1180px!important;
-  border:1px solid rgba(255,255,255,.18)!important;
-  border-radius:24px!important;
-  background:rgba(10,12,22,.94)!important;
-  box-shadow:0 18px 50px rgba(0,0,0,.24)!important;
-  overflow:hidden!important;
-}
-#parlayos-unified-shell .parlayos-unified-head{margin-bottom:10px!important}
-#parlayos-unified-shell .parlayos-unified-title{font-size:clamp(24px,4vw,32px)!important;line-height:1.08!important}
-#parlayos-unified-shell .parlayos-unified-subtitle{font-size:13px!important;line-height:1.45!important;max-width:68ch!important;opacity:.72!important}
-#parlayos-unified-shell .parlayos-unified-sport-tabs{
-  display:grid!important;
-  grid-template-columns:repeat(5,minmax(0,1fr))!important;
-  gap:8px!important;
-  margin:12px 0 14px!important;
-}
-#parlayos-unified-shell .parlayos-unified-sport-tab{
-  width:100%!important;
-  min-width:0!important;
-  min-height:44px!important;
-  padding:9px 10px!important;
-  font-size:13px!important;
-  white-space:nowrap!important;
-}
-#parlayos-unified-shell .parlayos-unified-models{
-  display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  gap:8px!important;
-  padding:8px 0 12px!important;
-}
-#parlayos-unified-shell .parlayos-unified-model{
-  width:100%!important;
-  min-width:0!important;
-  min-height:40px!important;
-  padding:8px 9px!important;
-  font-size:12px!important;
-  line-height:1.15!important;
-}
-#parlayos-unified-shell .parlayos-unified-model:last-child{grid-column:span 4!important}
-#parlayos-unified-shell .parlayos-unified-models-note{
-  margin:2px 0 10px!important;
-  padding:8px 10px!important;
-  border:1px solid rgba(255,255,255,.12)!important;
-  border-radius:12px!important;
-  background:rgba(255,255,255,.045)!important;
-  line-height:1.35!important;
-}
-#parlayos-unified-shell .parlayos-unified-grid{gap:12px!important}
-#parlayos-unified-shell .parlayos-unified-card{border-radius:18px!important;padding:13px!important}
-#parlayos-unified-shell .parlayos-unified-teams .names{font-size:16px!important;line-height:1.12!important}
-#parlayos-unified-shell .parlayos-unified-badge{width:44px!important;height:44px!important}
-#parlayos-unified-shell .parlayos-unified-actions{gap:6px!important;margin-top:11px!important}
-#parlayos-unified-shell .parlayos-unified-add{min-height:40px!important;padding:8px 6px!important}
-@media(max-width:900px){
-  #parlayos-unified-shell .parlayos-unified-sport-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-  #parlayos-unified-shell .parlayos-unified-models{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-  #parlayos-unified-shell .parlayos-unified-model:last-child{grid-column:span 3!important}
-}
-@media(max-width:680px){
-  #parlayos-unified-shell{margin:0 8px 18px!important;padding:14px 12px 20px!important;border-radius:20px!important}
-  #parlayos-unified-shell .parlayos-unified-title{font-size:22px!important}
-  #parlayos-unified-shell .parlayos-unified-subtitle{font-size:11px!important}
-  #parlayos-unified-shell .parlayos-unified-sport-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
-  #parlayos-unified-shell .parlayos-unified-sport-tab{min-height:42px!important;font-size:12px!important;padding:8px 6px!important}
-  #parlayos-unified-shell .parlayos-unified-models{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
-  #parlayos-unified-shell .parlayos-unified-model{min-height:42px!important;font-size:11px!important;padding:8px 6px!important}
-  #parlayos-unified-shell .parlayos-unified-model:last-child{grid-column:span 2!important}
-  #parlayos-unified-shell .parlayos-unified-card{padding:12px!important}
-  #parlayos-unified-shell .parlayos-unified-actions{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-  #parlayos-unified-shell .parlayos-unified-add{font-size:9px!important}
-  #parlayos-unified-shell .parlayos-unified-live-grid,
-  #parlayos-unified-shell .parlayos-unified-fantasy-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-}
-@media(max-width:420px){
-  #parlayos-unified-shell .parlayos-unified-sport-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  #parlayos-unified-shell .parlayos-unified-models{grid-template-columns:1fr 1fr!important}
-  #parlayos-unified-shell .parlayos-unified-live-grid,
-  #parlayos-unified-shell .parlayos-unified-fantasy-grid{grid-template-columns:1fr!important}
-}
-</style>\n</head>
+</head>
 <body class="dark">
 <div aria-hidden="true" class="morph-bg">
 <div class="morph-blob blob1"></div>
@@ -39652,43 +39565,256 @@ paint();const ob=new MutationObserver(()=>paint());if(document.body)ob.observe(d
 })();
 </script>
 
-<style id="PARLAYOS_SPORTS_UNIFIED_V3_STYLE">
-.p3-shell{max-width:1500px;margin:0 auto;padding:18px;position:relative;z-index:20}.p3-tabs,.p3-models,.p3-live-tabs,.p3-fantasy-tabs{display:flex;flex-wrap:wrap;gap:8px}.p3-tabs{margin:12px 0}.p3-tabs button,.p3-models button,.p3-live-tabs button,.p3-fantasy-tabs button,.p3-add,.p3-cart,.p3-close,.p3-remove{appearance:none;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:inherit;border-radius:12px;padding:9px 12px;font-weight:800;cursor:pointer}.p3-tabs button,.p3-models button,.p3-live-tabs button,.p3-fantasy-tabs button{border-radius:999px}.p3-tabs button[aria-pressed="true"],.p3-models button[aria-pressed="true"],.p3-live-tabs button[aria-pressed="true"],.p3-fantasy-tabs button[aria-pressed="true"]{background:rgba(255,255,255,.23);border-color:rgba(255,255,255,.5)}.p3-tabs button:focus-visible,.p3-models button:focus-visible,.p3-live-tabs button:focus-visible,.p3-fantasy-tabs button:focus-visible,.p3-add:focus-visible,.p3-cart:focus-visible,.p3-close:focus-visible,.p3-remove:focus-visible{outline:2px solid currentColor;outline-offset:2px}.p3-title{font-size:clamp(24px,3vw,36px);font-weight:950;letter-spacing:-.03em}.p3-sub{margin-top:4px;font-size:12px;opacity:.7;line-height:1.45;max-width:820px}.p3-panel{display:none}.p3-panel.active{display:block}.p3-models{margin-top:13px}.p3-models button{font-size:11px}.p3-note{font-size:11px;opacity:.68;margin:10px 0}.p3-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.p3-card{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);border-radius:20px;padding:15px;min-width:0}.p3-head{display:flex;justify-content:space-between;gap:8px;font-size:10px;text-transform:uppercase;letter-spacing:.07em;opacity:.7}.p3-match{display:grid;grid-template-columns:50px minmax(0,1fr) 50px;gap:9px;align-items:center;margin:14px 0}.p3-badge{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:rgba(20,65,130,.88);color:#fff;font-size:11px;font-weight:950}.p3-badge.home{justify-self:end;background:rgba(220,70,45,.88)}.p3-teams{text-align:center;min-width:0}.p3-teams .names{font-weight:950;font-size:18px;line-height:1.1;overflow-wrap:anywhere}.p3-teams .sub{font-size:10px;opacity:.6;margin-top:3px}.p3-market{border-top:1px solid rgba(255,255,255,.15);padding-top:9px;margin-top:9px}.p3-market-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.p3-market-title{font-size:10px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;opacity:.64}.p3-prob{font-size:16px;font-weight:950}.p3-pick{font-size:16px;font-weight:950;margin-top:3px;overflow-wrap:anywhere}.p3-meta{font-size:10px;opacity:.65;margin-top:3px}.p3-unavail{margin-top:9px;padding:9px;border:1px dashed rgba(255,255,255,.24);border-radius:11px;font-size:10px;opacity:.68}.p3-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:13px}.p3-add{min-height:42px;font-size:10px}.p3-add:disabled{opacity:.38;cursor:not-allowed}.p3-section{margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,.15)}.p3-live-grid,.p3-fantasy-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:10px}.p3-live-card,.p3-fantasy-card{border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:10px}.p3-live-card .teams,.p3-fantasy-card .name{font-size:12px;font-weight:900}.p3-live-card .score{font-size:18px;font-weight:950;margin-top:3px}.p3-live-card .status,.p3-fantasy-card .meta{font-size:10px;opacity:.66;margin-top:3px}.p3-cart-stack{position:fixed;right:14px;bottom:14px;z-index:2147483647;display:flex;flex-direction:column;align-items:flex-end;gap:8px;max-width:calc(100vw - 28px)}.p3-cart{background:rgba(18,20,28,.94);color:#fff;backdrop-filter:blur(14px);border-radius:999px;white-space:nowrap;box-shadow:0 10px 26px rgba(0,0,0,.24)}.p3-count{display:inline-grid;place-items:center;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:rgba(255,255,255,.16);margin-left:5px}.p3-backdrop{position:fixed;inset:0;z-index:2147483646;background:rgba(2,4,10,.68);display:none;align-items:flex-end;justify-content:center;padding:16px}.p3-backdrop.open{display:flex}.p3-drawer{width:min(760px,100%);max-height:78vh;overflow:auto;background:rgba(24,24,34,.98);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:16px}.p3-drawer-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.p3-drawer-title{font-size:19px;font-weight:950}.p3-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid rgba(255,255,255,.13)}.p3-row .pick{font-size:12px;font-weight:900}.p3-row .meta{font-size:10px;opacity:.65;margin-top:2px}.p3-hidden{display:none!important}@media(max-width:1080px){.p3-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.p3-live-grid,.p3-fantasy-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:650px){.p3-shell{padding:12px 10px 24px}.p3-grid,.p3-live-grid,.p3-fantasy-grid{grid-template-columns:1fr}.p3-actions{grid-template-columns:1fr}.p3-cart-stack{right:10px;bottom:10px;max-width:calc(100vw - 20px)}}
+<style id="PARLAYOS_GAME_CARD_REPAIR_STYLE">
+.parlayos-game-card-repair-ready .parlayos-game-card-add{pointer-events:auto!important;position:relative;z-index:30}
+.parlayos-game-card-pitcher[data-parlayos-pitcher-ready="1"]{cursor:pointer}
+.parlayos-game-card-pitcher[data-parlayos-pitcher-ready="1"]:hover{background:rgba(255,255,255,.12)}
+.parlayos-game-card-repair-modal{position:fixed;inset:0;z-index:2147483640;display:grid;place-items:center;padding:20px;background:rgba(5,7,14,.68)}
+.parlayos-game-card-repair-modal[hidden]{display:none}
+.parlayos-game-card-repair-dialog{width:min(620px,100%);max-height:80vh;overflow:auto;border:1px solid rgba(255,255,255,.28);border-radius:22px;background:rgba(30,25,45,.97);color:#fff;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.38)}
+.parlayos-game-card-repair-dialog .close{float:right}
+.parlayos-game-card-repair-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:16px}
+.parlayos-game-card-repair-stat{padding:10px;border:1px solid rgba(255,255,255,.18);border-radius:12px}
+.parlayos-game-card-repair-stat b{display:block;font-size:10px;opacity:.68;text-transform:uppercase}
+.parlayos-game-card-repair-stat span{font-weight:800}
+@media(max-width:620px){.parlayos-game-card-repair-stats{grid-template-columns:1fr}}
 </style>
-<script id="PARLAYOS_SPORTS_UNIFIED_V3">
+<script id="PARLAYOS_GAME_CARD_REPAIR">
 (function(){
 'use strict';
-if(window.__PARLAYOS_SPORTS_UNIFIED_V3_READY)return;
-window.__PARLAYOS_SPORTS_UNIFIED_V3_READY=true;
-const SPORTS={MLB:['⚾','MLB','parlayos_mlb_chd.json'],NFL:['🏈','NFL','parlayos_nfl_chd.json'],NBA:['🏀','NBA','parlayos_nba_chd.json'],SOC:['⚽','Soccer','parlayos_soccer_chd.json'],NHL:['🏒','NHL','parlayos_nhl_chd.json']};
-const ORDER=Object.keys(SPORTS),MODELS=['monte_carlo','zips','steamer','my_chd','season_stats','chd_master_predictor','final_combined'],MODEL_NAMES={monte_carlo:'Monte Carlo',zips:'ZiPS',steamer:'Steamer',my_chd:'My CHD',season_stats:'Season Stats',chd_master_predictor:'CHD Master Predictor',final_combined:'Final Combined All Models'};
-const state={data:{},models:{},carts:{MLB:[],NFL:[],NBA:[],SOC:[],NHL:[]},active:'MLB',live:{sports:{}},liveSport:'MLB',fantasySport:'SOC'};
-const A=v=>Array.isArray(v)?v:[],N=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v)),E=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),P=v=>N(v)?(Number(v)*100).toFixed(1)+'%':'N/A',gid=g=>String(g?.id??g?.game_id??g?.gamePk??'');
-const rec=(g,m)=>m==='final_combined'?(g?.ensemble||null):(g?.models?.[m]||null),market=(g,m,k)=>rec(g,m)?.markets?.[k]||null,pick=m=>m?[m.selection,m.pick,m.team,m.side,m.label].find(v=>v!==undefined&&v!==null&&v!=='')||null:null;
-const teams=g=>({a:g?.away??g?.a??'Away',h:g?.home??g?.b??'Home',aa:g?.away_abbr??g?.abbrA??g?.aAbbr??'',ha:g?.home_abbr??g?.abbrB??g?.bAbbr??''});
-function games(s){return A(state.data[s]?.games)}
-function init(x){return String(x||'').trim().split(/\s+/).filter(Boolean).map(v=>v[0]).join('').slice(0,3).toUpperCase()||'--'}
-function model(s){return state.models[s]||'final_combined'}
-function loadPrefs(){ORDER.forEach(s=>{try{state.models[s]=localStorage.getItem('parlayos:v3:model:'+s)||'final_combined'}catch(_){state.models[s]='final_combined'}})}
-function savePref(s){try{localStorage.setItem('parlayos:v3:model:'+s,state.models[s])}catch(_) {}}
-async function boot(){loadPrefs();for(const s of ORDER){try{state.data[s]=await(await fetch('./'+SPORTS[s][2],{cache:'no-store'})).json()}catch(_){state.data[s]={games:[]}}}try{state.live=await(await fetch('./live_scores.json',{cache:'no-store'})).json()}catch(_){state.live={sports:{}}}mount();renderAll();renderLive();renderFantasy();renderCarts()}
-function mount(){if(document.getElementById('parlayos-sports-v3'))return;const sh=document.createElement('section');sh.id='parlayos-sports-v3';sh.className='p3-shell';sh.innerHTML='<div class="p3-title">ParlayOS Sports Hubs</div><div class="p3-sub">MLB, NFL, NBA, Soccer, and NHL share one consistent seven-model prediction surface. Market or player data that is absent stays unavailable.</div><nav class="p3-tabs" aria-label="Sports hubs"></nav><div class="p3-panels"></div><div class="p3-section"><div class="p3-title" style="font-size:19px">Live Scores</div><div class="p3-sub">Live score chips for every supported sport.</div><div class="p3-live-tabs"></div><div class="p3-live-grid"></div></div><div class="p3-section"><div class="p3-title" style="font-size:19px">Fantasy Crew</div><div class="p3-sub">Validated players returned by the corresponding sport feed.</div><div class="p3-fantasy-tabs" data-area="crew"></div><div class="p3-fantasy-grid" data-area="crew-grid"></div><div class="p3-title" style="font-size:19px;margin-top:22px">Fantasy Shop</div><div class="p3-sub">Validated player inventory only; no synthetic prices, salaries, or slots are created.</div><div class="p3-fantasy-tabs" data-area="shop"></div><div class="p3-fantasy-grid" data-area="shop-grid"></div></div>';document.body.insertBefore(sh,document.body.firstElementChild||null);const stack=document.createElement('div');stack.id='parlayos-sports-v3-carts';stack.className='p3-cart-stack';document.body.appendChild(stack);const back=document.createElement('div');back.id='parlayos-sports-v3-drawer';back.className='p3-backdrop';back.innerHTML='<div class="p3-drawer" role="dialog" aria-modal="true"><div class="p3-drawer-head"><div class="p3-drawer-title" data-title></div><div><button type="button" class="p3-close" data-close>Close</button><button type="button" class="p3-close" data-clear>Clear</button></div></div><div data-list></div></div>';document.body.appendChild(back);const tabs=sh.querySelector('.p3-tabs'),panels=sh.querySelector('.p3-panels');ORDER.forEach(s=>{const b=document.createElement('button');b.type='button';b.dataset.s=s;b.textContent=SPORTS[s][0]+' '+SPORTS[s][1];tabs.appendChild(b);const p=document.createElement('section');p.className='p3-panel';p.dataset.s=s;p.innerHTML='<div class="p3-models"></div><div class="p3-note"></div><div class="p3-grid"></div>';panels.appendChild(p);MODELS.forEach(m=>{const mb=document.createElement('button');mb.type='button';mb.dataset.m=m;mb.textContent=MODEL_NAMES[m];p.querySelector('.p3-models').appendChild(mb)})});sh.addEventListener('click',e=>{const hub=e.target.closest('.p3-tabs button');if(hub){state.active=hub.dataset.s;renderAll();renderFantasy()}const modelBtn=e.target.closest('.p3-models button');if(modelBtn){const s=modelBtn.closest('.p3-panel').dataset.s;state.models[s]=modelBtn.dataset.m;savePref(s);renderAll()}const add=e.target.closest('.p3-add');if(add)addPick(add)});back.addEventListener('click',e=>{if(e.target===back||e.target.closest('[data-close]'))back.classList.remove('open');if(e.target.closest('[data-clear]')){const s=back.dataset.s;if(s){state.carts[s]=[];renderCarts();openCart(s)}}const remove=e.target.closest('[data-remove]');if(remove){const s=back.dataset.s,i=Number(remove.dataset.remove);if(s&&Number.isInteger(i)){state.carts[s].splice(i,1);renderCarts();openCart(s)}}});hideLegacy()}
-function hideLegacy(){['#dashboardCards','#nflDashboardCards','#nbaDashboardCards'].forEach(q=>document.querySelectorAll(q).forEach(x=>x.classList.add('p3-hidden')));document.querySelectorAll('.parlayos-model-switcher').forEach(x=>x.classList.add('p3-hidden'))}
-function addPick(btn){const s=btn.dataset.s,g=games(s).find(x=>gid(x)===btn.dataset.g),m=market(g,model(s),btn.dataset.k);if(!g||!m||m.status==='unavailable'||!pick(m))return;const t=teams(g),entry={gameId:gid(g),market:btn.dataset.k,selection:pick(m),line:m.line??null,odds:m.odds??null,model:model(s),game:t.a+' vs '+t.h};const i=state.carts[s].findIndex(x=>x.gameId===entry.gameId&&x.market===entry.market);if(i<0)state.carts[s].push(entry);else state.carts[s][i]=entry;nativeAdd(s,entry);renderCarts();const label=btn.dataset.label||btn.textContent;btn.dataset.label=label;btn.textContent='Added ✓';setTimeout(()=>{if(document.body.contains(btn))btn.textContent=label},850)}
-function nativeAdd(s,e){const f=s==='MLB'?window.addLegByToken:s==='NFL'?window.addNFLLegByToken:s==='NBA'?window.addNBALegByToken:null;if(typeof f==='function'){try{f(e.gameId+':'+e.market)}catch(_){}}try{document.dispatchEvent(new CustomEvent('parlayos:parlay-updated',{detail:{sport:s,count:state.carts[s].length}}))}catch(_) {}}
-function renderAll(){document.querySelectorAll('.p3-tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.s===state.active)));document.querySelectorAll('.p3-panel').forEach(p=>p.classList.toggle('active',p.dataset.s===state.active));ORDER.forEach(renderSport)}
-function renderSport(s){const p=document.querySelector('.p3-panel[data-s="'+s+'"]');if(!p)return;const id=model(s),gs=games(s);p.querySelectorAll('.p3-models button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.m===id)));const available=MODELS.filter(mid=>gs.some(g=>{const r=rec(g,mid);return r&&r.status!=='unavailable'&&Object.values(r.markets||{}).some(v=>v&&v.status!=='unavailable'&&pick(v))}));p.querySelector('.p3-note').textContent=gs.length?'Selected: '+MODEL_NAMES[id]+'. '+available.length+'/7 models expose at least one validated market on this '+SPORTS[s][1]+' slate.':'No '+SPORTS[s][1]+' games are currently returned by the real-data feed.';const labels=s==='MLB'?['Moneyline','Over / Under','Pitcher K Prop']:s==='NFL'||s==='NBA'?['Moneyline','Over / Under','Spread']:s==='SOC'?['Moneyline','Over / Under','Handicap']:['Moneyline','Over / Under','Puck Line'];const keys=['ml','ou','k'];p.querySelector('.p3-grid').innerHTML=gs.slice(0,40).map(g=>card(s,g,labels,keys,id)).join('')}
-function card(s,g,labels,keys,id){const t=teams(g);return '<article class="p3-card"><div class="p3-head"><span>'+E(g.league||SPORTS[s][1])+'</span><span>'+E(MODEL_NAMES[id])+'</span></div><div class="p3-match"><div class="p3-badge">'+E(t.aa||init(t.a))+'</div><div class="p3-teams"><div class="names">'+E(t.a)+' <span style="opacity:.45">VS</span> '+E(t.h)+'</div><div class="sub">'+E(t.aa)+' · '+E(t.ha)+'</div></div><div class="p3-badge home">'+E(t.ha||init(t.h))+'</div></div>'+keys.map((k,i)=>block(labels[i],market(g,id,k))).join('')+'<div class="p3-actions">'+keys.map((k,i)=>addButton(s,g,k,labels[i],id)).join('')+'</div></article>'}
-function block(title,m){if(!m||m.status==='unavailable'||!pick(m))return '<div class="p3-unavail"><b>'+E(title)+'</b> · Unavailable from the selected model.</div>';const meta=[m.line!=null?'Line '+m.line:'',m.odds!=null?String(m.odds):'',N(m.edge)?'Edge '+(Number(m.edge)>=0?'+':'')+(Number(m.edge)*100).toFixed(1)+'%':'Edge N/A'].filter(Boolean).join(' · ');return '<div class="p3-market"><div class="p3-market-head"><span class="p3-market-title">'+E(title)+'</span><span class="p3-prob">'+E(P(m.probability))+'</span></div><div class="p3-pick">'+E(pick(m))+'</div><div class="p3-meta">'+E(meta)+' · Confidence '+E(m.confidence!=null?P(m.confidence):'N/A')+'</div></div>'}
-function addButton(s,g,k,label,id){const m=market(g,id,k),ok=!!(m&&m.status!=='unavailable'&&pick(m));return '<button type="button" class="p3-add" data-s="'+s+'" data-g="'+E(gid(g))+'" data-k="'+k+'"'+(ok?'':' disabled')+'>'+E(ok?'Add '+label:'Unavailable')+'</button>'}
-function renderCarts(){const h=document.getElementById('parlayos-sports-v3-carts');if(!h)return;h.innerHTML=ORDER.filter(s=>state.carts[s].length).map(s=>'<button type="button" class="p3-cart" data-cart="'+s+'" title="Open '+E(SPORTS[s][1])+' Parlayinator">'+SPORTS[s][0]+' '+E(SPORTS[s][1])+' Parlayinator <span class="p3-count">'+state.carts[s].length+'</span></button>').join('');h.querySelectorAll('[data-cart]').forEach(b=>b.addEventListener('click',()=>openCart(b.dataset.cart)))}
-function openCart(s){const d=document.getElementById('parlayos-sports-v3-drawer');if(!d)return;d.dataset.s=s;d.querySelector('[data-title]').textContent=SPORTS[s][0]+' '+SPORTS[s][1]+' Parlayinator';const list=d.querySelector('[data-list]');list.innerHTML=state.carts[s].length?state.carts[s].map((x,i)=>'<div class="p3-row"><div><div class="pick">'+E(x.selection)+'</div><div class="meta">'+E(x.game)+' · '+E(MODEL_NAMES[x.model]||x.model)+' · '+E(x.market)+(x.line!=null?' · line '+E(x.line):'')+(x.odds!=null?' · '+E(x.odds):'')+'</div></div><button type="button" class="p3-remove" data-remove="'+i+'">Remove</button></div>').join(''):'<div class="p3-sub">No selections in this Parlayinator.</div>';d.classList.add('open')}
-function renderLive(){const tabs=document.querySelector('.p3-live-tabs'),grid=document.querySelector('.p3-live-grid');if(!tabs||!grid)return;tabs.innerHTML=ORDER.map(s=>'<button type="button" data-live="'+s+'" aria-pressed="'+(s===state.liveSport)+'">'+SPORTS[s][0]+' '+SPORTS[s][1]+'</button>').join('');const gs=A(state.live?.sports?.[state.liveSport]);grid.innerHTML=gs.length?gs.slice(0,24).map(g=>'<div class="p3-live-card"><div class="teams">'+E(g.a??g.away??'Away')+' '+E(g.aScore??g.awayScore??'—')+' · '+E(g.bScore??g.homeScore??'—')+' '+E(g.b??g.home??'Home')+'</div><div class="score">'+E(g.aScore??g.awayScore??'—')+' - '+E(g.bScore??g.homeScore??'—')+'</div><div class="status">'+E(g.status??'Scheduled')+'</div></div>').join(''):'<div class="p3-live-card"><div class="status">No '+E(SPORTS[state.liveSport][1])+' scores returned.</div></div>';tabs.querySelectorAll('[data-live]').forEach(b=>b.addEventListener('click',()=>{state.liveSport=b.dataset.live;renderLive()}))}
-function fantasyPlayers(s){return games(s).flatMap(g=>A(g.fantasy).map(p=>({...p,game:(g.away??g.a)+' vs '+(g.home??g.b)}))).filter((p,i,a)=>{const k=String(p.id||p.name||'').toLowerCase();return k&&a.findIndex(q=>String(q.id||q.name||'').toLowerCase()===k)===i})}
-function renderFantasyArea(area){const tabs=document.querySelector('.p3-fantasy-tabs[data-area="'+area+'"]'),grid=document.querySelector('.p3-fantasy-grid[data-area="'+area+'-grid"]');if(!tabs||!grid)return;tabs.innerHTML=['SOC','NHL'].map(s=>'<button type="button" data-fantasy="'+s+'" aria-pressed="'+(s===state.fantasySport)+'">'+SPORTS[s][0]+' '+SPORTS[s][1]+'</button>').join('');const ps=fantasyPlayers(state.fantasySport);grid.innerHTML=ps.length?ps.slice(0,20).map(p=>'<div class="p3-fantasy-card"><div class="name">'+E(p.name)+'</div><div class="meta">'+E(p.stat||'Validated leader')+(p.value!=null?' · '+E(p.value):'')+'</div><div class="meta">'+E(p.game)+'</div></div>').join(''):'<div class="p3-live-card"><div class="status">No validated '+E(SPORTS[state.fantasySport][1])+' fantasy data is available.</div></div>';tabs.querySelectorAll('[data-fantasy]').forEach(b=>b.addEventListener('click',()=>{state.fantasySport=b.dataset.fantasy;renderFantasy()}))}
-function renderFantasy(){renderFantasyArea('crew');renderFantasyArea('shop')}
-boot();
+if(window.__PARLAYOS_GAME_CARD_REPAIR_READY)return;window.__PARLAYOS_GAME_CARD_REPAIR_READY=true;
+document.documentElement.classList.add('parlayos-game-card-repair-ready');
+const SPORTS={MLB:{data:'PARLAYOS_DATA',cards:'dashboardCards',add:'data-add',handler:'addLegByToken'},NFL:{data:'PARLAYOS_NFL_DATA',cards:'nflDashboardCards',add:'data-nfl-add',handler:'addNFLLegByToken'},NBA:{data:'PARLAYOS_NBA_DATA',cards:'nbaDashboardCards',add:'data-nba-add',handler:'addNBALegByToken'}};
+const A=v=>Array.isArray(v)?v:[],S=v=>v==null?'':String(v),N=v=>Number.isFinite(Number(v)),F=(...v)=>v.find(x=>x!==undefined&&x!==null&&x!==''),E=s=>S(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
+const data=s=>window[SPORTS[s].data]||{},games=s=>A(data(s).games),gid=g=>S(g?.id??g?.game_id??g?.gamePk),model=s=>window.PARLAYOS_MODEL_SELECTION?.[s]||'final_combined',record=(g,m)=>m==='final_combined'?(g?.ensemble||null):(g?.models?.[m]||null),market=(g,m,k)=>record(g,m)?.markets?.[k]||null;
+function unique(a){const seen=new Set();return A(a).filter(p=>{if(!p||typeof p!=='object')return false;const k=S(p.id??p.playerId??p.name??p.fullName).toLowerCase();if(!k||seen.has(k))return false;seen.add(k);return true})}
+function lineup(g,side){const raw=A(g?.lineups?.[side]??g?.players?.[side]??g?.rosters?.[side]),want=S(g?.[side+'_abbr']||g?.[side]||g?.[side+'_team']).toLowerCase(),filtered=raw.filter(p=>{const t=S(p?.team??p?.team_abbr??p?.teamAbbr).toLowerCase();return !t||!want||t===want||t.includes(want)||want.includes(t)});return unique(filtered.length?filtered:raw)}
+function value(p,key){const keys={avg:['avg','batting_avg','AVG','average'],ops:['ops','OPS'],hr:['hr','HR','home_runs'],woba:['woba','wOBA'],war:['war','WAR']}[key]||[key];for(const k of keys){const n=parseFloat(p?.[k]);if(Number.isFinite(n))return n}return null}
+function mean(a,key){const v=unique(a).map(p=>value(p,key)).filter(Number.isFinite);return v.length?v.reduce((x,y)=>x+y,0)/v.length:null}
+function objects(x,out=[],depth=0){if(!x||typeof x!=='object'||depth>3)return out;if(Array.isArray(x)){x.forEach(v=>objects(v,out,depth+1));return out}out.push(x);Object.values(x).forEach(v=>{if(v&&typeof v==='object')objects(v,out,depth+1)});return out}
+function pitcher(g,side){const raw=g?.pitchers?.[side],stats=g?.pitchers?.[`${side}_stats`]||{},id=raw&&typeof raw!=='object'?S(raw):S(raw?.id??raw?.playerId??raw?.pitcher_id),c=[raw,g?.probable_pitchers?.[side],g?.probablePitchers?.[side],g?.[`${side}_pitcher`],g?.pitcher_details?.[side],g?.pitcherDetails?.[side]],initial=c.find(x=>x&&typeof x==='object')||{},resolved=id?objects(g).find(x=>S(x?.id??x?.playerId??x?.pitcher_id)===id&&F(x?.name,x?.fullName,x?.full_name,x?.player_name)):null,o=resolved||initial;return{id,name:F(o.name,o.fullName,o.full_name,o.displayName,o.player_name,g?.pitcher_names?.[side],g?.pitcherNames?.[side],g?.[`${side}_pitcher_name`]),era:F(o.era,o.stats?.era,stats.era),whip:F(o.whip,o.stats?.whip,stats.whip),k9:F(o.k9,o.k_per_9,o.stats?.k9,o.stats?.k_per_9,stats.k9,stats.k_per_9),object:o.stats?{...o,stats:{...stats,...o.stats}}:{...o,stats}}}
+function cardGame(card,s){const wanted=S(card?.dataset?.gameId);return games(s).find(g=>gid(g)===wanted)||null}
+function pct(v){return N(v)?`${(Number(v)*100).toFixed(1)}%`:'N/A'}function odds(v){if(!N(v)||Number(v)===0)return'N/A';const n=Number(v);return n>0?`+${n}`:String(n)}
+function marketHtml(title,m){if(!m||m.status==='unavailable')return`<div class="parlayos-game-card-unavailable"><b>${E(title)}</b> · Unavailable from the selected model.</div>`;const p=N(m.probability)?Number(m.probability):null,e=N(m.edge)?Number(m.edge):null,w=p==null?0:Math.max(0,Math.min(100,p*100));return`<section class="parlayos-game-card-market"><div class="parlayos-game-card-market-head"><span class="parlayos-game-card-market-title">${E(title)}</span><span class="parlayos-game-card-market-prob">${p==null?'N/A':pct(p)}</span></div><div class="parlayos-game-card-pick">${E(F(m.selection,m.pick,m.team,m.side,'Unavailable'))}</div><div class="parlayos-game-card-meta"><span>${e==null?'Edge N/A':`Edge ${e>=0?'+':''}${(e*100).toFixed(1)}%`}${m.line!=null?` · Line ${E(m.line)}`:''}${m.odds!=null?` · ${odds(m.odds)}`:''}</span><span>${m.confidence!=null?`Confidence ${pct(m.confidence)}`:'Confidence N/A'}</span></div><div class="parlayos-game-card-bar${e!==null&&e<0?' negative':''}"><span style="width:${w.toFixed(1)}%"></span></div></section>`}
+function refreshMarkets(card,s,g){const host=card.querySelector('.parlayos-game-card-markets');if(!host)return;const m=model(s);const ml=market(g,m,'ml'),ou=market(g,m,'ou'),k=market(g,m,'k');host.innerHTML=marketHtml('Moneyline',ml)+marketHtml('Over / Under',ou)+(s==='MLB'?marketHtml('Pitcher K Prop',k):'')}
+function refreshActions(card,s,g){const map=[['ml','Add predicted team'],['ou','Add O/U'],['k',s==='MLB'?'Add pitcher K':'Add prop']];const buttons=card.querySelectorAll('.parlayos-game-card-add');if(buttons.length!==3)return;map.forEach(([key,label],i)=>{const m=market(g,model(s),key),b=buttons[i],attr=SPORTS[s].add;b.setAttribute(attr,`${gid(g)}:${key}`);b.dataset.parlayosGameId=gid(g);b.dataset.parlayosMarket=key;b.textContent=m&&m.status!=='unavailable'&&F(m.selection,m.pick,m.team,m.side)!=null?label:`${label} unavailable`;b.disabled=!(m&&m.status!=='unavailable'&&F(m.selection,m.pick,m.team,m.side)!=null)})}
+function refreshLineups(card,g){if(!g)return;const tiles=card.querySelectorAll('.parlayos-game-card-stat');const sides=['away','home'];let idx=0;sides.forEach(side=>{const p=lineup(g,side),avg=mean(p,'avg'),ops=mean(p,'ops'),woba=mean(p,'woba'),war=mean(p,'war'),hr=mean(p,'hr');const tile=[...tiles].find(x=>S(x.querySelector('.title')?.textContent).toLowerCase()===`${side} lineup`.toLowerCase());if(!tile)return;if(![avg,ops,woba,war,hr].some(N))return;const main=tile.querySelector('.main'),sub=tile.querySelector('.sub');if(main)main.textContent=avg==null?'—':Number(avg).toFixed(3);if(sub)sub.textContent=[['OPS',ops,3],['wOBA',woba,3],['WAR',war,2],['HR',hr,2]].filter(([,v])=>N(v)).map(([k,v,d])=>`${k} ${Number(v).toFixed(d)}`).join(' · ');idx++})}
+function bindPitchers(){document.querySelectorAll('.parlayos-game-card-pitcher[data-parlayos-pitcher]').forEach(btn=>{if(btn.dataset.parlayosPitcherReady)return;const s=S(btn.dataset.sport).toUpperCase(),g=games(s).find(x=>gid(x)===S(btn.dataset.gameId)),p=g?pitcher(g,btn.dataset.side):null;if(!p)return;btn.dataset.parlayosPitcherReady='1';const main=btn.querySelector('.main');if(main)main.textContent=p.name||'Pitcher unavailable';btn.title=p.name?'Open full pitcher statistics':'Pitcher identity unavailable'})}
+function ensureModal(){if(document.getElementById('parlayos-game-card-repair-modal'))return;const d=document.createElement('div');d.id='parlayos-game-card-repair-modal';d.className='parlayos-game-card-repair-modal';d.hidden=true;d.innerHTML='<div class="parlayos-game-card-repair-dialog" role="dialog" aria-modal="true"><button class="btn close" type="button" data-parlayos-close-player>Close</button><h2 data-parlayos-player-title></h2><div data-parlayos-player-sub></div><div class="parlayos-game-card-repair-stats" data-parlayos-player-stats></div></div>';document.body.appendChild(d)}
+function openPitcher(g,side){const p=pitcher(g,side);if(p.name&&p.object&&typeof window.openPlayerDetail==='function'){try{window.openPlayerDetail(p.object);return}catch(e){console.warn('[ParlayOS] existing player detail failed',e)}}ensureModal();const d=document.getElementById('parlayos-game-card-repair-modal'),stats={'ERA':F(p.era,p.object?.era,p.object?.stats?.era),'WHIP':F(p.whip,p.object?.whip,p.object?.stats?.whip),'K/9':F(p.k9,p.object?.k9,p.object?.stats?.k9),'FIP':F(p.object?.fip,p.object?.stats?.fip),'IP':F(p.object?.ip,p.object?.inningsPitched,p.object?.stats?.ip,p.object?.stats?.inningsPitched),'K':F(p.object?.k,p.object?.strikeouts,p.object?.stats?.k,p.object?.stats?.strikeouts),'BB':F(p.object?.bb,p.object?.walks,p.object?.stats?.bb,p.object?.stats?.walks)};d.querySelector('[data-parlayos-player-title]').textContent=p.name||'Pitcher unavailable';d.querySelector('[data-parlayos-player-sub]').textContent=p.id?`Player ID ${p.id}`:'No validated pitcher identity is available for this game.';d.querySelector('[data-parlayos-player-stats]').innerHTML=Object.entries(stats).filter(([,v])=>v!==undefined&&v!==null&&v!=='').map(([k,v])=>`<div class="parlayos-game-card-repair-stat"><b>${E(k)}</b><span>${E(v)}</span></div>`).join('')||'<div class="parlayos-game-card-unavailable">No additional validated pitcher statistics are available.</div>';d.hidden=false}
+function nativeAdd(s,token){const f=s==='MLB'?window.addLegByToken:s==='NFL'?window.addNFLLegByToken:window.addNBALegByToken;if(typeof f!=='function')return false;try{f(token);return true}catch(e){console.warn('[ParlayOS] native add failed',e);return false}}
+function refreshCart(){['renderParlay','updateParlay','refreshParlay','renderParlayCart','updateCart','refreshCart'].forEach(n=>{if(typeof window[n]==='function')try{window[n]()}catch(e){}});document.dispatchEvent(new CustomEvent('parlayos:parlay-updated'))}
+function repair(){Object.keys(SPORTS).forEach(s=>{document.getElementById(SPORTS[s].cards)?.querySelectorAll('.parlayos-game-card[data-game-id]').forEach(card=>{const g=cardGame(card,s);if(!g)return;const r=record(g,model(s)),markets=card.querySelector('.parlayos-game-card-markets');if(markets&&(!r||r.status==='unavailable'))refreshMarkets(card,s,g);refreshActions(card,s,g);refreshLineups(card,g)});});bindPitchers();ensureModal()}
+document.addEventListener('click',e=>{const b=e.target?.closest?.('.parlayos-game-card-add');if(b){const card=b.closest('.parlayos-game-card'),s=S(card?.dataset?.sport).toUpperCase(),attr=SPORTS[s]?.add,token=attr?b.getAttribute(attr):'';if(s&&token){e.preventDefault();e.stopImmediatePropagation();if(nativeAdd(s,token))setTimeout(refreshCart,0);return}}const p=e.target?.closest?.('[data-parlayos-pitcher]');if(p){e.preventDefault();e.stopImmediatePropagation();const s=S(p.dataset.sport).toUpperCase(),g=games(s).find(x=>gid(x)===S(p.dataset.gameId));if(g)openPitcher(g,p.dataset.side)}} ,true);
+document.addEventListener('click',e=>{if(e.target?.matches?.('[data-parlayos-close-player]')||e.target?.id==='parlayos-game-card-repair-modal'){const d=document.getElementById('parlayos-game-card-repair-modal');if(d)d.hidden=true}});
+window.addEventListener('parlayos:chd-data-ready',()=>setTimeout(repair,0));document.addEventListener('parlayos:model-selection-changed',()=>setTimeout(repair,0));window.addEventListener('parlayos:model-selection-changed',()=>setTimeout(repair,0));repair();[100,300,700,1200,2000].forEach(ms=>setTimeout(repair,ms));const observer=new MutationObserver(()=>{clearTimeout(window.__PARLAYOS_GAME_CARD_REPAIR_TIMER);window.__PARLAYOS_GAME_CARD_REPAIR_TIMER=setTimeout(repair,120)});if(document.body)observer.observe(document.body,{childList:true,subtree:true});
 })();
 </script>
+
+<style id="PARLAYOS_GAME_CARD_STABILITY_STYLE">
+.parlayos-game-card-actions .parlayos-game-card-add{pointer-events:auto!important;position:relative;z-index:31}
+.parlayos-game-card-pitcher[data-parlayos-pitcher-ready="1"]{cursor:pointer}
+</style>
+<script id="PARLAYOS_GAME_CARD_STABILITY">
+(function(){
+  'use strict';
+  if(window.__PARLAYOS_GAME_CARD_STABILITY_READY)return;
+  window.__PARLAYOS_GAME_CARD_STABILITY_READY=true;
+
+  const SPORT={
+    MLB:{data:'PARLAYOS_DATA',mount:'dashboardCards',attr:'data-add',add:'addLegByToken'},
+    NFL:{data:'PARLAYOS_NFL_DATA',mount:'nflDashboardCards',attr:'data-nfl-add',add:'addNFLLegByToken'},
+    NBA:{data:'PARLAYOS_NBA_DATA',mount:'nbaDashboardCards',attr:'data-nba-add',add:'addNBALegByToken'}
+  };
+  const A=v=>Array.isArray(v)?v:[];
+  const S=v=>v==null?'':String(v);
+  const N=v=>Number.isFinite(Number(v));
+  const F=(...v)=>v.find(x=>x!==undefined&&x!==null&&x!=='');
+  const E=s=>S(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
+  const data=s=>window[SPORT[s].data]||{};
+  const games=s=>A(data(s).games);
+  const gid=g=>S(g?.id??g?.game_id??g?.gamePk);
+  const model=s=>window.PARLAYOS_MODEL_SELECTION?.[s]||'final_combined';
+  const record=(g,m)=>m==='final_combined'?(g?.ensemble||null):(g?.models?.[m]||null);
+  const market=(g,m,k)=>record(g,m)?.markets?.[k]||null;
+
+  function sportForCard(card){
+    const explicit=S(card?.dataset?.sport||card?.dataset?.parlayosSport).toUpperCase();
+    if(SPORT[explicit])return explicit;
+    for(const [s,c] of Object.entries(SPORT))if(card.closest('#'+c.mount))return s;
+    return '';
+  }
+  function unique(players){
+    const seen=new Set();
+    return A(players).filter(p=>{
+      if(!p||typeof p!=='object')return false;
+      const key=S(p.id??p.playerId??p.name??p.fullName).trim().toLowerCase();
+      if(!key||seen.has(key))return false;
+      seen.add(key);return true;
+    });
+  }
+  function lineup(g,side){
+    const raw=A(g?.lineups?.[side]??g?.players?.[side]??g?.rosters?.[side]);
+    const want=S(g?.[side+'_abbr']||g?.[side]||g?.[side+'_team']).trim().toLowerCase();
+    const scoped=raw.filter(p=>{
+      const team=S(p?.team??p?.team_abbr??p?.teamAbbr).trim().toLowerCase();
+      return !team||!want||team===want||team.includes(want)||want.includes(team);
+    });
+    return unique(scoped.length?scoped:raw);
+  }
+  function val(p,key){
+    const aliases={avg:['avg','batting_avg','AVG','average'],ops:['ops','OPS'],woba:['woba','wOBA'],war:['war','WAR'],hr:['hr','HR','home_runs']}[key]||[key];
+    for(const k of aliases){const n=Number(p?.[k]);if(Number.isFinite(n))return n}
+    return null;
+  }
+  function mean(players,key){
+    const values=unique(players).map(p=>val(p,key)).filter(Number.isFinite);
+    return values.length?values.reduce((a,b)=>a+b,0)/values.length:null;
+  }
+  function pitcher(g,side){
+    const raw=g?.pitchers?.[side],stats=g?.pitchers?.[side+'_stats']||{};
+    const o=raw&&typeof raw==='object'?raw:{};
+    return {
+      id:S(o.id??o.playerId??o.pitcher_id??stats.id??stats.playerId),
+      name:F(o.name,o.fullName,o.full_name,o.displayName,o.player_name,stats.name,stats.fullName),
+      era:F(o.era,o.stats?.era,stats.era),
+      whip:F(o.whip,o.stats?.whip,stats.whip),
+      k9:F(o.k9,o.k_per_9,o.stats?.k9,o.stats?.k_per_9,stats.k9,stats.k_per_9)
+    };
+  }
+  function realLineupStats(g,side){
+    const players=lineup(g,side);
+    const avg=mean(players,'avg'),ops=mean(players,'ops'),woba=mean(players,'woba'),war=mean(players,'war'),hr=mean(players,'hr');
+    if(![avg,ops,woba,war,hr].some(N))return null;
+    return {
+      avg,
+      sub:[['OPS',ops,3],['wOBA',woba,3],['WAR',war,2],['HR',hr,2]]
+        .filter(([,v])=>N(v)).map(([k,v,d])=>`${k} ${Number(v).toFixed(d)}`).join(' · ')
+    };
+  }
+  function setPitcherTile(tile,g,side,s){
+    if(s!=='MLB')return;
+    const p=pitcher(g,side);
+    if(!p.name)return;
+    tile.classList.add('parlayos-game-card-pitcher');
+    tile.dataset.parlayosPitcher='1';
+    tile.dataset.parlayosPitcherReady='1';
+    tile.dataset.sport='MLB';
+    tile.dataset.gameId=gid(g);
+    tile.dataset.side=side;
+    tile.setAttribute('role','button');
+    tile.setAttribute('tabindex','0');
+    const main=tile.querySelector('.main');
+    if(main)main.textContent=p.name;
+    tile.title='Open full pitcher statistics';
+  }
+  function rebuildMLBStats(card,g){
+    const host=card.querySelector('.parlayos-game-card-stats');
+    if(!host)return;
+    const signature=['away','home'].map(side=>{
+      const p=pitcher(g,side),ls=realLineupStats(g,side);
+      return [side,p.name||'',p.era??'',p.whip??'',p.k9??'',ls?.avg??'',ls?.sub||''].join('|');
+    }).join('||');
+    if(host.dataset.parlayosStatsSignature===signature)return;
+    host.dataset.parlayosStatsSignature=signature;
+    const existing=[...host.querySelectorAll('.parlayos-game-card-stat')];
+    const pitcherTiles=existing.filter(t=>S(t.querySelector('.title')?.textContent).trim().toLowerCase()==='pitching');
+    const lineupTiles=existing.filter(t=>/lineup/i.test(S(t.querySelector('.title')?.textContent)));
+    const fresh=[];
+    for(const side of ['away','home']){
+      const p=pitcher(g,side);
+      const tile=pitcherTiles[side==='away'?0:1]||document.createElement('div');
+      tile.className='parlayos-game-card-stat parlayos-game-card-pitcher';
+      tile.innerHTML='<div class="title">Pitching</div><div class="main"></div><div class="sub"></div>';
+      setPitcherTile(tile,g,side,'MLB');
+      const sub=[['ERA',p.era,2],['WHIP',p.whip,2],['K/9',p.k9,2]]
+        .filter(([,v])=>N(v)).map(([k,v,d])=>`${k} ${Number(v).toFixed(d)}`).join(' · ');
+      const subEl=tile.querySelector('.sub');if(subEl)subEl.textContent=sub;
+      if(p.name)fresh.push(tile);
+
+      const ls=realLineupStats(g,side);
+      if(ls){
+        const lt=lineupTiles[side==='away'?0:1]||document.createElement('div');
+        lt.className='parlayos-game-card-stat';
+        lt.innerHTML=`<div class="title">${side==='away'?'Away lineup':'Home lineup'}</div><div class="main">${Number(ls.avg).toFixed(3)}</div><div class="sub">${E(ls.sub)}</div>`;
+        fresh.push(lt);
+      }
+    }
+    host.replaceChildren(...fresh);
+  }
+  function normalizeActions(card,s,g){
+    const cfg=SPORT[s],buttons=[...card.querySelectorAll('.parlayos-game-card-actions button')];
+    if(buttons.length<3)return;
+    const keys=['ml','ou','k'],labels=['Add predicted team','Add O/U',s==='MLB'?'Add pitcher K':'Add prop'];
+    keys.forEach((key,i)=>{
+      const b=buttons[i],m=market(g,model(s),key);
+      b.classList.add('parlayos-game-card-add');
+      b.dataset.sport=s;
+      b.dataset.parlayosGameId=gid(g);
+      b.dataset.parlayosMarket=key;
+      b.setAttribute(cfg.attr,gid(g)+':'+key);
+      b.textContent=m&&m.status!=='unavailable'&&F(m.selection,m.pick,m.team,m.side)!=null?labels[i]:labels[i]+' unavailable';
+      b.disabled=!(m&&m.status!=='unavailable'&&F(m.selection,m.pick,m.team,m.side)!=null);
+    });
+  }
+  function normalizeCard(card,s){
+    const g=games(s).find(x=>gid(x)===S(card.dataset.gameId));
+    if(!g)return;
+    card.dataset.sport=s;
+    card.dataset.parlayosSport=s;
+    normalizeActions(card,s,g);
+    if(s==='MLB')rebuildMLBStats(card,g);
+  }
+  function repair(){
+    Object.keys(SPORT).forEach(s=>{
+      document.getElementById(SPORT[s].mount)?.querySelectorAll('.parlayos-game-card[data-game-id]').forEach(card=>normalizeCard(card,s));
+    });
+  }
+  function addFromButton(b){
+    const s=S(b.dataset.sport).toUpperCase(),cfg=SPORT[s],token=cfg?b.getAttribute(cfg.attr):'';
+    if(!cfg||!token||typeof window[cfg.add]!=='function')return;
+    try{
+      window[cfg.add](token);
+      setTimeout(()=>{
+        ['renderParlay','updateParlay','refreshParlay','renderParlayCart','updateCart','refreshCart']
+          .forEach(n=>{if(typeof window[n]==='function')try{window[n]()}catch(e){}});
+        document.dispatchEvent(new CustomEvent('parlayos:parlay-updated'));
+      },0);
+    }catch(e){console.warn('[ParlayOS] game-card add failed',e)}
+  }
+  function openPitcherFromTile(tile){
+    const s=S(tile.dataset.sport).toUpperCase(),g=games(s).find(x=>gid(x)===S(tile.dataset.gameId));
+    if(!g)return;
+    const p=pitcher(g,tile.dataset.side);
+    if(p.name&&typeof window.openPlayerDetail==='function'){
+      try{window.openPlayerDetail(g?.pitchers?.[tile.dataset.side]||p);return}catch(e){}
+    }
+    document.dispatchEvent(new CustomEvent('parlayos:open-player',{detail:{sport:s,game:g,pitcher:p}}));
+  }
+  document.addEventListener('click',e=>{
+    const add=e.target?.closest?.('.parlayos-game-card-add');
+    if(add){e.preventDefault();e.stopImmediatePropagation();addFromButton(add);return}
+    const tile=e.target?.closest?.('.parlayos-game-card-pitcher[data-parlayos-pitcher]');
+    if(tile){e.preventDefault();e.stopImmediatePropagation();openPitcherFromTile(tile)}
+  },true);
+  document.addEventListener('keydown',e=>{
+    if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('.parlayos-game-card-pitcher[data-parlayos-pitcher]')){
+      e.preventDefault();e.target.click();
+    }
+  });
+  window.addEventListener('chd:ready',()=>setTimeout(repair,0));
+  document.addEventListener('parlayos:chd-data-ready',()=>setTimeout(repair,0));
+  document.addEventListener('parlayos:model-selection-changed',()=>setTimeout(repair,0));
+  window.addEventListener('parlayos:model-selection-changed',()=>setTimeout(repair,0));
+  repair();
+  [100,300,700,1200,2000].forEach(ms=>setTimeout(repair,ms));
+  const observer=new MutationObserver(()=>{
+    clearTimeout(window.__PARLAYOS_GAME_CARD_STABILITY_TIMER);
+    window.__PARLAYOS_GAME_CARD_STABILITY_TIMER=setTimeout(repair,80);
+  });
+  if(document.body)observer.observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+
 </body>
 </html>
