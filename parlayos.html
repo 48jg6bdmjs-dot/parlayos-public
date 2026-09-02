@@ -39816,5 +39816,57 @@ window.addEventListener('parlayos:chd-data-ready',()=>setTimeout(repair,0));docu
 })();
 </script>
 
+<style id="PARLAYOS_SPORT_HUBS_LIVE_SCORES_STYLE">
+.parlayos-sport-hubs{margin:14px 0 18px;padding:14px;border:1px solid rgba(28,34,48,.10);border-radius:20px;background:rgba(255,255,255,.62);box-shadow:0 12px 28px rgba(23,37,73,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.parlayos-sport-hubs-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-bottom:10px}.parlayos-sport-hubs-title{font-size:14px;font-weight:850;letter-spacing:-.01em}.parlayos-sport-hubs-sub{font-size:10px;opacity:.62;margin-top:3px}.parlayos-sport-hubs-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.parlayos-sport-hub{appearance:none;min-width:0;text-align:left;border:1px solid rgba(28,34,48,.10);border-radius:16px;padding:12px;background:rgba(255,255,255,.72);color:inherit;cursor:pointer;box-shadow:0 8px 18px rgba(23,37,73,.05)}.parlayos-sport-hub:hover,.parlayos-sport-hub:focus-visible{border-color:rgba(28,34,48,.22);outline:none;transform:translateY(-1px)}.parlayos-sport-hub .icon{font-size:19px}.parlayos-sport-hub .name{font-size:13px;font-weight:850;margin-top:7px}.parlayos-sport-hub .desc{font-size:10px;opacity:.64;margin-top:3px;line-height:1.35}
+.parlayos-live-score-panel{margin:0 0 18px;padding:12px 0 2px}.parlayos-live-score-panel .title{font-size:14px;font-weight:850}.parlayos-live-score-panel .sub{font-size:10px;opacity:.62;margin-top:3px}.parlayos-live-score-chips{display:flex;gap:7px;overflow-x:auto;padding:10px 0 7px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.parlayos-live-score-chips::-webkit-scrollbar{display:none}.parlayos-live-score-chip{appearance:none;flex:0 0 auto;min-height:34px;padding:7px 11px;border:1px solid rgba(28,34,48,.12);border-radius:999px;background:rgba(255,255,255,.68);color:inherit;font:750 11px/1 system-ui,sans-serif;cursor:pointer;white-space:nowrap}.parlayos-live-score-chip[aria-pressed="true"]{background:rgba(28,34,48,.10);border-color:rgba(28,34,48,.26)}
+.parlayos-live-score-list{display:grid;gap:8px}.parlayos-live-score-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 12px;border:1px solid rgba(28,34,48,.10);border-radius:14px;background:rgba(255,255,255,.54)}.parlayos-live-score-card .league{font-size:9px;letter-spacing:.07em;text-transform:uppercase;opacity:.55}.parlayos-live-score-card .teams{font-size:12px;font-weight:780;margin-top:4px;line-height:1.35}.parlayos-live-score-card .status{font-size:9px;opacity:.58;margin-top:3px}.parlayos-live-score-card .score{font-size:17px;font-weight:900;white-space:nowrap}.parlayos-live-score-empty{padding:13px;border:1px dashed rgba(28,34,48,.14);border-radius:14px;font-size:11px;opacity:.65}
+@media(max-width:760px){.parlayos-sport-hubs{padding:12px}.parlayos-sport-hubs-grid{grid-template-columns:1fr}.parlayos-sport-hub{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:9px;row-gap:2px;align-items:center}.parlayos-sport-hub .icon{grid-row:1/3}.parlayos-sport-hub .name{margin-top:0}.parlayos-sport-hub .desc{margin-top:0}}
+</style>
+<script id="PARLAYOS_SPORT_HUBS_LIVE_SCORES">
+(function(){
+'use strict';
+if(window.__PARLAYOS_SPORT_HUBS_LIVE_SCORES_READY)return;
+window.__PARLAYOS_SPORT_HUBS_LIVE_SCORES_READY=true;
+const SPORTS={MLB:{label:'MLB',icon:'⚾',desc:'Baseball predictions & games'},NFL:{label:'NFL',icon:'🏈',desc:'Football predictions & games'},NBA:{label:'NBA',icon:'🏀',desc:'Basketball predictions & games'},SOC:{label:'Soccer',icon:'⚽',desc:'Live scores'},NHL:{label:'NHL',icon:'🏒',desc:'Live scores'}};
+const HUB_SPORTS=['MLB','NFL','NBA'],SCORE_ORDER=['MLB','NFL','NBA','SOC','NHL'];
+let liveData=null,liveActive='ALL',hubMounted=false,liveMounted=false;
+const arr=v=>Array.isArray(v)?v:[],str=v=>v==null?'':String(v),esc=v=>str(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),num=v=>v!==null&&v!==undefined&&v!==''&&!Number.isNaN(Number(v)),score=v=>num(v)?String(v):'—';
+function findScreen(kind){
+ const selectors=kind==='hub'?['#screen-desktop','#screen-home','#screen-home-screen','#screen-main-menu','#main-menu','#mainMenu','#menu','[data-screen="desktop"]','[data-screen="home"]','[data-screen="main-menu"]','[data-go="desktop"]']:['#screen-live-scores','#screen-live','#live-scores','[data-screen="live-scores"]','[data-screen="live"]','[data-view="live-scores"]'];
+ for(const sel of selectors){const el=document.querySelector(sel);if(el)return el}
+ const screens=[...document.querySelectorAll('.screen')],rx=kind==='hub'?/(desktop|home|menu|main)/i:/(live.*score|score.*live)/i;
+ return screens.find(el=>rx.test(`${el.id} ${el.dataset.screen||''} ${el.getAttribute('aria-label')||''}`))||null;
+}
+function invokeSport(sport){
+ const menuBtn=document.querySelector(`.menu-grid .menu-btn[data-go="${sport.toLowerCase()}"]`);if(menuBtn){menuBtn.click();return true}
+ const candidates={MLB:['screen-mlb-hub','screen-mlb','screen-mlb-dashboard','mlb-dashboard'],NFL:['screen-nfl-hub','screen-nfl','screen-nfl-dashboard','nfl-dashboard'],NBA:['screen-nba-hub','screen-nba','screen-nba-dashboard','nba-dashboard']}[sport]||[];
+ for(const id of candidates){const target=document.getElementById(id);if(!target)continue;for(const fnName of ['switchScreen','showScreen','navigateTo','goToScreen','setCurrentScreen']){const fn=window[fnName];if(typeof fn!=='function')continue;try{fn(id);return true}catch(_){}}}
+ const match={MLB:/^\s*MLB\s*$/i,NFL:/^\s*NFL\s*$/i,NBA:/^\s*NBA\s*$/i}[sport];
+ if(match){const btn=[...document.querySelectorAll('button,a,[role="button"]')].find(el=>match.test(str(el.textContent))&&!el.closest('.parlayos-live-score-panel'));if(btn){btn.click();return true}}
+ return false;
+}
+function mountHubs(){
+ if(hubMounted)return true;const host=findScreen('hub');if(!host)return false;if(host.querySelector('.parlayos-sport-hubs')){hubMounted=true;return true}
+ const wrap=document.createElement('section');wrap.className='parlayos-sport-hubs';wrap.setAttribute('aria-label','Sports hubs');wrap.innerHTML='<div class="parlayos-sport-hubs-head"><div><div class="parlayos-sport-hubs-title">Sports</div><div class="parlayos-sport-hubs-sub">Jump into a sport hub</div></div></div><div class="parlayos-sport-hubs-grid"></div>';
+ const grid=wrap.querySelector('.parlayos-sport-hubs-grid');HUB_SPORTS.forEach(s=>{const b=document.createElement('button');b.type='button';b.className='parlayos-sport-hub';b.dataset.sport=s;b.innerHTML=`<span class="icon" aria-hidden="true">${SPORTS[s].icon}</span><span class="name">${esc(SPORTS[s].label)}</span><span class="desc">${esc(SPORTS[s].desc)}</span>`;b.addEventListener('click',()=>invokeSport(s));grid.appendChild(b)});
+ const anchor=host.querySelector('.menu-grid')||host.querySelector('#dashboardCards,.cards,.quick-nav,.toolbar')||host.querySelector('h1,h2,h3,.title,.screen-title')||host.firstElementChild;if(anchor&&anchor.parentNode)anchor.insertAdjacentElement('afterend',wrap);else host.prepend(wrap);hubMounted=true;return true;
+}
+function scoreRows(sport){return arr(liveData?.sports?.[sport]).filter(g=>g&&((g.a||g.away)&&(g.b||g.home)))}
+function availableSports(){return SCORE_ORDER.filter(s=>scoreRows(s).length>0)}
+function scoreHost(){const screen=findScreen('live');if(!screen)return null;const host=screen.querySelector('#liveScoresMount');if(!host)return null;host.classList.add('parlayos-live-score-runtime-host');return host}
+function renderScores(){
+ const host=scoreHost();if(!host)return false;const sports=availableSports();if(liveActive!=='ALL'&&!sports.includes(liveActive))liveActive='ALL';const activeSports=liveActive==='ALL'?sports:[liveActive];
+ host.innerHTML='<div class="parlayos-live-score-panel"><div class="title">Live Scores</div><div class="sub">Select a sport to see its current score feed.</div><div class="parlayos-live-score-chips" role="group" aria-label="Live score sports"></div><div class="parlayos-live-score-list"></div></div>';
+ const chips=host.querySelector('.parlayos-live-score-chips'),list=host.querySelector('.parlayos-live-score-list');['ALL',...sports].forEach(s=>{const b=document.createElement('button');b.type='button';b.className='parlayos-live-score-chip';b.dataset.sport=s;b.textContent=s==='ALL'?'All':SPORTS[s].label;b.setAttribute('aria-pressed',String(s===liveActive));b.addEventListener('click',()=>{liveActive=s;renderScores()});chips.appendChild(b)});
+ const rows=activeSports.flatMap(s=>scoreRows(s).map(g=>({sport:s,g})));if(!rows.length){list.innerHTML='<div class="parlayos-live-score-empty">No live score data is currently available for this sport.</div>';liveMounted=true;return true}
+ rows.forEach(({sport:s,g})=>{const a=g.a||g.away||'Away',b=g.b||g.home||'Home',status=g.status||g.detailedState||'Status unavailable';const card=document.createElement('article');card.className='parlayos-live-score-card';card.dataset.sport=s;card.innerHTML=`<div><div class="league">${esc(SPORTS[s].label)}</div><div class="teams">${esc(a)}<br>${esc(b)}</div><div class="status">${esc(status)}</div></div><div class="score">${esc(score(g.aScore))}<br>${esc(score(g.bScore))}</div>`;list.appendChild(card)});liveMounted=true;return true;
+}
+async function loadLive(){try{const r=await fetch('./live_scores.json',{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);const payload=await r.json();liveData=payload&&typeof payload==='object'?payload:{sports:{}}}catch(e){liveData={sports:{}};console.warn('[ParlayOS] live scores unavailable',e)}renderScores()}
+function boot(){mountHubs();loadLive();const observer=new MutationObserver(()=>{if(!hubMounted)mountHubs()});if(document.body)observer.observe(document.body,{childList:true,subtree:true});setInterval(()=>{mountHubs();loadLive()},30000)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
+</script>
 </body>
 </html>
