@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate restored three-sport runtime artifact contract
+      - name: Validate production runtime artifact contract
         run: |
           set -euo pipefail
           for f in parlayos_chd_data.json parlayos_mlb_chd.json parlayos_nfl_chd.json parlayos_nba_chd.json live_scores.json data/live_scores.json; do
@@ -65,12 +65,44 @@ jobs:
               assert isinstance(section, dict), f'combined missing {sport}'
               assert section.get('games') == payload['games'], f'combined mismatch {sport}'
 
-          live = json.loads(Path('live_scores.json').read_text(encoding='utf-8'))
-          for sport in files:
-              assert isinstance(live.get('sports', {}).get(sport), list), f'live_scores missing {sport}'
-          assert isinstance(live.get('games'), list), 'live_scores games missing'
-          assert Path('index.html').read_text(encoding='utf-8') == Path('parlayos.html').read_text(encoding='utf-8'), 'HTML parity mismatch'
-          print('OK restored three-sport public artifact contract')
+          root_live = Path('live_scores.json')
+          mirror_live = Path('data/live_scores.json')
+          assert root_live.read_bytes() == mirror_live.read_bytes(), 'live score root/data mirror mismatch'
+          live = json.loads(root_live.read_text(encoding='utf-8'))
+          sports = live.get('sports')
+          assert isinstance(sports, dict), 'live_scores sports map missing'
+          for sport in ('MLB', 'NFL', 'NBA', 'SOC', 'NHL'):
+              assert isinstance(sports.get(sport), list), f'live_scores missing {sport}'
+              for i, game in enumerate(sports[sport]):
+                  assert isinstance(game, dict), f'{sport}[{i}]: invalid live-score game'
+                  assert game.get('a') or game.get('away'), f'{sport}[{i}]: away team missing'
+                  assert game.get('b') or game.get('home'), f'{sport}[{i}]: home team missing'
+          assert isinstance(live.get('games'), list), 'live_scores legacy games missing'
+
+          index = Path('index.html').read_text(encoding='utf-8')
+          parlayos = Path('parlayos.html').read_text(encoding='utf-8')
+          assert index == parlayos, 'HTML parity mismatch'
+          required_runtime = [
+              "const REQUIRED_SPORTS=['mlb','nfl','nba'];",
+              "const OPTIONAL_SPORTS=['soc','nhl'];",
+              'PARLAYOS_SPORT_HUBS_LIVE_SCORES',
+              'parlayos-live-score-chip',
+              'parlayos-hub-screen-title',
+              'PREDICTIONS',
+          ]
+          for token in required_runtime:
+              assert token in index, f'dashboard runtime token missing: {token}'
+          forbidden_runtime = [
+              'id="parlayos-live-scores-v7"',
+              "for(const s of SPORTS)payloads[s]=await get(SRC[s])",
+              "const games=A(payloads[s]?.games)",
+              'id="PARLAYOS_SPORTS_UNIFIED_V3"',
+              'id="PARLAYOS_UNIFIED_SPORTS_UI_TUNING"',
+              'ParlayOS Sports Hubs',
+          ]
+          for token in forbidden_runtime:
+              assert token not in index, f'obsolete/blocking runtime present: {token}'
+          print('OK production prediction, live-score, hub runtime, and artifact parity contracts')
           PY
 
       - name: Prepare artifact
@@ -78,8 +110,8 @@ jobs:
           mkdir -p site/data
           cp index.html parlayos.html about.html favicon.ico site/
           cp parlayos_chd_data.json parlayos_mlb_chd.json parlayos_nfl_chd.json parlayos_nba_chd.json live_scores.json site/
-          cp live_scores.json site/data/live_scores.json
-          ls -lh site
+          cp data/live_scores.json site/data/live_scores.json
+          ls -lh site site/data
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
