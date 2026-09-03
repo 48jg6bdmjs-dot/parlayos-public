@@ -23749,74 +23749,6 @@ body.no-fx #parlayos-emoji-canvas-v7 { display:none !important; }
 @media (prefers-reduced-motion: reduce) { #parlayos-emoji-canvas-v7 { opacity:0.20 !important; } }
 </style>
 <canvas aria-hidden="true" id="parlayos-emoji-canvas-v7"></canvas>
-<script id="parlayos-live-scores-v7">
-// FIXED LIVE SCORES - no teleport, auto-refresh
-(function(){
-  const MOUNT_ID='liveScoresMount';
-  function getMount(){ return document.getElementById(MOUNT_ID); }
-  function normalize(g){
-    if(g.teams && g.teams.length){
-      const a=g.teams[0], b=g.teams[1]||{};
-      return {lg:g.lg||'MLB', date:g.date||new Date().toISOString().split('T')[0], status:g.inning||g.status||'LIVE', aAbbr:(a.logo||a.abbr||'').substring(0,3).toUpperCase(), aName:a.name||g.a||'Away', aScore:a.score??g.aScore??0, bAbbr:(b.logo||b.abbr||'').substring(0,3).toUpperCase(), bName:b.name||g.b||'Home', bScore:b.score??g.bScore??0, final:!!g.final||(g.status||'').toLowerCase().includes('final')};
-    } else {
-      return {lg:g.lg||'MLB', date:g.date||new Date().toISOString().split('T')[0], status:g.status||'LIVE', aAbbr:(g.a||'AWY').substring(0,3).toUpperCase(), aName:g.a, aScore:g.aScore??0, bAbbr:(g.b||'HME').substring(0,3).toUpperCase(), bName:g.b, bScore:g.bScore??0, final:!!g.final};
-    }
-  }
-  function render(games, updatedISO){
-    const mount=getMount(); if(!mount) return;
-    const updated=updatedISO?new Date(updatedISO):new Date();
-    const timeStr=updated.toLocaleTimeString();
-    let html='<div class="live-header" style="display:flex; justify-content:space-between; align-items:center; padding:12px 4px;"><h2 style="margin:0; display:flex; align-items:center; gap:8px; font-size:16px;"><span style="width:8px;height:8px;background:#ff3b30;border-radius:50%;display:inline-block; box-shadow:0 0 8px #ff3b30; animation:pulseLive 1.2s infinite;"></span>Live Scores - '+games.length+'</h2><span style="font-size:11px; opacity:0.7;">Updated '+timeStr+' - Auto 1m</span></div><div class="live-grid" style="display:flex; flex-direction:column; gap:14px;">';
-    games.sort((a,b)=>(a.final?1:0)-(b.final?1:0));
-    games.forEach(gRaw=>{
-      const g=normalize(gRaw);
-      const bg=g.final?'rgba(0,0,0,0.18)':'rgba(180,90,40,0.22)';
-      html+='<div class="live-card live" style="background:'+bg+'; border:1px solid rgba(255,255,255,0.14); border-radius:22px; padding:16px 18px;"><div style="display:flex; justify-content:space-between; font-size:11px; opacity:0.7; margin-bottom:12px;"><span>'+g.lg+' • '+g.date+'</span><span>'+g.status+'</span></div>';
-      html+='<div style="display:flex; flex-direction:column; gap:18px;">';
-      html+='<div style="display:flex; align-items:center; justify-content:space-between;"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:12px; font-weight:800; width:32px;">'+g.aAbbr+'</span><div><div style="font-weight:800; font-size:18px;">'+g.aName+'</div><div style="font-size:10px; opacity:0.6;">AWAY</div></div></div><div style="font-size:28px; font-weight:900;">'+g.aScore+'</div></div>';
-      html+='<div style="height:1px; background:rgba(255,255,255,0.10);"></div>';
-      html+='<div style="display:flex; align-items:center; justify-content:space-between;"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:12px; font-weight:800; width:32px;">'+g.bAbbr+'</span><div><div style="font-weight:800; font-size:18px;">'+g.bName+'</div><div style="font-size:10px; opacity:0.6;">HOME</div></div></div><div style="font-size:28px; font-weight:900;">'+g.bScore+'</div></div>';
-      const rawPlate = gRaw.plateInfo || {};
-      const rawBox = gRaw.boxScore || {};
-      const plateParts = [];
-      if(rawPlate.outs != null) plateParts.push(rawPlate.outs+' OUT');
-      if(rawPlate.balls != null && rawPlate.strikes != null) plateParts.push(rawPlate.balls+'-'+rawPlate.strikes+' BS');
-      if(rawPlate.baseRunners != null) plateParts.push(rawPlate.baseRunners+' RUNNER'+(rawPlate.baseRunners===1?'':'S'));
-      if(plateParts.length) html+='<div style="font-size:10px; opacity:0.8; margin-top:4px; font-family:monospace;">PLATE: '+plateParts.join(' • ')+'</div>';
-      const boxParts = [];
-      if(rawBox.aHits != null || rawBox.bHits != null) boxParts.push('H: '+(rawBox.aHits??'-')+'-'+(rawBox.bHits??'-'));
-      if(rawBox.aErrors != null || rawBox.bErrors != null) boxParts.push('E: '+(rawBox.aErrors??'-')+'-'+(rawBox.bErrors??'-'));
-      if(rawBox.aLob != null || rawBox.bLob != null) boxParts.push('LOB: '+(rawBox.aLob??'-')+'-'+(rawBox.bLob??'-'));
-      if(boxParts.length) html+='<div style="font-size:10px; opacity:0.7; margin-top:2px; font-family:monospace;">BOX: '+boxParts.join(' • ')+'</div>';
-      html+='</div><div style="display:flex; justify-content:space-between; margin-top:14px; font-size:10px; opacity:0.5;"><span>LIVE • '+g.lg+'</span><span>'+(g.final?'Final':'LIVE')+'</span></div></div>';
-    });
-    html+='</div><style>@keyframes pulseLive{0%,100%{opacity:1}50%{opacity:0.4}}</style>';
-    mount.innerHTML=html;
-  }
-  async function loadLive(){
-    let data=null;
-    const cands=['./live_scores.json','live_scores.json','./data/live_scores.json','/live_scores.json'];
-    for(const url of cands){
-      try{ const res=await fetch(url+'?ts='+Date.now(), {cache:'no-store'}); if(!res.ok) continue; const json=await res.json(); if(Array.isArray(json)) data={games:json, updated:new Date().toISOString()}; else if(json.games) data=json; else if(json.mlb_games) data={games:json.mlb_games, updated:json.updated}; if(data&&data.games) break; }catch(e){}
-    }
-    if(!data||!data.games||!data.games.length){
-      if(window.PARLAYOS_LIVE_SCORES&&window.PARLAYOS_LIVE_SCORES.games) data=window.PARLAYOS_LIVE_SCORES;
-      else if(window.LIVE_SCORES_DATA&&window.LIVE_SCORES_DATA.games) data=window.LIVE_SCORES_DATA;
-    }
-    const mount=getMount(); if(!mount) return;
-    if(!data||!data.games||!data.games.length){
-      mount.innerHTML='<div style="padding:24px; text-align:center; opacity:0.6;">No live games - last check '+new Date().toLocaleTimeString()+'</div>';
-      return;
-    }
-    render(data.games, new Date().toISOString());
-  }
-  document.addEventListener('DOMContentLoaded', loadLive);
-  setTimeout(loadLive, 800);
-  setInterval(loadLive, 60000);
-  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) loadLive(); });
-  window.loadLiveJSON=loadLive;
-})();
-</script>
 <script>
 // V8 DYNAMIC EMOJI STORM ENGINE - UPGRADED: 20+ emojis, parallax, glow, trails, bursts
 (function(){
@@ -38371,7 +38303,9 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
 (function(){
   'use strict';
   const SRC={mlb:'./parlayos_mlb_chd.json',nfl:'./parlayos_nfl_chd.json',nba:'./parlayos_nba_chd.json',soc:'./parlayos_soccer_chd.json',nhl:'./parlayos_nhl_chd.json',combined:'./parlayos_chd_data.json'};
-  const SPORTS=['mlb','nfl','nba','soc','nhl'];
+  const REQUIRED_SPORTS=['mlb','nfl','nba'];
+  const OPTIONAL_SPORTS=['soc','nhl'];
+  const SPORTS=[...REQUIRED_SPORTS,...OPTIONAL_SPORTS];
   window.PARLAYOS_CHD_SOURCES=SRC;
   const bust=u=>u+(u.includes('?')?'&':'?')+'ts='+Date.now();
   async function get(u){const r=await fetch(bust(u),{cache:'no-store'});if(!r.ok)throw new Error(u+' HTTP '+r.status);return r.json();}
@@ -38439,11 +38373,18 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   }
   async function load(){
     let payloads={};
-    try{for(const s of SPORTS)payloads[s]=await get(SRC[s]);payloads.combined=await get(SRC.combined);}catch(err){console.error('[CHD] Failed to load JSON payloads:',err);throw err;}
+    try{
+      for(const s of REQUIRED_SPORTS)payloads[s]=await get(SRC[s]);
+      payloads.combined=await get(SRC.combined);
+    }catch(err){console.error('[CHD] Failed to load required JSON payloads:',err);throw err;}
+    for(const s of OPTIONAL_SPORTS){
+      try{payloads[s]=await get(SRC[s]);}
+      catch(err){const fallback=payloads.combined&&typeof payloads.combined[s]==='object'?payloads.combined[s]:{games:[]};payloads[s]=fallback;console.info('[CHD] Optional '+s.toUpperCase()+' prediction payload unavailable');}
+    }
     window.CHD_DATA=payloads.combined;
     window.PARLAYOS_SPORT_DATA={};
     for(const s of SPORTS){
-      const games=A(payloads[s]?.games).map((g,i)=>s==='mlb'?transformMLBGame(g,i):transformGenericGame(g,i,s));
+      const games=normalize(payloads[s]).games.map((g,i)=>s==='mlb'?transformMLBGame(g,i):transformGenericGame(g,i,s));
       window.PARLAYOS_SPORT_DATA[s]=Object.assign({},normalize(payloads[s]),{games});
     }
     window.PARLAYOS_DATA=window.PARLAYOS_SPORT_DATA.mlb;
@@ -39817,54 +39758,123 @@ window.addEventListener('parlayos:chd-data-ready',()=>setTimeout(repair,0));docu
 </script>
 
 <style id="PARLAYOS_SPORT_HUBS_LIVE_SCORES_STYLE">
-.parlayos-sport-hubs{margin:14px 0 18px;padding:14px;border:1px solid rgba(28,34,48,.10);border-radius:20px;background:rgba(255,255,255,.62);box-shadow:0 12px 28px rgba(23,37,73,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.parlayos-sport-hubs-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-bottom:10px}.parlayos-sport-hubs-title{font-size:14px;font-weight:850;letter-spacing:-.01em}.parlayos-sport-hubs-sub{font-size:10px;opacity:.62;margin-top:3px}.parlayos-sport-hubs-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-.parlayos-sport-hub{appearance:none;min-width:0;text-align:left;border:1px solid rgba(28,34,48,.10);border-radius:16px;padding:12px;background:rgba(255,255,255,.72);color:inherit;cursor:pointer;box-shadow:0 8px 18px rgba(23,37,73,.05)}.parlayos-sport-hub:hover,.parlayos-sport-hub:focus-visible{border-color:rgba(28,34,48,.22);outline:none;transform:translateY(-1px)}.parlayos-sport-hub .icon{font-size:19px}.parlayos-sport-hub .name{font-size:13px;font-weight:850;margin-top:7px}.parlayos-sport-hub .desc{font-size:10px;opacity:.64;margin-top:3px;line-height:1.35}
-.parlayos-live-score-panel{margin:0 0 18px;padding:12px 0 2px}.parlayos-live-score-panel .title{font-size:14px;font-weight:850}.parlayos-live-score-panel .sub{font-size:10px;opacity:.62;margin-top:3px}.parlayos-live-score-chips{display:flex;gap:7px;overflow-x:auto;padding:10px 0 7px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.parlayos-live-score-chips::-webkit-scrollbar{display:none}.parlayos-live-score-chip{appearance:none;flex:0 0 auto;min-height:34px;padding:7px 11px;border:1px solid rgba(28,34,48,.12);border-radius:999px;background:rgba(255,255,255,.68);color:inherit;font:750 11px/1 system-ui,sans-serif;cursor:pointer;white-space:nowrap}.parlayos-live-score-chip[aria-pressed="true"]{background:rgba(28,34,48,.10);border-color:rgba(28,34,48,.26)}
-.parlayos-live-score-list{display:grid;gap:8px}.parlayos-live-score-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 12px;border:1px solid rgba(28,34,48,.10);border-radius:14px;background:rgba(255,255,255,.54)}.parlayos-live-score-card .league{font-size:9px;letter-spacing:.07em;text-transform:uppercase;opacity:.55}.parlayos-live-score-card .teams{font-size:12px;font-weight:780;margin-top:4px;line-height:1.35}.parlayos-live-score-card .status{font-size:9px;opacity:.58;margin-top:3px}.parlayos-live-score-card .score{font-size:17px;font-weight:900;white-space:nowrap}.parlayos-live-score-empty{padding:13px;border:1px dashed rgba(28,34,48,.14);border-radius:14px;font-size:11px;opacity:.65}
-@media(max-width:760px){.parlayos-sport-hubs{padding:12px}.parlayos-sport-hubs-grid{grid-template-columns:1fr}.parlayos-sport-hub{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:9px;row-gap:2px;align-items:center}.parlayos-sport-hub .icon{grid-row:1/3}.parlayos-sport-hub .name{margin-top:0}.parlayos-sport-hub .desc{margin-top:0}}
+/* Existing MLB/NFL/NBA menu cards and screens are the prediction hubs. Refine them in place. */
+#menuGrid .menu-btn[data-go="mlb"] h3,
+#menuGrid .menu-btn[data-go="nfl"] h3,
+#menuGrid .menu-btn[data-go="nba"] h3,
+#screen-mlb > div:first-child > h2,
+#screen-nfl > div:first-child > h2,
+#screen-nba > div:first-child > h2,
+#screen-live-scores > div > h2,
+#screen-live-scores .quick-nav-btn{font-style:italic!important}
+#menuGrid .menu-btn.parlayos-hub-menu-card{isolation:isolate}
+#menuGrid .menu-btn.parlayos-hub-menu-card h3{letter-spacing:-.025em}
+#screen-mlb > div:first-child .badge,
+#screen-nfl > div:first-child .badge,
+#screen-nba > div:first-child .badge{font-style:italic}
+.parlayos-hub-screen-title,.parlayos-live-score-screen-title{font-style:italic!important}
+
+.parlayos-live-score-panel{margin:0 0 18px;padding:0;min-width:0}
+.parlayos-live-score-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 8px;font-size:10px;opacity:.62}
+.parlayos-live-score-chips{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.parlayos-live-score-chips::-webkit-scrollbar{display:none}
+.parlayos-live-score-chip{appearance:none;flex:0 0 auto;min-height:34px;padding:7px 12px;border:1px solid rgba(28,34,48,.13);border-radius:999px;background:rgba(255,255,255,.62);color:inherit;font:750 11px/1 system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.parlayos-live-score-chip:hover,.parlayos-live-score-chip:focus-visible{border-color:rgba(28,34,48,.26);outline:none}
+.parlayos-live-score-chip[aria-pressed="true"]{background:rgba(28,34,48,.10);border-color:rgba(28,34,48,.28)}
+.parlayos-live-score-list{display:grid;gap:9px}
+.parlayos-live-score-card{padding:12px 13px;border:1px solid rgba(28,34,48,.11);border-radius:16px;background:rgba(255,255,255,.54);min-width:0}
+.parlayos-live-score-card-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:9px}
+.parlayos-live-score-league{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.6}
+.parlayos-live-score-status{font-size:9px;opacity:.64;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:65%}
+.parlayos-live-score-team{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:8px;align-items:center;min-height:31px}
+.parlayos-live-score-team+.parlayos-live-score-team{margin-top:5px;padding-top:6px;border-top:1px solid rgba(28,34,48,.07)}
+.parlayos-live-score-abbr{font-size:10px;font-weight:850;opacity:.7}
+.parlayos-live-score-name{min-width:0;font-size:12px;font-weight:780;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.parlayos-live-score-value{font-size:19px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.parlayos-live-score-empty{padding:14px;border:1px dashed rgba(28,34,48,.15);border-radius:15px;font-size:11px;line-height:1.45;opacity:.68}
+@media(max-width:520px){.parlayos-live-score-meta{align-items:flex-start;flex-direction:column;gap:2px}.parlayos-live-score-card{padding:11px 12px}.parlayos-live-score-status{max-width:58%}}
 </style>
 <script id="PARLAYOS_SPORT_HUBS_LIVE_SCORES">
 (function(){
 'use strict';
 if(window.__PARLAYOS_SPORT_HUBS_LIVE_SCORES_READY)return;
 window.__PARLAYOS_SPORT_HUBS_LIVE_SCORES_READY=true;
-const SPORTS={MLB:{label:'MLB',icon:'⚾',desc:'Baseball predictions & games'},NFL:{label:'NFL',icon:'🏈',desc:'Football predictions & games'},NBA:{label:'NBA',icon:'🏀',desc:'Basketball predictions & games'},SOC:{label:'Soccer',icon:'⚽',desc:'Live scores'},NHL:{label:'NHL',icon:'🏒',desc:'Live scores'}};
+const SPORTS={MLB:{label:'MLB',go:'mlb',icon:'⚾'},NFL:{label:'NFL',go:'nfl',icon:'🏈'},NBA:{label:'NBA',go:'nba',icon:'🏀'},SOC:{label:'Soccer',icon:'⚽'},NHL:{label:'NHL',icon:'🏒'}};
 const HUB_SPORTS=['MLB','NFL','NBA'],SCORE_ORDER=['MLB','NFL','NBA','SOC','NHL'];
-let liveData=null,liveActive='ALL',hubMounted=false,liveMounted=false;
-const arr=v=>Array.isArray(v)?v:[],str=v=>v==null?'':String(v),esc=v=>str(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),num=v=>v!==null&&v!==undefined&&v!==''&&!Number.isNaN(Number(v)),score=v=>num(v)?String(v):'—';
-function findScreen(kind){
- const selectors=kind==='hub'?['#screen-desktop','#screen-home','#screen-home-screen','#screen-main-menu','#main-menu','#mainMenu','#menu','[data-screen="desktop"]','[data-screen="home"]','[data-screen="main-menu"]','[data-go="desktop"]']:['#screen-live-scores','#screen-live','#live-scores','[data-screen="live-scores"]','[data-screen="live"]','[data-view="live-scores"]'];
- for(const sel of selectors){const el=document.querySelector(sel);if(el)return el}
- const screens=[...document.querySelectorAll('.screen')],rx=kind==='hub'?/(desktop|home|menu|main)/i:/(live.*score|score.*live)/i;
- return screens.find(el=>rx.test(`${el.id} ${el.dataset.screen||''} ${el.getAttribute('aria-label')||''}`))||null;
+let liveData={sports:{}},liveActive='ALL',liveFetchFailed=false;
+const arr=v=>Array.isArray(v)?v:[];
+const str=v=>v==null?'':String(v);
+const esc=v=>str(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const numeric=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v));
+function markHubs(){
+ HUB_SPORTS.forEach(s=>{
+  const cfg=SPORTS[s];
+  const btn=document.querySelector(`#menuGrid .menu-btn[data-go="${cfg.go}"]`);
+  if(btn){btn.classList.add('parlayos-hub-menu-card');btn.dataset.parlayosSportHub=s;btn.setAttribute('aria-label',`${cfg.label} Hub`);const title=btn.querySelector('h3');if(title)title.classList.add('parlayos-hub-menu-title')}
+  const screen=document.querySelector(`#screen-${cfg.go}`);
+  if(screen){
+   screen.dataset.parlayosSportHub=s;
+   const head=screen.querySelector(':scope > div:first-child');
+   const h=head&&head.querySelector('h2');
+   if(h){h.classList.add('parlayos-hub-screen-title');if(!/\bHub\b/i.test(str(h.textContent)))h.textContent=`${cfg.icon} ${cfg.label} Hub`}
+   const badge=head&&head.querySelector('.badge');if(badge&&/HUB/i.test(str(badge.textContent)))badge.textContent='PREDICTIONS';
+  }
+ });
+ const liveTitle=document.querySelector('#screen-live-scores h2');if(liveTitle)liveTitle.classList.add('parlayos-live-score-screen-title');
 }
-function invokeSport(sport){
- const menuBtn=document.querySelector(`.menu-grid .menu-btn[data-go="${sport.toLowerCase()}"]`);if(menuBtn){menuBtn.click();return true}
- const candidates={MLB:['screen-mlb-hub','screen-mlb','screen-mlb-dashboard','mlb-dashboard'],NFL:['screen-nfl-hub','screen-nfl','screen-nfl-dashboard','nfl-dashboard'],NBA:['screen-nba-hub','screen-nba','screen-nba-dashboard','nba-dashboard']}[sport]||[];
- for(const id of candidates){const target=document.getElementById(id);if(!target)continue;for(const fnName of ['switchScreen','showScreen','navigateTo','goToScreen','setCurrentScreen']){const fn=window[fnName];if(typeof fn!=='function')continue;try{fn(id);return true}catch(_){}}}
- const match={MLB:/^\s*MLB\s*$/i,NFL:/^\s*NFL\s*$/i,NBA:/^\s*NBA\s*$/i}[sport];
- if(match){const btn=[...document.querySelectorAll('button,a,[role="button"]')].find(el=>match.test(str(el.textContent))&&!el.closest('.parlayos-live-score-panel'));if(btn){btn.click();return true}}
+function scoreRows(sport){
+ const direct=arr(liveData?.sports?.[sport]);
+ if(direct.length)return direct.filter(g=>g&&((g.a||g.away||g.awayTeam)&&(g.b||g.home||g.homeTeam)));
+ if(sport==='MLB')return arr(liveData?.games).filter(g=>g&&((g.a||g.away||g.awayTeam)&&(g.b||g.home||g.homeTeam)));
+ return [];
+}
+function gameStatus(g){return str(g.status||g.detailedState||g.abstractGameState||'Status unavailable')}
+function scoreIsActive(g){
+ if(g.final===true||g.completed===true)return true;
+ const state=str(g.state).toLowerCase();if(state==='in'||state==='post')return true;if(state==='pre')return false;
+ const abstract=str(g.abstractGameState).toLowerCase();if(abstract==='live'||abstract==='final')return true;
+ const status=gameStatus(g).toLowerCase();
+ if(/(^|\b)(live|final|halftime|overtime|ot|in progress|q[1-4]|quarter|period|inning|top\s+\d|bottom\s+\d|end\s+\d)(\b|$)/i.test(status))return true;
+ if(/^\s*(?:1st|2nd|3rd|4th)\b/i.test(status))return true;
+ if(/^\s*\d{1,3}(?:\+\d+)?['’]/.test(status))return true;
  return false;
 }
-function mountHubs(){
- if(hubMounted)return true;const host=findScreen('hub');if(!host)return false;if(host.querySelector('.parlayos-sport-hubs')){hubMounted=true;return true}
- const wrap=document.createElement('section');wrap.className='parlayos-sport-hubs';wrap.setAttribute('aria-label','Sports hubs');wrap.innerHTML='<div class="parlayos-sport-hubs-head"><div><div class="parlayos-sport-hubs-title">Sports</div><div class="parlayos-sport-hubs-sub">Jump into a sport hub</div></div></div><div class="parlayos-sport-hubs-grid"></div>';
- const grid=wrap.querySelector('.parlayos-sport-hubs-grid');HUB_SPORTS.forEach(s=>{const b=document.createElement('button');b.type='button';b.className='parlayos-sport-hub';b.dataset.sport=s;b.innerHTML=`<span class="icon" aria-hidden="true">${SPORTS[s].icon}</span><span class="name">${esc(SPORTS[s].label)}</span><span class="desc">${esc(SPORTS[s].desc)}</span>`;b.addEventListener('click',()=>invokeSport(s));grid.appendChild(b)});
- const anchor=host.querySelector('.menu-grid')||host.querySelector('#dashboardCards,.cards,.quick-nav,.toolbar')||host.querySelector('h1,h2,h3,.title,.screen-title')||host.firstElementChild;if(anchor&&anchor.parentNode)anchor.insertAdjacentElement('afterend',wrap);else host.prepend(wrap);hubMounted=true;return true;
+function scoreText(g,side){
+ if(!scoreIsActive(g))return '—';
+ const raw=side==='a'?(g.aScore??g.awayScore):(g.bScore??g.homeScore);
+ return numeric(raw)?String(raw):'—';
 }
-function scoreRows(sport){return arr(liveData?.sports?.[sport]).filter(g=>g&&((g.a||g.away)&&(g.b||g.home)))}
-function availableSports(){return SCORE_ORDER.filter(s=>scoreRows(s).length>0)}
-function scoreHost(){const screen=findScreen('live');if(!screen)return null;const host=screen.querySelector('#liveScoresMount');if(!host)return null;host.classList.add('parlayos-live-score-runtime-host');return host}
+function teamName(g,side){return side==='a'?(g.a||g.away||g.awayTeam||'Away'):(g.b||g.home||g.homeTeam||'Home')}
+function teamAbbr(g,side){
+ const raw=side==='a'?(g.aAbbr||g.awayAbbr):(g.bAbbr||g.homeAbbr);if(raw)return str(raw).slice(0,4).toUpperCase();
+ return str(teamName(g,side)).replace(/[^A-Za-z0-9 ]/g,'').split(/\s+/).filter(Boolean).map(x=>x[0]).join('').slice(0,4).toUpperCase()|| (side==='a'?'AWY':'HME');
+}
+function updatedLabel(){
+ const raw=liveData?.updated||liveData?.generated_at;if(!raw)return 'Update time unavailable';
+ const d=new Date(raw);return Number.isNaN(d.getTime())?'Update time unavailable':`Updated ${d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}`;
+}
 function renderScores(){
- const host=scoreHost();if(!host)return false;const sports=availableSports();if(liveActive!=='ALL'&&!sports.includes(liveActive))liveActive='ALL';const activeSports=liveActive==='ALL'?sports:[liveActive];
- host.innerHTML='<div class="parlayos-live-score-panel"><div class="title">Live Scores</div><div class="sub">Select a sport to see its current score feed.</div><div class="parlayos-live-score-chips" role="group" aria-label="Live score sports"></div><div class="parlayos-live-score-list"></div></div>';
- const chips=host.querySelector('.parlayos-live-score-chips'),list=host.querySelector('.parlayos-live-score-list');['ALL',...sports].forEach(s=>{const b=document.createElement('button');b.type='button';b.className='parlayos-live-score-chip';b.dataset.sport=s;b.textContent=s==='ALL'?'All':SPORTS[s].label;b.setAttribute('aria-pressed',String(s===liveActive));b.addEventListener('click',()=>{liveActive=s;renderScores()});chips.appendChild(b)});
- const rows=activeSports.flatMap(s=>scoreRows(s).map(g=>({sport:s,g})));if(!rows.length){list.innerHTML='<div class="parlayos-live-score-empty">No live score data is currently available for this sport.</div>';liveMounted=true;return true}
- rows.forEach(({sport:s,g})=>{const a=g.a||g.away||'Away',b=g.b||g.home||'Home',status=g.status||g.detailedState||'Status unavailable';const card=document.createElement('article');card.className='parlayos-live-score-card';card.dataset.sport=s;card.innerHTML=`<div><div class="league">${esc(SPORTS[s].label)}</div><div class="teams">${esc(a)}<br>${esc(b)}</div><div class="status">${esc(status)}</div></div><div class="score">${esc(score(g.aScore))}<br>${esc(score(g.bScore))}</div>`;list.appendChild(card)});liveMounted=true;return true;
+ const host=document.getElementById('liveScoresMount');if(!host)return false;
+ const activeSports=liveActive==='ALL'?SCORE_ORDER:[liveActive];
+ host.innerHTML='<div class="parlayos-live-score-panel"><div class="parlayos-live-score-meta"><span>Real league score feeds</span><span class="parlayos-live-score-updated"></span></div><div class="parlayos-live-score-chips" role="group" aria-label="Live score sports"></div><div class="parlayos-live-score-list" aria-live="polite"></div></div>';
+ const chips=host.querySelector('.parlayos-live-score-chips'),list=host.querySelector('.parlayos-live-score-list'),updated=host.querySelector('.parlayos-live-score-updated');updated.textContent=updatedLabel();
+ ['ALL',...SCORE_ORDER].forEach(s=>{const b=document.createElement('button');b.type='button';b.className='parlayos-live-score-chip';b.dataset.sport=s;b.textContent=s==='ALL'?'All':SPORTS[s].label;b.setAttribute('aria-pressed',String(s===liveActive));b.addEventListener('click',()=>{liveActive=s;renderScores()});chips.appendChild(b)});
+ const rows=activeSports.flatMap(s=>scoreRows(s).map(g=>({sport:s,g})));
+ if(!rows.length){const sportLabel=liveActive==='ALL'?'games':SPORTS[liveActive].label+' games';const message=liveFetchFailed?'Live score feeds are temporarily unavailable.':`No ${sportLabel} are currently available in the live-score feed.`;list.innerHTML=`<div class="parlayos-live-score-empty">${esc(message)}</div>`;return true}
+ rows.forEach(({sport:s,g})=>{
+  const card=document.createElement('article');card.className='parlayos-live-score-card';card.dataset.sport=s;
+  card.innerHTML=`<div class="parlayos-live-score-card-head"><span class="parlayos-live-score-league">${esc(SPORTS[s].label)}</span><span class="parlayos-live-score-status">${esc(gameStatus(g))}</span></div><div class="parlayos-live-score-team"><span class="parlayos-live-score-abbr">${esc(teamAbbr(g,'a'))}</span><span class="parlayos-live-score-name">${esc(teamName(g,'a'))}</span><span class="parlayos-live-score-value">${esc(scoreText(g,'a'))}</span></div><div class="parlayos-live-score-team"><span class="parlayos-live-score-abbr">${esc(teamAbbr(g,'b'))}</span><span class="parlayos-live-score-name">${esc(teamName(g,'b'))}</span><span class="parlayos-live-score-value">${esc(scoreText(g,'b'))}</span></div>`;
+  list.appendChild(card);
+ });
+ return true;
 }
-async function loadLive(){try{const r=await fetch('./live_scores.json',{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);const payload=await r.json();liveData=payload&&typeof payload==='object'?payload:{sports:{}}}catch(e){liveData={sports:{}};console.warn('[ParlayOS] live scores unavailable',e)}renderScores()}
-function boot(){mountHubs();loadLive();const observer=new MutationObserver(()=>{if(!hubMounted)mountHubs()});if(document.body)observer.observe(document.body,{childList:true,subtree:true});setInterval(()=>{mountHubs();loadLive()},30000)}
+async function loadLive(){
+ const urls=['./live_scores.json','./data/live_scores.json'];let payload=null,lastError=null;
+ for(const url of urls){try{const r=await fetch(url+(url.includes('?')?'&':'?')+'parlayosLive='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error(`${url} HTTP ${r.status}`);const json=await r.json();if(json&&typeof json==='object'){payload=json;break}}catch(e){lastError=e}}
+ liveFetchFailed=!payload;liveData=payload||{sports:{}};window.PARLAYOS_LIVE_SCORES=liveData;window.LIVE_SCORES_DATA=liveData;if(lastError&&!payload)console.warn('[ParlayOS] live score feeds unavailable',lastError);renderScores();return liveData;
+}
+function boot(){markHubs();loadLive();const observer=new MutationObserver(()=>markHubs());if(document.body)observer.observe(document.body,{childList:true,subtree:true});setInterval(loadLive,30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadLive()});}
+window.loadLiveJSON=loadLive;
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
 </script>
