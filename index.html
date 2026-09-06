@@ -10966,6 +10966,127 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
 .parlayos-robust-data-error{margin:10px 0;padding:12px 14px;border:1px solid rgba(255,255,255,.25);border-radius:14px;background:rgba(255,255,255,.08);font-size:12px}
 @media(max-width:780px){.parlayos-robust-tools{grid-template-columns:1fr;margin-bottom:12px}.parlayos-robust-actions{justify-content:stretch}.parlayos-robust-btn{flex:1 1 calc(33.33% - 6px);min-width:0}.parlayos-robust-status{font-size:10px}.parlayos-robust-favorite{top:9px;right:9px;width:36px;height:36px}}
 </style>
+<style id="PARLAYOS_PRODUCT_QA_STYLE">
+/* Product QA presentation layer: preserves the existing visual identity while making
+   prediction cards/model selection readable and usable on phone + desktop. */
+.parlayos-model-switcher{margin:14px 0 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.24);border-radius:16px;background:rgba(255,255,255,.10);box-shadow:0 8px 22px rgba(0,0,0,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.parlayos-model-switcher .pms-title{display:block;margin:0 0 8px;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;opacity:.72}
+.parlayos-model-switcher .pms-row{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:1px}
+.parlayos-model-switcher .pms-row::-webkit-scrollbar{display:none}
+.parlayos-model-switcher .pms-chip{appearance:none;flex:0 0 auto;min-height:36px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.30);background:rgba(255,255,255,.10);color:inherit;font:700 12px/1 inherit;cursor:pointer;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.24)}
+.parlayos-model-switcher .pms-chip:hover,.parlayos-model-switcher .pms-chip:focus-visible{background:rgba(255,255,255,.18);outline:none}
+.parlayos-model-switcher .pms-chip[aria-pressed="true"]{background:rgba(255,255,255,.32);border-color:rgba(255,255,255,.52);box-shadow:0 0 0 2px rgba(255,255,255,.10) inset}
+.parlayos-model-switcher .pms-chip[disabled]{opacity:.42;cursor:not-allowed}
+.parlayos-product-card{position:relative}
+.parlayos-product-card .game-head{align-items:flex-start}
+.parlayos-product-card .pqa-model{font-size:11px;font-weight:800;opacity:.72;letter-spacing:.04em}
+.parlayos-product-card .pqa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px 14px 0}
+.parlayos-product-card .pqa-cell{min-width:0;border:1px solid rgba(255,255,255,.20);border-radius:12px;padding:9px;background:rgba(0,0,0,.05)}
+.parlayos-product-card .pqa-label{font-size:10px;letter-spacing:.07em;text-transform:uppercase;opacity:.66}
+.parlayos-product-card .pqa-value{margin-top:4px;font-size:14px;font-weight:800;overflow-wrap:anywhere}
+.parlayos-product-card .pqa-market{border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:10px 12px;margin:10px 14px 0}
+.parlayos-product-card .pqa-market-title{font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.68;margin-bottom:5px}
+.parlayos-product-card .pqa-market-main{display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:800}
+.parlayos-product-card .pqa-muted{font-size:11px;opacity:.68}
+.parlayos-product-card .pqa-unavailable{border:1px dashed rgba(255,255,255,.24);border-radius:12px;padding:10px 12px;margin:10px 14px 0;font-size:11px;opacity:.72}
+@media(max-width:780px){.parlayos-model-switcher{margin:10px 0 12px;border-radius:14px}.parlayos-model-switcher .pms-chip{min-height:34px;padding:8px 10px;font-size:11px}.parlayos-product-card .pqa-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:10px 12px 0}.parlayos-product-card .pqa-market{margin-left:12px;margin-right:12px}.parlayos-product-card .game-actions{padding-left:12px;padding-right:12px;flex-wrap:wrap}.parlayos-product-card .game-actions .btn{min-width:110px}}
+</style>
+<style id="PARLAYOS_PRODUCT_FINALIZER_STYLE">
+/* Final product UI layer: consistent, compact bettor-facing dashboards. */
+.parlayos-model-switcher{margin:14px 0 18px;padding:12px;border:1px solid rgba(255,255,255,.24);border-radius:16px;background:rgba(255,255,255,.10);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.parlayos-model-switcher .pms-title{display:block;margin:0 0 10px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.76}
+.parlayos-model-switcher .pms-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;overflow:visible;padding:0}
+.parlayos-model-switcher .pms-chip{width:100%;min-height:40px;padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.30);background:rgba(255,255,255,.10);color:inherit;font:700 12px/1.1 inherit;cursor:pointer;white-space:normal;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.24)}
+.parlayos-model-switcher .pms-chip:hover,.parlayos-model-switcher .pms-chip:focus-visible{background:rgba(255,255,255,.19);outline:none}
+.parlayos-model-switcher .pms-chip[aria-pressed="true"]{background:rgba(255,255,255,.34);border-color:rgba(255,255,255,.58);box-shadow:0 0 0 2px rgba(255,255,255,.10) inset}
+.parlayos-model-switcher .pms-chip[disabled]{opacity:.34;cursor:not-allowed}
+
+.parlayos-final-cards{display:grid;gap:18px}
+.parlayos-final-card{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.28);border-radius:24px;background:rgba(255,255,255,.13);box-shadow:0 14px 34px rgba(0,0,0,.10);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:18px}
+.parlayos-final-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+.parlayos-final-model{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.72;text-align:right}
+.parlayos-final-matchup{display:grid;grid-template-columns:76px minmax(0,1fr) 76px;align-items:center;gap:12px;margin-bottom:14px}
+.parlayos-final-team-badge{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:18px;font-weight:900;background:rgba(20,65,130,.88);color:#fff;box-shadow:0 5px 12px rgba(0,0,0,.16)}
+.parlayos-final-team-badge.home{justify-self:end;background:rgba(220,70,45,.88)}
+.parlayos-final-teams{text-align:center;min-width:0}
+.parlayos-final-teams .names{font-size:24px;font-weight:900;line-height:1.08;letter-spacing:.01em;overflow-wrap:anywhere}
+.parlayos-final-teams .sub{margin-top:6px;font-size:11px;font-weight:700;opacity:.66;overflow-wrap:anywhere}
+.parlayos-final-stat-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}
+.parlayos-final-stat{border:1px solid rgba(255,255,255,.22);border-radius:15px;padding:12px;background:rgba(0,0,0,.055);min-width:0}
+.parlayos-final-stat-title{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;opacity:.72}
+.parlayos-final-stat-main{margin-top:5px;font-size:17px;font-weight:900;overflow-wrap:anywhere}
+.parlayos-final-stat-sub{margin-top:3px;font-size:11px;opacity:.68;overflow-wrap:anywhere}
+.parlayos-final-markets{display:grid;gap:10px;margin-top:12px}
+.parlayos-final-market{border-top:1px solid rgba(255,255,255,.18);padding-top:12px}
+.parlayos-final-market-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.parlayos-final-market-title{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.68}
+.parlayos-final-market-prob{font-size:20px;font-weight:900}
+.parlayos-final-pick{margin-top:4px;font-size:21px;font-weight:900;overflow-wrap:anywhere}
+.parlayos-final-market-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:4px;font-size:12px;opacity:.74}
+.parlayos-final-bar{height:7px;margin-top:9px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}
+.parlayos-final-bar>span{display:block;height:100%;width:0;background:rgba(94,230,150,.82);border-radius:999px}
+.parlayos-final-bar.negative>span{background:rgba(255,100,100,.75)}
+.parlayos-final-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.parlayos-final-actions .btn{min-height:40px}
+.parlayos-final-unavailable{border:1px dashed rgba(255,255,255,.28);border-radius:14px;padding:12px;font-size:12px;opacity:.74}
+.parlayos-final-source{margin-top:10px;font-size:10px;opacity:.54}
+
+@media(max-width:780px){
+  .parlayos-model-switcher .pms-row{grid-template-columns:1fr}
+  .parlayos-final-card{padding:14px;border-radius:20px}
+  .parlayos-final-matchup{grid-template-columns:58px minmax(0,1fr) 58px;gap:8px}
+  .parlayos-final-team-badge{width:52px;height:52px;font-size:14px}
+  .parlayos-final-teams .names{font-size:18px}
+  .parlayos-final-stat-row{grid-template-columns:1fr 1fr;gap:8px}
+  .parlayos-final-stat{padding:10px}
+  .parlayos-final-stat-main{font-size:15px}
+  .parlayos-final-pick{font-size:18px}
+  .parlayos-final-market-prob{font-size:18px}
+}
+</style>
+<style id="PARLAYOS_SWITCHER_CLEANUP_STYLE">
+/* Model selector uses the same compact glass-chip language as dashboard controls. */
+.parlayos-model-switcher{box-sizing:border-box;width:min(100%,420px);margin:12px 0 16px;padding:10px;border:1px solid rgba(255,255,255,.24);border-radius:18px;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.parlayos-model-switcher .pms-title{display:block;margin:0 0 8px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.72}
+.parlayos-model-switcher .pms-row{display:flex;flex-direction:column;gap:8px;overflow:visible;padding:0}
+.parlayos-model-switcher .pms-chip{box-sizing:border-box;width:100%;min-height:40px;margin:0;padding:9px 14px;border:1px solid rgba(255,255,255,.30);border-radius:999px;background:rgba(255,255,255,.10);color:inherit;font:700 13px/1.15 inherit;cursor:pointer;white-space:nowrap;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.20);transition:background .15s ease,border-color .15s ease,transform .15s ease}
+.parlayos-model-switcher .pms-chip:hover,.parlayos-model-switcher .pms-chip:focus-visible{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.46);outline:none;transform:translateY(-1px)}
+.parlayos-model-switcher .pms-chip[aria-pressed="true"]{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.62);box-shadow:0 0 0 1px rgba(255,255,255,.10) inset}
+.parlayos-model-switcher .pms-chip[disabled]{opacity:.34;cursor:not-allowed;transform:none}
+/* Every model/card uses one bettor-facing Add-to-Parlay control language. */
+.parlayos-final-card [data-add],.parlayos-final-card [data-nfl-add],.parlayos-final-card [data-nba-add]{box-sizing:border-box;min-height:40px;padding:9px 15px;border:1px solid rgba(255,255,255,.34);border-radius:999px;background:rgba(255,255,255,.13);color:inherit;font:700 13px/1.1 inherit;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.22);transition:background .15s ease,border-color .15s ease,transform .15s ease}
+.parlayos-final-card [data-add]:hover,.parlayos-final-card [data-nfl-add]:hover,.parlayos-final-card [data-nba-add]:hover,.parlayos-final-card [data-add]:focus-visible,.parlayos-final-card [data-nfl-add]:focus-visible,.parlayos-final-card [data-nba-add]:focus-visible{background:rgba(255,255,255,.24);border-color:rgba(255,255,255,.58);outline:none;transform:translateY(-1px)}
+.parlayos-final-card [data-add][disabled],.parlayos-final-card [data-nfl-add][disabled],.parlayos-final-card [data-nba-add][disabled]{opacity:.38;cursor:not-allowed;transform:none}
+.parlayos-final-player-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
+.parlayos-final-player{min-width:0;padding:10px 11px;border:1px solid rgba(255,255,255,.20);border-radius:14px;background:rgba(0,0,0,.045)}
+.parlayos-final-player .role{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.62}
+.parlayos-final-player .name{margin-top:3px;font-size:14px;font-weight:900;overflow-wrap:anywhere}
+.parlayos-final-player .meta{margin-top:3px;font-size:10px;opacity:.68;overflow-wrap:anywhere}
+@media(max-width:780px){.parlayos-model-switcher{width:min(100%,390px);padding:9px}.parlayos-model-switcher .pms-chip{min-height:42px;font-size:13px}.parlayos-final-player-info{grid-template-columns:1fr 1fr}.parlayos-final-player{padding:9px}}
+</style>
+<style id="PARLAYOS_DASHBOARD_ROBUSTNESS_STYLE">
+/* Final product hardening: navigation fallbacks, persistent favorites, filters,
+   data-state feedback, keyboard/touch affordances, and safe empty states. */
+.parlayos-robust-tools{box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:center;margin:0 0 14px;padding:9px 10px;border:1px solid rgba(255,255,255,.22);border-radius:16px;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.parlayos-robust-search{min-width:0;width:100%;min-height:40px;padding:9px 13px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.10);color:inherit;font:600 13px/1.1 inherit;outline:none}
+.parlayos-robust-search::placeholder{color:inherit;opacity:.52}
+.parlayos-robust-search:focus{border-color:rgba(255,255,255,.62);box-shadow:0 0 0 2px rgba(255,255,255,.10)}
+.parlayos-robust-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+.parlayos-robust-btn{box-sizing:border-box;min-height:40px;padding:9px 13px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.10);color:inherit;font:800 12px/1 inherit;cursor:pointer;white-space:nowrap}
+.parlayos-robust-btn:hover,.parlayos-robust-btn:focus-visible{background:rgba(255,255,255,.20);border-color:rgba(255,255,255,.54);outline:none}
+.parlayos-robust-btn[aria-pressed="true"]{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.62)}
+.parlayos-robust-status{grid-column:1/-1;display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:11px;opacity:.72;min-width:0}
+.parlayos-robust-status .state{font-weight:800}
+.parlayos-robust-status .detail{overflow-wrap:anywhere;text-align:right}
+.parlayos-robust-empty{display:none;margin:12px 0;padding:18px 14px;border:1px dashed rgba(255,255,255,.25);border-radius:14px;text-align:center;font-size:12px;opacity:.72}
+.parlayos-robust-empty.is-visible{display:block}
+.parlayos-robust-favorite{position:absolute;top:12px;right:12px;z-index:4;width:38px;height:38px;border:1px solid rgba(255,255,255,.30);border-radius:999px;background:rgba(255,255,255,.12);color:inherit;font:800 18px/1 inherit;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.parlayos-robust-favorite:hover,.parlayos-robust-favorite:focus-visible{background:rgba(255,255,255,.22);outline:none}
+.parlayos-robust-favorite[aria-pressed="true"]{background:rgba(255,255,255,.30);border-color:rgba(255,255,255,.65)}
+.parlayos-robust-card-hidden{display:none!important}
+.parlayos-robust-data-error{margin:10px 0;padding:12px 14px;border:1px solid rgba(255,255,255,.25);border-radius:14px;background:rgba(255,255,255,.08);font-size:12px}
+@media(max-width:780px){.parlayos-robust-tools{grid-template-columns:1fr;margin-bottom:12px}.parlayos-robust-actions{justify-content:stretch}.parlayos-robust-btn{flex:1 1 calc(33.33% - 6px);min-width:0}.parlayos-robust-status{font-size:10px}.parlayos-robust-favorite{top:9px;right:9px;width:36px;height:36px}}
+</style>
 <style id="PARLAYOS_UI_STYLE">/* Shared, readable surfaces for the existing ParlayOS window and themes. */
 html { color-scheme: dark; }
 body.pos-ui { --pos-accent:#ab9cff; --pos-bg:#111522; --pos-surface:#202638; --pos-text:#f4f5ff; --pos-muted:#c0c7d8; background:var(--pos-bg)!important; color:var(--pos-text)!important; }
@@ -11062,6 +11183,24 @@ html body.pos-ui { --text:var(--pos-text); --muted:var(--pos-muted); }
 html body.pos-ui .theme-card div:nth-child(2) { font-size:14px!important; }
 html body.pos-ui .theme-card div:nth-child(3) { font-size:12px!important; color:var(--pos-muted)!important; }
 html body.pos-ui .mono-block,html body.pos-ui .notice,html body.pos-ui .toggle .left,html body.pos-ui .titlebar h1 { color:var(--pos-text)!important; }
+
+/* Keep the window inside the viewport across theme and settings changes. */
+html { background:#111522; }
+html body.pos-ui .app-shell { min-height:100dvh!important; height:auto!important; display:block!important; padding:24px!important; }
+html body.pos-ui #osWindow { height:calc(100dvh - 48px)!important; max-height:calc(100dvh - 48px)!important; min-height:0!important; margin:0 auto!important; }
+html body.pos-ui #viewport { flex:1 1 auto!important; min-height:0!important; }
+html body.pos-ui .screen.active { position:relative!important; inset:auto!important; height:auto!important; width:100%!important; flex-shrink:0!important; }
+html body.pos-ui #screen-settings .settings { display:block!important; }
+html body.pos-ui #screen-settings .toggle-list { width:100%!important; }
+html body.pos-ui #screen-settings .toggle .left b { font-size:16px!important; }
+html body.pos-ui #screen-settings .toggle .left span { font-size:14px!important; }
+html body.pos-ui .theme-card { background-image:none!important; }
+html body.pos-ui .theme-card[data-theme="winter"],html body.pos-ui .theme-card[data-theme="autumn"],html body.pos-ui .theme-card[data-theme="desert"] { background-color:#392821!important; }
+html body.pos-ui .theme-card[data-theme="summer"],html body.pos-ui .theme-card[data-theme="halloween"] { background-color:#39233a!important; }
+html body.pos-ui .theme-card[data-theme="spring"] { background-color:#203b31!important; }
+html body.pos-ui .theme-card[data-theme="rain"] { background-color:#22344b!important; }
+html body.pos-ui .theme-card[data-theme="black"] { background-color:#15171c!important; }
+@media(max-width:760px) { html body.pos-ui .app-shell { padding:10px!important; } html body.pos-ui #osWindow { height:calc(100dvh - 20px)!important; max-height:calc(100dvh - 20px)!important; } }
 </style></head>
 <body class="dark pos-ui">
 <div aria-hidden="true" class="morph-bg">
@@ -11397,7 +11536,6 @@ window.switchCoverTab=switchCleanTab;
 </div>
 <div class="chip-row" id="dashChips"></div>
 <div class="chip-row" id="modelChips" style="margin-top:8px;"></div>
-
 </div>
 <div class="cards" id="dashboardCards"></div></div>
 <div class="league-view" id="mlb-view-parlay" style="display:none;"><div class="build">
@@ -11543,7 +11681,6 @@ window.switchCoverTab=switchCleanTab;
 </div>
 <div class="chip-row" id="nflDashChips"></div>
 <div class="chip-row" id="nflModelChips" style="margin-top:8px;"></div>
-
 </div>
 <div class="cards" id="nflDashboardCards"></div></div>
 <div class="league-view" id="nfl-view-parlay" style="display:none;"><div class="build">
@@ -11638,7 +11775,6 @@ window.switchCoverTab=switchCleanTab;
 </div>
 <div class="chip-row" id="nbaDashChips"></div>
 <div class="chip-row" id="nbaModelChips" style="margin-top:8px;"></div>
-
 </div>
 <div class="cards" id="nbaDashboardCards"></div></div>
 <div class="league-view" id="nba-view-parlay" style="display:none;"><div class="build">
@@ -21652,7 +21788,6 @@ button[data-view-toggle],
 }
 </style>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
-
 <script id="et-time-fix">
 (function(){
   // Force ET formatting for any game times that are in UTC
@@ -26652,8 +26787,6 @@ div:has(> #brHeatmap) {
 <button class="whatsNewBtn ghost" onclick="document.getElementById('whatsNewOverlay').classList.remove('show')">Later</button>
 <button class="whatsNewBtn primary" onclick="dismissWhatsNew()">Let's go 🚀</button>
 </div>
-
-
 <style id="WHATS_NEW_V21_FIXED">
 #whatsNewOverlay {
   position: fixed !important;
@@ -33516,9 +33649,6 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
 
   // === FALLBACK DATA ===
   const FALLBACK_STANDINGS = null;
-  const FALLBACK_BATTING = [];
-  const FALLBACK_PITCHING = [];
-  const FALLBACK_LINEUPS = {};
   function getLineup(t){ return []; }
 // === FIXED RENDER STANDINGS (NO API TEXT) ===
   window.renderStandings = function(){
@@ -36895,7 +37025,6 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   [100,250,500,900,1500,2500].forEach(ms=>setTimeout(run,ms));
 })();
 </script>
-
 <script id="PARLAYOS_VIDEO_RUNTIME">
 (function(){
   'use strict';
@@ -37030,6 +37159,15 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
 })();
 </script>
 
+<style id="PARLAYOS_CRITICAL_RUNTIME_STYLE">
+.parlayos-critical-ready{}
+.parlayos-inline-stat{display:block;margin-top:3px;font-size:10px;line-height:1.35;opacity:.76;overflow-wrap:anywhere}
+.parlayos-critical-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:2147483646;padding:10px 14px;border:1px solid rgba(255,255,255,.30);border-radius:999px;background:rgba(25,30,40,.88);color:#fff;font:700 12px/1.2 system-ui,sans-serif;box-shadow:0 10px 28px rgba(0,0,0,.22);pointer-events:none}
+#brDkImportBtn,#brDkPasteBtn,#brDkClearBtn,#brPhotoStripBtn{position:relative;z-index:3}
+#brDkImportBtn{margin-bottom:10px!important}
+#brChart{position:relative;z-index:1}
+@media(max-width:620px){.parlayos-inline-stat{font-size:9.5px}.parlayos-critical-toast{bottom:18px;max-width:calc(100vw - 28px);text-align:center}}
+</style>
 <style id="PARLAYOS_GAME_CARD_RUNTIME_STYLE">
 .parlayos-game-card-grid{display:grid;gap:18px}.parlayos-game-card{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.28);border-radius:24px;background:rgba(255,255,255,.13);box-shadow:0 14px 34px rgba(0,0,0,.1);backdrop-filter:blur(14px);padding:18px}.parlayos-game-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}.parlayos-game-card-model{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.72;text-align:right}.parlayos-game-card-matchup{display:grid;grid-template-columns:58px minmax(0,1fr) 58px;align-items:center;gap:12px;margin-bottom:14px}.parlayos-game-card-badge{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:15px;font-weight:900;background:rgba(20,65,130,.88);color:#fff}.parlayos-game-card-badge.home{justify-self:end;background:rgba(220,70,45,.88)}.parlayos-game-card-teams{text-align:center;min-width:0}.parlayos-game-card-teams .names{font-size:22px;font-weight:900;line-height:1.08;overflow-wrap:anywhere}.parlayos-game-card-teams .sub{margin-top:5px;font-size:11px;font-weight:700;opacity:.66}.parlayos-game-card-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}.parlayos-game-card-stat{border:1px solid rgba(255,255,255,.22);border-radius:15px;padding:12px;background:rgba(0,0,0,.055);min-width:0}.parlayos-game-card-stat .title{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.72}.parlayos-game-card-stat .main{margin-top:5px;font-size:17px;font-weight:900;overflow-wrap:anywhere}.parlayos-game-card-stat .sub{margin-top:3px;font-size:11px;line-height:1.35;opacity:.72;overflow-wrap:anywhere}.parlayos-game-card-pitcher{cursor:pointer}.parlayos-game-card-pitcher:focus-visible{outline:2px solid rgba(255,255,255,.6);outline-offset:2px}.parlayos-game-card-markets{display:grid;gap:10px;margin-top:12px}.parlayos-game-card-market{border-top:1px solid rgba(255,255,255,.18);padding-top:12px}.parlayos-game-card-market-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.parlayos-game-card-market-title{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.68}.parlayos-game-card-market-prob{font-size:20px;font-weight:900}.parlayos-game-card-pick{margin-top:4px;font-size:21px;font-weight:900;overflow-wrap:anywhere}.parlayos-game-card-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:4px;font-size:12px;opacity:.74}.parlayos-game-card-bar{height:7px;margin-top:9px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}.parlayos-game-card-bar>span{display:block;height:100%;border-radius:999px;background:rgba(94,230,150,.82)}.parlayos-game-card-bar.negative>span{background:rgba(255,100,100,.75)}.parlayos-game-card-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:14px}.parlayos-game-card-actions .btn{min-height:42px;width:100%;white-space:normal}.parlayos-game-card-actions .btn[disabled]{opacity:.45;cursor:not-allowed}.parlayos-game-card-unavailable{border:1px dashed rgba(255,255,255,.28);border-radius:14px;padding:12px;font-size:12px;opacity:.74}.parlayos-game-card-player-modal{position:fixed;inset:0;z-index:2147483646;display:grid;place-items:center;padding:20px;background:rgba(5,7,14,.68)}.parlayos-game-card-player-modal[hidden]{display:none}.parlayos-game-card-player-dialog{width:min(620px,100%);max-height:80vh;overflow:auto;border:1px solid rgba(255,255,255,.28);border-radius:22px;background:rgba(30,25,45,.97);color:#fff;padding:20px}.parlayos-game-card-player-dialog .close{float:right}.parlayos-game-card-player-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:16px}.parlayos-game-card-player-stat{padding:10px;border:1px solid rgba(255,255,255,.18);border-radius:12px}.parlayos-game-card-player-stat b{display:block;font-size:10px;opacity:.68;text-transform:uppercase}.parlayos-game-card-player-stat span{font-weight:800}@media(max-width:780px){.parlayos-game-card{padding:14px;border-radius:20px}.parlayos-game-card-matchup{grid-template-columns:48px minmax(0,1fr) 48px;gap:8px}.parlayos-game-card-badge{width:46px;height:46px;font-size:13px}.parlayos-game-card-teams .names{font-size:18px}.parlayos-game-card-stat{padding:10px}.parlayos-game-card-actions{grid-template-columns:1fr}.parlayos-game-card-player-stats{grid-template-columns:1fr}}
 </style>
@@ -37240,15 +37378,16 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       q('[data-pos-slip]',host).dataset.posSlip=s;q('[data-pos-count]',host).textContent=String(selected(s).length);
       q('[data-pos-search]',host).dataset.posSearch=s;q('[data-pos-search]',host).setAttribute('aria-label','Search '+sports[s][1]+' games');
       if(q('[data-pos-search]',host).value!==(state.query[s]||''))q('[data-pos-search]',host).value=state.query[s]||'';
-      host.querySelectorAll('[data-pos-sport]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.posSport===s)));
+      host.querySelectorAll('.pos-nav [data-pos-sport]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.posSport===s)));
       const mh=q('.pos-models',host),html=Object.entries(C.models).map(([id,name])=>`<button type="button" data-pos-model="${id}" data-pos-sport="${s}" aria-pressed="${id===model(s)}"${C.applicable(s,id)?'':' disabled title="MLB model"'}>${name}${C.applicable(s,id)?'':' · MLB only'}</button>`).join('');
+      mh.setAttribute('aria-label',sports[s][1]+' prediction model');
       if(mh.__posHTML!==html){mh.innerHTML=html;mh.__posHTML=html;}
       const all=games(s),filtered=all.filter(g=>teams(g).toLowerCase().includes((state.query[s]||'').toLowerCase()));
       const unavailable=all.length&&!all.some(g=>Object.keys(labels(s)).some(k=>C.market(g,s,model(s),k).available));
       const status=q('.pos-status',host);
       const updated=new Date(state.data[s]?.updated||state.data[s]?.runDate||state.data[s]?.generated_at||'');
-      const freshness=Number.isFinite(updated.getTime())?' · Data updated '+updated.toLocaleString():'';
-      status.textContent=state.loading?'Loading games…':state.errors[s]?'Could not load '+sports[s][1]+' data. Use Refresh data to retry.':!all.length?'No games available.':`${filtered.length} of ${all.length} games · ${C.models[model(s)]}${freshness}${unavailable?' · Predictions unavailable: the feed has no validated output for this model.':''}`;
+      const freshness=(Number.isFinite(updated.getTime())?' · Data updated '+updated.toLocaleString():'')+(state.data[s]?.refresh_error?' · '+state.data[s].refresh_error:'');
+      status.textContent=state.loading?'Loading games…':state.errors[s]?'Could not load '+sports[s][1]+' data. Use Refresh data to retry.':!all.length?'0 games'+freshness:`${filtered.length} of ${all.length} games · ${C.models[model(s)]}${freshness}${unavailable?' · Predictions unavailable: the feed has no validated output for this model.':''}`;
       const grid=q('.pos-grid',host),cards=filtered.length?filtered.map(g=>card(g,s)).join(''):`<div class="pos-empty">${state.loading?'Loading games…':state.errors[s]?'Game data is temporarily unavailable.':all.length?'No matching games. Clear your search to see the slate.':'No games available.'}</div>`;
       if(grid.__posHTML!==cards){grid.innerHTML=cards;grid.__posHTML=cards;}
     });
