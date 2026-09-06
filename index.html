@@ -11087,6 +11087,127 @@ body.main-screen-active .titlebar .parlayos-titlebar-logo {
 .parlayos-robust-data-error{margin:10px 0;padding:12px 14px;border:1px solid rgba(255,255,255,.25);border-radius:14px;background:rgba(255,255,255,.08);font-size:12px}
 @media(max-width:780px){.parlayos-robust-tools{grid-template-columns:1fr;margin-bottom:12px}.parlayos-robust-actions{justify-content:stretch}.parlayos-robust-btn{flex:1 1 calc(33.33% - 6px);min-width:0}.parlayos-robust-status{font-size:10px}.parlayos-robust-favorite{top:9px;right:9px;width:36px;height:36px}}
 </style>
+<style id="PARLAYOS_PRODUCT_QA_STYLE">
+/* Product QA presentation layer: preserves the existing visual identity while making
+   prediction cards/model selection readable and usable on phone + desktop. */
+.parlayos-model-switcher{margin:14px 0 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.24);border-radius:16px;background:rgba(255,255,255,.10);box-shadow:0 8px 22px rgba(0,0,0,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.parlayos-model-switcher .pms-title{display:block;margin:0 0 8px;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;opacity:.72}
+.parlayos-model-switcher .pms-row{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:1px}
+.parlayos-model-switcher .pms-row::-webkit-scrollbar{display:none}
+.parlayos-model-switcher .pms-chip{appearance:none;flex:0 0 auto;min-height:36px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.30);background:rgba(255,255,255,.10);color:inherit;font:700 12px/1 inherit;cursor:pointer;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.24)}
+.parlayos-model-switcher .pms-chip:hover,.parlayos-model-switcher .pms-chip:focus-visible{background:rgba(255,255,255,.18);outline:none}
+.parlayos-model-switcher .pms-chip[aria-pressed="true"]{background:rgba(255,255,255,.32);border-color:rgba(255,255,255,.52);box-shadow:0 0 0 2px rgba(255,255,255,.10) inset}
+.parlayos-model-switcher .pms-chip[disabled]{opacity:.42;cursor:not-allowed}
+.parlayos-product-card{position:relative}
+.parlayos-product-card .game-head{align-items:flex-start}
+.parlayos-product-card .pqa-model{font-size:11px;font-weight:800;opacity:.72;letter-spacing:.04em}
+.parlayos-product-card .pqa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px 14px 0}
+.parlayos-product-card .pqa-cell{min-width:0;border:1px solid rgba(255,255,255,.20);border-radius:12px;padding:9px;background:rgba(0,0,0,.05)}
+.parlayos-product-card .pqa-label{font-size:10px;letter-spacing:.07em;text-transform:uppercase;opacity:.66}
+.parlayos-product-card .pqa-value{margin-top:4px;font-size:14px;font-weight:800;overflow-wrap:anywhere}
+.parlayos-product-card .pqa-market{border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:10px 12px;margin:10px 14px 0}
+.parlayos-product-card .pqa-market-title{font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.68;margin-bottom:5px}
+.parlayos-product-card .pqa-market-main{display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:800}
+.parlayos-product-card .pqa-muted{font-size:11px;opacity:.68}
+.parlayos-product-card .pqa-unavailable{border:1px dashed rgba(255,255,255,.24);border-radius:12px;padding:10px 12px;margin:10px 14px 0;font-size:11px;opacity:.72}
+@media(max-width:780px){.parlayos-model-switcher{margin:10px 0 12px;border-radius:14px}.parlayos-model-switcher .pms-chip{min-height:34px;padding:8px 10px;font-size:11px}.parlayos-product-card .pqa-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:10px 12px 0}.parlayos-product-card .pqa-market{margin-left:12px;margin-right:12px}.parlayos-product-card .game-actions{padding-left:12px;padding-right:12px;flex-wrap:wrap}.parlayos-product-card .game-actions .btn{min-width:110px}}
+</style>
+<style id="PARLAYOS_PRODUCT_FINALIZER_STYLE">
+/* Final product UI layer: consistent, compact bettor-facing dashboards. */
+.parlayos-model-switcher{margin:14px 0 18px;padding:12px;border:1px solid rgba(255,255,255,.24);border-radius:16px;background:rgba(255,255,255,.10);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.parlayos-model-switcher .pms-title{display:block;margin:0 0 10px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.76}
+.parlayos-model-switcher .pms-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;overflow:visible;padding:0}
+.parlayos-model-switcher .pms-chip{width:100%;min-height:40px;padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.30);background:rgba(255,255,255,.10);color:inherit;font:700 12px/1.1 inherit;cursor:pointer;white-space:normal;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.24)}
+.parlayos-model-switcher .pms-chip:hover,.parlayos-model-switcher .pms-chip:focus-visible{background:rgba(255,255,255,.19);outline:none}
+.parlayos-model-switcher .pms-chip[aria-pressed="true"]{background:rgba(255,255,255,.34);border-color:rgba(255,255,255,.58);box-shadow:0 0 0 2px rgba(255,255,255,.10) inset}
+.parlayos-model-switcher .pms-chip[disabled]{opacity:.34;cursor:not-allowed}
+
+.parlayos-final-cards{display:grid;gap:18px}
+.parlayos-final-card{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.28);border-radius:24px;background:rgba(255,255,255,.13);box-shadow:0 14px 34px rgba(0,0,0,.10);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:18px}
+.parlayos-final-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+.parlayos-final-model{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.72;text-align:right}
+.parlayos-final-matchup{display:grid;grid-template-columns:76px minmax(0,1fr) 76px;align-items:center;gap:12px;margin-bottom:14px}
+.parlayos-final-team-badge{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:18px;font-weight:900;background:rgba(20,65,130,.88);color:#fff;box-shadow:0 5px 12px rgba(0,0,0,.16)}
+.parlayos-final-team-badge.home{justify-self:end;background:rgba(220,70,45,.88)}
+.parlayos-final-teams{text-align:center;min-width:0}
+.parlayos-final-teams .names{font-size:24px;font-weight:900;line-height:1.08;letter-spacing:.01em;overflow-wrap:anywhere}
+.parlayos-final-teams .sub{margin-top:6px;font-size:11px;font-weight:700;opacity:.66;overflow-wrap:anywhere}
+.parlayos-final-stat-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}
+.parlayos-final-stat{border:1px solid rgba(255,255,255,.22);border-radius:15px;padding:12px;background:rgba(0,0,0,.055);min-width:0}
+.parlayos-final-stat-title{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;opacity:.72}
+.parlayos-final-stat-main{margin-top:5px;font-size:17px;font-weight:900;overflow-wrap:anywhere}
+.parlayos-final-stat-sub{margin-top:3px;font-size:11px;opacity:.68;overflow-wrap:anywhere}
+.parlayos-final-markets{display:grid;gap:10px;margin-top:12px}
+.parlayos-final-market{border-top:1px solid rgba(255,255,255,.18);padding-top:12px}
+.parlayos-final-market-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.parlayos-final-market-title{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.68}
+.parlayos-final-market-prob{font-size:20px;font-weight:900}
+.parlayos-final-pick{margin-top:4px;font-size:21px;font-weight:900;overflow-wrap:anywhere}
+.parlayos-final-market-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:4px;font-size:12px;opacity:.74}
+.parlayos-final-bar{height:7px;margin-top:9px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}
+.parlayos-final-bar>span{display:block;height:100%;width:0;background:rgba(94,230,150,.82);border-radius:999px}
+.parlayos-final-bar.negative>span{background:rgba(255,100,100,.75)}
+.parlayos-final-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.parlayos-final-actions .btn{min-height:40px}
+.parlayos-final-unavailable{border:1px dashed rgba(255,255,255,.28);border-radius:14px;padding:12px;font-size:12px;opacity:.74}
+.parlayos-final-source{margin-top:10px;font-size:10px;opacity:.54}
+
+@media(max-width:780px){
+  .parlayos-model-switcher .pms-row{grid-template-columns:1fr}
+  .parlayos-final-card{padding:14px;border-radius:20px}
+  .parlayos-final-matchup{grid-template-columns:58px minmax(0,1fr) 58px;gap:8px}
+  .parlayos-final-team-badge{width:52px;height:52px;font-size:14px}
+  .parlayos-final-teams .names{font-size:18px}
+  .parlayos-final-stat-row{grid-template-columns:1fr 1fr;gap:8px}
+  .parlayos-final-stat{padding:10px}
+  .parlayos-final-stat-main{font-size:15px}
+  .parlayos-final-pick{font-size:18px}
+  .parlayos-final-market-prob{font-size:18px}
+}
+</style>
+<style id="PARLAYOS_SWITCHER_CLEANUP_STYLE">
+/* Model selector uses the same compact glass-chip language as dashboard controls. */
+.parlayos-model-switcher{box-sizing:border-box;width:min(100%,420px);margin:12px 0 16px;padding:10px;border:1px solid rgba(255,255,255,.24);border-radius:18px;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.parlayos-model-switcher .pms-title{display:block;margin:0 0 8px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.72}
+.parlayos-model-switcher .pms-row{display:flex;flex-direction:column;gap:8px;overflow:visible;padding:0}
+.parlayos-model-switcher .pms-chip{box-sizing:border-box;width:100%;min-height:40px;margin:0;padding:9px 14px;border:1px solid rgba(255,255,255,.30);border-radius:999px;background:rgba(255,255,255,.10);color:inherit;font:700 13px/1.15 inherit;cursor:pointer;white-space:nowrap;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.20);transition:background .15s ease,border-color .15s ease,transform .15s ease}
+.parlayos-model-switcher .pms-chip:hover,.parlayos-model-switcher .pms-chip:focus-visible{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.46);outline:none;transform:translateY(-1px)}
+.parlayos-model-switcher .pms-chip[aria-pressed="true"]{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.62);box-shadow:0 0 0 1px rgba(255,255,255,.10) inset}
+.parlayos-model-switcher .pms-chip[disabled]{opacity:.34;cursor:not-allowed;transform:none}
+/* Every model/card uses one bettor-facing Add-to-Parlay control language. */
+.parlayos-final-card [data-add],.parlayos-final-card [data-nfl-add],.parlayos-final-card [data-nba-add]{box-sizing:border-box;min-height:40px;padding:9px 15px;border:1px solid rgba(255,255,255,.34);border-radius:999px;background:rgba(255,255,255,.13);color:inherit;font:700 13px/1.1 inherit;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.22);transition:background .15s ease,border-color .15s ease,transform .15s ease}
+.parlayos-final-card [data-add]:hover,.parlayos-final-card [data-nfl-add]:hover,.parlayos-final-card [data-nba-add]:hover,.parlayos-final-card [data-add]:focus-visible,.parlayos-final-card [data-nfl-add]:focus-visible,.parlayos-final-card [data-nba-add]:focus-visible{background:rgba(255,255,255,.24);border-color:rgba(255,255,255,.58);outline:none;transform:translateY(-1px)}
+.parlayos-final-card [data-add][disabled],.parlayos-final-card [data-nfl-add][disabled],.parlayos-final-card [data-nba-add][disabled]{opacity:.38;cursor:not-allowed;transform:none}
+.parlayos-final-player-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
+.parlayos-final-player{min-width:0;padding:10px 11px;border:1px solid rgba(255,255,255,.20);border-radius:14px;background:rgba(0,0,0,.045)}
+.parlayos-final-player .role{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.62}
+.parlayos-final-player .name{margin-top:3px;font-size:14px;font-weight:900;overflow-wrap:anywhere}
+.parlayos-final-player .meta{margin-top:3px;font-size:10px;opacity:.68;overflow-wrap:anywhere}
+@media(max-width:780px){.parlayos-model-switcher{width:min(100%,390px);padding:9px}.parlayos-model-switcher .pms-chip{min-height:42px;font-size:13px}.parlayos-final-player-info{grid-template-columns:1fr 1fr}.parlayos-final-player{padding:9px}}
+</style>
+<style id="PARLAYOS_DASHBOARD_ROBUSTNESS_STYLE">
+/* Final product hardening: navigation fallbacks, persistent favorites, filters,
+   data-state feedback, keyboard/touch affordances, and safe empty states. */
+.parlayos-robust-tools{box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:center;margin:0 0 14px;padding:9px 10px;border:1px solid rgba(255,255,255,.22);border-radius:16px;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.parlayos-robust-search{min-width:0;width:100%;min-height:40px;padding:9px 13px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.10);color:inherit;font:600 13px/1.1 inherit;outline:none}
+.parlayos-robust-search::placeholder{color:inherit;opacity:.52}
+.parlayos-robust-search:focus{border-color:rgba(255,255,255,.62);box-shadow:0 0 0 2px rgba(255,255,255,.10)}
+.parlayos-robust-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+.parlayos-robust-btn{box-sizing:border-box;min-height:40px;padding:9px 13px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.10);color:inherit;font:800 12px/1 inherit;cursor:pointer;white-space:nowrap}
+.parlayos-robust-btn:hover,.parlayos-robust-btn:focus-visible{background:rgba(255,255,255,.20);border-color:rgba(255,255,255,.54);outline:none}
+.parlayos-robust-btn[aria-pressed="true"]{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.62)}
+.parlayos-robust-status{grid-column:1/-1;display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:11px;opacity:.72;min-width:0}
+.parlayos-robust-status .state{font-weight:800}
+.parlayos-robust-status .detail{overflow-wrap:anywhere;text-align:right}
+.parlayos-robust-empty{display:none;margin:12px 0;padding:18px 14px;border:1px dashed rgba(255,255,255,.25);border-radius:14px;text-align:center;font-size:12px;opacity:.72}
+.parlayos-robust-empty.is-visible{display:block}
+.parlayos-robust-favorite{position:absolute;top:12px;right:12px;z-index:4;width:38px;height:38px;border:1px solid rgba(255,255,255,.30);border-radius:999px;background:rgba(255,255,255,.12);color:inherit;font:800 18px/1 inherit;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.parlayos-robust-favorite:hover,.parlayos-robust-favorite:focus-visible{background:rgba(255,255,255,.22);outline:none}
+.parlayos-robust-favorite[aria-pressed="true"]{background:rgba(255,255,255,.30);border-color:rgba(255,255,255,.65)}
+.parlayos-robust-card-hidden{display:none!important}
+.parlayos-robust-data-error{margin:10px 0;padding:12px 14px;border:1px solid rgba(255,255,255,.25);border-radius:14px;background:rgba(255,255,255,.08);font-size:12px}
+@media(max-width:780px){.parlayos-robust-tools{grid-template-columns:1fr;margin-bottom:12px}.parlayos-robust-actions{justify-content:stretch}.parlayos-robust-btn{flex:1 1 calc(33.33% - 6px);min-width:0}.parlayos-robust-status{font-size:10px}.parlayos-robust-favorite{top:9px;right:9px;width:36px;height:36px}}
+</style>
 <style id="PARLAYOS_UI_STYLE">/* Shared, readable surfaces for the existing ParlayOS window and themes. */
 html { color-scheme: dark; }
 body.pos-ui { --pos-accent:#ab9cff; --pos-bg:#111522; --pos-surface:#202638; --pos-text:#f4f5ff; --pos-muted:#c0c7d8; background:var(--pos-bg)!important; color:var(--pos-text)!important; }
@@ -33653,7 +33774,6 @@ body.dark .screen[data-screen="nba-dashboard"] .market{
 
   // === FALLBACK DATA ===
   const FALLBACK_STANDINGS = null;
-  function getLineup(t){ return []; }
 // === FIXED RENDER STANDINGS (NO API TEXT) ===
   window.renderStandings = function(){
     const mount = document.getElementById('standingsMount');
@@ -36387,117 +36507,6 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   setTimeout(run,1000);
 })();
 </script>
-<script id="CHD_DATA_INJECTION">
-(function(){
-  'use strict';
-  const SRC={mlb:'./parlayos_mlb_chd.json',nfl:'./parlayos_nfl_chd.json',nba:'./parlayos_nba_chd.json',soc:'./parlayos_soccer_chd.json',nhl:'./parlayos_nhl_chd.json',combined:'./parlayos_chd_data.json'};
-  const REQUIRED_SPORTS=['mlb','nfl','nba'];
-  const OPTIONAL_SPORTS=['soc','nhl'];
-  const SPORTS=[...REQUIRED_SPORTS,...OPTIONAL_SPORTS];
-  window.PARLAYOS_CHD_SOURCES=SRC;
-  const bust=u=>u+(u.includes('?')?'&':'?')+'ts='+Date.now();
-  async function get(u){const r=await fetch(bust(u),{cache:'no-store'});if(!r.ok)throw new Error(u+' HTTP '+r.status);return r.json();}
-  const normalize=d=>Object.assign({},d||{},{games:Array.isArray(d?.games)?d.games:[]});
-  function americanToDecimal(odds){
-    if(odds==null||odds===''||isNaN(odds)) return null;
-    const n=Number(odds);
-    if(!Number.isFinite(n)||n===0) return null;
-    return n>0 ? 1+n/100 : 1+100/Math.abs(n);
-  }
-  function firstDefined(...values){return values.find(v=>v!==undefined&&v!==null&&v!=='');}
-  function teamIds(g){return {away:g.away||'',home:g.home||'',aAbbr:g.away_abbr||'',bAbbr:g.home_abbr||''};}
-  function transformMLBGame(g, idx){
-    const {away,home,aAbbr,bAbbr}=teamIds(g);
-    const chd=Object.assign({},g.chd||{});
-    const pA=chd.pA;
-    const pB=firstDefined(chd.pB,pA!=null?1-pA:null);
-    const mlFav=(pA!=null&&pB!=null)?(pA>=pB?away:home):null;
-    const mlProb=(pA!=null&&pB!=null)?Math.max(pA,pB):null;
-    const mlEdge=firstDefined(chd.edge,(pA!=null&&pB!=null)?Math.abs(pA-pB):null);
-    const total=g.total||{};
-    const totalLine=firstDefined(total.line,total.simple?.line);
-    const overProb=firstDefined(total.simple?.over_prob,total.p_over_8_5);
-    const underProb=firstDefined(total.simple?.under_prob,overProb!=null?1-overProb:null);
-    const ouPick=overProb!=null&&totalLine!=null?(overProb>=0.5?`OVER ${totalLine}`:`UNDER ${totalLine}`):null;
-    const ouEdge=overProb!=null?overProb-0.5:null;
-    const ouProb=overProb!=null&&underProb!=null?Math.max(overProb,underProb):null;
-    const k=g.k_prop||{};
-    const kLine=k.line;
-    const kOver=k.over_prob;
-    const kUnder=firstDefined(k.under_prob,kOver!=null?1-kOver:null);
-    const kPick=kOver!=null&&kLine!=null?(kOver>=0.5?`OVER ${kLine} K`:`UNDER ${kLine} K`):null;
-    const kEdge=kOver!=null?kOver-0.5:null;
-    const kProb=kOver!=null&&kUnder!=null?Math.max(kOver,kUnder):null;
-    const pitchers=g.pitchers||{};
-    const paStats=pitchers.away_stats||{};
-    const phStats=pitchers.home_stats||{};
-    const luA=Array.isArray(g.lineups?.away)?g.lineups.away:[];
-    const luB=Array.isArray(g.lineups?.home)?g.lineups.home:[];
-    const avgOf=(arr,key)=>{const vals=arr.map(p=>Number(p?.[key])).filter(Number.isFinite);return vals.length?vals.reduce((s,v)=>s+v,0)/vals.length:null;};
-    const sumOf=(arr,key)=>{const vals=arr.map(p=>Number(p?.[key])).filter(Number.isFinite);return vals.length?vals.reduce((s,v)=>s+v,0):null;};
-    const w=g.weather||{};
-    const awayOdds=firstDefined(g.odds?.h2h?.[away]?.price,g.odds?.h2h?.[aAbbr]?.price,chd.market_price&&mlFav===away?chd.market_price:null);
-    const homeOdds=firstDefined(g.odds?.h2h?.[home]?.price,g.odds?.h2h?.[bAbbr]?.price,chd.market_price&&mlFav===home?chd.market_price:null);
-    const mlPrice=mlFav===away?awayOdds:mlFav===home?homeOdds:null;
-    return Object.assign({},g,{id:firstDefined(g.id,`mlb_${g.gamePk||idx}`),a:away,b:home,abbrA:aAbbr,abbrB:bAbbr,lgA:'MLB',lgB:'MLB',
-      total:firstDefined(totalLine,null),ouPick,ouEdge,ouProb,kLine,kPick,kEdge,kProb,mlFav,mlEdge,model:mlProb,
-      chd_pA:pA,chd_pB:pB,pitcherA:firstDefined(pitchers.away,null),pitcherB:firstDefined(pitchers.home,null),
-      pitcherA_era:paStats.era,pitcherA_whip:paStats.whip,pitcherA_k9:paStats.k9,
-      pitcherB_era:phStats.era,pitcherB_whip:phStats.whip,pitcherB_k9:phStats.k9,
-      lineupA:luA,lineupB:luB,teamA_avg:avgOf(luA,'avg'),teamA_ops:avgOf(luA,'ops'),teamA_hr:sumOf(luA,'hr'),
-      teamB_avg:avgOf(luB,'avg'),teamB_ops:avgOf(luB,'ops'),teamB_hr:sumOf(luB,'hr'),
-      weather:firstDefined(w.temp!=null?`${w.temp}°`:null,null),wind:firstDefined(w.wind!=null?`${w.wind}mph`:null,null),
-      startAt:firstDefined(g.startAt,g.start_time,g.game_time,g.commence_time,null),date:firstDefined(g.date,g.game_date,null),time:firstDefined(g.time,g.start_time_label,null),
-      hot:mlEdge!=null?Math.abs(mlEdge)>0.03:false,mlPriceDec:americanToDecimal(mlPrice),models:firstDefined(g.models,null),ensemble:firstDefined(g.ensemble,null)});
-  }
-  function transformGenericGame(g,idx,sport){
-    const away=g.away||g.a||''; const home=g.home||g.b||''; const aAbbr=g.away_abbr||g.abbrA||g.aAbbr||''; const bAbbr=g.home_abbr||g.abbrB||g.bAbbr||'';
-    const chd=Object.assign({},g.chd||{}); const pA=chd.pA; const pB=firstDefined(chd.pB,pA!=null?1-pA:null);
-    const mlFav=pA!=null&&pB!=null?(pA>=pB?away:home):null; const mlProb=pA!=null&&pB!=null?Math.max(pA,pB):null;
-    return Object.assign({},g,{id:firstDefined(g.id,g.event_id,g.gamePk,`${sport}_${idx}`),a:away,b:home,abbrA:aAbbr,abbrB:bAbbr,lgA:sport.toUpperCase(),lgB:sport.toUpperCase(),
-      total:firstDefined(g.total_line,g.total?.line,null),mlFav,mlEdge:firstDefined(chd.edge,pA!=null&&pB!=null?Math.abs(pA-pB):null),model:mlProb,chd_pA:pA,chd_pB:pB,
-      startAt:firstDefined(g.startAt,g.start_time,g.game_time,g.commence_time,null),date:firstDefined(g.date,g.game_date,null),time:firstDefined(g.time,g.start_time_label,null),
-      hot:chd.edge!=null?Math.abs(chd.edge)>0.03:false,models:firstDefined(g.models,null),ensemble:firstDefined(g.ensemble,null)});
-  }
-  async function load(){
-    let payloads={};
-    try{
-      for(const s of REQUIRED_SPORTS)payloads[s]=await get(SRC[s]);
-      payloads.combined=await get(SRC.combined);
-    }catch(err){console.error('[CHD] Failed to load required JSON payloads:',err);throw err;}
-    for(const s of OPTIONAL_SPORTS){
-      try{payloads[s]=await get(SRC[s]);}
-      catch(err){const fallback=payloads.combined&&typeof payloads.combined[s]==='object'?payloads.combined[s]:{games:[]};payloads[s]=fallback;console.info('[CHD] Optional '+s.toUpperCase()+' prediction payload unavailable');}
-    }
-    window.CHD_DATA=payloads.combined;
-    window.PARLAYOS_SPORT_DATA={};
-    for(const s of SPORTS){
-      const games=normalize(payloads[s]).games.map((g,i)=>s==='mlb'?transformMLBGame(g,i):transformGenericGame(g,i,s));
-      window.PARLAYOS_SPORT_DATA[s]=Object.assign({},normalize(payloads[s]),{games});
-    }
-    window.PARLAYOS_DATA=window.PARLAYOS_SPORT_DATA.mlb;
-    window.PARLAYOS_NFL_DATA=window.PARLAYOS_SPORT_DATA.nfl;
-    window.PARLAYOS_NBA_DATA=window.PARLAYOS_SPORT_DATA.nba;
-    window.PARLAYOS_SOC_DATA=window.PARLAYOS_SPORT_DATA.soc;
-    window.PARLAYOS_NHL_DATA=window.PARLAYOS_SPORT_DATA.nhl;
-    window.PARLAYOS_GAMES=window.PARLAYOS_DATA.games; window.games=window.PARLAYOS_DATA.games; window.gamesNFL=window.PARLAYOS_NFL_DATA.games; window.gamesNBA=window.PARLAYOS_NBA_DATA.games;
-    const detail=Object.assign({},window.PARLAYOS_SPORT_DATA,{combined:payloads.combined});
-    try{window.dispatchEvent(new CustomEvent('chd:ready',{detail:payloads.combined}));}catch(e){console.warn('[CHD] chd:ready dispatch failed',e);}
-    try{document.dispatchEvent(new CustomEvent('parlayos:chd-data-ready',{detail}));}catch(e){console.warn('[CHD] parlayos:chd-data-ready dispatch failed',e);}
-    if(!document.getElementById('PARLAYOS_SPORTS_UNIFIED_V3')){
-      try{if(typeof window.loadRealData==='function')window.loadRealData();}catch(e){console.warn('[CHD] loadRealData failed',e);}
-      try{if(typeof window.renderDashboard==='function')window.renderDashboard();}catch(e){console.warn('[CHD] renderDashboard failed',e);}
-      try{if(typeof window.renderNFLDashboard==='function')window.renderNFLDashboard();}catch(e){console.warn('[CHD] renderNFLDashboard failed',e);}
-      try{if(typeof window.renderNBADashboard==='function')window.renderNBADashboard();}catch(e){console.warn('[CHD] renderNBADashboard failed',e);}
-      try{if(typeof window.chdWireSportHubs==='function')window.chdWireSportHubs();}catch(e){console.warn('[CHD] chdWireSportHubs failed',e);}
-    }
-    return payloads.combined;
-  }
-  window.loadParlayOSCHDData=load;
-  const boot=()=>load().catch(e=>console.error('[CHD] Runtime JSON load failed',e));
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-})();
-</script>
 <style id="PARLAYOS_GAME_DETAILS_STYLE">
 .parlayos-game-context{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 12px}
 .parlayos-game-context-item{min-width:0;padding:9px 10px;border:1px solid rgba(255,255,255,.20);border-radius:13px;background:rgba(0,0,0,.045)}
@@ -37162,7 +37171,127 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   new MutationObserver(()=>{clearTimeout(window.__PARLAYOS_VIDEO_TIMER);window.__PARLAYOS_VIDEO_TIMER=setTimeout(run,120)}).observe(document.body,{childList:true,subtree:true});
 })();
 </script>
+<style id="PARLAYOS_CRITICAL_RUNTIME_STYLE">
+.parlayos-critical-ready{}
+.parlayos-inline-stat{display:block;margin-top:3px;font-size:10px;line-height:1.35;opacity:.76;overflow-wrap:anywhere}
+.parlayos-critical-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:2147483646;padding:10px 14px;border:1px solid rgba(255,255,255,.30);border-radius:999px;background:rgba(25,30,40,.88);color:#fff;font:700 12px/1.2 system-ui,sans-serif;box-shadow:0 10px 28px rgba(0,0,0,.22);pointer-events:none}
+#brDkImportBtn,#brDkPasteBtn,#brDkClearBtn,#brPhotoStripBtn{position:relative;z-index:3}
+#brDkImportBtn{margin-bottom:10px!important}
+#brChart{position:relative;z-index:1}
+@media(max-width:620px){.parlayos-inline-stat{font-size:9.5px}.parlayos-critical-toast{bottom:18px;max-width:calc(100vw - 28px);text-align:center}}
+</style>
 
+<script id="CHD_DATA_INJECTION">
+(function(){
+  'use strict';
+  const SRC={mlb:'./parlayos_mlb_chd.json',nfl:'./parlayos_nfl_chd.json',nba:'./parlayos_nba_chd.json',soc:'./parlayos_soccer_chd.json',nhl:'./parlayos_nhl_chd.json',combined:'./parlayos_chd_data.json'};
+  const REQUIRED_SPORTS=['mlb','nfl','nba'];
+  const OPTIONAL_SPORTS=['soc','nhl'];
+  const SPORTS=[...REQUIRED_SPORTS,...OPTIONAL_SPORTS];
+  window.PARLAYOS_CHD_SOURCES=SRC;
+  const bust=u=>u+(u.includes('?')?'&':'?')+'ts='+Date.now();
+  async function get(u){const r=await fetch(bust(u),{cache:'no-store'});if(!r.ok)throw new Error(u+' HTTP '+r.status);return r.json();}
+  const normalize=d=>Object.assign({},d||{},{games:Array.isArray(d?.games)?d.games:[]});
+  function americanToDecimal(odds){
+    if(odds==null||odds===''||isNaN(odds)) return null;
+    const n=Number(odds);
+    if(!Number.isFinite(n)||n===0) return null;
+    return n>0 ? 1+n/100 : 1+100/Math.abs(n);
+  }
+  function firstDefined(...values){return values.find(v=>v!==undefined&&v!==null&&v!=='');}
+  function teamIds(g){return {away:g.away||'',home:g.home||'',aAbbr:g.away_abbr||'',bAbbr:g.home_abbr||''};}
+  function transformMLBGame(g, idx){
+    const {away,home,aAbbr,bAbbr}=teamIds(g);
+    const chd=Object.assign({},g.chd||{});
+    const pA=chd.pA;
+    const pB=firstDefined(chd.pB,pA!=null?1-pA:null);
+    const mlFav=(pA!=null&&pB!=null)?(pA>=pB?away:home):null;
+    const mlProb=(pA!=null&&pB!=null)?Math.max(pA,pB):null;
+    const mlEdge=firstDefined(chd.edge,(pA!=null&&pB!=null)?Math.abs(pA-pB):null);
+    const total=g.total||{};
+    const totalLine=firstDefined(total.line,total.simple?.line);
+    const overProb=firstDefined(total.simple?.over_prob,total.p_over_8_5);
+    const underProb=firstDefined(total.simple?.under_prob,overProb!=null?1-overProb:null);
+    const ouPick=overProb!=null&&totalLine!=null?(overProb>=0.5?`OVER ${totalLine}`:`UNDER ${totalLine}`):null;
+    const ouEdge=overProb!=null?overProb-0.5:null;
+    const ouProb=overProb!=null&&underProb!=null?Math.max(overProb,underProb):null;
+    const k=g.k_prop||{};
+    const kLine=k.line;
+    const kOver=k.over_prob;
+    const kUnder=firstDefined(k.under_prob,kOver!=null?1-kOver:null);
+    const kPick=kOver!=null&&kLine!=null?(kOver>=0.5?`OVER ${kLine} K`:`UNDER ${kLine} K`):null;
+    const kEdge=kOver!=null?kOver-0.5:null;
+    const kProb=kOver!=null&&kUnder!=null?Math.max(kOver,kUnder):null;
+    const pitchers=g.pitchers||{};
+    const paStats=pitchers.away_stats||{};
+    const phStats=pitchers.home_stats||{};
+    const luA=Array.isArray(g.lineups?.away)?g.lineups.away:[];
+    const luB=Array.isArray(g.lineups?.home)?g.lineups.home:[];
+    const avgOf=(arr,key)=>{const vals=arr.map(p=>Number(p?.[key])).filter(Number.isFinite);return vals.length?vals.reduce((s,v)=>s+v,0)/vals.length:null;};
+    const sumOf=(arr,key)=>{const vals=arr.map(p=>Number(p?.[key])).filter(Number.isFinite);return vals.length?vals.reduce((s,v)=>s+v,0):null;};
+    const w=g.weather||{};
+    const awayOdds=firstDefined(g.odds?.h2h?.[away]?.price,g.odds?.h2h?.[aAbbr]?.price,chd.market_price&&mlFav===away?chd.market_price:null);
+    const homeOdds=firstDefined(g.odds?.h2h?.[home]?.price,g.odds?.h2h?.[bAbbr]?.price,chd.market_price&&mlFav===home?chd.market_price:null);
+    const mlPrice=mlFav===away?awayOdds:mlFav===home?homeOdds:null;
+    return Object.assign({},g,{id:firstDefined(g.id,`mlb_${g.gamePk||idx}`),a:away,b:home,abbrA:aAbbr,abbrB:bAbbr,lgA:'MLB',lgB:'MLB',
+      total:firstDefined(totalLine,null),ouPick,ouEdge,ouProb,kLine,kPick,kEdge,kProb,mlFav,mlEdge,model:mlProb,
+      chd_pA:pA,chd_pB:pB,pitcherA:firstDefined(pitchers.away,null),pitcherB:firstDefined(pitchers.home,null),
+      pitcherA_era:paStats.era,pitcherA_whip:paStats.whip,pitcherA_k9:paStats.k9,
+      pitcherB_era:phStats.era,pitcherB_whip:phStats.whip,pitcherB_k9:phStats.k9,
+      lineupA:luA,lineupB:luB,teamA_avg:avgOf(luA,'avg'),teamA_ops:avgOf(luA,'ops'),teamA_hr:sumOf(luA,'hr'),
+      teamB_avg:avgOf(luB,'avg'),teamB_ops:avgOf(luB,'ops'),teamB_hr:sumOf(luB,'hr'),
+      weather:firstDefined(w.temp!=null?`${w.temp}°`:null,null),wind:firstDefined(w.wind!=null?`${w.wind}mph`:null,null),
+      startAt:firstDefined(g.startAt,g.start_time,g.game_time,g.commence_time,null),date:firstDefined(g.date,g.game_date,null),time:firstDefined(g.time,g.start_time_label,null),
+      hot:mlEdge!=null?Math.abs(mlEdge)>0.03:false,mlPriceDec:americanToDecimal(mlPrice),models:firstDefined(g.models,null),ensemble:firstDefined(g.ensemble,null)});
+  }
+  function transformGenericGame(g,idx,sport){
+    const away=g.away||g.a||''; const home=g.home||g.b||''; const aAbbr=g.away_abbr||g.abbrA||g.aAbbr||''; const bAbbr=g.home_abbr||g.abbrB||g.bAbbr||'';
+    const chd=Object.assign({},g.chd||{}); const pA=chd.pA; const pB=firstDefined(chd.pB,pA!=null?1-pA:null);
+    const mlFav=pA!=null&&pB!=null?(pA>=pB?away:home):null; const mlProb=pA!=null&&pB!=null?Math.max(pA,pB):null;
+    return Object.assign({},g,{id:firstDefined(g.id,g.event_id,g.gamePk,`${sport}_${idx}`),a:away,b:home,abbrA:aAbbr,abbrB:bAbbr,lgA:sport.toUpperCase(),lgB:sport.toUpperCase(),
+      total:firstDefined(g.total_line,g.total?.line,null),mlFav,mlEdge:firstDefined(chd.edge,pA!=null&&pB!=null?Math.abs(pA-pB):null),model:mlProb,chd_pA:pA,chd_pB:pB,
+      startAt:firstDefined(g.startAt,g.start_time,g.game_time,g.commence_time,null),date:firstDefined(g.date,g.game_date,null),time:firstDefined(g.time,g.start_time_label,null),
+      hot:chd.edge!=null?Math.abs(chd.edge)>0.03:false,models:firstDefined(g.models,null),ensemble:firstDefined(g.ensemble,null)});
+  }
+  async function load(){
+    let payloads={};
+    try{
+      for(const s of REQUIRED_SPORTS)payloads[s]=await get(SRC[s]);
+      payloads.combined=await get(SRC.combined);
+    }catch(err){console.error('[CHD] Failed to load required JSON payloads:',err);throw err;}
+    for(const s of OPTIONAL_SPORTS){
+      try{payloads[s]=await get(SRC[s]);}
+      catch(err){const fallback=payloads.combined&&typeof payloads.combined[s]==='object'?payloads.combined[s]:{games:[]};payloads[s]=fallback;console.info('[CHD] Optional '+s.toUpperCase()+' prediction payload unavailable');}
+    }
+    window.CHD_DATA=payloads.combined;
+    window.PARLAYOS_SPORT_DATA={};
+    for(const s of SPORTS){
+      const games=normalize(payloads[s]).games.map((g,i)=>s==='mlb'?transformMLBGame(g,i):transformGenericGame(g,i,s));
+      window.PARLAYOS_SPORT_DATA[s]=Object.assign({},normalize(payloads[s]),{games});
+    }
+    window.PARLAYOS_DATA=window.PARLAYOS_SPORT_DATA.mlb;
+    window.PARLAYOS_NFL_DATA=window.PARLAYOS_SPORT_DATA.nfl;
+    window.PARLAYOS_NBA_DATA=window.PARLAYOS_SPORT_DATA.nba;
+    window.PARLAYOS_SOC_DATA=window.PARLAYOS_SPORT_DATA.soc;
+    window.PARLAYOS_NHL_DATA=window.PARLAYOS_SPORT_DATA.nhl;
+    window.PARLAYOS_GAMES=window.PARLAYOS_DATA.games; window.games=window.PARLAYOS_DATA.games; window.gamesNFL=window.PARLAYOS_NFL_DATA.games; window.gamesNBA=window.PARLAYOS_NBA_DATA.games;
+    const detail=Object.assign({},window.PARLAYOS_SPORT_DATA,{combined:payloads.combined});
+    try{window.dispatchEvent(new CustomEvent('chd:ready',{detail:payloads.combined}));}catch(e){console.warn('[CHD] chd:ready dispatch failed',e);}
+    try{document.dispatchEvent(new CustomEvent('parlayos:chd-data-ready',{detail}));}catch(e){console.warn('[CHD] parlayos:chd-data-ready dispatch failed',e);}
+    if(!document.getElementById('PARLAYOS_SPORTS_UNIFIED_V3')){
+      try{if(typeof window.loadRealData==='function')window.loadRealData();}catch(e){console.warn('[CHD] loadRealData failed',e);}
+      try{if(typeof window.renderDashboard==='function')window.renderDashboard();}catch(e){console.warn('[CHD] renderDashboard failed',e);}
+      try{if(typeof window.renderNFLDashboard==='function')window.renderNFLDashboard();}catch(e){console.warn('[CHD] renderNFLDashboard failed',e);}
+      try{if(typeof window.renderNBADashboard==='function')window.renderNBADashboard();}catch(e){console.warn('[CHD] renderNBADashboard failed',e);}
+      try{if(typeof window.chdWireSportHubs==='function')window.chdWireSportHubs();}catch(e){console.warn('[CHD] chdWireSportHubs failed',e);}
+    }
+    return payloads.combined;
+  }
+  window.loadParlayOSCHDData=load;
+  const boot=()=>load().catch(e=>console.error('[CHD] Runtime JSON load failed',e));
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
+</script>
 <style id="PARLAYOS_CRITICAL_RUNTIME_STYLE">
 .parlayos-critical-ready{}
 .parlayos-inline-stat{display:block;margin-top:3px;font-size:10px;line-height:1.35;opacity:.76;overflow-wrap:anywhere}
