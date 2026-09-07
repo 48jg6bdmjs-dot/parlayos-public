@@ -37481,16 +37481,42 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   function timeLabel(g,s){const d=C.start(g,A(state.live.sports?.[s]));return d?d.toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Start time unavailable';}
   function details(g) {
     const rows=[];
+    if(g.data_quality?.prediction_available===false)rows.push(['Prediction inputs',g.data_quality.reason||'Unavailable']);
+    if(g.model_assumptions?.length)rows.push(['Model assumptions',g.model_assumptions.join('; ')]);
     for(const side of ['away','home']) {
       const p=g.pitchers?.[side],stats=g.pitchers?.[side+'_stats']||{};
       const name=(typeof p==='object'?p?.name:p)||stats.name;
       if(name&&!/^\d+$|^n\/?a$/i.test(String(name)))rows.push([side==='away'?'Away pitcher':'Home pitcher',name]);
       for(const key of ['era','whip','k9'])if(C.numeric(stats[key]))rows.push([`${side} ${key.toUpperCase()}`,Number(stats[key]).toFixed(2)]);
       const roster=A(g.lineups?.[side]);
+      if(g.lineups?.[side+'_source'])rows.push([side+' lineup',g.lineups[side+'_source']]);
+      const teamStats=g.stats?.[side];
+      if(teamStats?.season)rows.push([side+' statistics season',String(teamStats.season)+(teamStats.prior_season?' · completed-season prior':'')]);
+      if(teamStats?.metric_basis)rows.push([side+' statistics method',teamStats.metric_basis]);
       for(const key of ['avg','ops']){const values=roster.map(p=>p[key]).filter(C.numeric);if(values.length)rows.push([`${side} lineup ${key.toUpperCase()}`,(values.reduce((sum,v)=>sum+Number(v),0)/values.length).toFixed(3)]);}
     }
     if(g.venue?.name||typeof g.venue==='string')rows.push(['Venue',g.venue.name||g.venue]);
     return rows.length?`<details class="pos-detail"><summary>Game details</summary><div class="pos-stats">${rows.map(([k,v])=>`<div><small>${E(k)}</small>${E(v)}</div>`).join('')}</div></details>`:'';
+  }
+  function reconcileCards(grid,markup) {
+    if(grid.__posHTML===markup)return;
+    const template=document.createElement('template');template.innerHTML=markup;
+    const previous=new Map(Array.from(grid.children).filter(el=>el.matches('article[data-pos-game]')).map(el=>[el.dataset.posGame,el]));
+    const children=[];
+    for(const candidate of Array.from(template.content.children)) {
+      const current=previous.get(candidate.dataset.posGame);
+      if(current) {
+        const expanded=!!current.querySelector('details[open]');
+        current.dataset.posModel=candidate.dataset.posModel;
+        if(current.innerHTML!==candidate.innerHTML)current.innerHTML=candidate.innerHTML;
+        if(expanded)current.querySelector('details')?.setAttribute('open','');
+        children.push(current);
+      } else children.push(candidate);
+    }
+    // Reuse each game's article node across model changes and feed refreshes.
+    for(let i=0;i<children.length;i++)if(grid.children[i]!==children[i])grid.insertBefore(children[i],grid.children[i]||null);
+    const keep=new Set(children);for(const child of Array.from(grid.children))if(!keep.has(child))child.remove();
+    grid.__posHTML=markup;
   }
   function card(g,s) {
     const id=C.id(g),m=model(s);
@@ -37514,15 +37540,18 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       host.querySelectorAll('.pos-nav [data-pos-sport]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.posSport===s)));
       const mh=q('.pos-models',host),html=Object.entries(C.models).map(([id,name])=>`<button type="button" data-pos-model="${id}" data-pos-sport="${s}" aria-pressed="${id===model(s)}"${C.applicable(s,id)?'':' disabled title="MLB model"'}>${name}${C.applicable(s,id)?'':' · MLB only'}</button>`).join('');
       mh.setAttribute('aria-label',sports[s][1]+' prediction model');
-      if(mh.__posHTML!==html){mh.innerHTML=html;mh.__posHTML=html;}
+      if(mh.dataset.posSport!==s){mh.innerHTML=html;mh.dataset.posSport=s;}
+      mh.querySelectorAll('[data-pos-model]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.posModel===model(s))));
       const all=games(s),filtered=all.filter(g=>teams(g).toLowerCase().includes((state.query[s]||'').toLowerCase()));
       const unavailable=all.length&&!all.some(g=>Object.keys(labels(s)).some(k=>C.market(g,s,model(s),k).available));
       const status=q('.pos-status',host);
       const updated=new Date(state.data[s]?.updated||state.data[s]?.runDate||state.data[s]?.generated_at||'');
       const freshness=(Number.isFinite(updated.getTime())?' · Data updated '+updated.toLocaleString():'')+(state.data[s]?.refresh_error?' · '+state.data[s].refresh_error:'');
       status.textContent=state.loading?'Loading games…':state.errors[s]?'Could not load '+sports[s][1]+' data. Use Refresh data to retry.':!all.length?'0 games'+freshness:`${filtered.length} of ${all.length} games · ${C.models[model(s)]}${freshness}${unavailable?' · Predictions unavailable: the feed has no validated output for this model.':''}`;
-      const grid=q('.pos-grid',host),cards=filtered.length?filtered.map(g=>card(g,s)).join(''):`<div class="pos-empty">${state.loading?'Loading games…':state.errors[s]?'Game data is temporarily unavailable.':all.length?'No matching games. Clear your search to see the slate.':'No games available.'}</div>`;
-      if(grid.__posHTML!==cards){grid.innerHTML=cards;grid.__posHTML=cards;}
+      const feed=state.data[s]||{};
+      const empty=feed.status==='provider_failed'?'The game provider could not be reached.':feed.status==='no_games_scheduled'?`No games scheduled${feed.schedule_start?' for '+feed.schedule_start+' through '+feed.schedule_end:''}.${feed.preseason_start?' Preseason starts '+feed.preseason_start+'.':''}`:'No games available.';
+      const grid=q('.pos-grid',host),cards=filtered.length?filtered.map(g=>card(g,s)).join(''):`<div class="pos-empty">${E(state.loading?'Loading games…':state.errors[s]?'Game data is temporarily unavailable.':all.length?'No matching games. Clear your search to see the slate.':empty)}</div>`;
+      reconcileCards(grid,cards);
     });
   }
   function renderAll(){Object.keys(sports).forEach(renderSport);}

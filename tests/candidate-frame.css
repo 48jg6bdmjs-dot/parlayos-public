@@ -1,0 +1,137 @@
+/* Shared, readable surfaces for the existing ParlayOS window and themes. */
+html { color-scheme: dark; }
+body.pos-ui { --pos-accent:#ab9cff; --pos-bg:#111522; --pos-surface:#202638; --pos-text:#f4f5ff; --pos-muted:#c0c7d8; background:var(--pos-bg)!important; color:var(--pos-text)!important; }
+body.pos-ui.theme-winter { --pos-bg:#191817; --pos-surface:#302923; --pos-accent:#f1bc87; }
+body.pos-ui.theme-summer { --pos-bg:#211625; --pos-surface:#39233a; --pos-accent:#ffb593; }
+body.pos-ui.theme-autumn { --pos-bg:#241816; --pos-surface:#392821; --pos-accent:#f5ba83; }
+body.pos-ui.theme-halloween { --pos-bg:#1a1029; --pos-surface:#2d1d40; --pos-accent:#d4a2ff; }
+body.pos-ui.theme-spring { --pos-bg:#10221e; --pos-surface:#203b31; --pos-accent:#a5e0bf; }
+body.pos-ui.theme-rain { --pos-bg:#121d2d; --pos-surface:#22344b; --pos-accent:#a4d5fb; }
+body.pos-ui.theme-desert { --pos-bg:#241b16; --pos-surface:#382d23; --pos-accent:#eccc98; }
+body.pos-ui.theme-black { --pos-bg:#050608; --pos-surface:#15171c; --pos-accent:#e1e6ff; }
+html body.pos-ui * { text-shadow:none!important; box-sizing:border-box; }
+html body.pos-ui .window, html body.pos-ui #parlayWindow, html body.pos-ui .app-window { background:var(--pos-bg)!important; color:var(--pos-text)!important; filter:none!important; backdrop-filter:none!important; }
+html body.pos-ui #osWindow, html body.pos-ui .app-shell { background:var(--pos-bg)!important; color:var(--pos-text)!important; filter:none!important; backdrop-filter:none!important; }
+html body.pos-ui #viewport { background:transparent!important; overflow:auto!important; overscroll-behavior:contain; }
+html body.pos-ui #osWindow::before, html body.pos-ui #osWindow::after, html body.pos-ui::before, html body.pos-ui::after { background:transparent!important; box-shadow:none!important; }
+/* One screen frame and one scroll owner, including dynamically mounted hubs.
+   The viewport already sits below the titlebar; legacy 72–114px offsets and
+   100dvh screen limits otherwise create gaps and nested scrolling. */
+html body.pos-ui #viewport > .screen {
+  --pos-screen-gutter:24px;
+  color:var(--pos-text)!important;
+  width:100%!important;
+  max-width:1248px!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0 auto!important;
+  padding:var(--pos-screen-gutter) var(--pos-screen-gutter) calc(var(--pos-screen-gutter) + env(safe-area-inset-bottom, 0px))!important;
+  overflow:visible!important;
+  scroll-snap-type:none!important;
+}
+html body.pos-ui #viewport > .screen > * { scroll-snap-align:none!important; }
+@media(max-width:760px) {
+  html body.pos-ui #viewport > .screen { --pos-screen-gutter:16px; }
+}
+html body.pos-ui .screen:not(.active) { display:none!important; }
+html body.pos-ui .screen.active { display:block!important; opacity:1!important; transform:none!important; filter:none!important; }
+html body.pos-ui .titlebar { position:relative!important; background:var(--pos-surface)!important; color:var(--pos-text)!important; min-height:58px; }
+html body.pos-ui .glass, html body.pos-ui .menu-btn, html body.pos-ui .theme-card { background-color:var(--pos-surface)!important; color:var(--pos-text)!important; border:1px solid #ffffff26!important; }
+html body.pos-ui .menu-btn p { color:var(--pos-muted)!important; opacity:1!important; font-size:14px!important; }
+html body.pos-ui .menu-btn h3 { font-size:20px!important; font-style:normal!important; }
+html body.pos-ui #menuGrid { display:grid!important; grid-template-columns:repeat(3,minmax(0,1fr))!important; gap:16px!important; }
+html body.pos-ui #menuGrid .menu-btn { min-height:156px!important; padding:24px 20px!important; }
+html body.pos-ui button, html body.pos-ui input, html body.pos-ui select, html body.pos-ui textarea { font-family:system-ui,sans-serif!important; }
+html body.pos-ui input, html body.pos-ui select, html body.pos-ui textarea { background:var(--pos-bg)!important; color:var(--pos-text)!important; border-color:#ffffff40!important; font-size:16px!important; }
+html body.pos-ui :focus-visible { outline:3px solid var(--pos-accent)!important; outline-offset:3px!important; }
+html body.pos-ui #whatsNewOverlay, html body.pos-ui #returningUserLoadScreen, html body.pos-ui #minecraft-splash, html body.pos-ui .whatsNewOverlay, html body.pos-ui [data-theme="white"] { display:none!important; }
+html body.pos-ui > .whatsNewGroup, html body.pos-ui > .whatsNewFooter, html body.pos-ui > .whatsNewBadge { display:none!important; }
+html body.pos-ui #coverPage { background:var(--pos-bg)!important; color:var(--pos-text)!important; }
+html body.pos-ui #coverPage * { color:inherit!important; }
+html body.pos-ui #coverPage .glass { background:var(--pos-surface)!important; }
+html body.pos-ui #themeBackground { opacity:.24!important; pointer-events:none!important; }
+html body.pos-ui .pos-legacy, html body.pos-ui [data-pos-legacy] { display:none!important; }
+.pos-hub { width:100%; max-width:1200px; margin:0 auto; font:16px/1.5 system-ui,sans-serif; }
+.pos-hub h2 { font-size:28px; margin:0; color:var(--pos-text); }
+.pos-heading { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px; }
+.pos-nav, .pos-models, .pos-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.pos-nav { margin:0 0 20px; }
+.pos-hub button, .pos-dialog button { min-height:44px; padding:10px 15px; border-radius:12px; border:1px solid #ffffff35; background:var(--pos-surface); color:var(--pos-text); cursor:pointer; font-size:14px; font-weight:650; }
+.pos-hub button[aria-pressed="true"], .pos-dialog button.primary { background:var(--pos-accent)!important; color:#111522!important; border-color:transparent; }
+.pos-hub button:disabled { opacity:.5; cursor:default; }
+.pos-toolbar { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:16px; }
+.pos-toolbar input { flex:1 1 200px; width:100%; min-width:0; border-radius:12px; padding:12px; }
+.pos-models { margin:8px 0 12px; }
+.pos-label { font-size:14px; color:var(--pos-muted); }
+.pos-status { font-size:14px; color:var(--pos-muted); margin:10px 0 18px; overflow-wrap:anywhere; }
+.pos-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; align-items:start; }
+.pos-card { padding:20px; border:1px solid #ffffff28; border-radius:22px; background:var(--pos-surface); min-width:0; }
+.pos-card-head { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; color:var(--pos-muted); font-size:13px; }
+.pos-card h3 { margin:15px 0; font-size:22px; line-height:1.3; font-weight:750; overflow-wrap:anywhere; }
+.pos-card h3 span { color:var(--pos-muted); font-weight:400; font-size:15px; }
+.pos-market { padding:14px 0; border-top:1px solid #ffffff22; }
+.pos-market-title { display:flex; justify-content:space-between; gap:12px; align-items:baseline; font-size:14px; }
+.pos-prob { font-size:20px; font-weight:750; font-variant-numeric:tabular-nums; }
+.pos-pick { font-size:18px; font-weight:700; margin:4px 0; overflow-wrap:anywhere; }
+.pos-meta { font-size:13px; color:var(--pos-muted); overflow-wrap:anywhere; }
+.pos-empty { padding:28px 20px; border:1px dashed #ffffff50; border-radius:18px; color:var(--pos-muted); grid-column:1/-1; }
+.pos-detail { margin-top:12px; }
+.pos-detail summary { cursor:pointer; min-height:44px; padding:10px 0; }
+.pos-stats { display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:14px; }
+.pos-stats div { padding:10px; border-radius:10px; background:#00000020; }
+.pos-stats small { display:block; color:var(--pos-muted); }
+.pos-score-row { display:flex; justify-content:space-between; gap:12px; margin:10px 0; font-size:18px; }
+.pos-score-row b { font-variant-numeric:tabular-nums; }
+.pos-dialog { border:1px solid #ffffff40; border-radius:22px; padding:24px; width:min(620px,calc(100vw - 24px)); max-height:85dvh; overflow:auto; background:var(--pos-bg); color:var(--pos-text); z-index:2147483647; }
+.pos-dialog::backdrop { background:#080b18b8; }
+.pos-dialog .pos-row { padding:16px 0; border-top:1px solid #ffffff25; }
+.pos-dialog header { display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.pos-dialog h2 { margin:0; font-size:22px; }
+.pos-dialog textarea { width:100%; min-height:150px; margin:16px 0; }
+.pos-toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:2147483647; padding:12px 18px; border-radius:14px; color:var(--pos-text); background:var(--pos-surface); border:1px solid var(--pos-accent); max-width:90vw; }
+html body.pos-ui #screen-settings .setting-title { font-size:16px!important; }
+html body.pos-ui #screen-settings .setting-desc { font-size:14px!important; color:var(--pos-muted)!important; }
+@media(max-width:760px) {
+  html body.pos-ui #menuGrid { grid-template-columns:repeat(2,minmax(0,1fr))!important; gap:12px!important; }
+  html body.pos-ui #menuGrid .menu-btn { padding:20px 12px!important; min-height:150px!important; }
+  .pos-grid { grid-template-columns:1fr; }
+  .pos-card { padding:16px; }
+  .pos-models { display:grid; grid-template-columns:1fr 1fr; }
+  .pos-models button:last-child { grid-column:1/-1; }
+  .pos-nav { flex-wrap:nowrap; overflow-x:auto; padding-bottom:8px; }
+  .pos-nav button { flex-shrink:0; }
+  .pos-hub h2 { font-size:25px; }
+}
+@media(max-width:390px) { html body.pos-ui #menuGrid { grid-template-columns:1fr!important; } }
+@media(prefers-reduced-motion:reduce) { html body.pos-ui *,html body.pos-ui *::before,html body.pos-ui *::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+
+html body.pos-ui.reduce-motion *,html body.pos-ui.reduce-motion *::before,html body.pos-ui.reduce-motion *::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+
+html body.pos-ui { --text:var(--pos-text); --muted:var(--pos-muted); }
+html body.pos-ui .theme-card div:nth-child(2) { font-size:14px!important; }
+html body.pos-ui .theme-card div:nth-child(3) { font-size:12px!important; color:var(--pos-muted)!important; }
+html body.pos-ui .mono-block,html body.pos-ui .notice,html body.pos-ui .toggle .left,html body.pos-ui .titlebar h1 { color:var(--pos-text)!important; }
+
+/* Keep the window inside the viewport across theme and settings changes. */
+html { background:#111522; }
+html body.pos-ui .app-shell { min-height:100dvh!important; height:auto!important; display:block!important; padding:24px!important; }
+html body.pos-ui #osWindow { height:calc(100dvh - 48px)!important; max-height:calc(100dvh - 48px)!important; min-height:0!important; margin:0 auto!important; }
+html body.pos-ui #viewport { flex:1 1 auto!important; min-height:0!important; }
+html body.pos-ui .screen.active { position:relative!important; inset:auto!important; height:auto!important; width:100%!important; flex-shrink:0!important; }
+html body.pos-ui #screen-settings .settings { display:block!important; }
+html body.pos-ui #screen-settings .toggle-list { width:100%!important; }
+html body.pos-ui #screen-settings .toggle .left b { font-size:16px!important; }
+html body.pos-ui #screen-settings .toggle .left span { font-size:14px!important; }
+html body.pos-ui .theme-card { background-image:none!important; }
+html body.pos-ui .theme-card[data-theme="winter"],html body.pos-ui .theme-card[data-theme="autumn"],html body.pos-ui .theme-card[data-theme="desert"] { background-color:#392821!important; }
+html body.pos-ui .theme-card[data-theme="summer"],html body.pos-ui .theme-card[data-theme="halloween"] { background-color:#39233a!important; }
+html body.pos-ui .theme-card[data-theme="spring"] { background-color:#203b31!important; }
+html body.pos-ui .theme-card[data-theme="rain"] { background-color:#22344b!important; }
+html body.pos-ui .theme-card[data-theme="black"] { background-color:#15171c!important; }
+@media(max-width:760px) { html body.pos-ui .app-shell { padding:10px!important; } html body.pos-ui #osWindow { height:calc(100dvh - 20px)!important; max-height:calc(100dvh - 20px)!important; } }
+/* The legacy dock must not add invisible height below the app window. */
+html:has(body.pos-ui) { background:#111522!important; }
+html body.pos-ui { overflow:hidden!important; }
+html body.pos-ui .app-shell > .dock { position:fixed!important; left:50%!important; bottom:12px!important; transform:translateX(-50%)!important; }

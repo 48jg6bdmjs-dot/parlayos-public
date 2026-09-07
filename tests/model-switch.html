@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ParlayOS deployed model regression</title>
+<style>
+body{font:16px/1.5 system-ui;margin:24px;color:#172033}button{font:inherit;padding:10px 16px}iframe{border:0;display:block;margin-top:20px}pre{white-space:pre-wrap}label{display:block;margin:12px 0}
+</style>
+<h1>Deployed MLB model regression</h1>
+<p>This checks both published entrypoints at phone, tablet and desktop widths. It clicks every MLB model, observes delayed updates, and verifies that each game keeps its card node and style. No picks are added. The original model selection is restored.</p>
+<label><input id="candidate" type="checkbox"> Test PR #84 responsive frame stylesheet</label>
+<button id="run">Run MLB model checks</button>
+<pre id="result" role="status">Ready.</pre>
+<div id="preview"></div>
+<script>
+const result=document.querySelector('#result'),run=document.querySelector('#run');
+const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const assert=(ok,message)=>{if(!ok)throw new Error(message);};
+const signature=(win,node)=>{const c=win.getComputedStyle(node);return [node.tagName,node.className,c.fontFamily,c.fontSize,c.borderRadius,c.backgroundColor,c.padding,c.display].join('|');};
+run.addEventListener('click',async()=>{
+  run.disabled=true;result.dataset.complete='false';result.textContent='Starting…';
+  let frame,originalModel,doc,passed=0;const failures=[];
+  const candidate=document.querySelector('#candidate').checked;
+  try{
+    for(const entry of ['index.html','parlayos.html']){
+      frame=document.createElement('iframe');frame.width=390;frame.height=844;frame.title=entry+' mobile preview';
+      const loaded=new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Page load timed out')),30000);frame.onload=()=>{clearTimeout(timer);resolve();};});
+      frame.src='../'+entry;document.querySelector('#preview').replaceChildren(frame);await loaded;
+      doc=frame.contentDocument;const win=frame.contentWindow;
+      doc.querySelector('#coverSkipBtn')?.click();doc.querySelector('#coverUnlockBtn')?.click();
+      if(candidate){const style=doc.createElement('link');style.rel='stylesheet';style.href='tests/candidate-frame.css';doc.head.appendChild(style);await new Promise((resolve,reject)=>{style.onload=resolve;style.onerror=()=>reject(new Error('PR #84 stylesheet unavailable'));});}
+      const start=Date.now();
+      while(!doc.querySelector('#screen-mlb .pos-card')){if(Date.now()-start>30000)throw new Error('No deployed MLB cards: model regression cannot be verified against an empty feed');await delay(100);}
+      const homeButton=Array.from(doc.querySelectorAll('button')).find(b=>b.getAttribute('aria-label')==='MLB Hub');
+      assert(homeButton,'MLB menu control missing');homeButton.click();await delay(300);
+      originalModel=doc.querySelector('#screen-mlb .pos-models [aria-pressed="true"]')?.dataset.posModel;
+      for(const [width,height] of [[390,844],[768,1024],[1440,900]]){
+        frame.width=width;frame.height=height;await delay(200);
+        const screen=doc.querySelector('#screen-mlb'),hub=screen.querySelector('.pos-hub');
+        const cards=new Map(Array.from(hub.querySelectorAll('article[data-pos-game]')).map(el=>[el.dataset.posGame,{node:el,style:signature(win,el)}]));
+        const buttons=Array.from(hub.querySelectorAll('.pos-models button[data-pos-model]'));
+        assert(buttons.length===7,'Expected all seven MLB models');
+        function check(mid){
+          assert(doc.querySelector('#screen-mlb .pos-hub')===hub,'Shared hub was replaced');
+          const current=Array.from(hub.querySelectorAll('article[data-pos-game]'));
+          assert(current.length===cards.size,'Game cards disappeared or duplicated');
+          assert(hub.querySelectorAll('.pos-models [aria-pressed="true"]').length===1,'Model selection is ambiguous');
+          assert(hub.querySelector('.pos-models [aria-pressed="true"]').dataset.posModel===mid,'Model reverted');
+          for(const node of current){const original=cards.get(node.dataset.posGame);assert(original?.node===node,'Game card DOM node was replaced');assert(node.dataset.posModel===mid,'Card shows another model');assert(signature(win,node)===original.style,'Card component style changed');}
+          assert(doc.documentElement.scrollWidth<=win.innerWidth+1,'Horizontal page overflow');
+          if(candidate){const css=win.getComputedStyle(screen);assert(css.overflowY==='visible','Nested screen scrolling');assert(parseFloat(css.paddingLeft)===(width<=760?16:24),'Responsive gutter mismatch');}
+        }
+        for(const button of buttons){
+          const mid=button.dataset.posModel;const label=entry+' '+width+'px '+mid+(candidate?' PR #84':'');
+          try{
+            button.click();await delay(100);check(mid);await delay(2200);check(mid);
+            passed++;result.textContent='Running: '+passed+' passed, '+failures.length+' failed.\n'+label;
+          }catch(error){failures.push(label+': '+error.message);}
+        }
+        // Several legacy timers ran on a 10–12 second cadence.
+        await delay(13000);try{check(buttons.at(-1).dataset.posModel);}catch(error){failures.push(entry+' '+width+'px delayed: '+error.message);}
+      }
+      doc.querySelector('#screen-mlb .pos-models [data-pos-model="'+originalModel+'"]')?.click();
+      frame.remove();frame=null;
+    }
+  }catch(error){failures.push(error.message);}
+  finally{
+    if(frame&&originalModel)doc?.querySelector('#screen-mlb .pos-models [data-pos-model="'+originalModel+'"]')?.click();
+    frame?.remove();result.textContent=(failures.length?'FAIL':'PASS')+': '+passed+' model/viewport cases passed, '+failures.length+' failures.\n'+failures.join('\n');
+    result.dataset.complete='true';result.dataset.failures=String(failures.length);run.disabled=false;
+  }
+});
+</script>
+</html>
