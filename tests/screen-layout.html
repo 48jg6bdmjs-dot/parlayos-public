@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ParlayOS screen layout regression</title>
+<style>
+  body { font:16px/1.5 system-ui,sans-serif; margin:24px; color:#172033; }
+  button { font:inherit; padding:10px 16px; }
+  iframe { display:block; border:0; margin-top:16px; }
+  pre { white-space:pre-wrap; }
+</style>
+<h1>Screen layout regression</h1>
+<p>Serve the repository with <code>npm run dev</code>, then run this check.
+It loads both shipped entrypoints and checks all screen frames in a real browser.
+Use a fresh browser profile for verification; the app initializes its usual local preferences.</p>
+<button id="run">Run screen checks</button>
+<pre id="result" role="status">Ready.</pre>
+<div id="preview"></div>
+<script>
+const sizes = [[390,844], [768,1024], [1440,900]];
+const screens = ['desktop','mlb','nfl','nba','nhl','soccer','sports',
+  'live-scores','fantasy','fantasyshop','settings','about','calendar','bankroll'];
+const result = document.querySelector('#result');
+const run = document.querySelector('#run');
+const tick = () => new Promise(resolve => setTimeout(resolve, 80));
+function assert(value, message) { if (!value) throw new Error(message); }
+function near(actual, expected, message) {
+  assert(Math.abs(actual - expected) <= 1, `${message}: ${actual} vs ${expected}`);
+}
+run.addEventListener('click', async () => {
+  run.disabled = true;
+  const failures = [];
+  let passed = 0;
+  let frame;
+  try {
+    for (const entry of ['index.html','parlayos.html']) {
+      frame = document.createElement('iframe');
+      frame.title = `${entry} layout preview`;
+      frame.width = 1440;
+      frame.height = 900;
+      const loaded = new Promise((resolve, reject) => {
+        const timer = setTimeout(() => reject(new Error(`${entry} load timed out`)), 30000);
+        frame.onload = () => { clearTimeout(timer); resolve(); };
+      });
+      frame.src = '../' + entry;
+      document.querySelector('#preview').replaceChildren(frame);
+      await loaded;
+      const win = frame.contentWindow, doc = frame.contentDocument;
+      assert(win.ParlayOSUI, 'Shared UI did not initialize');
+      doc.querySelector('#coverUnlockBtn')?.click();
+      // Let the existing cover transition and startup layout callbacks settle.
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      for (const [width,height] of sizes) {
+        frame.width = width;
+        frame.height = height;
+        await tick();
+        const gutter = width <= 760 ? 16 : 24;
+        for (const theme of ['original','winter']) {
+          const savedClass = doc.body.className;
+          doc.body.className = savedClass.replace(/\btheme-\S+/g, '') + ' theme-' + theme;
+          for (const name of screens) {
+            const label = `${entry} ${width}×${height} ${theme} ${name}`;
+            try {
+              assert(win.ParlayOSUI.navigate(name), 'Screen navigation failed');
+              await tick();
+              const screen = doc.getElementById('screen-' + name);
+              const viewport = doc.querySelector('#viewport');
+              const css = win.getComputedStyle(screen);
+              const box = screen.getBoundingClientRect();
+              assert(doc.querySelectorAll('.screen.active').length === 1, 'Multiple active screens');
+              near(parseFloat(css.paddingTop), gutter, 'Top gutter');
+              near(parseFloat(css.paddingLeft), gutter, 'Left gutter');
+              near(parseFloat(css.paddingRight), gutter, 'Right gutter');
+              assert(css.minHeight === '0px' && css.maxHeight === 'none', 'Legacy viewport-height constraint');
+              assert(css.overflowY === 'visible', 'Screen creates a second scroll container');
+              near(box.width, Math.min(1248, viewport.clientWidth), 'Shared frame width');
+              near(parseFloat(css.marginLeft), parseFloat(css.marginRight), 'Centered frame');
+              screen.scrollTop = 100;
+              near(screen.scrollTop, 0, 'Screen should not scroll independently');
+              const titlebar = doc.querySelector('.titlebar');
+              const titleTop = titlebar.getBoundingClientRect().top;
+              viewport.scrollTop = viewport.scrollHeight;
+              if (viewport.scrollHeight > viewport.clientHeight + 1)
+                assert(viewport.scrollTop > 0, 'Long content cannot scroll');
+              near(titlebar.getBoundingClientRect().top, titleTop, 'Titlebar moves with content');
+              viewport.scrollTop = 0;
+              passed++;
+            } catch (error) { failures.push(`${label}: ${error.message}`); }
+            result.textContent = `Running: ${passed} passed, ${failures.length} failed.\n${label}`;
+          }
+          doc.body.className = savedClass;
+        }
+      }
+      frame.remove();
+    }
+  } catch (error) { failures.push(error.message); }
+  finally {
+    frame?.remove();
+    result.textContent = `${failures.length ? 'FAIL' : 'PASS'}: ${passed} passed, ${failures.length} failed.\n` + failures.join('\n');
+    result.dataset.complete = 'true';
+    result.dataset.failures = String(failures.length);
+    run.disabled = false;
+  }
+});
+</script>
+</html>

@@ -11224,7 +11224,27 @@ html body.pos-ui .window, html body.pos-ui #parlayWindow, html body.pos-ui .app-
 html body.pos-ui #osWindow, html body.pos-ui .app-shell { background:var(--pos-bg)!important; color:var(--pos-text)!important; filter:none!important; backdrop-filter:none!important; }
 html body.pos-ui #viewport { background:transparent!important; overflow:auto!important; overscroll-behavior:contain; }
 html body.pos-ui #osWindow::before, html body.pos-ui #osWindow::after, html body.pos-ui::before, html body.pos-ui::after { background:transparent!important; box-shadow:none!important; }
-html body.pos-ui .screen { color:var(--pos-text)!important; min-width:0!important; max-width:100%!important; }
+/* One screen frame and one scroll owner, including dynamically mounted hubs.
+   The viewport already sits below the titlebar; legacy 72–114px offsets and
+   100dvh screen limits otherwise create gaps and nested scrolling. */
+html body.pos-ui #viewport > .screen {
+  --pos-screen-gutter:24px;
+  color:var(--pos-text)!important;
+  width:100%!important;
+  max-width:1248px!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0 auto!important;
+  padding:var(--pos-screen-gutter) var(--pos-screen-gutter) calc(var(--pos-screen-gutter) + env(safe-area-inset-bottom, 0px))!important;
+  overflow:visible!important;
+  scroll-snap-type:none!important;
+}
+html body.pos-ui #viewport > .screen > * { scroll-snap-align:none!important; }
+@media(max-width:760px) {
+  html body.pos-ui #viewport > .screen { --pos-screen-gutter:16px; }
+}
 html body.pos-ui .screen:not(.active) { display:none!important; }
 html body.pos-ui .screen.active { display:block!important; opacity:1!important; transform:none!important; filter:none!important; }
 html body.pos-ui .titlebar { position:relative!important; background:var(--pos-surface)!important; color:var(--pos-text)!important; min-height:58px; }
@@ -11281,7 +11301,6 @@ html body.pos-ui .pos-legacy, html body.pos-ui [data-pos-legacy] { display:none!
 .pos-dialog h2 { margin:0; font-size:22px; }
 .pos-dialog textarea { width:100%; min-height:150px; margin:16px 0; }
 .pos-toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:2147483647; padding:12px 18px; border-radius:14px; color:var(--pos-text); background:var(--pos-surface); border:1px solid var(--pos-accent); max-width:90vw; }
-html body.pos-ui #screen-settings { max-width:1000px!important; margin:auto!important; height:auto!important; overflow:visible!important; }
 html body.pos-ui #screen-settings .setting-title { font-size:16px!important; }
 html body.pos-ui #screen-settings .setting-desc { font-size:14px!important; color:var(--pos-muted)!important; }
 @media(max-width:760px) {
