@@ -25,7 +25,7 @@ run.addEventListener('click',async()=>{
     for(const entry of ['index.html','parlayos.html']){
       frame=document.createElement('iframe');frame.width=390;frame.height=844;frame.title=entry+' mobile preview';
       const loaded=new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Page load timed out')),30000);frame.onload=()=>{clearTimeout(timer);resolve();};});
-      frame.src='../'+entry;document.querySelector('#preview').replaceChildren(frame);await loaded;
+      frame.src='../'+entry+'?ui-regression='+Date.now();document.querySelector('#preview').replaceChildren(frame);await loaded;
       doc=frame.contentDocument;const win=frame.contentWindow;
       doc.querySelector('#coverSkipBtn')?.click();doc.querySelector('#coverUnlockBtn')?.click();
       if(candidate){const style=doc.createElement('link');style.rel='stylesheet';style.href='tests/candidate-frame.css';doc.head.appendChild(style);await new Promise((resolve,reject)=>{style.onload=resolve;style.onerror=()=>reject(new Error('PR #84 stylesheet unavailable'));});}

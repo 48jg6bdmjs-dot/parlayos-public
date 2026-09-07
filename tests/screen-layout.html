@@ -42,7 +42,8 @@ run.addEventListener('click', async () => {
         const timer = setTimeout(() => reject(new Error(`${entry} load timed out`)), 30000);
         frame.onload = () => { clearTimeout(timer); resolve(); };
       });
-      frame.src = '../' + entry;
+      // Avoid mixing cached entrypoints from different Pages deployments.
+      frame.src = '../' + entry + '?ui-regression=' + Date.now();
       document.querySelector('#preview').replaceChildren(frame);
       await loaded;
       const win = frame.contentWindow, doc = frame.contentDocument;
