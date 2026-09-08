@@ -37378,7 +37378,11 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   const applicable = (sport, model) => sport === 'MLB' || !['zips', 'steamer'].includes(model);
   const record = (game, model) => model === 'final_combined' ? (game.ensemble || game.models?.final_combined) : game.models?.[model];
   const id = game => String(game.id ?? game.game_id ?? game.gamePk ?? [game.away ?? game.a, game.home ?? game.b, game.startAt ?? game.date ?? ''].join('|'));
-  function market(game, sport, model, kind) {
+  function market(game, sport, model, kind, now=Date.now()) {
+    if(game.data_quality?.prediction_available===false)return {available:false,reason:game.data_quality.reason||'Prediction inputs unavailable.'};
+    const kickoff=start(game), generated=new Date(game.generated_at||'').getTime();
+    if(kickoff&&kickoff.getTime()<=now)return {available:false,reason:'Pregame predictions closed at the scheduled start.'};
+    if(Number.isFinite(generated)&&(generated>now+60000||now-generated>24*60*60*1000))return {available:false,reason:'Prediction inputs need to be refreshed.'};
     if (!applicable(sport, model)) return {available:false, reason:'This model is designed for MLB.'};
     const r = record(game, model), m = r?.markets?.[kind];
     if (!r || r.status === 'unavailable' || !m || m.status === 'unavailable' || !m.selection || !probability(m.probability)) {
@@ -37416,6 +37420,14 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   function american(value) {
     return numeric(value) && Math.abs(Number(value)) >= 100 ? (Number(value) > 0 ? '+' : '') + String(Number(value)) : 'Odds unavailable';
   }
+  function goalTotal(distribution, line) {
+    if(distribution?.type!=='independent_poisson'||!numeric(line)||Number(line)<.5||Number(line)>20||Number(line)*2!==Math.round(Number(line)*2))return null;
+    const a=Number(distribution.away_mean),h=Number(distribution.home_mean);
+    if(!numeric(distribution.away_mean)||!numeric(distribution.home_mean)||a<=0||h<=0||a>12||h>12)return null;
+    const mean=a+h,threshold=Number(line);let p=Math.exp(-mean),under=0,push=0;
+    for(let k=0;k<=Math.floor(threshold);k++){if(k>0)p*=mean/k;if(k<threshold)under+=p;else push=p;}
+    return {over:Math.max(0,1-under-push),under,push};
+  }
   function start(game, liveGames = []) {
     const normalized = g => String(g.gamePk ?? g.game_id ?? g.id ?? '').replace(/^(mlb|nba|nfl|nhl|soc)_/i,'');
     const source = liveGames.find(g => normalized(g) && normalized(g) === normalized(game));
@@ -37446,7 +37458,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   function slipText(items) {
     return ['ParlayOS · Prediction slip', ...items.map((x,i) => `${i+1}. ${x.game} · ${x.selection}${x.line == null ? '' : ' '+x.line} · ${american(x.odds)} · ${models[x.model] || x.model}`)].join('\n');
   }
-  return {models,numeric,probability,percent,escape,applicable,record,id,market,american,start,score,toggle,legacyPicks,slipText};
+  return {models,numeric,probability,percent,escape,applicable,record,id,market,american,start,score,toggle,legacyPicks,slipText,goalTotal};
 });
 </script><script id="PARLAYOS_UI_CONSISTENCY">(function () {
   'use strict';
@@ -37455,7 +37467,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   const E=C.escape, A=v=>Array.isArray(v)?v:[], q=(s,r=document)=>r.querySelector(s);
   const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback;}catch{return fallback;}};
   const write=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value));}catch{}};
-  const state={data:{},errors:{},models:read('parlayos:ui:models',{}),slips:read('parlayos:ui:slips',{}),query:{},active:'MLB',liveSport:'ALL',live:{sports:{}},fantasy:'MLB',crew:read('parlayos:ui:crew',{}),loading:true};
+  const state={data:{},errors:{},models:read('parlayos:ui:models',{}),slips:read('parlayos:ui:slips',{}),query:{},active:'MLB',liveSport:'ALL',live:{sports:{}},fantasy:'MLB',crew:read('parlayos:ui:crew',{}),loading:true,goalLines:{}};
   const model=s=>C.models[state.models[s]]?state.models[s]:'final_combined';
   const games=s=>[...new Map(A(state.data[s]?.games).filter(g=>g&&typeof g==='object').map(g=>[C.id(g),g])).values()];
   const labels=s=>({ml:'Moneyline',ou:'Over / Under',k:s==='MLB'?'Pitcher strikeouts':s==='NHL'?'Puck line':s==='SOC'?'Handicap':'Spread'});
@@ -37469,7 +37481,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     node.textContent=text;node.hidden=false;clearTimeout(notify.timer);notify.timer=setTimeout(()=>node.hidden=true,3000);
   }
   function openDialog(title,html) {
-    returnFocus=document.activeElement;
+    if(!dialog.open)returnFocus=document.activeElement;
     dialog.innerHTML=`<header><h2>${E(title)}</h2><button type="button" data-pos-close aria-label="Close dialog">Close</button></header>${html}`;
     if(!dialog.open)dialog.showModal();
   }
@@ -37512,10 +37524,27 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       const teamStats=g.stats?.[side];
       if(teamStats?.season)rows.push([side+' statistics season',String(teamStats.season)+(teamStats.prior_season?' · completed-season prior':'')]);
       if(teamStats?.metric_basis)rows.push([side+' statistics method',teamStats.metric_basis]);
+      const goalie=g.goalies?.[side];
+      if(goalie){rows.push([side+' goalie pool',A(goalie.players).map(p=>p.name).join(', ')+' · starter unconfirmed']);rows.push([side+' pool save percentage',C.percent(goalie.save_percentage)]);}
       for(const key of ['avg','ops']){const values=roster.map(p=>p[key]).filter(C.numeric);if(values.length)rows.push([`${side} lineup ${key.toUpperCase()}`,(values.reduce((sum,v)=>sum+Number(v),0)/values.length).toFixed(3)]);}
     }
     if(g.venue?.name||typeof g.venue==='string')rows.push(['Venue',g.venue.name||g.venue]);
-    return rows.length?`<details class="pos-detail"><summary>Game details</summary><div class="pos-stats">${rows.map(([k,v])=>`<div><small>${E(k)}</small>${E(v)}</div>`).join('')}</div></details>`:'';
+    return rows.length?`<details class="pos-detail" data-pos-detail="game"><summary>Game details</summary><div class="pos-stats">${rows.map(([k,v])=>`<div><small>${E(k)}</small>${E(v)}</div>`).join('')}</div></details>`:'';
+  }
+  function goalForecast(g,s) {
+    const d=g.score_distribution,m=model(s),key=s+':'+C.id(g);
+    if(!d||!A(d.model_ids).includes(m)||!C.market(g,s,m,'ml').available)return '';
+    const line=state.goalLines[key],p=C.goalTotal(d,line);
+    return `<details class="pos-detail" data-pos-detail="goal"><summary>Goal forecast and total calculator</summary><p class="pos-meta">Estimated goals: ${E(g.away)} ${Number(d.away_mean).toFixed(2)} · ${E(g.home)} ${Number(d.home_mean).toFixed(2)}. Uncalibrated season baseline.</p><p class="pos-meta">${E(d.scope)}. Enter your own total line; this calculator does not supply bookmaker odds.</p><form data-pos-total-form data-pos-game="${E(C.id(g))}" data-pos-sport="${s}"><label>Total goals line <input type="number" name="line" min="0.5" max="20" step="0.5" required value="${p?E(line):''}" placeholder="Enter a line"></label><button type="submit">Calculate total</button></form><p role="status" data-pos-total-result>${p?`Your line ${E(line)}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}`:''}</p></details>`;
+  }
+  async function modelResults() {
+    openDialog('Model results','<p role="status">Loading verified outcomes…</p>');
+    try {
+      const r=await fetchJSON('data/model_benchmark.json');
+      const rows=A(r.model_scores),fmt=n=>C.numeric(n)?Number(n).toFixed(3):'—';
+      if(!dialog.open)return;
+      openDialog('Model results',`<p>${E(r.verified_settled_games)} games settled from ${E(r.captured_games)} archived pregame forecasts.</p><p class="pos-meta">Early evidence, not proof of future accuracy. Lower Brier score and log loss are better. Compare only the same sport and outcome type.</p>${rows.map(x=>`<div class="pos-row"><b>${E(sports[x.sport]?.[1]||x.sport)} · ${E(C.models[x.model]||x.model)}</b><p class="pos-meta">Version ${E(x.version)} · ${E(x.n)} games · ${E(x.outcome_type||'binary winner')}</p><p>Brier ${fmt(x.brier)} · Log loss ${fmt(x.log_loss)} · Correct winner ${C.percent(x.accuracy)}</p></div>`).join('')||'<p>No verified results are available yet.</p>'}<p class="pos-meta">${E(r.policy)}</p>`);
+    } catch {if(dialog.open)openDialog('Model results','<p>Results could not be loaded. Try again after the next successful data refresh.</p>');}
   }
   function reconcileCards(grid,markup) {
     if(grid.__posHTML===markup)return;
@@ -37525,10 +37554,10 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     for(const candidate of Array.from(template.content.children)) {
       const current=previous.get(candidate.dataset.posGame);
       if(current) {
-        const expanded=!!current.querySelector('details[open]');
+        const expanded=new Set(Array.from(current.querySelectorAll('details[open]')).map(d=>d.dataset.posDetail));
         current.dataset.posModel=candidate.dataset.posModel;
         if(current.innerHTML!==candidate.innerHTML)current.innerHTML=candidate.innerHTML;
-        if(expanded)current.querySelector('details')?.setAttribute('open','');
+        current.querySelectorAll('details').forEach(d=>{if(expanded.has(d.dataset.posDetail))d.setAttribute('open','');});
         children.push(current);
       } else children.push(candidate);
     }
@@ -37541,10 +37570,10 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const id=C.id(g),m=model(s);
     return `<article class="pos-card" data-pos-game="${E(id)}" data-pos-model="${m}"><div class="pos-card-head"><span>${E(timeLabel(g,s))}</span><span>${E(C.models[m])}</span></div><h3>${E(g.away??g.a??'Away')} <span>vs</span> ${E(g.home??g.b??'Home')}</h3>${Object.entries(labels(s)).map(([kind,label])=>{
       const p=C.market(g,s,m,kind);
-      if(!p.available)return `<section class="pos-market"><div class="pos-market-title">${label}</div><div class="pos-meta">Prediction unavailable</div></section>`;
+      if(!p.available)return `<section class="pos-market"><div class="pos-market-title">${label}</div><div class="pos-meta">Prediction unavailable</div><div class="pos-meta">${E(p.reason)}</div></section>`;
       const isSelected=selected(s).some(x=>x.gameId===id&&x.market===kind&&x.model===m);
-      return `<section class="pos-market"><div class="pos-market-title"><span>${label}</span><span class="pos-prob">${C.percent(p.probability)}</span></div><div class="pos-pick">${p.player_name&&!/^pitcher$/i.test(p.player_name)?E(p.player_name)+' · ':''}${E(p.selection)}${p.line==null?'':' '+E(p.line)}</div><div class="pos-meta">${E(C.american(p.odds))}${p.edge==null?'':' · Edge '+(p.edge>=0?'+':'')+(p.edge*100).toFixed(1)+'%'}${C.probability(p.confidence)?' · Confidence '+C.percent(p.confidence):''}</div><div class="pos-actions"><button type="button" data-pos-add="${kind}" data-pos-game="${E(id)}" data-pos-sport="${s}" aria-pressed="${isSelected}"${p.actionable?'':' disabled'}>${p.actionable?(isSelected?'Selected ✓':'Select '+label):'Selection incomplete'}</button></div></section>`;
-    }).join('')}${details(g)}</article>`;
+      return `<section class="pos-market"><div class="pos-market-title"><span>${label}</span><span class="pos-prob">${C.percent(p.probability)}</span></div><div class="pos-pick">${p.player_name&&!/^pitcher$/i.test(p.player_name)?E(p.player_name)+' · ':''}${E(p.selection)}${p.line==null?'':' '+E(p.line)}</div><div class="pos-meta">${E(C.american(p.odds))}${p.edge==null?'':' · Edge '+(p.edge>=0?'+':'')+(p.edge*100).toFixed(1)+'%'}${C.probability(p.confidence)?' · Confidence '+C.percent(p.confidence):''}${p.calibration_status==='unvalidated'?' · Accuracy not yet validated':''}</div>${p.outcomes?.draw!=null?`<div class="pos-meta">Away ${C.percent(p.outcomes.away)} · Draw ${C.percent(p.outcomes.draw)} · Home ${C.percent(p.outcomes.home)}</div>`:''}${p.inputs?.family_count===1?'<div class="pos-meta">One independent model family available.</div>':''}<div class="pos-actions"><button type="button" data-pos-add="${kind}" data-pos-game="${E(id)}" data-pos-sport="${s}" aria-pressed="${isSelected}"${p.actionable?'':' disabled'}>${p.actionable?(isSelected?'Selected ✓':'Select '+label):'Selection incomplete'}</button></div></section>`;
+    }).join('')}${goalForecast(g,s)}${details(g)}</article>`;
   }
   function renderSport(s) {
     if(!sports[s])return;
@@ -37568,6 +37597,11 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       const freshness=(Number.isFinite(updated.getTime())?' · Data updated '+updated.toLocaleString():'')+(state.data[s]?.refresh_error?' · '+state.data[s].refresh_error:'');
       status.textContent=state.loading?'Loading games…':state.errors[s]?'Could not load '+sports[s][1]+' data. Use Refresh data to retry.':!all.length?'0 games'+freshness:`${filtered.length} of ${all.length} games · ${C.models[model(s)]}${freshness}${unavailable?' · Predictions unavailable: the feed has no validated output for this model.':''}`;
       const feed=state.data[s]||{};
+      if(feed.coverage)status.textContent+=' · '+feed.coverage;
+      let attribution=q('.pos-attribution',host);
+      if(!attribution){attribution=document.createElement('p');attribution.className='pos-meta pos-attribution';status.after(attribution);}
+      attribution.innerHTML=feed.attribution?.name==='OpenLigaDB'?'<a href="https://www.openligadb.de/" target="_blank" rel="noopener">Data: OpenLigaDB</a> · <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL 1.0</a>':'';
+      if(!q('[data-pos-results]',host)){const b=document.createElement('button');b.type='button';b.dataset.posResults='';b.textContent='Model results';q('.pos-toolbar',host).appendChild(b);}
       const empty=feed.status==='provider_failed'?'The game provider could not be reached.':feed.status==='no_games_scheduled'?`No games scheduled${feed.schedule_start?' for '+feed.schedule_start+' through '+feed.schedule_end:''}.${feed.preseason_start?' Preseason starts '+feed.preseason_start+'.':''}`:'No games available.';
       const grid=q('.pos-grid',host),cards=filtered.length?filtered.map(g=>card(g,s)).join(''):`<div class="pos-empty">${E(state.loading?'Loading games…':state.errors[s]?'Game data is temporarily unavailable.':all.length?'No matching games. Clear your search to see the slate.':empty)}</div>`;
       reconcileCards(grid,cards);
@@ -37648,6 +37682,9 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     dialog=document.createElement('dialog');dialog.className='pos-dialog';dialog.id='pos-dialog';dialog.setAttribute('aria-label','ParlayOS details');document.body.appendChild(dialog);
     dialog.addEventListener('click',e=>{if(e.target===dialog)closeDialog();});dialog.addEventListener('cancel',()=>returnFocus?.focus());
     document.addEventListener('input',e=>{const b=e.target;if(b.matches('[data-pos-search]')){state.query[b.dataset.posSearch]=b.value;renderSport(b.dataset.posSearch);}});
+    document.addEventListener('submit',e=>{const f=e.target;if(!f.matches('[data-pos-total-form]'))return;e.preventDefault();e.stopImmediatePropagation();const s=f.dataset.posSport,g=games(s).find(g=>C.id(g)===f.dataset.posGame);if(!g||!C.market(g,s,model(s),'ml').available)return;const line=f.elements.line.value,p=C.goalTotal(g.score_distribution,line);if(!p)return;state.goalLines[s+':'+C.id(g)]=Number(line);q('[data-pos-total-result]',f.parentElement).textContent=`Your line ${line}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}`;},true);
+    // Close pregame selections at kickoff even if a tab stays open between feeds.
+    setInterval(()=>{if(!state.loading)renderAll();},60000);
     renderAll();load();
   }
   function handle(e){
@@ -37659,6 +37696,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     if(b.dataset.posRemove!==undefined){const s=b.dataset.posSport;state.slips[s]=selected(s).filter((_,i)=>i!==Number(b.dataset.posRemove));write('parlayos:ui:slips',state.slips);renderSport(s);openSlip(s);return true;}
     if(b.dataset.posCopy){copy(b.dataset.posCopy);return true;}
     if(b.dataset.posRefresh!==undefined){load();return true;}
+    if(b.dataset.posResults!==undefined){modelResults();return true;}
     if(b.dataset.posLive){state.liveSport=b.dataset.posLive;renderLive();return true;}
     if(b.dataset.posFantasy){state.fantasy=b.dataset.posFantasy;renderFantasy();return true;}
     if(b.dataset.posPlayer){const s=state.fantasy,id=b.dataset.posPlayer,crew=A(state.crew[s]);state.crew[s]=crew.includes(id)?crew.filter(x=>x!==id):[...crew,id];write('parlayos:ui:crew',state.crew);renderFantasy();return true;}

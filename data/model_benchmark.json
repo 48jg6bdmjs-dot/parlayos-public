@@ -1,0 +1,275 @@
+{
+  "status": "collecting_prospective_evidence",
+  "updated": "2026-09-08T01:59:54.879035+00:00",
+  "captured_games": 31,
+  "verified_settled_games": 8,
+  "model_scores": [
+    {
+      "sport": "MLB",
+      "model": "monte_carlo",
+      "version": "1.0.0",
+      "n": 8,
+      "outcome_type": "binary winner",
+      "uniform_baseline_brier": 0.25,
+      "uniform_baseline_log_loss": 0.6931471805599453,
+      "brier": 0.17973155078125,
+      "log_loss": 0.5415722368926301,
+      "accuracy": 0.625,
+      "calibration_bins": [
+        {
+          "lower": 0.2,
+          "upper": 0.3,
+          "n": 1,
+          "mean_forecast": 0.295625,
+          "observed_away_rate": 0.0
+        },
+        {
+          "lower": 0.3,
+          "upper": 0.4,
+          "n": 3,
+          "mean_forecast": 0.3745833333333333,
+          "observed_away_rate": 0.0
+        },
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 1,
+          "mean_forecast": 0.4745,
+          "observed_away_rate": 1.0
+        },
+        {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 2,
+          "mean_forecast": 0.5564374999999999,
+          "observed_away_rate": 0.0
+        },
+        {
+          "lower": 0.8,
+          "upper": 0.9,
+          "n": 1,
+          "mean_forecast": 0.817375,
+          "observed_away_rate": 1.0
+        }
+      ]
+    },
+    {
+      "sport": "MLB",
+      "model": "zips",
+      "version": "1.0.0",
+      "n": 8,
+      "outcome_type": "binary winner",
+      "uniform_baseline_brier": 0.25,
+      "uniform_baseline_log_loss": 0.6931471805599453,
+      "brier": 0.17998147265625003,
+      "log_loss": 0.5421413851776448,
+      "accuracy": 0.625,
+      "calibration_bins": [
+        {
+          "lower": 0.2,
+          "upper": 0.3,
+          "n": 1,
+          "mean_forecast": 0.2894375,
+          "observed_away_rate": 0.0
+        },
+        {
+          "lower": 0.3,
+          "upper": 0.4,
+          "n": 3,
+          "mean_forecast": 0.3777083333333333,
+          "observed_away_rate": 0.0
+        },
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 1,
+          "mean_forecast": 0.48125,
+          "observed_away_rate": 1.0
+        },
+        {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 2,
+          "mean_forecast": 0.558875,
+          "observed_away_rate": 0.0
+        },
+        {
+          "lower": 0.8,
+          "upper": 0.9,
+          "n": 1,
+          "mean_forecast": 0.8156875,
+          "observed_away_rate": 1.0
+        }
+      ]
+    },
+    {
+      "sport": "MLB",
+      "model": "steamer",
+      "version": "1.0.0",
+      "n": 8,
+      "outcome_type": "binary winner",
+      "uniform_baseline_brier": 0.25,
+      "uniform_baseline_log_loss": 0.6931471805599453,
+      "brier": 0.17889589746093748,
+      "log_loss": 0.539944996873082,
+      "accuracy": 0.625,
+      "calibration_bins": [
+        {
+          "lower": 0.2,
+          "upper": 0.3,
+          "n": 1,
+          "mean_forecast": 0.2955,
+          "observed_away_rate": 0.0
+        },
+        {
+          "lower": 0.3,
+          "upper": 0.4,
+          "n": 3,
+          "mean_forecast": 0.3747916666666667,
+          "observed_away_rate": 0.0
+        },
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 1,
+          "mean_forecast": 0.4840625,
+          "observed_away_rate": 1.0
+        },
+        {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 2,
+          "mean_forecast": 0.5578125,
+          "observed_away_rate": 0.0
+        },
+        {
+          "lower": 0.8,
+          "upper": 0.9,
+          "n": 1,
+          "mean_forecast": 0.8170625,
+          "observed_away_rate": 1.0
+        }
+      ]
+    },
+    {
+      "sport": "MLB",
+      "model": "my_chd",
+      "version": "3.4",
+      "n": 8,
+      "outcome_type": "binary winner",
+      "uniform_baseline_brier": 0.25,
+      "uniform_baseline_log_loss": 0.6931471805599453,
+      "brier": 0.24674343945391508,
+      "log_loss": 0.6866227669411428,
+      "accuracy": 0.375,
+      "calibration_bins": [
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 3,
+          "mean_forecast": 0.48348942163991254,
+          "observed_away_rate": 0.3333333333333333
+        },
+        {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 5,
+          "mean_forecast": 0.5102340192544118,
+          "observed_away_rate": 0.2
+        }
+      ]
+    },
+    {
+      "sport": "MLB",
+      "model": "season_stats",
+      "version": "1.0.0",
+      "n": 8,
+      "outcome_type": "binary winner",
+      "uniform_baseline_brier": 0.25,
+      "uniform_baseline_log_loss": 0.6931471805599453,
+      "brier": 0.2508857369891682,
+      "log_loss": 0.6949190022945885,
+      "accuracy": 0.5,
+      "calibration_bins": [
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 6,
+          "mean_forecast": 0.49601646777751335,
+          "observed_away_rate": 0.3333333333333333
+        },
+        {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 2,
+          "mean_forecast": 0.5081370052605667,
+          "observed_away_rate": 0.0
+        }
+      ]
+    },
+    {
+      "sport": "MLB",
+      "model": "chd_master_predictor",
+      "version": "3.4",
+      "n": 8,
+      "outcome_type": "binary winner",
+      "uniform_baseline_brier": 0.25,
+      "uniform_baseline_log_loss": 0.6931471805599453,
+      "brier": 0.24674343945391508,
+      "log_loss": 0.6866227669411428,
+      "accuracy": 0.375,
+      "calibration_bins": [
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 3,
+          "mean_forecast": 0.48348942163991254,
+          "observed_away_rate": 0.3333333333333333
+        },
+        {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 5,
+          "mean_forecast": 0.5102340192544118,
+          "observed_away_rate": 0.2
+        }
+      ]
+    },
+    {
+      "sport": "MLB",
+      "model": "final_combined",
+      "version": "2.0.0",
+      "n": 8,
+      "outcome_type": "binary winner",
+      "uniform_baseline_brier": 0.25,
+      "uniform_baseline_log_loss": 0.6931471805599453,
+      "brier": 0.21256369036196,
+      "log_loss": 0.6171194584549164,
+      "accuracy": 0.625,
+      "calibration_bins": [
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 5,
+          "mean_forecast": 0.44301508721626925,
+          "observed_away_rate": 0.2
+        },
+        {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 2,
+          "mean_forecast": 0.5275608381901558,
+          "observed_away_rate": 0.0
+        },
+        {
+          "lower": 0.6,
+          "upper": 0.7,
+          "n": 1,
+          "mean_forecast": 0.6392055730965807,
+          "observed_away_rate": 1.0
+        }
+      ]
+    }
+  ],
+  "policy": "No fitted weights or superiority claim. Forecasts precede kickoff; outcomes use final score sources. Sample counts are per sport/model/version. Compare matched games and hold out later dates before promoting trained weights. Soccer uses three outcomes; its Brier scale differs from binary sports."
+}
