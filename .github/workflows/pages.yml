@@ -99,6 +99,7 @@ jobs:
           cp index.html parlayos.html about.html favicon.ico site/
           cp parlayos_chd_data.json parlayos_mlb_chd.json parlayos_nfl_chd.json parlayos_nba_chd.json parlayos_nhl_chd.json parlayos_soccer_chd.json live_scores.json site/
           cp live_scores.json site/data/live_scores.json
+          if [ -f data/model_benchmark.json ]; then cp data/model_benchmark.json site/data/; fi
           ls -lh site
 
       - name: Upload artifact
