@@ -11604,24 +11604,7 @@ window.switchCoverTab=switchCleanTab;
                                                                         </p>
 </div>
 <div class="menu-grid" id="menuGrid">
-<button class="menu-btn accent" data-go="mlb">
-<div class="num"><i>1</i> MLB LEAGUE</div>
-<h3>⚾ MLB Hub</h3>
-<p>Dashboard • Parlayinator • Shop • Stats in one place.</p>
-<span class="go">↗</span>
-</button>
-<button class="menu-btn" data-go="nfl" style="border-color:rgba(92,124,255,0.28);">
-<div class="num"><i>2</i> NFL LEAGUE</div>
-<h3>🏈 NFL Hub</h3>
-<p>Dashboard • Parlayinator • Shop • Stats in one place.</p>
-<span class="go">↗</span>
-</button>
-<button class="menu-btn" data-go="nba" style="border-color:rgba(255,90,60,0.28);">
-<div class="num"><i>3</i> NBA LEAGUE</div>
-<h3>🏀 NBA Hub</h3>
-<p>Dashboard • Parlayinator • Shop • Stats in one place.</p>
-<span class="go">↗</span>
-</button>
+<button type="button" class="menu-btn accent" data-go="sports" aria-label="Sports Hub"><h3>🌐 Sports Hub</h3><p>Explore MLB, NFL, NBA, NHL and soccer.</p><span class="go">↗</span></button>
 <button class="menu-btn" data-go="bankroll">
 <div class="num"><i>4</i> TRACK</div>
 <h3>💰 Bankroll Tracker</h3>
@@ -37685,8 +37668,11 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const parent=q('#screen-mlb')?.parentNode;if(!parent)return;
     for(const name of ['nhl','soccer','sports'])if(!document.getElementById('screen-'+name)){const el=document.createElement('section');el.className='screen';el.id='screen-'+name;el.dataset.screen=name;parent.appendChild(el);}
     const menu=q('#menuGrid');
-    if(menu){for(const [name,title,desc] of [['nhl','🏒 NHL Hub','Game predictions and puck lines.'],['sports','🌐 Sports Hub','Explore MLB, NFL, NBA, NHL and soccer.']])if(!q(`[data-go="${name}"]`,menu)){const b=document.createElement('button');b.type='button';b.className='menu-btn';b.dataset.go=name;b.innerHTML=`<h3>${title}</h3><p>${desc}</p><span class="go">↗</span>`;menu.appendChild(b);}
-      for(const [s,v]of Object.entries(sports)){const b=q(`[data-go="${v[2]}"]`,menu);if(b){b.setAttribute('aria-label',v[1]+' Hub');const p=q('p',b);if(p)p.textContent='Predictions, game details and selected picks.';}}
+    if(menu){
+      for(const v of Object.values(sports))menu.querySelectorAll(`[data-go="${v[2]}"]`).forEach(b=>b.remove());
+      let sportsButton=q('[data-go="sports"]',menu);
+      if(!sportsButton){sportsButton=document.createElement('button');sportsButton.type='button';sportsButton.dataset.go='sports';sportsButton.innerHTML='<h3>🌐 Sports Hub</h3><p>Explore MLB, NFL, NBA, NHL and soccer.</p><span class="go">↗</span>';}
+      sportsButton.className='menu-btn accent';sportsButton.setAttribute('aria-label','Sports Hub');menu.prepend(sportsButton);
       const liveCopy=q('[data-go="live-scores"] p',menu);if(liveCopy)liveCopy.textContent='Scores and schedules by sport.';
       const fantasyCopy=q('[data-go="fantasy"] p',menu);if(fantasyCopy)fantasyCopy.textContent='Build a crew from available player data.';
     }

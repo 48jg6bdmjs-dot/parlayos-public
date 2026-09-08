@@ -30,18 +30,23 @@ run.addEventListener('click',async()=>{
       doc.querySelector('#coverSkipBtn')?.click();doc.querySelector('#coverUnlockBtn')?.click();
       if(candidate){const style=doc.createElement('link');style.rel='stylesheet';style.href='tests/candidate-frame.css';doc.head.appendChild(style);await new Promise((resolve,reject)=>{style.onload=resolve;style.onerror=()=>reject(new Error('PR #84 stylesheet unavailable'));});}
       const start=Date.now();
-      while(!doc.querySelector('#screen-mlb .pos-card')){if(Date.now()-start>30000)throw new Error('No deployed MLB cards: model regression cannot be verified against an empty feed');await delay(100);}
-      const homeButton=Array.from(doc.querySelectorAll('button')).find(b=>b.getAttribute('aria-label')==='MLB Hub');
-      assert(homeButton,'MLB menu control missing');homeButton.click();await delay(300);
-      originalModel=doc.querySelector('#screen-mlb .pos-models [aria-pressed="true"]')?.dataset.posModel;
+      while(!doc.querySelector('#screen-sports .pos-card')){if(Date.now()-start>30000)throw new Error('No deployed MLB cards: model regression cannot be verified against an empty feed');await delay(100);}
+      const menu=doc.querySelector('#menuGrid'),homeButton=menu.querySelector('[data-go="sports"]');
+      assert(homeButton&&menu.firstElementChild===homeButton,'Sports Hub must lead the main menu');
+      assert(!menu.querySelector('[data-go="mlb"],[data-go="nfl"],[data-go="nba"],[data-go="nhl"],[data-go="soccer"]'),'Individual sport hubs remain in the main menu');
+      homeButton.click();await delay(100);
+      const mlb=doc.querySelector('#screen-sports [data-pos-sport="MLB"]');
+      assert(mlb,'Sports Hub MLB navigation missing');mlb.click();await delay(300);
+      originalModel=doc.querySelector('#screen-sports .pos-models [aria-pressed="true"]')?.dataset.posModel;
       for(const [width,height] of [[390,844],[768,1024],[1440,900]]){
         frame.width=width;frame.height=height;await delay(200);
-        const screen=doc.querySelector('#screen-mlb'),hub=screen.querySelector('.pos-hub');
+        const screen=doc.querySelector('#screen-sports'),hub=screen.querySelector('.pos-hub');
         const cards=new Map(Array.from(hub.querySelectorAll('article[data-pos-game]')).map(el=>[el.dataset.posGame,{node:el,style:signature(win,el)}]));
         const buttons=Array.from(hub.querySelectorAll('.pos-models button[data-pos-model]'));
         assert(buttons.length===7,'Expected all seven MLB models');
         function check(mid){
-          assert(doc.querySelector('#screen-mlb .pos-hub')===hub,'Shared hub was replaced');
+          assert(menu.firstElementChild===homeButton&&!menu.querySelector('[data-go="mlb"],[data-go="nfl"],[data-go="nba"],[data-go="nhl"],[data-go="soccer"]'),'Main menu hubs reverted');
+          assert(doc.querySelector('#screen-sports .pos-hub')===hub,'Shared hub was replaced');
           const current=Array.from(hub.querySelectorAll('article[data-pos-game]'));
           assert(current.length===cards.size,'Game cards disappeared or duplicated');
           assert(hub.querySelectorAll('.pos-models [aria-pressed="true"]').length===1,'Model selection is ambiguous');
@@ -60,12 +65,12 @@ run.addEventListener('click',async()=>{
         // Several legacy timers ran on a 10–12 second cadence.
         await delay(13000);try{check(buttons.at(-1).dataset.posModel);}catch(error){failures.push(entry+' '+width+'px delayed: '+error.message);}
       }
-      doc.querySelector('#screen-mlb .pos-models [data-pos-model="'+originalModel+'"]')?.click();
+      doc.querySelector('#screen-sports .pos-models [data-pos-model="'+originalModel+'"]')?.click();
       frame.remove();frame=null;
     }
   }catch(error){failures.push(error.message);}
   finally{
-    if(frame&&originalModel)doc?.querySelector('#screen-mlb .pos-models [data-pos-model="'+originalModel+'"]')?.click();
+    if(frame&&originalModel)doc?.querySelector('#screen-sports .pos-models [data-pos-model="'+originalModel+'"]')?.click();
     frame?.remove();result.textContent=(failures.length?'FAIL':'PASS')+': '+passed+' model/viewport cases passed, '+failures.length+' failures.\n'+failures.join('\n');
     result.dataset.complete='true';result.dataset.failures=String(failures.length);run.disabled=false;
   }
