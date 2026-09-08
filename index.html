@@ -37447,18 +37447,27 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     return active && numeric(raw) ? String(raw) : '—';
   }
   function toggle(items, entry) {
-    const key = x => [x.sport, x.gameId, x.market, x.model].join(':');
-    const found = items.some(x => key(x) === key(entry));
-    return found ? items.filter(x => key(x) !== key(entry)) : [...items, entry];
+    // Another model's view of the same market is an alternative, not a new leg.
+    const key = x => [x.sport, x.gameId, x.market].join(':');
+    const found = items.some(x => key(x) === key(entry) && x.model === entry.model);
+    const rest = items.filter(x => key(x) !== key(entry));
+    return found ? rest : [...rest, entry];
   }
   function legacyPicks(items, sport, model) {
     if(!Array.isArray(items))return [];
     return items.filter(x=>x&&x.gameId&&x.label).map(x=>({sport,model,gameId:String(x.gameId),market:x.market||'ml',selection:String(x.label),line:null,odds:numeric(x.oddsAmerican)?Number(x.oddsAmerican):null,game:x.game||('Saved '+sport+' pick')}));
   }
   function slipText(items) {
-    return ['ParlayOS · Prediction slip', ...items.map((x,i) => `${i+1}. ${x.game} · ${x.selection}${x.line == null ? '' : ' '+x.line} · ${american(x.odds)} · ${models[x.model] || x.model}`)].join('\n');
+    return ['ParlayOS · Prediction slip', ...items.map((x,i) => `${i+1}. ${x.game} · ${x.selection}${x.line == null ? '' : ' '+x.line} · ${american(x.odds)} · ${models[x.model] || x.model}${x.modelVersion?' v'+x.modelVersion:''}\nSaved model estimate: ${percent(x.probability)} · Forecast: ${x.forecastAt||'unavailable'} · Game: ${x.startAt||'unavailable'}`),slipSummary(items)].join('\n');
   }
-  return {models,numeric,probability,percent,escape,applicable,record,id,market,american,start,score,toggle,legacyPicks,slipText,goalTotal};
+  function slipSummary(items) {
+    if(!items.length)return 'No picks selected.';
+    if(items.some(x=>!probability(x.probability)))return 'Combined estimate unavailable: one or more saved picks lack a forecast snapshot.';
+    if(new Set(items.map(x=>x.sport+':'+x.gameId)).size!==items.length)return 'Combined estimate unavailable: picks from the same game require a joint model.';
+    const p=items.reduce((v,x)=>v*Number(x.probability),1);
+    return `${items.length===1?'Saved model estimate':'Estimated chance every pick wins'}: ${percent(p)}.${items.length>1?' Assumes independent games.':''} Uncalibrated model estimates; not a guarantee.`;
+  }
+  return {models,numeric,probability,percent,escape,applicable,record,id,market,american,start,score,toggle,legacyPicks,slipText,goalTotal,slipSummary};
 });
 </script><script id="PARLAYOS_UI_CONSISTENCY">(function () {
   'use strict';
@@ -37611,12 +37620,14 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   function add(s,gameId,kind) {
     const g=games(s).find(g=>C.id(g)===gameId);if(!g)return;
     const p=C.market(g,s,model(s),kind);if(!p.available||!p.actionable)return;
-    const entry={sport:s,gameId,market:kind,model:model(s),selection:p.selection,line:p.line??null,odds:p.odds,game:teams(g)};
+    const entry={sport:s,gameId,market:kind,model:model(s),selection:p.selection,line:p.line??null,odds:p.odds,game:teams(g),
+      probability:p.probability,modelVersion:p.model_version||C.record(g,model(s))?.model_version||null,forecastAt:p.timestamp||g.generated_at||null,
+      startAt:C.start(g)?.toISOString()||null,selectedAt:new Date().toISOString()};
     state.slips[s]=C.toggle(selected(s),entry);write('parlayos:ui:slips',state.slips);renderSport(s);
   }
   function openSlip(s) {
     const items=selected(s);
-    openDialog(`${sports[s][1]} selected picks`,items.length?`${items.map((x,i)=>`<div class="pos-row"><b>${E(x.selection)}${x.line==null?'':' '+E(x.line)}</b><div class="pos-meta">${E(x.game)} · ${E(C.models[x.model])} · ${E(C.american(x.odds))}</div><button type="button" data-pos-remove="${i}" data-pos-sport="${s}">Remove</button></div>`).join('')}<button type="button" class="primary" data-pos-copy="${s}">Copy slip</button>`:'<p>No picks selected. Select a prediction from a game card to begin.</p>');
+    openDialog(`${sports[s][1]} selected picks`,items.length?`<p>${E(C.slipSummary(items))}</p>${items.map((x,i)=>`<div class="pos-row"><b>${E(x.selection)}${x.line==null?'':' '+E(x.line)}</b><div class="pos-meta">${E(x.game)} · ${E(C.models[x.model])}${x.modelVersion?' v'+E(x.modelVersion):''} · ${E(C.american(x.odds))}</div><div class="pos-meta">Saved model estimate: ${C.percent(x.probability)} · Forecast: ${E(x.forecastAt||'unavailable')} · Game: ${E(x.startAt||'unavailable')}</div><button type="button" data-pos-remove="${i}" data-pos-sport="${s}">Remove</button></div>`).join('')}<button type="button" class="primary" data-pos-copy="${s}">Copy slip</button>`:'<p>No picks selected. Select a prediction from a game card to begin.</p>');
   }
   async function copy(s){const text=C.slipText(selected(s));try{await navigator.clipboard.writeText(text);notify('Slip copied');}catch{openDialog('Copy your slip',`<p>Select and copy the text below.</p><textarea readonly aria-label="Slip text">${E(text)}</textarea>`);q('textarea',dialog).select();}}
   function renderLive() {
