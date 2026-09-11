@@ -1,8 +1,8 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-09-11T03:07:36.993341+00:00",
-  "captured_games": 65,
-  "verified_settled_games": 44,
+  "updated": "2026-09-11T05:03:29.872177+00:00",
+  "captured_games": 79,
+  "verified_settled_games": 45,
   "model_scores": [
     {
       "sport": "MLB",
@@ -841,14 +841,21 @@
       "sport": "NFL",
       "model": "monte_carlo",
       "version": "1.0.0",
-      "n": 1,
+      "n": 2,
       "outcome_type": "binary winner",
       "uniform_baseline_brier": 0.25,
       "uniform_baseline_log_loss": 0.6931471805599453,
-      "brier": 0.28897344140625003,
-      "log_loss": 0.7712438662963674,
+      "brier": 0.348966845703125,
+      "log_loss": 0.8957535942767504,
       "accuracy": 0.0,
       "calibration_bins": [
+        {
+          "lower": 0.3,
+          "upper": 0.4,
+          "n": 1,
+          "mean_forecast": 0.3605,
+          "observed_away_rate": 1.0
+        },
         {
           "lower": 0.5,
           "upper": 0.6,
@@ -862,20 +869,20 @@
       "sport": "NFL",
       "model": "my_chd",
       "version": "3.4",
-      "n": 1,
+      "n": 2,
       "outcome_type": "binary winner",
       "uniform_baseline_brier": 0.25,
       "uniform_baseline_log_loss": 0.6931471805599453,
-      "brier": 0.2574237548389784,
-      "log_loss": 0.7079957694439681,
-      "accuracy": 0.0,
+      "brier": 0.25005430873586665,
+      "log_loss": 0.6932558098311427,
+      "accuracy": 0.5,
       "calibration_bins": [
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 1,
+          "n": 2,
           "mean_forecast": 0.5073694461031117,
-          "observed_away_rate": 0.0
+          "observed_away_rate": 0.5
         }
       ]
     },
@@ -883,14 +890,21 @@
       "sport": "NFL",
       "model": "season_stats",
       "version": "1.0.0",
-      "n": 1,
+      "n": 2,
       "outcome_type": "binary winner",
       "uniform_baseline_brier": 0.25,
       "uniform_baseline_log_loss": 0.6931471805599453,
-      "brier": 0.26858976044520194,
-      "log_loss": 0.730343385454885,
+      "brier": 0.3018484294666317,
+      "log_loss": 0.7975955907079496,
       "accuracy": 0.0,
       "calibration_bins": [
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 1,
+          "mean_forecast": 0.4211156432515545,
+          "observed_away_rate": 1.0
+        },
         {
           "lower": 0.5,
           "upper": 0.6,
@@ -904,20 +918,20 @@
       "sport": "NFL",
       "model": "chd_master_predictor",
       "version": "3.4",
-      "n": 1,
+      "n": 2,
       "outcome_type": "binary winner",
       "uniform_baseline_brier": 0.25,
       "uniform_baseline_log_loss": 0.6931471805599453,
-      "brier": 0.2574237548389784,
-      "log_loss": 0.7079957694439681,
-      "accuracy": 0.0,
+      "brier": 0.25005430873586665,
+      "log_loss": 0.6932558098311427,
+      "accuracy": 0.5,
       "calibration_bins": [
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 1,
+          "n": 2,
           "mean_forecast": 0.5073694461031117,
-          "observed_away_rate": 0.0
+          "observed_away_rate": 0.5
         }
       ]
     },
@@ -925,14 +939,21 @@
       "sport": "NFL",
       "model": "final_combined",
       "version": "2.0.0",
-      "n": 1,
+      "n": 2,
       "outcome_type": "binary winner",
       "uniform_baseline_brier": 0.25,
       "uniform_baseline_log_loss": 0.6931471805599453,
-      "brier": 0.2712324673162548,
-      "log_loss": 0.7356368862146965,
+      "brier": 0.2958505611775011,
+      "log_loss": 0.7852884713635946,
       "accuracy": 0.0,
       "calibration_bins": [
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 1,
+          "mean_forecast": 0.43390049016206755,
+          "observed_away_rate": 1.0
+        },
         {
           "lower": 0.5,
           "upper": 0.6,

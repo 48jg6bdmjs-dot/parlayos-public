@@ -11345,6 +11345,117 @@ html body.pos-ui .theme-card[data-theme="black"] { background-color:#15171c!impo
 html:has(body.pos-ui) { background:#111522!important; }
 html body.pos-ui { overflow:hidden!important; }
 html body.pos-ui .app-shell > .dock { position:fixed!important; left:50%!important; bottom:12px!important; transform:translateX(-50%)!important; }
+
+/* Decorative CSS scenes: no external assets, canvas loops or input interception. */
+html body.pos-ui[data-pos-theme="aurora"] { --pos-bg:#071923; --pos-surface:#122b37; --pos-accent:#83e9c6; --pos-text:#f0fcf8; --pos-muted:#b7d1d4; --pos-window:rgba(5,20,31,.64); }
+html body.pos-ui[data-pos-theme="ocean"] { --pos-bg:#051c2c; --pos-surface:#0e3041; --pos-accent:#83deef; --pos-text:#effaff; --pos-muted:#b6d0de; --pos-window:rgba(3,23,38,.66); }
+html body.pos-ui[data-pos-theme="neon"] { --pos-bg:#151127; --pos-surface:#29223f; --pos-accent:#e3a4f9; --pos-text:#fcf4ff; --pos-muted:#d1c1de; --pos-window:rgba(17,11,36,.65); }
+html body.pos-ui[data-pos-theme="dunes"] { --pos-bg:#251723; --pos-surface:#3c2835; --pos-accent:#f4c097; --pos-text:#fff5ed; --pos-muted:#e2c9bd; --pos-window:rgba(30,13,28,.63); }
+html body.pos-ui[data-pos-theme] .app-shell { position:relative!important; z-index:1; background:transparent!important; }
+html body.pos-ui[data-pos-theme] #osWindow { background:var(--pos-window)!important; border-color:#ffffff30!important; }
+html body.pos-ui[data-pos-theme] .morph-bg,html body.pos-ui[data-pos-theme] #fullPageSpace,html body.pos-ui[data-pos-theme] #starsCanvas,html body.pos-ui[data-pos-theme] #themeBackground { display:none!important; }
+#pos-scene { position:fixed; inset:0; z-index:0; pointer-events:none; }
+#pos-scene[hidden] { display:none!important; }
+.pos-scenery { overflow:hidden; isolation:isolate; pointer-events:none; }
+.pos-scenery .pos-sky,.pos-scenery .pos-light,.pos-scenery .pos-land,.pos-scenery .pos-mote { position:absolute; display:block; pointer-events:none; }
+.pos-sky { inset:0; }
+.pos-light { inset:-15% -20% 25%; transform-origin:50% 0; }
+.pos-land { left:-5%; bottom:-2%; width:110%; height:26%; }
+.pos-mote { left:var(--x); top:var(--y); width:var(--size); height:var(--size); border-radius:50%; opacity:.6; }
+/* Aurora: drifting curtains, stars, and a quiet mountain silhouette. */
+[data-scene="aurora"] .pos-sky { background:radial-gradient(ellipse at 25% 8%,#175962 0,transparent 55%),linear-gradient(155deg,#070f2a,#082532 68%,#0f1536); }
+[data-scene="aurora"] .pos-light { background:linear-gradient(117deg,transparent 22%,#4bf4b875 37%,#40abc14d 44%,transparent 49%,#8066ed66 57%,transparent 69%); filter:blur(18px); border-radius:48%; animation:pos-aurora 24s ease-in-out infinite alternate; }
+[data-scene="aurora"] .pos-light::after { content:""; position:absolute; inset:15% 5% -25%; border-radius:50%; background:linear-gradient(105deg,transparent 20%,#55e6da38 48%,transparent 60%); transform:rotate(-13deg); }
+[data-scene="aurora"] .pos-land { background:linear-gradient(#132842,#070f22); clip-path:polygon(0 74%,9% 42%,15% 67%,27% 8%,38% 64%,45% 40%,57% 85%,72% 23%,85% 73%,94% 42%,100% 72%,100% 100%,0 100%); }
+[data-scene="aurora"] .pos-mote { background:#d3fff0; box-shadow:0 0 6px #adeddc6b; animation:pos-star var(--duration) ease-in-out var(--delay) infinite alternate; }
+/* Ocean: diffused surface rays, bubbles and overlapping currents. */
+[data-scene="ocean"] .pos-sky { background:radial-gradient(ellipse at 68% -15%,#1c8290 0,#0b465d 25%,transparent 65%),linear-gradient(#092e47,#02131f); }
+[data-scene="ocean"] .pos-light { background:repeating-linear-gradient(112deg,transparent 0 8%,#97f8ee12 9%,#90e8ee26 11%,transparent 14% 20%); filter:blur(3px); animation:pos-rays 20s ease-in-out infinite alternate; }
+[data-scene="ocean"] .pos-land { height:27%; bottom:-13%; border-radius:48% 58% 0 0; border-top:1px solid #74e4e540; background:linear-gradient(#0f5c6b44,#03182c); animation:pos-current 17s ease-in-out infinite alternate; }
+[data-scene="ocean"] .pos-land::after { content:""; position:absolute; inset:15% -5% -20%; border-radius:56% 42% 0 0; border-top:1px solid #62dfda38; background:#072a3c99; }
+[data-scene="ocean"] .pos-mote { top:auto; bottom:-8%; width:calc(var(--size)*3); height:calc(var(--size)*3); border:1px solid #b2f1eb70; background:#b9fffa0a; animation:pos-bubble var(--duration) linear var(--delay) infinite; }
+/* City: rain in the foreground, violet towers and cyan reflections. */
+[data-scene="neon"] .pos-sky { background:radial-gradient(ellipse at 78% 25%,#77296088,transparent 52%),radial-gradient(ellipse at 18% 70%,#147d8880,transparent 55%),linear-gradient(#100e26,#281139); }
+[data-scene="neon"] .pos-light { inset:20% -25% -20%; background:linear-gradient(115deg,transparent 35%,#ed70d32b 47%,transparent 51%,#31d9ea29 65%,transparent 72%); filter:blur(18px); animation:pos-rays 26s ease-in-out infinite alternate; }
+[data-scene="neon"] .pos-land { height:32%; bottom:0; background:repeating-linear-gradient(90deg,transparent 0 8px,#9e5a9620 9px 10px,transparent 11px 23px),linear-gradient(#243755,#130e24 85%); clip-path:polygon(0 60%,6% 60%,6% 28%,11% 28%,11% 52%,18% 52%,18% 14%,24% 14%,24% 68%,32% 68%,32% 35%,38% 35%,38% 61%,45% 61%,45% 7%,49% 7%,49% 0,51% 0,51% 7%,54% 7%,54% 56%,60% 56%,60% 30%,69% 30%,69% 63%,76% 63%,76% 19%,84% 19%,84% 50%,90% 50%,90% 38%,96% 38%,96% 70%,100% 70%,100% 100%,0 100%); }
+[data-scene="neon"] .pos-mote { top:-15%; width:1px; height:26px; border-radius:0; background:linear-gradient(transparent,#99e9f370); animation:pos-rain var(--rain) linear var(--delay) infinite; }
+/* Dunes: sunset disc, layered sands and slow dust across the horizon. */
+[data-scene="dunes"] .pos-sky { background:radial-gradient(ellipse at 70% 32%,#d2765a70,transparent 50%),linear-gradient(#342238,#67394a 52%,#352337); }
+[data-scene="dunes"] .pos-light { inset:auto; width:26vmin; height:26vmin; right:14%; top:9%; border-radius:50%; background:linear-gradient(#f6cd9d,#d97f75); box-shadow:0 0 90px #efb37b30; opacity:.8; animation:pos-sun 25s ease-in-out infinite alternate; }
+[data-scene="dunes"] .pos-land { height:31%; bottom:-7%; border-radius:55% 65% 0 0; transform:rotate(-7deg); background:linear-gradient(155deg,#a960576b,#3d2637 60%); box-shadow:0 -1px 0 #f6cead29; }
+[data-scene="dunes"] .pos-land::after { content:""; position:absolute; inset:35% -10% -30%; border-radius:55% 75% 0 0; transform:rotate(13deg); background:linear-gradient(170deg,#5c3847,#20182c 70%); border-top:1px solid #f6cead30; }
+[data-scene="dunes"] .pos-mote { top:calc(40% + var(--y)*.5); background:#eaca9c; animation:pos-dust var(--duration) ease-in-out var(--delay) infinite alternate; }
+@keyframes pos-aurora { from { transform:translate3d(-4%,-2%,0) rotate(-8deg) scale(1.04); opacity:.72; } to { transform:translate3d(7%,8%,0) rotate(7deg) scale(1.15); opacity:1; } }
+@keyframes pos-rays { from { transform:translate3d(-3%,0,0) rotate(-5deg); opacity:.6; } to { transform:translate3d(5%,2%,0) rotate(4deg); opacity:.95; } }
+@keyframes pos-star { from { opacity:.22; } to { opacity:.85; } }
+@keyframes pos-current { from { transform:translate3d(-2%,0,0) rotate(-3deg); } to { transform:translate3d(3%,-8%,0) rotate(2deg); } }
+@keyframes pos-bubble { from { transform:translate3d(0,0,0); opacity:0; } 12% { opacity:.55; } 90% { opacity:.4; } to { transform:translate3d(38px,-110vh,0); opacity:0; } }
+@keyframes pos-rain { from { transform:translate3d(0,0,0) rotate(12deg); opacity:0; } 15% { opacity:.6; } 85% { opacity:.45; } to { transform:translate3d(-90px,120vh,0) rotate(12deg); opacity:0; } }
+@keyframes pos-sun { from { transform:scale(.97); opacity:.72; } to { transform:scale(1.03); opacity:.88; } }
+@keyframes pos-dust { from { transform:translate3d(-25px,12px,0); opacity:.12; } to { transform:translate3d(65px,-24px,0); opacity:.5; } }
+/* Quiet, static previews keep the Settings grid inexpensive to render. */
+#pos-living-themes { margin:24px 0; color:var(--pos-text); font:15px/1.5 system-ui,sans-serif; }
+.pos-theme-intro { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; }
+.pos-theme-intro h3 { font-size:26px; letter-spacing:-.04em; margin:2px 0 6px; }
+.pos-theme-intro p { margin:0; color:var(--pos-muted); }
+.pos-theme-intro .pos-theme-eyebrow { font-size:11px; font-weight:750; letter-spacing:.18em; color:var(--pos-accent); }
+.pos-theme-badge { padding:6px 11px; border:1px solid #ffffff2a; border-radius:30px; font-size:12px; color:var(--pos-muted); background:var(--pos-surface); }
+.pos-theme-choices { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+html body.pos-ui .pos-theme-choice { display:block; min-width:0; padding:0; border:1px solid #ffffff30; border-radius:18px; background:var(--pos-surface); color:var(--pos-text); text-align:left; overflow:hidden; cursor:pointer; transition:border-color .2s ease,box-shadow .2s ease; }
+html body.pos-ui .pos-theme-choice[aria-pressed="true"] { border-color:var(--pos-accent); box-shadow:0 0 0 2px var(--pos-accent); }
+html body.pos-ui .pos-theme-choice:hover { border-color:var(--pos-accent); }
+.pos-theme-preview { display:block; position:relative; height:130px; border-bottom:1px solid #ffffff20; }
+.pos-theme-preview *, .pos-theme-preview *::after { animation:none!important; }
+.pos-theme-preview .pos-light { filter:blur(7px); }
+.pos-theme-preview[data-scene="dunes"] .pos-light { width:55px; height:55px; filter:none; }
+.pos-theme-preview[data-scene="ocean"] .pos-mote { top:var(--y); bottom:auto; opacity:.5; }
+.pos-theme-preview[data-scene="neon"] .pos-mote { top:var(--y); height:14px; opacity:.35; }
+.pos-theme-copy { display:block; padding:15px; }
+.pos-theme-name { display:flex; align-items:center; justify-content:space-between; gap:6px; font-size:16px; font-weight:750; }
+.pos-theme-check { opacity:0; color:var(--pos-accent); }
+[aria-pressed="true"] .pos-theme-check { opacity:1; }
+.pos-theme-mood { display:block; font-size:11px; margin:4px 0 10px; color:var(--pos-accent); letter-spacing:.03em; }
+.pos-theme-description { display:block; font-size:13px; line-height:1.5; color:var(--pos-muted); }
+.pos-theme-motion { margin:14px 0 0; font-size:12px; color:var(--pos-muted); }
+html body.pos-ui #currentThemeLabel { font-size:12px!important; opacity:1!important; }
+html body.pos-ui .theme-card[aria-pressed="true"] { outline:2px solid var(--pos-accent)!important; outline-offset:2px; }
+#pos-scene[data-paused="true"] *,#pos-scene[data-paused="true"] *::after { animation-play-state:paused!important; }
+#pos-scene[data-motion="off"] *,#pos-scene[data-motion="off"] *::after { animation:none!important; }
+@media(prefers-reduced-motion:reduce) { #pos-scene *,#pos-scene *::after { animation:none!important; } }
+@media(max-width:1000px) { .pos-theme-choices { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:760px) { #pos-scene .pos-mote:nth-of-type(n+13) { display:none; } .pos-theme-preview { height:110px; } .pos-theme-copy { padding:12px; } .pos-theme-choices { gap:12px; } }
+@media(max-width:380px) { .pos-theme-choices { grid-template-columns:1fr; } }
+
+/* Bankroll: one presentation owner, existing per-user records. */
+html body.pos-ui #screen-bankroll > :not(#pos-bankroll){display:none!important}
+.pos-bank {line-height:1.5}
+.pos-bank-heading{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+.pos-bank-eyebrow{font-size:11px;font-weight:750;letter-spacing:.16em;color:var(--pos-accent)}
+.pos-bank-heading h2{font-size:36px;letter-spacing:-.04em;margin:4px 0}
+.pos-bank-heading p,.pos-bank-slip p{color:var(--pos-muted);margin:4px 0;font-size:14px}
+.pos-bank .pos-bank-primary{background:var(--pos-accent);color:#111522;border-color:transparent}
+.pos-bank-hero{border:1px solid #ffffff25;border-radius:24px;padding:28px;background:linear-gradient(120deg,#ffffff0d,transparent),var(--pos-surface);margin-bottom:20px}
+.pos-bank-balance>span{color:var(--pos-muted);font-size:14px}.pos-bank-balance>strong{display:block;font-size:clamp(36px,6vw,56px);letter-spacing:-.045em;line-height:1.25;font-variant-numeric:tabular-nums;margin:8px 0}
+.pos-bank-balance p{color:var(--pos-muted);font-size:14px;margin:4px 0 24px}
+.pos-bank-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid #ffffff25;padding-top:22px;gap:20px}
+.pos-bank-metric span,.pos-bank-metric small{display:block;color:var(--pos-muted);font-size:13px}.pos-bank-metric strong{display:block;font-size:25px;margin:4px 0;font-variant-numeric:tabular-nums}
+.pos-bank-columns{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
+.pos-bank-panel{background:var(--pos-surface);border:1px solid #ffffff25;border-radius:20px;padding:24px;margin-bottom:20px;min-width:0}
+.pos-bank-section-heading{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}.pos-bank-section-heading h3{margin:0;font-size:18px}.pos-bank-section-heading>span{font-size:12px;color:var(--pos-muted)}
+#pos-bank-pending-count{display:inline-block;font-size:12px;padding:2px 8px;border-radius:20px;background:#ffffff12;margin-left:6px}
+#pos-bank-chart svg{display:block;width:100%;height:auto;margin-top:20px;min-height:130px}.pos-bank-axis{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--pos-muted)}
+.pos-bank-empty{padding:28px 12px;text-align:center;color:var(--pos-muted);font-size:14px;border:1px dashed #ffffff25;border-radius:14px}.pos-bank-empty p{margin:6px 0 0}
+.pos-bank-slip{border:1px solid #ffffff25;border-radius:14px;margin:10px 0;background:var(--pos-bg);overflow:hidden}
+.pos-bank-slip>summary{display:flex;justify-content:space-between;align-items:center;gap:16px;cursor:pointer;padding:16px;list-style:none}.pos-bank-slip>summary::-webkit-details-marker{display:none}.pos-bank-slip>summary>div{min-width:0}.pos-bank-slip h4{margin:7px 0 3px;font-size:16px;overflow-wrap:anywhere}.pos-bank-slip p{font-size:12px}.pos-bank-slip-body{padding:0 16px 16px;color:var(--pos-muted);font-size:14px}.pos-bank-slip-body li{margin:8px 0;overflow-wrap:anywhere}
+.pos-bank-badge{display:inline-block;font-size:11px;font-weight:750;padding:3px 9px;border-radius:20px;background:#ffffff12;color:var(--pos-muted)}
+.pos-bank-badge[data-outcome=win],.pos-bank-return[data-outcome=win]{color:#90edbf}.pos-bank-badge[data-outcome=loss],.pos-bank-return[data-outcome=loss]{color:#ffabba}.pos-bank-badge[data-outcome=pending]{color:#f5d18b}
+.pos-bank-return{text-align:right;white-space:nowrap;font-size:19px;font-variant-numeric:tabular-nums}.pos-bank-return small{display:block;font-size:11px;font-weight:400;color:var(--pos-muted)}
+.pos-bank-filters{display:flex;gap:12px;margin:16px 0}.pos-bank-filters input{flex:1;min-width:0}.pos-bank-filters input,.pos-bank-filters select{padding:11px 14px;border:1px solid;border-radius:10px;min-height:44px}.pos-bank-filters select{width:150px}
+.pos-bank-import{border:1px solid #ffffff25;border-radius:16px;padding:18px;margin-bottom:18px}.pos-bank-import>summary{cursor:pointer;font-weight:650;min-height:24px}.pos-bank-import p{color:var(--pos-muted);font-size:14px}.pos-bank-footnote{font-size:12px;text-align:center}
+.pos-bank-dialog{max-width:540px}.pos-bank-dialog form{display:grid;gap:16px}.pos-bank-dialog label{display:grid;gap:7px;font-size:14px;color:var(--pos-muted)}.pos-bank-dialog input,.pos-bank-dialog textarea{padding:12px;border:1px solid;border-radius:10px;width:100%;min-width:0}.pos-bank-dialog textarea{min-height:90px;resize:vertical}.pos-bank-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pos-bank-dialog [data-bank-message]{margin:0;color:#ffabba}.pos-bank-dialog p{font-size:14px}
+html body.pos-ui #pos-bank-import-mount .glass{padding:16px!important;margin:0!important}html body.pos-ui #pos-bank-import-mount button{min-height:44px!important}html body.pos-ui #pos-bank-import-mount [style*="color:"]{color:var(--pos-text)!important}
+@media(max-width:800px){.pos-bank-columns{grid-template-columns:1fr}.pos-bank-hero,.pos-bank-panel{padding:20px}.pos-bank-heading{gap:16px}.pos-bank-heading .pos-actions{width:100%}.pos-bank-heading .pos-actions button{flex:1}.pos-bank-heading h2{font-size:30px}}
+@media(max-width:480px){.pos-bank-metrics{grid-template-columns:1fr;gap:16px}.pos-bank-metric{display:grid;grid-template-columns:1fr auto;align-items:center}.pos-bank-metric small{grid-column:1/-1}.pos-bank-metric strong{font-size:23px}.pos-bank-filters{flex-wrap:wrap}.pos-bank-filters input{flex-basis:100%}.pos-bank-filters select{width:100%}.pos-bank-panel,.pos-bank-hero{padding:16px}.pos-bank-slip>summary{padding:13px;gap:10px}.pos-bank-return{font-size:16px}}
 </style></head>
 <body class="dark pos-ui">
 <div aria-hidden="true" class="morph-bg">
@@ -22221,7 +22332,7 @@ button[data-view-toggle],
 <script id="theme-full-js">
 // Full Background Replacement Themes
 (function(){
-  const THEMES = ['original','winter','summer','autumn','halloween','spring','rain','desert','white','black'];
+  const THEMES = ['original','winter','summer','autumn','halloween','spring','rain','desert','white','black','aurora','ocean','neon','dunes'];
   const THEME_KEY = 'parlayos_theme';
   const DEFAULT_THEME = 'white';
 
@@ -37361,15 +37472,20 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   const applicable = (sport, model) => sport === 'MLB' || !['zips', 'steamer'].includes(model);
   const record = (game, model) => model === 'final_combined' ? (game.ensemble || game.models?.final_combined) : game.models?.[model];
   const id = game => String(game.id ?? game.game_id ?? game.gamePk ?? [game.away ?? game.a, game.home ?? game.b, game.startAt ?? game.date ?? ''].join('|'));
-  function market(game, sport, model, kind, now=Date.now()) {
+  function market(game, sport, model, kind, now=Date.now(), display=false) {
     if(game.data_quality?.prediction_available===false)return {available:false,reason:game.data_quality.reason||'Prediction inputs unavailable.'};
     const kickoff=start(game), generated=new Date(game.generated_at||'').getTime();
-    if(kickoff&&kickoff.getTime()<=now)return {available:false,reason:'Pregame predictions closed at the scheduled start.'};
-    if(Number.isFinite(generated)&&(generated>now+60000||now-generated>24*60*60*1000))return {available:false,reason:'Prediction inputs need to be refreshed.'};
+    const closed=!!kickoff&&kickoff.getTime()<=now;
+    const stale=Number.isFinite(generated)&&now-generated>24*60*60*1000;
+    if(Number.isFinite(generated)&&generated>now+60000)return {available:false,reason:'Forecast timestamp is ahead of the current time. Refresh data or check your device clock.'};
+    if(closed&&(!display||!Number.isFinite(generated)||generated>=kickoff.getTime()))return {available:false,reason:'No verified pregame snapshot is available for this started game.'};
+    if(stale&&!display)return {available:false,reason:'Prediction inputs need to be refreshed.'};
     if (!applicable(sport, model)) return {available:false, reason:'This model is designed for MLB.'};
     const r = record(game, model), m = r?.markets?.[kind];
     if (!r || r.status === 'unavailable' || !m || m.status === 'unavailable' || !m.selection || !probability(m.probability)) {
-      return {available:false, reason:m?.reason || r?.reason || 'No prediction supplied for this market.'};
+      const reasons=model==='final_combined'?Object.entries(game.models||{}).filter(([id])=>id!=='final_combined').map(([,r])=>r?.markets?.[kind]?.reason).filter(Boolean):[];
+      const explanation=reasons.length&&reasons.every(x=>x===reasons[0])?reasons[0]:null;
+      return {available:false, reason:explanation || m?.reason || r?.reason || 'No prediction supplied for this market.'};
     }
     // A total/spread without its line is not an actionable selection. A
     // strikeout prop must identify the player instead of saying "pitcher".
@@ -37397,9 +37513,10 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     if(!numeric(quote)&&m.inputs?.market_available===true)quote=m.odds;
     const hasPrice=numeric(quote)&&Math.abs(Number(quote))>=100;
     const implied=hasPrice?(Number(quote)>0?100/(Number(quote)+100):-Number(quote)/(-Number(quote)+100)):null;
-    return {...m, selection:/^home$/i.test(m.selection)?(game.home||game.b||m.selection):/^away$/i.test(m.selection)?(game.away||game.a||m.selection):m.selection, line:kind==='ml'?null:m.line, available:true, actionable:complete, odds:hasPrice?Number(quote):null,
+    return {...m, selection:/^home$/i.test(m.selection)?(game.home||game.b||m.selection):/^away$/i.test(m.selection)?(game.away||game.a||m.selection):m.selection, line:kind==='ml'?null:m.line, available:true, actionable:complete&&!closed&&!stale, closed, stale, snapshotLabel:closed?'Pregame estimate · game started':stale?'Last estimate · refresh required':'Model estimate', odds:hasPrice?Number(quote):null,
       edge:hasPrice?Number(m.probability)-implied:null};
   }
+  const forecast=(game,sport,model,kind,now=Date.now())=>market(game,sport,model,kind,now,true);
   function american(value) {
     return numeric(value) && Math.abs(Number(value)) >= 100 ? (Number(value) > 0 ? '+' : '') + String(Number(value)) : 'Odds unavailable';
   }
@@ -37450,7 +37567,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const p=items.reduce((v,x)=>v*Number(x.probability),1);
     return `${items.length===1?'Saved model estimate':'Estimated chance every pick wins'}: ${percent(p)}.${items.length>1?' Assumes independent games.':''} Uncalibrated model estimates; not a guarantee.`;
   }
-  return {models,numeric,probability,percent,escape,applicable,record,id,market,american,start,score,toggle,legacyPicks,slipText,goalTotal,slipSummary};
+  return {models,numeric,probability,percent,escape,applicable,record,id,market,forecast,american,start,score,toggle,legacyPicks,slipText,goalTotal,slipSummary};
 });
 </script><script id="PARLAYOS_UI_CONSISTENCY">(function () {
   'use strict';
@@ -37490,7 +37607,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     if(['mlb','nfl','nba','nhl','soccer','sports'].includes(name))renderSport(name==='sports'?state.active:name==='soccer'?'SOC':name.toUpperCase());
     if(name==='live-scores')renderLive();
     if(['fantasy','fantasyshop'].includes(name))renderFantasy();
-    if(name==='bankroll'){try{window.renderBankroll?.();}catch{}}
+    if(name==='bankroll'){try{window.renderBankroll?.();window.ParlayOSBankroll?.render();}catch{}}
     screen.scrollTop=0;document.querySelector('#viewport')?.scrollTo({top:0});window.scrollTo({top:0,behavior:'instant'});
     return true;
   }
@@ -37561,10 +37678,10 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   function card(g,s) {
     const id=C.id(g),m=model(s);
     return `<article class="pos-card" data-pos-game="${E(id)}" data-pos-model="${m}"><div class="pos-card-head"><span>${E(timeLabel(g,s))}</span><span>${E(C.models[m])}</span></div><h3>${E(g.away??g.a??'Away')} <span>vs</span> ${E(g.home??g.b??'Home')}</h3>${Object.entries(labels(s)).map(([kind,label])=>{
-      const p=C.market(g,s,m,kind);
+      const p=C.forecast(g,s,m,kind);
       if(!p.available)return `<section class="pos-market"><div class="pos-market-title">${label}</div><div class="pos-meta">Prediction unavailable</div><div class="pos-meta">${E(p.reason)}</div></section>`;
       const isSelected=selected(s).some(x=>x.gameId===id&&x.market===kind&&x.model===m);
-      return `<section class="pos-market"><div class="pos-market-title"><span>${label}</span><span class="pos-prob">${C.percent(p.probability)}</span></div><div class="pos-pick">${p.player_name&&!/^pitcher$/i.test(p.player_name)?E(p.player_name)+' · ':''}${E(p.selection)}${p.line==null?'':' '+E(p.line)}</div><div class="pos-meta">${E(C.american(p.odds))}${p.edge==null?'':' · Edge '+(p.edge>=0?'+':'')+(p.edge*100).toFixed(1)+'%'}${C.probability(p.confidence)?' · Confidence '+C.percent(p.confidence):''}${p.calibration_status==='unvalidated'?' · Accuracy not yet validated':''}</div>${p.outcomes?.draw!=null?`<div class="pos-meta">Away ${C.percent(p.outcomes.away)} · Draw ${C.percent(p.outcomes.draw)} · Home ${C.percent(p.outcomes.home)}</div>`:''}${p.inputs?.family_count===1?'<div class="pos-meta">One independent model family available.</div>':''}<div class="pos-actions"><button type="button" data-pos-add="${kind}" data-pos-game="${E(id)}" data-pos-sport="${s}" aria-pressed="${isSelected}"${p.actionable?'':' disabled'}>${p.actionable?(isSelected?'Selected ✓':'Select '+label):'Selection incomplete'}</button></div></section>`;
+      return `<section class="pos-market"><div class="pos-market-title"><span>${label}</span><span class="pos-prob" aria-label="Model estimate ${C.percent(p.probability)}">${C.percent(p.probability)}</span></div><div class="pos-meta pos-forecast-label">${E(p.snapshotLabel)}</div><div class="pos-pick">${p.player_name&&!/^pitcher$/i.test(p.player_name)?E(p.player_name)+' · ':''}${E(p.selection)}${p.line==null?'':' '+E(p.line)}</div><div class="pos-meta">${E(C.american(p.odds))}${p.edge==null?'':' · Edge '+(p.edge>=0?'+':'')+(p.edge*100).toFixed(1)+'%'}${C.probability(p.confidence)?' · Confidence '+C.percent(p.confidence):''}${p.calibration_status==='unvalidated'?' · Accuracy not yet validated':''}</div>${p.outcomes?.draw!=null?`<div class="pos-meta">Away ${C.percent(p.outcomes.away)} · Draw ${C.percent(p.outcomes.draw)} · Home ${C.percent(p.outcomes.home)}</div>`:''}${p.inputs?.family_count===1?'<div class="pos-meta">One independent model family available.</div>':''}<div class="pos-actions"><button type="button" data-pos-add="${kind}" data-pos-game="${E(id)}" data-pos-sport="${s}" aria-pressed="${isSelected}"${p.actionable?'':' disabled'}>${p.actionable?(isSelected?'Selected ✓':'Select '+label):p.closed?'Game started':p.stale?'Refresh required':'Selection incomplete'}</button></div></section>`;
     }).join('')}${goalForecast(g,s)}${details(g)}</article>`;
   }
   function renderSport(s) {
@@ -37583,7 +37700,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       if(mh.dataset.posSport!==s){mh.innerHTML=html;mh.dataset.posSport=s;}
       mh.querySelectorAll('[data-pos-model]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.posModel===model(s))));
       const all=games(s),filtered=all.filter(g=>teams(g).toLowerCase().includes((state.query[s]||'').toLowerCase()));
-      const unavailable=all.length&&!all.some(g=>Object.keys(labels(s)).some(k=>C.market(g,s,model(s),k).available));
+      const unavailable=all.length&&!all.some(g=>Object.keys(labels(s)).some(k=>C.forecast(g,s,model(s),k).available));
       const status=q('.pos-status',host);
       const updated=new Date(state.data[s]?.updated||state.data[s]?.runDate||state.data[s]?.generated_at||'');
       const freshness=(Number.isFinite(updated.getTime())?' · Data updated '+updated.toLocaleString():'')+(state.data[s]?.refresh_error?' · '+state.data[s].refresh_error:'');
@@ -37707,5 +37824,158 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   window.ParlayOSUI={handle,navigate,renderSport};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+</script><script id="PARLAYOS_DYNAMIC_THEMES">(function () {
+  'use strict';
+  const themes = {
+    aurora: {name:'Aurora Drift', description:'Northern lights, distant peaks and a field of stars.', mood:'Arctic · Teal & violet'},
+    ocean: {name:'Deep Current', description:'Underwater light rays and slowly rising bubbles.', mood:'Ocean · Cyan & midnight'},
+    neon: {name:'Neon City', description:'Soft rain over a luminous city skyline.', mood:'After dark · Cyan & pink'},
+    dunes: {name:'Solar Dunes', description:'A low sun, layered dunes and drifting desert dust.', mood:'Sunset · Amber & plum'}
+  };
+  const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let scene, panel, current = '';
+  function layers(preview=false) {
+    return '<span class="pos-sky"></span><span class="pos-light"></span><span class="pos-land"></span>'+Array.from({length:preview?8:24},(_,i)=>
+      `<i class="pos-mote" style="--x:${(i*37+9)%100}%;--y:${(i*23+11)%91}%;--size:${i%3+1}px;--duration:${14+(i*7)%19}s;--delay:-${(i*11)%29}s;--rain:${1.7+(i%7)*.19}s"></i>`).join('');
+  }
+  function motion() {
+    if(!scene)return;
+    const reduced = media.matches || document.body.classList.contains('reduce-motion');
+    const effectsOff = document.body.classList.contains('reduce-fx');
+    scene.dataset.motion = reduced || effectsOff ? 'off' : 'on';
+    scene.dataset.paused = String(document.hidden);
+    const status=panel?.querySelector('[data-pos-motion-status]');
+    if(status)status.textContent=reduced?'Still scenes · Reduce Motion is on.':effectsOff?'Still scenes · Background effects are off.':'Gentle animation · Follows your Reduce Motion setting.';
+  }
+  function sync() {
+    const selected=Array.from(document.body.classList).find(c=>c.startsWith('theme-'))?.slice(6)||'original';
+    const active=themes[selected]?selected:'';
+    if(active!==current){
+      current=active;
+      if(active){scene.dataset.scene=active;scene.innerHTML=layers();scene.hidden=false;document.body.dataset.posTheme=active;}
+      else {scene.hidden=true;scene.replaceChildren();delete document.body.dataset.posTheme;}
+    }
+    panel.querySelectorAll('[data-pos-theme-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.posThemeChoice===selected)));
+    document.querySelectorAll('.theme-card[data-theme]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.theme===selected)));
+    const label=document.getElementById('currentThemeLabel');
+    if(label&&active)label.textContent=themes[active].name;
+    motion();
+  }
+  function boot() {
+    const settings=document.getElementById('screen-settings');
+    if(!settings||document.getElementById('pos-living-themes'))return;
+    scene=document.createElement('div');scene.id='pos-scene';scene.className='pos-scenery';scene.hidden=true;
+    scene.setAttribute('aria-hidden','true');document.body.prepend(scene);
+    panel=document.createElement('section');panel.id='pos-living-themes';panel.setAttribute('aria-labelledby','pos-theme-heading');
+    panel.innerHTML='<header class="pos-theme-intro"><div><p class="pos-theme-eyebrow">MAKE IT YOURS</p><h3 id="pos-theme-heading">Living themes</h3><p>Choose a world for your dashboard.</p></div><span class="pos-theme-badge">4 animated scenes</span></header><div class="pos-theme-choices" role="group" aria-label="Living themes">'+
+      Object.entries(themes).map(([id,t])=>`<button type="button" class="pos-theme-choice" data-pos-theme-choice="${id}" aria-label="${t.name}" aria-pressed="false"><span class="pos-theme-preview pos-scenery" data-scene="${id}" aria-hidden="true">${layers(true)}</span><span class="pos-theme-copy"><span class="pos-theme-name">${t.name}<span class="pos-theme-check" aria-hidden="true">✓</span></span><span class="pos-theme-mood">${t.mood}</span><span class="pos-theme-description">${t.description}</span></span></button>`).join('')+
+      '</div><p class="pos-theme-motion" data-pos-motion-status role="status"></p>';
+    const classic=document.getElementById('currentThemeLabel')?.closest('.panel-pad');
+    if(classic)classic.before(panel);else settings.appendChild(panel);
+    panel.addEventListener('click',e=>{const b=e.target.closest('[data-pos-theme-choice]');if(!b)return;
+      window.applyParlayTheme?.(b.dataset.posThemeChoice);sync();});
+    new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});
+    document.addEventListener('visibilitychange',motion);media.addEventListener('change',motion);
+    sync();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
+</script><script id="PARLAYOS_BANKROLL">(function(root,factory){
+  const api=factory();
+  if(typeof module==='object'&&module.exports)module.exports=api;
+  else {root.ParlayOSBankroll=api;api.boot();}
+})(typeof window==='undefined'?this:window,function(){
+  'use strict';
+  const rows=x=>Array.isArray(x)?x:[],valid=x=>x!==null&&x!==undefined&&x!==''&&Number.isFinite(Number(x)),num=x=>valid(x)?Number(x):0;
+  const money=x=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(num(x));
+  const signed=x=>(x>0?'+':'')+money(x),escape=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function summary(data){
+    const history=rows(data.history),pending=rows(data.pending);
+    const settled=history.map((h,index)=>({...h,index})).filter(h=>!h.isStake&&(h.isSettlement||num(h.profit)!==0));
+    const staked=new Map(history.filter(h=>h.isStake&&h.pendingId).map(h=>[String(h.pendingId),Math.abs(num(h.profit))]));
+    settled.forEach(h=>{h.stake=valid(h.stake)?Number(h.stake):staked.get(String(h.slipId));h.outcome=num(h.profit)>0?'win':num(h.profit)<0?'loss':'push';});
+    const pnl=settled.reduce((v,h)=>v+num(h.profit),0),atRisk=pending.reduce((v,h)=>v+num(h.stake),0);
+    const wins=settled.filter(h=>h.outcome==='win').length,losses=settled.filter(h=>h.outcome==='loss').length;
+    const knownStakes=settled.every(h=>valid(h.stake)&&Number(h.stake)>0),stakeTotal=settled.reduce((v,h)=>v+num(h.stake),0);
+    return {settled,pending,pnl,atRisk,balance:num(data.balance),wins,losses,pushes:settled.length-wins-losses,
+      winRate:wins+losses?wins/(wins+losses):null,roi:knownStakes&&stakeTotal>0?pnl/stakeTotal:null,stakeTotal};
+  }
+  function logSlip(data,{label,stake,odds,id,legs=[]},now=Date.now()){
+    stake=Number(stake);odds=Number(odds);
+    if(!String(label||'').trim())throw Error('Enter a slip name or selection.');
+    if(!Number.isFinite(stake)||stake<=0||Math.abs(stake*100-Math.round(stake*100))>1e-7)throw Error('Enter a positive wager with at most two decimal places.');
+    if(stake>num(data.balance))throw Error('Wager exceeds the available virtual balance.');
+    if(!Number.isInteger(odds)||Math.abs(odds)<100)throw Error('Enter American odds of +100 or higher, or −100 or lower.');
+    if(!id||rows(data.pending).some(p=>p.id===id))throw Error('Slip identifier already exists.');
+    const balance=Math.round((num(data.balance)-stake)*100)/100,date=new Date(now).toLocaleDateString();
+    return {...data,balance,pending:[...rows(data.pending),{id,label:String(label).trim(),stake,odds,legs,placedDate:date,ts:now}],history:[...rows(data.history),{balance,label:String(label).trim()+' (staked)',profit:-stake,date,ts:now,isStake:true,pendingId:id}]};
+  }
+  function settle(data,id,outcome,now=Date.now()){
+    const bet=rows(data.pending).find(p=>p.id===id);if(!bet||!['win','loss','push'].includes(outcome))throw Error('This pending slip is no longer available.');
+    const stake=num(bet.stake),odds=num(bet.odds);if(stake<=0||Math.abs(odds)<100)throw Error('This saved slip has invalid wager or odds data.');
+    const profit=Math.round((outcome==='win'?stake*(odds>0?odds/100:100/-odds):outcome==='loss'?-stake:0)*100)/100;
+    const balance=Math.round((num(data.balance)+stake+profit)*100)/100;
+    return {...data,balance,pending:data.pending.filter(p=>p.id!==id),history:[...rows(data.history),{balance,label:bet.label,profit,stake,odds,date:new Date(now).toLocaleDateString(),ts:now,isSettlement:true,result:outcome,legs:bet.legs,slipId:bet.id,placedDate:bet.placedDate}]};
+  }
+  let host,dialog,filter='all',search='',signature='',opener;
+  const q=s=>document.querySelector(s),read=()=>window.brLoad?.();
+  function save(data){if(typeof window.brSave!=='function'||window.brSave(data)===false)throw Error('Could not save the bankroll. Try again.');window.renderBankroll?.();signature='';render();}
+  function pct(x){return x===null?'—':(x*100).toFixed(1)+'%';}
+  function chart(s){
+    if(!s.settled.length)return '<div class="pos-bank-empty">Your performance chart starts with your first settled slip.</div>';
+    const values=[0];s.settled.forEach(h=>values.push(values.at(-1)+num(h.profit)));
+    const lo=Math.min(...values),hi=Math.max(...values),range=hi-lo||1;
+    const points=values.map((v,i)=>(12+i/(values.length-1)*776).toFixed(1)+','+(150-(v-lo)/range*126).toFixed(1)).join(' ');
+    return `<svg viewBox="0 0 800 180" role="img" aria-label="Settled profit over ${s.settled.length} slips, ending at ${escape(signed(s.pnl))}"><line x1="12" y1="${150-(0-lo)/range*126}" x2="788" y2="${150-(0-lo)/range*126}" stroke="currentColor" opacity=".25" stroke-dasharray="4 6"/><polyline points="${points}" fill="none" stroke="var(--pos-accent)" stroke-width="3" vector-effect="non-scaling-stroke"/></svg><div class="pos-bank-axis"><span>First slip</span><span>Range ${money(lo)} to ${money(hi)}</span><span>Latest</span></div>`;
+  }
+  function slip(item,pending){
+    const status=pending?'Pending':({win:'Won',loss:'Lost',push:'Push'})[item.outcome];
+    const legs=rows(item.legs);return `<details class="pos-bank-slip"><summary><div><span class="pos-bank-badge" data-outcome="${pending?'pending':item.outcome}">${status}</span><h4>${escape(item.label||'Saved slip')}</h4><p>${escape(pending?item.placedDate:item.date)||'Date unavailable'} · Wager ${valid(item.stake)?money(item.stake):'unavailable'}${valid(item.odds)?' · '+(Number(item.odds)>0?'+':'')+escape(item.odds):''}</p></div><strong class="pos-bank-return" data-outcome="${pending?'pending':item.outcome}">${pending?money(item.stake):signed(num(item.profit))}<small>${pending?'at risk':'net result'}</small></strong></summary><div class="pos-bank-slip-body">${legs.length?'<ol>'+legs.map(l=>'<li>'+escape(typeof l==='object'?(l.pick||l.label||l.selection||'Saved leg'):l)+'</li>').join('')+'</ol>':'<p>No individual legs were saved with this slip.</p>'}${pending?`<div class="pos-actions">${['win','loss','push'].map(x=>`<button type="button" data-bank-settle="${x}" data-bank-id="${escape(item.id)}">Mark ${x}</button>`).join('')}</div>`:''}</div></details>`;
+  }
+  function render(){
+    if(!host)return;const data=read();if(!data){q('#pos-bank-overview').innerHTML='<p>Bankroll data is not available yet.</p>';return;}
+    const stamp=JSON.stringify([data,filter,search]);if(stamp===signature)return;signature=stamp;
+    const s=summary(data),metric=(label,value,detail)=>`<div class="pos-bank-metric"><span>${label}</span><strong>${value}</strong><small>${detail}</small></div>`;
+    q('#pos-bank-overview').innerHTML=`<div class="pos-bank-balance"><span>Available virtual balance</span><strong>${money(s.balance)}</strong><p>${money(s.atRisk)} committed to ${s.pending.length} pending ${s.pending.length===1?'slip':'slips'}</p></div><div class="pos-bank-metrics">${metric('Settled profit',signed(s.pnl),'Pending wagers excluded')}${metric('Win rate',pct(s.winRate),s.wins+' wins · '+s.losses+' losses · '+s.pushes+' pushes')}${metric('Return on wagers',pct(s.roi),s.roi===null?'Requires saved settled wager amounts':money(s.stakeTotal)+' settled wagers')}</div>`;
+    q('#pos-bank-chart').innerHTML=chart(s);
+    q('#pos-bank-pending-count').textContent=s.pending.length;
+    const list=q('#pos-bank-pending'),open=new Set(Array.from(list.querySelectorAll('details[open]')).map(el=>el.querySelector('[data-bank-id]')?.dataset.bankId));
+    list.innerHTML=s.pending.length?s.pending.map(h=>slip(h,true)).join(''):'<div class="pos-bank-empty"><b>No pending slips</b><p>Log an existing wager to track its result here.</p></div>';
+    list.querySelectorAll('details').forEach(d=>{if(open.has(d.querySelector('[data-bank-id]')?.dataset.bankId))d.open=true;});
+    const matches=s.settled.filter(h=>(filter==='all'||h.outcome===filter)&&String(h.label||'').toLowerCase().includes(search.toLowerCase())).reverse();
+    q('#pos-bank-history-count').textContent=matches.length+' of '+s.settled.length+' slips';
+    q('#pos-bank-history').innerHTML=matches.length?matches.map(h=>slip(h,false)).join(''):`<div class="pos-bank-empty"><b>${s.settled.length?'No matching slips':'No settled slips yet'}</b><p>${s.settled.length?'Try a different filter or search.':'Wins, losses and pushes will appear here after you record a result.'}</p></div>`;
+  }
+  function open(title,body){opener=document.activeElement;dialog.innerHTML=`<header><h2>${title}</h2><button type="button" data-bank-close>Close</button></header>${body}`;dialog.showModal();}
+  function close(){dialog.close();opener?.focus();}
+  function boot(){
+    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot,{once:true});return;}
+    const screen=q('#screen-bankroll');if(!screen||q('#pos-bankroll'))return;
+    Array.from(screen.children).forEach(el=>el.setAttribute('data-pos-legacy',''));
+    host=document.createElement('div');host.id='pos-bankroll';host.className='pos-hub pos-bank';
+    host.innerHTML=`<header class="pos-bank-heading"><div><span class="pos-bank-eyebrow">YOUR TRACKING SPACE</span><h2>Bankroll</h2><p>Track wagers. Understand your results.</p></div><div class="pos-actions"><button type="button" data-bank-adjust>Adjust starting balance</button><button type="button" class="pos-bank-primary" data-bank-log>Log a slip</button></div></header><section class="pos-bank-hero" id="pos-bank-overview" aria-label="Bankroll overview"></section><div class="pos-bank-columns"><section class="pos-bank-panel"><div class="pos-bank-section-heading"><h3>Settled performance</h3><span>All time</span></div><p class="pos-meta">Cumulative net results. Pending stakes do not count as losses.</p><div id="pos-bank-chart"></div></section><section class="pos-bank-panel"><div class="pos-bank-section-heading"><h3>Pending slips <span id="pos-bank-pending-count"></span></h3></div><div id="pos-bank-pending"></div></section></div><section class="pos-bank-panel"><div class="pos-bank-section-heading"><h3>Slip history</h3><span id="pos-bank-history-count"></span></div><div class="pos-bank-filters"><input type="search" id="pos-bank-search" aria-label="Search slip history" placeholder="Search slip names"><select id="pos-bank-filter" aria-label="Filter slip results"><option value="all">All results</option><option value="win">Won</option><option value="loss">Lost</option><option value="push">Push</option></select></div><div id="pos-bank-history"></div></section><details class="pos-bank-import"><summary>Import an existing sportsbook slip</summary><p>Import tools are optional. Review the wager and odds before logging.</p><div id="pos-bank-import-mount"></div></details><p class="pos-meta pos-bank-footnote">Virtual tracking only. Logging or marking a result does not place a bet or move money. Records are saved in this browser.</p>`;
+    screen.appendChild(host);
+    const importer=q('#brDkTextInput')?.closest('.glass');if(importer){importer.removeAttribute('data-pos-legacy');q('#pos-bank-import-mount').appendChild(importer);}
+    for(const [id,label]of [['brDkLinkInput','Sportsbook share link'],['brDkTextInput','Slip text'],['brDkStakeInput','Imported wager amount'],['brDkOddsInput','Imported American odds']])q('#'+id)?.setAttribute('aria-label',label);
+    dialog=document.createElement('dialog');dialog.className='pos-dialog pos-bank-dialog';dialog.setAttribute('aria-label','Bankroll action');document.body.appendChild(dialog);
+    dialog.addEventListener('cancel',()=>opener?.focus());dialog.addEventListener('click',e=>{if(e.target===dialog||e.target.closest('[data-bank-close]'))close();});
+    document.addEventListener('click',e=>{
+      const b=e.target.closest('button');if(!b)return;
+      if(b.hasAttribute('data-bank-log'))open('Log a slip',`<p>Record a wager you already placed. This only updates your virtual tracker.</p><form data-bank-form="log"><label>Slip name<input name="label" required maxlength="160" placeholder="e.g. Padres moneyline"></label><div class="pos-bank-form-row"><label>Wager ($)<input name="stake" type="number" inputmode="decimal" min="0.01" step="0.01" required></label><label>American odds<input name="odds" type="number" step="1" required placeholder="e.g. -110"></label></div><label>Individual legs (optional)<textarea name="legs" placeholder="One selection per line"></textarea></label><p role="status" data-bank-message></p><button class="primary" type="submit">Save pending slip</button></form>`);
+      if(b.hasAttribute('data-bank-adjust')){const d=read();if(!d)return;open('Adjust starting balance',`<p>Change your starting virtual amount. All pending slips and history are preserved; the available balance changes by the same difference.</p><form data-bank-form="adjust"><label>Starting balance ($)<input name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" value="${num(d.startingBalance)}" required></label><p role="status" data-bank-message></p><button class="primary" type="submit">Save starting balance</button></form>`);}
+      if(b.dataset.bankSettle){const d=read(),bet=rows(d?.pending).find(p=>p.id===b.dataset.bankId);if(!bet)return;open('Record slip result',`<p>${escape(bet.label)} · ${money(bet.stake)} wager</p><p>Record this slip as <strong>${escape(b.dataset.bankSettle)}</strong> in your tracker?</p><form data-bank-form="settle" data-id="${escape(bet.id)}" data-outcome="${escape(b.dataset.bankSettle)}"><p role="status" data-bank-message></p><button class="primary" type="submit">Confirm result</button></form>`);}
+    });
+    dialog.addEventListener('submit',e=>{const f=e.target;if(!f.dataset.bankForm)return;e.preventDefault();try{const d=read();if(!d)throw Error('Bankroll data is unavailable.');const v=new FormData(f);let next;
+      if(f.dataset.bankForm==='log')next=logSlip(d,{label:v.get('label'),stake:v.get('stake'),odds:v.get('odds'),legs:String(v.get('legs')).split('\n').map(x=>x.trim()).filter(Boolean),id:crypto.randomUUID()});
+      else if(f.dataset.bankForm==='settle')next=settle(d,f.dataset.id,f.dataset.outcome);
+      else {const amount=Number(v.get('amount')),delta=amount-num(d.startingBalance);if(!Number.isFinite(amount)||amount<=0||num(d.balance)+delta<0)throw Error('Choose an amount that keeps your available balance at or above zero.');next={...d,startingBalance:amount,balance:Math.round((num(d.balance)+delta)*100)/100,history:rows(d.history).map(h=>({...h,balance:valid(h.balance)?Math.round((Number(h.balance)+delta)*100)/100:h.balance}))};}
+      save(next);close();
+    }catch(error){f.querySelector('[data-bank-message]').textContent=error.message;}});
+    q('#pos-bank-search').addEventListener('input',e=>{search=e.target.value;render();});q('#pos-bank-filter').addEventListener('change',e=>{filter=e.target.value;render();});
+    const observer=new MutationObserver(render);for(const id of ['#brBalance','#brLog','#brPending']){const el=q(id);if(el)observer.observe(el,{childList:true,subtree:true,characterData:true});}
+    window.addEventListener('storage',()=>{signature='';render();});render();
+  }
+  return {summary,logSlip,settle,boot,render};
+});
 </script></body>
 </html>
