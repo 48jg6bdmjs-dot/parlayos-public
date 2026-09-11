@@ -33,7 +33,7 @@ run.addEventListener('click',async()=>{
       frame=document.createElement('iframe');frame.width=390;frame.height=844;frame.title='Theme preview';document.querySelector('#preview').replaceChildren(frame);
       await load(entry);originalTheme=Array.from(doc.body.classList).find(x=>x.startsWith('theme-'))?.slice(6)||'original';originalMotion=motionButton().classList.contains('on');
       for(const [width,height]of [[390,844],[768,1024],[1440,900]]){
-        frame.width=width;frame.height=height;
+        frame.width=width;frame.height=height;frame.scrollIntoView({block:'start'});
         for(const id of themeIds){
           const label=entry+' '+width+'px '+id;
           try{
@@ -50,7 +50,7 @@ run.addEventListener('click',async()=>{
             const shouldMove=!win.matchMedia('(prefers-reduced-motion: reduce)').matches&&!doc.body.classList.contains('reduce-fx');
             if(shouldMove){
               const animations=scene.getAnimations({subtree:true}).filter(a=>a.playState==='running');assert(animations.length>0,'Scene is static with motion enabled');
-              const before=animations[0].currentTime;await delay(150);assert(animations[0].currentTime>before,'Animation clock did not advance');
+              const light=scene.querySelector('.pos-light');const before=win.getComputedStyle(light).transform;await delay(500);const after=win.getComputedStyle(light).transform;assert(after!==before,'Scene transform did not advance: '+before+'; hidden='+doc.hidden+'; paused='+scene.dataset.paused);
             }
             await setMotion(true);assert(scene.dataset.motion==='off'&&!scene.getAnimations({subtree:true}).some(a=>a.playState==='running'),'Reduce Motion did not stop the scene');
             await setMotion(false);
