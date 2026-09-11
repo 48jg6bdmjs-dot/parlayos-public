@@ -94,6 +94,7 @@ jobs:
       - name: Prepare artifact
         run: |
           mkdir -p site/data site/tests
+          cp tests/themes.html tests/bankroll.html site/tests/
           if [ -f tests/model-switch.html ]; then cp tests/model-switch.html tests/candidate-frame.css site/tests/; fi
           if [ -f tests/screen-layout.html ]; then cp tests/screen-layout.html site/tests/; fi
           cp index.html parlayos.html about.html favicon.ico site/
