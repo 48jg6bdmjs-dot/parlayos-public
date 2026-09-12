@@ -1,8 +1,8 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-09-12T15:01:23.748924+00:00",
-  "captured_games": 94,
-  "verified_settled_games": 59,
+  "updated": "2026-09-12T20:13:09.656738+00:00",
+  "captured_games": 96,
+  "verified_settled_games": 64,
   "model_scores": [
     {
       "sport": "MLB",
@@ -983,6 +983,32 @@
           "observed_away_rate": 0.0
         }
       ]
+    },
+    {
+      "sport": "SOC",
+      "model": "season_stats",
+      "version": "league-goals-1.0.0",
+      "n": 5,
+      "outcome_type": "three_way_90_minutes",
+      "brier": 0.6901362795668557,
+      "log_loss": 1.139536766291574,
+      "accuracy": 0.4,
+      "uniform_baseline_brier": 0.6666666666666666,
+      "uniform_baseline_log_loss": 1.0986122886681098,
+      "calibration_bins": []
+    },
+    {
+      "sport": "SOC",
+      "model": "final_combined",
+      "version": "league-goals-1.0.0",
+      "n": 5,
+      "outcome_type": "three_way_90_minutes",
+      "brier": 0.6901362795668557,
+      "log_loss": 1.139536766291574,
+      "accuracy": 0.4,
+      "uniform_baseline_brier": 0.6666666666666666,
+      "uniform_baseline_log_loss": 1.0986122886681098,
+      "calibration_bins": []
     }
   ],
   "policy": "No fitted weights or superiority claim. Forecasts precede kickoff; outcomes use final score sources. Sample counts are per sport/model/version. Compare matched games and hold out later dates before promoting trained weights. Soccer uses three outcomes; its Brier scale differs from binary sports."
