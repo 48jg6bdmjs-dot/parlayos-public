@@ -1,7 +1,7 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-09-13T11:08:02.972285+00:00",
-  "captured_games": 114,
+  "updated": "2026-09-13T12:45:58.432827+00:00",
+  "captured_games": 116,
   "verified_settled_games": 79,
   "model_scores": [
     {
@@ -1039,5 +1039,12 @@
       "calibration_bins": []
     }
   ],
-  "policy": "No fitted weights or superiority claim. Forecasts precede kickoff; outcomes use final score sources. Sample counts are per sport/model/version. Compare matched games and hold out later dates before promoting trained weights. Soccer uses three outcomes; its Brier scale differs from binary sports."
+  "learning_policy": {
+    "training_games_required": 100,
+    "prospective_evaluation_games_required": 100,
+    "prospective_evaluation_days_required": 20,
+    "version": "family-brier-1",
+    "promotion_rule": "Candidate must beat frozen default weights on paired daily Brier/log-loss bounds and beat uniform probability; no guarantee of future performance"
+  },
+  "policy": "Forecasts precede kickoff; outcomes use final score sources. Sample counts are per sport/model/version. Learned family weights remain in shadow mode until a separate prospective evaluation passes. Soccer uses three outcomes; its Brier scale differs from binary sports."
 }

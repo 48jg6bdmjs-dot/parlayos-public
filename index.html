@@ -37473,6 +37473,12 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   const record = (game, model) => model === 'final_combined' ? (game.ensemble || game.models?.final_combined) : game.models?.[model];
   const id = game => String(game.id ?? game.game_id ?? game.gamePk ?? [game.away ?? game.a, game.home ?? game.b, game.startAt ?? game.date ?? ''].join('|'));
   function market(game, sport, model, kind, now=Date.now(), display=false) {
+    const saved=game.pregame_snapshot, savedStart=new Date(saved?.start_at||'').getTime(), savedAt=new Date(saved?.generated_at||'').getTime(), captured=new Date(saved?.captured_at||'').getTime();
+    if(display&&kind==='ml'&&saved&&saved.sport===sport&&saved.event_id===String(game.event_id||game.gamePk||'')&&saved.away===game.away&&saved.home===game.home&&savedStart===start(game)?.getTime()&&savedAt<=captured&&captured<savedStart&&savedStart<=now&&applicable(sport,model)){
+      const p=saved.forecasts?.[model];
+      if(p?.status==='available'&&p.selection&&p.model_version&&probability(p.probability)&&probability(p.pA)&&probability(p.pB)&&(p.pDraw==null||probability(p.pDraw))&&Math.abs(Number(p.pA)+Number(p.pB)+(p.pDraw==null?0:Number(p.pDraw))-1)<1e-6&&Math.abs(Math.max(Number(p.pA),Number(p.pB),Number(p.pDraw||0))-Number(p.probability))<1e-6)
+        return {...p,timestamp:saved.generated_at,available:true,actionable:false,closed:true,stale:false,line:null,odds:null,edge:null,snapshotLabel:'Archived pregame estimate · game started'};
+    }
     if(game.data_quality?.prediction_available===false)return {available:false,reason:game.data_quality.reason||'Prediction inputs unavailable.'};
     const kickoff=start(game), generated=new Date(game.generated_at||'').getTime();
     const closed=!!kickoff&&kickoff.getTime()<=now;
@@ -37513,7 +37519,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     if(!numeric(quote)&&m.inputs?.market_available===true)quote=m.odds;
     const hasPrice=numeric(quote)&&Math.abs(Number(quote))>=100;
     const implied=hasPrice?(Number(quote)>0?100/(Number(quote)+100):-Number(quote)/(-Number(quote)+100)):null;
-    return {...m, selection:/^home$/i.test(m.selection)?(game.home||game.b||m.selection):/^away$/i.test(m.selection)?(game.away||game.a||m.selection):m.selection, line:kind==='ml'?null:m.line, available:true, actionable:complete&&!closed&&!stale, closed, stale, snapshotLabel:closed?'Pregame estimate · game started':stale?'Last estimate · refresh required':'Model estimate', odds:hasPrice?Number(quote):null,
+    return {...m, selection:/^home$/i.test(m.selection)?(game.home||game.b||m.selection):/^away$/i.test(m.selection)?(game.away||game.a||m.selection):m.selection, line:kind==='ml'?null:m.line, available:true, actionable:complete&&!closed&&!stale, closed, stale, snapshotLabel:closed?'Pregame estimate · game started':stale?'Last estimate · refresh required':game.data_quality?.input_basis==='team_season'?'Team season estimate · starter or lineup incomplete':'Model estimate', odds:hasPrice?Number(quote):null,
       edge:hasPrice?Number(m.probability)-implied:null};
   }
   const forecast=(game,sport,model,kind,now=Date.now())=>market(game,sport,model,kind,now,true);
