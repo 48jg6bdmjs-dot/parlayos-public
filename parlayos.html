@@ -11426,6 +11426,82 @@ html body.pos-ui .theme-card[aria-pressed="true"] { outline:2px solid var(--pos-
 @media(max-width:760px) { #pos-scene .pos-mote:nth-of-type(n+13) { display:none; } .pos-theme-preview { height:110px; } .pos-theme-copy { padding:12px; } .pos-theme-choices { gap:12px; } }
 @media(max-width:380px) { .pos-theme-choices { grid-template-columns:1fr; } }
 
+/* One world behind the window. Blur the scenery and sampled backdrop, never
+   the foreground tree; overscan prevents exposed edges around the soft scene. */
+html body.pos-ui[data-pos-theme] { --pos-window:rgba(12,18,30,.48); --pos-glass:rgba(31,40,57,.57); --pos-glass-edge:rgba(235,245,255,.22); --pos-glass-blur:22px; }
+#pos-scene { inset:-18px; filter:blur(2px); }
+html body.pos-ui[data-pos-theme] #osWindow {
+  background:var(--pos-window)!important;
+  -webkit-backdrop-filter:blur(var(--pos-glass-blur)) saturate(125%)!important;
+  backdrop-filter:blur(var(--pos-glass-blur)) saturate(125%)!important;
+  border:1px solid var(--pos-glass-edge)!important;
+  box-shadow:0 24px 80px #00000055,inset 0 1px 0 #ffffff26!important;
+  isolation:isolate;
+}
+html body.pos-ui[data-pos-theme] :is(.glass,.menu-btn,.theme-card,.pos-card,.pos-bank-hero,.pos-bank-panel) {
+  background:var(--pos-glass)!important;
+  background:color-mix(in srgb,var(--pos-surface) 58%,transparent)!important;
+  border-color:var(--pos-glass-edge)!important;
+  box-shadow:inset 0 1px 0 #ffffff12,0 8px 28px #00000012;
+}
+html body.pos-ui[data-pos-theme] .titlebar { background:var(--pos-glass)!important; border-bottom:1px solid var(--pos-glass-edge); }
+/* Text-entry surfaces stay dense enough to read against any moving highlight. */
+html body.pos-ui[data-pos-theme] :is(input,select,textarea,.pos-dialog,.pos-toast) { background:var(--pos-bg)!important; }
+html body.pos-ui[data-pos-theme="winter"] { --pos-bg:#12202c; --pos-surface:#263d4e; --pos-accent:#b9e3f5; --pos-window:rgba(13,31,46,.48); --pos-glass:rgba(35,60,78,.57); }
+html body.pos-ui[data-pos-theme="summer"] { --pos-window:rgba(45,24,36,.46); --pos-glass:rgba(74,39,56,.56); }
+html body.pos-ui[data-pos-theme="autumn"] { --pos-window:rgba(37,22,17,.48); --pos-glass:rgba(66,40,27,.58); }
+html body.pos-ui[data-pos-theme="spring"] { --pos-window:rgba(11,34,30,.46); --pos-glass:rgba(29,61,46,.57); }
+html body.pos-ui[data-pos-theme="desert"] { --pos-window:rgba(40,26,19,.47); --pos-glass:rgba(64,45,31,.58); }
+html body.pos-ui[data-pos-theme="white"] { --pos-bg:#e9eef4; --pos-surface:#f6f8fc; --pos-text:#152838; --pos-muted:#3f5365; --pos-accent:#6950a8; --pos-window:rgba(242,247,252,.53); --pos-glass:rgba(255,255,255,.62); --pos-glass-edge:rgba(255,255,255,.8); color-scheme:light; }
+html body.pos-ui[data-pos-theme="white"] :is(.pos-hub button[aria-pressed="true"],.pos-dialog button.primary,.pos-bank .pos-bank-primary) { color:#fff!important; }
+html body.pos-ui[data-pos-theme="black"] { --pos-window:rgba(4,7,13,.52); --pos-glass:rgba(19,24,34,.61); }
+html body.pos-ui[data-pos-theme="aurora"] { --pos-window:rgba(5,20,31,.46); --pos-glass:rgba(18,43,55,.57); }
+html body.pos-ui[data-pos-theme="ocean"] { --pos-window:rgba(3,23,38,.47); --pos-glass:rgba(14,48,65,.57); }
+html body.pos-ui[data-pos-theme="neon"] { --pos-window:rgba(17,11,36,.46); --pos-glass:rgba(41,34,63,.58); }
+html body.pos-ui[data-pos-theme="dunes"] { --pos-window:rgba(30,13,28,.46); --pos-glass:rgba(60,40,53,.57); }
+/* The classic palette gets the same layered scenes as the four living themes. */
+[data-scene="original"] .pos-sky { background:radial-gradient(ellipse at 20% 25%,#434b8066,transparent 55%),linear-gradient(145deg,#11182e,#21162f); }
+[data-scene="original"] .pos-light,[data-scene="black"] .pos-light,[data-scene="white"] .pos-light { background:radial-gradient(ellipse at 30% 45%,#a38af455,transparent 40%),radial-gradient(ellipse at 70% 65%,#73c9e744,transparent 38%); filter:blur(28px); animation:pos-aurora 28s ease-in-out infinite alternate; }
+[data-scene="original"] .pos-mote,[data-scene="black"] .pos-mote { background:#d9e8ff; animation:pos-star var(--duration) ease-in-out var(--delay) infinite alternate; }
+[data-scene="winter"] .pos-sky { background:radial-gradient(ellipse at 70% 10%,#83b6cf77,transparent 55%),linear-gradient(#183247,#0a172b); }
+[data-scene="winter"] .pos-light { background:linear-gradient(120deg,transparent 30%,#b8e1ee44,transparent 70%); filter:blur(20px); animation:pos-rays 30s ease-in-out infinite alternate; }
+[data-scene="winter"] .pos-land { height:35%; background:linear-gradient(#5d8399,#1f3a50); clip-path:polygon(0 65%,15% 22%,28% 62%,42% 8%,61% 73%,80% 25%,100% 62%,100% 100%,0 100%); }
+[data-scene="winter"] .pos-mote { top:-10%; width:calc(var(--size)*2); height:calc(var(--size)*2); background:#e7f6ff; animation:pos-fall var(--duration) linear var(--delay) infinite; }
+[data-scene="summer"] .pos-sky { background:radial-gradient(circle at 73% 23%,#ffd69a99,transparent 24%),linear-gradient(#743b60,#cd786066 58%,#283a57); }
+[data-scene="summer"] .pos-light { inset:12% 15% auto auto; width:23vmin; height:23vmin; border-radius:50%; background:#ffc591; filter:blur(8px); animation:pos-sun 22s ease-in-out infinite alternate; }
+[data-scene="summer"] .pos-land { background:repeating-linear-gradient(175deg,#759eac44 0 3px,transparent 4px 24px),linear-gradient(#2e647899,#142b49); border-radius:50% 45% 0 0; animation:pos-current 20s ease-in-out infinite alternate; }
+[data-scene="summer"] .pos-mote { background:#ffdcab; animation:pos-dust var(--duration) ease-in-out var(--delay) infinite alternate; }
+[data-scene="autumn"] .pos-sky { background:radial-gradient(ellipse at 20% 15%,#c1844166,transparent 65%),linear-gradient(#442721,#201914); }
+[data-scene="autumn"] .pos-light { background:linear-gradient(120deg,transparent 30%,#e8af5733,transparent 60%); filter:blur(20px); animation:pos-rays 25s ease-in-out infinite alternate; }
+[data-scene="autumn"] .pos-land { background:#352317; border-radius:65% 40% 0 0; }
+[data-scene="autumn"] .pos-mote { top:-10%; width:calc(var(--size)*5); height:calc(var(--size)*3); border-radius:80% 0 80% 0; background:#d4934d; animation:pos-fall var(--duration) linear var(--delay) infinite; }
+[data-scene="halloween"] .pos-sky { background:radial-gradient(circle at 75% 25%,#b0a3dd55,transparent 20%),linear-gradient(#291b42,#120d23); }
+[data-scene="halloween"] .pos-light { inset:35% -25% -15%; background:repeating-linear-gradient(170deg,transparent 0 12%,#a788c933 15% 22%,transparent 28%); filter:blur(26px); animation:pos-rays 24s ease-in-out infinite alternate; }
+[data-scene="halloween"] .pos-land { background:#0d1020; border-radius:60% 80% 0 0; }
+[data-scene="halloween"] .pos-mote { background:#ffae69; box-shadow:0 0 12px #ed924e; animation:pos-dust var(--duration) ease-in-out var(--delay) infinite alternate; }
+[data-scene="spring"] .pos-sky { background:radial-gradient(ellipse at 15% 10%,#829b7266,transparent 60%),linear-gradient(#25463d,#132b2e); }
+[data-scene="spring"] .pos-light { background:radial-gradient(ellipse at 40% 35%,#e6c1cc55,transparent 40%),radial-gradient(ellipse at 80% 70%,#a4cf8366,transparent 40%); filter:blur(28px); animation:pos-aurora 30s ease-in-out infinite alternate; }
+[data-scene="spring"] .pos-land { border-radius:75% 50% 0 0; background:linear-gradient(#557d6655,#143b30); }
+[data-scene="spring"] .pos-mote { top:-10%; width:calc(var(--size)*4); height:calc(var(--size)*2.5); border-radius:80% 20% 80% 40%; background:#edcad4; animation:pos-fall var(--duration) linear var(--delay) infinite; }
+[data-scene="rain"] .pos-sky { background:radial-gradient(ellipse at 75% 15%,#789eae44,transparent 55%),linear-gradient(#293e53,#101d30); }
+[data-scene="rain"] .pos-light { background:radial-gradient(ellipse at 30% 35%,#8cb9cb33,transparent 48%); filter:blur(25px); animation:pos-rays 26s ease-in-out infinite alternate; }
+[data-scene="rain"] .pos-land { background:linear-gradient(#6b9fab22,#112337); border-radius:55% 70% 0 0; animation:pos-current 22s ease-in-out infinite alternate; }
+[data-scene="rain"] .pos-mote { top:-15%; width:2px; height:34px; border-radius:3px; background:linear-gradient(transparent,#b9dfe580); animation:pos-rain var(--rain) linear var(--delay) infinite; }
+[data-scene="desert"] .pos-sky { background:radial-gradient(circle at 70% 25%,#e5b16b66,transparent 35%),linear-gradient(#6c4b41,#302927); }
+[data-scene="desert"] .pos-light { inset:13% 18% auto auto; width:22vmin; height:22vmin; border-radius:50%; background:#e9c997; filter:blur(5px); animation:pos-sun 28s ease-in-out infinite alternate; }
+[data-scene="desert"] .pos-land { height:36%; bottom:-9%; border-radius:70% 45% 0 0; transform:rotate(-6deg); background:linear-gradient(#b3895866,#473529); }
+[data-scene="desert"] .pos-mote { background:#d4b887; animation:pos-dust var(--duration) ease-in-out var(--delay) infinite alternate; }
+[data-scene="white"] .pos-sky { background:radial-gradient(ellipse at 20% 20%,#bfd6e9,transparent 55%),linear-gradient(145deg,#e6e9f2,#d3d6e8); }
+[data-scene="white"] .pos-mote { width:calc(var(--size)*8); height:calc(var(--size)*8); background:#ffffff80; animation:pos-dust var(--duration) ease-in-out var(--delay) infinite alternate; }
+[data-scene="black"] .pos-sky { background:radial-gradient(ellipse at 75% 20%,#31354a66,transparent 50%),linear-gradient(#05070e,#10131d); }
+@keyframes pos-fall { from { transform:translate3d(0,-5vh,0) rotate(0deg); opacity:0; } 10% { opacity:.6; } 90% { opacity:.5; } to { transform:translate3d(90px,120vh,0) rotate(220deg); opacity:0; } }
+@media(max-width:760px) { html body.pos-ui[data-pos-theme] { --pos-glass-blur:14px; } }
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
+  html body.pos-ui[data-pos-theme] #osWindow { background:var(--pos-bg)!important; }
+}
+html body.pos-ui.reduce-fx[data-pos-theme] #pos-scene { display:none!important; }
+html body.pos-ui.reduce-fx[data-pos-theme] #osWindow { background:var(--pos-bg)!important; -webkit-backdrop-filter:none!important; backdrop-filter:none!important; }
+
 /* Bankroll: one presentation owner, existing per-user records. */
 html body.pos-ui #screen-bankroll > :not(#pos-bankroll){display:none!important}
 .pos-bank {line-height:1.5}
@@ -37833,6 +37909,16 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
 </script><script id="PARLAYOS_DYNAMIC_THEMES">(function () {
   'use strict';
   const themes = {
+    original: {name:'Original', scene:'original'},
+    winter: {name:'Winter', scene:'winter'},
+    summer: {name:'Summer', scene:'summer'},
+    autumn: {name:'Autumn', scene:'autumn'},
+    halloween: {name:'Halloween', scene:'halloween'},
+    spring: {name:'Spring', scene:'spring'},
+    rain: {name:'Rain', scene:'rain'},
+    desert: {name:'Desert', scene:'desert'},
+    white: {name:'White', scene:'white'},
+    black: {name:'Black', scene:'black'},
     aurora: {name:'Aurora Drift', description:'Northern lights, distant peaks and a field of stars.', mood:'Arctic · Teal & violet'},
     ocean: {name:'Deep Current', description:'Underwater light rays and slowly rising bubbles.', mood:'Ocean · Cyan & midnight'},
     neon: {name:'Neon City', description:'Soft rain over a luminous city skyline.', mood:'After dark · Cyan & pink'},
@@ -37873,8 +37959,8 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     scene=document.createElement('div');scene.id='pos-scene';scene.className='pos-scenery';scene.hidden=true;
     scene.setAttribute('aria-hidden','true');document.body.prepend(scene);
     panel=document.createElement('section');panel.id='pos-living-themes';panel.setAttribute('aria-labelledby','pos-theme-heading');
-    panel.innerHTML='<header class="pos-theme-intro"><div><p class="pos-theme-eyebrow">MAKE IT YOURS</p><h3 id="pos-theme-heading">Living themes</h3><p>Choose a world for your dashboard.</p></div><span class="pos-theme-badge">4 animated scenes</span></header><div class="pos-theme-choices" role="group" aria-label="Living themes">'+
-      Object.entries(themes).map(([id,t])=>`<button type="button" class="pos-theme-choice" data-pos-theme-choice="${id}" aria-label="${t.name}" aria-pressed="false"><span class="pos-theme-preview pos-scenery" data-scene="${id}" aria-hidden="true">${layers(true)}</span><span class="pos-theme-copy"><span class="pos-theme-name">${t.name}<span class="pos-theme-check" aria-hidden="true">✓</span></span><span class="pos-theme-mood">${t.mood}</span><span class="pos-theme-description">${t.description}</span></span></button>`).join('')+
+    panel.innerHTML='<header class="pos-theme-intro"><div><p class="pos-theme-eyebrow">MAKE IT YOURS</p><h3 id="pos-theme-heading">Living themes</h3><p>Animated worlds behind frosted glass.</p></div><span class="pos-theme-badge">14 glass themes</span></header><div class="pos-theme-choices" role="group" aria-label="Living themes">'+
+      Object.entries(themes).filter(([,t])=>t.description).map(([id,t])=>`<button type="button" class="pos-theme-choice" data-pos-theme-choice="${id}" aria-label="${t.name}" aria-pressed="false"><span class="pos-theme-preview pos-scenery" data-scene="${id}" aria-hidden="true">${layers(true)}</span><span class="pos-theme-copy"><span class="pos-theme-name">${t.name}<span class="pos-theme-check" aria-hidden="true">✓</span></span><span class="pos-theme-mood">${t.mood}</span><span class="pos-theme-description">${t.description}</span></span></button>`).join('')+
       '</div><p class="pos-theme-motion" data-pos-motion-status role="status"></p>';
     const classic=document.getElementById('currentThemeLabel')?.closest('.panel-pad');
     if(classic)classic.before(panel);else settings.appendChild(panel);

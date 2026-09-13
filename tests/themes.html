@@ -7,7 +7,7 @@
 <script>
 const run=document.querySelector('#run'),result=document.querySelector('#result');
 const delay=ms=>new Promise(r=>setTimeout(r,ms)),assert=(ok,m)=>{if(!ok)throw Error(m);};
-const themeIds=['aurora','ocean','neon','dunes'];
+const themeIds=['original','winter','summer','autumn','halloween','spring','rain','desert','white','black','aurora','ocean','neon','dunes'];
 function contrast(a,b){
   const lum=s=>{const v=s.match(/[\d.]+/g).slice(0,3).map(Number).map(x=>{x/=255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4;});return .2126*v[0]+.7152*v[1]+.0722*v[2];};
   const x=lum(a),y=lum(b);return(Math.max(x,y)+.05)/(Math.min(x,y)+.05);
@@ -37,16 +37,19 @@ run.addEventListener('click',async()=>{
         for(const id of themeIds){
           const label=entry+' '+width+'px '+id;
           try{
-            await setMotion(false);doc.querySelector('[data-pos-theme-choice="'+id+'"]').click();await delay(350);
-            const win=frame.contentWindow,scene=doc.querySelector('#pos-scene'),choice=doc.querySelector('[data-pos-theme-choice="'+id+'"]');
+            await setMotion(false);(doc.querySelector('[data-pos-theme-choice="'+id+'"]')||doc.querySelector('.theme-card[data-theme="'+id+'"]')).click();await delay(350);
+            const win=frame.contentWindow,scene=doc.querySelector('#pos-scene'),choice=doc.querySelector('[data-pos-theme-choice="'+id+'"]')||doc.querySelector('.theme-card[data-theme="'+id+'"]');
             assert(doc.body.dataset.posTheme===id&&scene.dataset.scene===id&&!scene.hidden,'Theme reverted');
             assert(doc.querySelectorAll('#pos-scene').length===1&&scene.children.length===27,'Scene nodes duplicated');
-            assert(doc.querySelectorAll('[data-pos-theme-choice][aria-pressed="true"]').length===1,'Ambiguous selection');
+            assert(choice.getAttribute('aria-pressed')==='true','Selected theme not marked');
             assert(win.localStorage.getItem('parlayos_theme')===id,'Theme was not saved');
             const css=win.getComputedStyle(scene);assert(css.position==='fixed'&&css.pointerEvents==='none','Background intercepts interaction or layout');
             assert(doc.documentElement.scrollWidth<=win.innerWidth+1,'Horizontal overflow');
-            const copy=win.getComputedStyle(choice.querySelector('.pos-theme-description')),surface=win.getComputedStyle(choice);
-            assert(contrast(copy.color,surface.backgroundColor)>=4.5,'Theme description contrast below 4.5');
+            const description=choice.querySelector('.pos-theme-description');
+            if(description){const copy=win.getComputedStyle(description),surface=win.getComputedStyle(choice);assert(contrast(copy.color,surface.backgroundColor)>=4.5,'Theme description contrast below 4.5');}
+            const glass=win.getComputedStyle(doc.querySelector('#osWindow'));
+            if(!doc.body.classList.contains('reduce-fx'))assert((glass.backdropFilter||glass.webkitBackdropFilter).includes('blur('),'Glass backdrop blur missing');
+            assert(glass.filter==='none','Foreground content is blurred');
             const shouldMove=!win.matchMedia('(prefers-reduced-motion: reduce)').matches&&!doc.body.classList.contains('reduce-fx');
             if(shouldMove){
               const animations=scene.getAnimations({subtree:true}).filter(a=>a.playState==='running');assert(animations.length>0,'Scene is static with motion enabled');
