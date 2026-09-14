@@ -11252,7 +11252,11 @@ html body.pos-ui .glass, html body.pos-ui .menu-btn, html body.pos-ui .theme-car
 html body.pos-ui .menu-btn p { color:var(--pos-muted)!important; opacity:1!important; font-size:14px!important; }
 html body.pos-ui .menu-btn h3 { font-size:20px!important; font-style:normal!important; }
 html body.pos-ui #menuGrid { display:grid!important; grid-template-columns:repeat(3,minmax(0,1fr))!important; gap:16px!important; }
-html body.pos-ui #menuGrid .menu-btn { min-height:156px!important; padding:24px 20px!important; }
+html body.pos-ui #menuGrid .menu-btn { display:flex!important; flex-direction:column!important; align-items:center!important; gap:12px!important; min-width:0!important; height:auto!important; max-height:none!important; min-height:156px!important; padding:24px 20px!important; }
+/* Keep the arrow in flow so wrapped text and larger type cannot collide with it. */
+html body.pos-ui #menuGrid .menu-btn > :is(h3,p) { position:static!important; margin:0!important; width:100%!important; min-width:0!important; overflow-wrap:anywhere; }
+html body.pos-ui #menuGrid .menu-btn > .go { position:static!important; inset:auto!important; transform:none!important; flex:0 0 auto!important; margin: auto 0 0!important; }
+html body.pos-ui #menuGrid .menu-btn[hidden] { display:none!important; }
 html body.pos-ui button, html body.pos-ui input, html body.pos-ui select, html body.pos-ui textarea { font-family:system-ui,sans-serif!important; }
 html body.pos-ui input, html body.pos-ui select, html body.pos-ui textarea { background:var(--pos-bg)!important; color:var(--pos-text)!important; border-color:#ffffff40!important; font-size:16px!important; }
 html body.pos-ui :focus-visible { outline:3px solid var(--pos-accent)!important; outline-offset:3px!important; }
@@ -11314,7 +11318,7 @@ html body.pos-ui #screen-settings .setting-desc { font-size:14px!important; colo
   .pos-nav button { flex-shrink:0; }
   .pos-hub h2 { font-size:25px; }
 }
-@media(max-width:390px) { html body.pos-ui #menuGrid { grid-template-columns:1fr!important; } }
+@media(max-width:480px) { html body.pos-ui #menuGrid { grid-template-columns:1fr!important; } }
 @media(prefers-reduced-motion:reduce) { html body.pos-ui *,html body.pos-ui *::before,html body.pos-ui *::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
 
 html body.pos-ui.reduce-motion *,html body.pos-ui.reduce-motion *::before,html body.pos-ui.reduce-motion *::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }

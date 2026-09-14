@@ -13,6 +13,8 @@
 <p>Serve the repository with <code>npm run dev</code>, then run this check.
 It loads both shipped entrypoints and checks all screen frames in a real browser.
 Use a fresh browser profile for verification; the app initializes its usual local preferences.</p>
+<button id="menu-run">Run mobile menu checks</button>
+<pre id="menu-result" role="status">Menu checks ready.</pre>
 <button id="run">Run screen checks</button>
 <pre id="result" role="status">Ready.</pre>
 <div id="preview"></div>
@@ -101,6 +103,66 @@ run.addEventListener('click', async () => {
     result.dataset.complete = 'true';
     result.dataset.failures = String(failures.length);
     run.disabled = false;
+  }
+});
+
+// This focused regression measures real text/arrow boxes, including larger text.
+document.querySelector('#menu-run').addEventListener('click', async () => {
+  const button = document.querySelector('#menu-run'), output = document.querySelector('#menu-result');
+  button.disabled = true; run.disabled = true;
+  let frame, passed = 0; const failures = [];
+  output.textContent = 'Checking mobile menu…';
+  try {
+    for (const entry of ['index.html', 'parlayos.html']) {
+      frame = document.createElement('iframe'); frame.title = entry + ' mobile menu preview';
+      frame.width = 393; frame.height = 852;
+      const loaded = new Promise((resolve, reject) => {
+        const timer = setTimeout(() => reject(Error('Page load timed out')), 30000);
+        frame.onload = () => { clearTimeout(timer); resolve(); };
+      });
+      frame.src = '../' + entry + '?menu-regression=' + Date.now();
+      document.querySelector('#preview').replaceChildren(frame); await loaded;
+      const doc = frame.contentDocument, win = frame.contentWindow;
+      doc.querySelector('#coverUnlockBtn')?.click(); doc.querySelector('#coverSkipBtn')?.click();
+      await new Promise(resolve => setTimeout(resolve, 1800));
+      for (const width of [320,375,390,393,430,480,768,1440]) {
+        frame.width = width; await tick();
+        for (const large of [false,true]) {
+          const style = doc.createElement('style');
+          if (large) style.textContent = 'html body.pos-ui #menuGrid .menu-btn h3 {font-size:40px!important} html body.pos-ui #menuGrid .menu-btn p {font-size:28px!important}';
+          doc.head.appendChild(style); await tick();
+          const label = `${entry} ${width}px ${large ? '200% text' : 'normal text'}`;
+          try {
+            const cards = [...doc.querySelectorAll('#menuGrid .menu-btn')].filter(el => el.getClientRects().length);
+            assert(cards.length === 6, 'Expected six visible menu buttons');
+            assert(cards[0].dataset.go === 'sports', 'Sports Hub must lead');
+            for (let i = 0; i < cards.length; i++) {
+              const card = cards[i], box = card.getBoundingClientRect();
+              const heading = card.querySelector('h3').getBoundingClientRect();
+              const description = card.querySelector('p').getBoundingClientRect();
+              const arrow = card.querySelector('.go').getBoundingClientRect();
+              assert(description.top >= heading.bottom - 1, card.dataset.go + ': title overlaps description');
+              assert(arrow.top >= description.bottom + 8, card.dataset.go + ': arrow overlaps description');
+              assert(arrow.bottom <= box.bottom - 8, card.dataset.go + ': arrow escapes card');
+              assert(card.scrollWidth <= card.clientWidth + 1, card.dataset.go + ': content overflows');
+              for (const other of cards.slice(i + 1)) {
+                const b = other.getBoundingClientRect();
+                assert(box.right <= b.left + 1 || box.left >= b.right - 1 || box.bottom <= b.top + 1 || box.top >= b.bottom - 1, 'Menu buttons overlap');
+              }
+            }
+            assert(doc.documentElement.scrollWidth <= win.innerWidth + 1, 'Page overflows horizontally');
+            passed++;
+          } catch (error) { failures.push(label + ': ' + error.message); }
+          style.remove();
+          output.textContent = `Running: ${passed} passed, ${failures.length} failed.\n${label}`;
+        }
+      }
+      frame.remove(); frame = null;
+    }
+  } catch (error) { failures.push(error.message); }
+  finally {
+    frame?.remove(); button.disabled = false; run.disabled = false;
+    output.textContent = `${failures.length ? 'FAIL' : 'PASS'}: ${passed} menu cases, ${failures.length} failures.\n` + failures.join('\n');
   }
 });
 </script>
