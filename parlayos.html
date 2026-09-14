@@ -11508,7 +11508,7 @@ html body.pos-ui #pos-bank-import-mount .glass{padding:16px!important;margin:0!i
 </div>
 <canvas aria-hidden="true" id="starsCanvas"></canvas>
 <!-- BLURRED SCREEN THAT BOOTS FIRST AND COMPLETELY COVERS COVER PAGE NO MATTER WHAT - V2640 -->
-<div id="returningUserLoadScreen" style="position:fixed; inset:0; z-index:9999999 !important; display:flex !important; align-items:center; justify-content:center; background:rgba(255,255,255,0.92); backdrop-filter:blur(32px) saturate(1.8); -webkit-backdrop-filter:blur(32px) saturate(1.8); opacity:1; transition:opacity 0.5s ease; pointer-events:all;"></div>
+
 <style id="BLUR_COVERS_COVER_NO_MATTER_WHAT_V2640">
 #returningUserLoadScreen {
   position: fixed !important;
@@ -11536,73 +11536,6 @@ html body.pos-ui #pos-bank-import-mount .glass{padding:16px!important;margin:0!i
   pointer-events: none !important;
 }
 </style>
-<script id="BLUR_BOOTS_FIRST_COVERS_COVER_V2640">
-(function(){
-  // BOOT FIRST - show blur immediately, covering cover page
-  const blurScreen = document.getElementById('returningUserLoadScreen');
-  const coverPage = document.getElementById('coverPage');
-
-  // Ensure blur is visible immediately at 0s, covering cover
-  if(blurScreen){
-    blurScreen.style.display = 'flex';
-    blurScreen.style.opacity = '1';
-    blurScreen.style.zIndex = '9999999';
-    // Force it to be top-most
-    document.body.appendChild(blurScreen);
-  }
-
-  // Ensure cover is below blur at boot
-  if(coverPage){
-    coverPage.style.zIndex = '10000';
-  }
-
-  function hideBlurAfterBoot(){
-    const blur = document.getElementById('returningUserLoadScreen');
-    if(!blur) return;
-
-    // Hide after 1.5s for all users - no matter what
-    setTimeout(function(){
-      blur.style.opacity = '0';
-      blur.style.transition = 'opacity 0.5s ease';
-      setTimeout(function(){
-        blur.style.display = 'none';
-        blur.classList.add('hide');
-        blur.style.pointerEvents = 'none';
-      },500);
-    },1500);
-  }
-
-  // Start hiding timer immediately
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', hideBlurAfterBoot);
-  } else {
-    hideBlurAfterBoot();
-  }
-
-  // Also ensure if coverPage tries to show early, blur stays over it for 1.5s
-  // Re-assert blur on top during first 1.5s
-  let bootTime = Date.now();
-  let interval = setInterval(function(){
-    if(Date.now() - bootTime > 1600){
-      clearInterval(interval);
-      return;
-    }
-    const blur = document.getElementById('returningUserLoadScreen');
-    const cover = document.getElementById('coverPage');
-    if(blur && cover){
-      if(parseInt(blur.style.zIndex) < 9999999){
-        blur.style.zIndex = '9999999';
-      }
-      if(blur.style.display === 'none' && Date.now() - bootTime < 1400){
-        blur.style.display = 'flex';
-        blur.style.opacity = '1';
-      }
-    }
-  },50);
-
-  console.log('Blur boots first and covers cover page no matter what - V2640');
-})();
-</script>
 <div aria-hidden="true" class="morph-bg">
 <div class="morph-blob blob1"></div>
 <div class="morph-blob blob2"></div>
@@ -11611,48 +11544,7 @@ html body.pos-ui #pos-bank-import-mount .glass{padding:16px!important;margin:0!i
 </div>
 <div aria-hidden="true" id="gateRemoved"></div>
 <!-- WHITE BACKGROUND THEME BOOT COVER - V2641 -->
-<div id="coverPage" style="position:fixed; inset:0; z-index:10000; background:rgba(255,255,255,0.92); display:flex; align-items:center; justify-content:center; padding:20px; font-family:system-ui, -apple-system, sans-serif; backdrop-filter:blur(16px) saturate(1.6); -webkit-backdrop-filter:blur(16px) saturate(1.6);">
-<div style="width:100%; max-width:420px; background:linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,255,255,0.84)); border:1px solid rgba(255,255,255,0.92); border-radius:32px; padding:32px 24px 28px; backdrop-filter:blur(24px) saturate(1.6); -webkit-backdrop-filter:blur(24px) saturate(1.6); box-shadow:0 24px 70px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9); max-height:90vh; overflow-y:auto;">
-<!-- TABS - WHITE THEME, NO WHITE LINE, ONLY CURVED BLUE LINE -->
-<div id="coverTabsClean" style="display:flex; justify-content:center; gap:36px; margin-bottom:24px; padding:0; border:none; background:transparent;">
-<button class="clean-tab active" data-tab="request" style="position:relative; background:none; border:none; outline:none; box-shadow:none; color:#1e293b; font-weight:700; font-size:14px; cursor:pointer; padding:10px 4px 18px;">
-        Request
-        <svg class="curved-underline" height="10" style="position:absolute; bottom:0; left:50%; transform:translateX(-50%); overflow:visible; display:block;" viewbox="0 0 44 10" width="44"><path d="M 4 2 Q 22 12 40 2" fill="none" stroke="#5c7cff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8" style="filter:drop-shadow(0 1px 6px rgba(92,124,255,0.4));"></path></svg>
-</button>
-<button class="clean-tab" data-tab="about" style="position:relative; background:none; border:none; outline:none; box-shadow:none; color:rgba(30,41,59,0.42); font-weight:700; font-size:14px; cursor:pointer; padding:10px 4px 18px;">
-        About
-        <svg class="curved-underline" height="10" style="position:absolute; bottom:0; left:50%; transform:translateX(-50%); overflow:visible; display:none;" viewbox="0 0 44 10" width="44"><path d="M 4 2 Q 22 12 40 2" fill="none" stroke="#5c7cff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8" style="filter:drop-shadow(0 1px 6px rgba(92,124,255,0.4));"></path></svg>
-</button>
-<button class="clean-tab" data-tab="legal" style="position:relative; background:none; border:none; outline:none; box-shadow:none; color:rgba(30,41,59,0.42); font-weight:700; font-size:14px; cursor:pointer; padding:10px 4px 18px;">
-        Legal
-        <svg class="curved-underline" height="10" style="position:absolute; bottom:0; left:50%; transform:translateX(-50%); overflow:visible; display:none;" viewbox="0 0 44 10" width="44"><path d="M 4 2 Q 22 12 40 2" fill="none" stroke="#5c7cff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8" style="filter:drop-shadow(0 1px 6px rgba(92,124,255,0.4));"></path></svg>
-</button>
-</div>
-<!-- REQUEST - WHITE THEME -->
-<div id="cleanTabRequest">
-<button id="coverUnlockBtn" style="display:flex !important; width:100%; margin:18px 0 20px; padding:16px; border-radius:16px; border:none; background:linear-gradient(135deg,#5c7cff 0%,#7c5cff 100%); color:white; font-weight:800; font-size:16px; justify-content:center; align-items:center; gap:8px; cursor:pointer; box-shadow:0 8px 20px rgba(92,124,255,0.32); position:relative; z-index:9999;">Enter ParlayOS →</button>
-<div style="color:rgba(15,23,42,0.52); font-size:14px; text-align:center; margin-bottom:26px; font-weight:500;">MLB Edge Scanner &amp; Parlay Builder</div>
-</div>
-<!-- ABOUT - WHITE THEME -->
-<div id="cleanTabAbout" style="display:none; color:#1e293b; font-size:14px; line-height:1.65;">
-<h2 style="font-size:20px; font-weight:800; margin:0 0 12px; color:#0f172a;">About ParlayOS</h2>
-<p style="margin:0 0 14px; color:rgba(15,23,42,0.68);">ParlayOS is a picks and analytics tool built by someone who bets his own parlays and got tired of staking them all the same way. This page exists to make one thing unmistakably clear before you subscribe: a model percentage on a single game is not the same number as your chance of winning a parlay built from several of them.</p>
-<p style="margin:0 0 14px; color:rgba(15,23,42,0.68);">A "73% model" pick is not a 73% parlay - for independent legs, multiply their probabilities. Even stacking eight strong 65% picks leaves ~3% chance the whole ticket cashes. At a typical 57% per leg, eight legs is closer to 1-in-90.</p>
-<p style="margin:0 0 14px; color:rgba(15,23,42,0.68);">Because of that, the founder sizes longer parlays much smaller than short ones - roughly a dime (one-tenth) of a full stake on 7+ leg tickets - not because the model is wrong, but because the hit rate of a long parlay is genuinely low.</p>
-</div>
-<!-- LEGAL - WHITE THEME -->
-<div id="cleanTabLegal" style="display:none; color:#1e293b; font-size:13px; line-height:1.6; max-height:62vh; overflow-y:auto;">
-<h2 style="font-size:19px; font-weight:800; margin:0 0 14px; color:#0f172a;">Terms &amp; Disclaimers</h2>
-<p style="margin:0 0 12px;"><strong style="color:#0f172a;">ParlayOS is not a sportsbook and does not accept wagers.</strong> <span style="color:rgba(15,23,42,0.68);">It is a paid analytics tool. You must be 21+ and located where this service is lawful.</span></p>
-<p style="margin:0 0 12px; color:rgba(15,23,42,0.68);"><strong style="color:#0f172a;">No guarantees:</strong> All model probabilities, edges, and picks are informational only - past performance does not guarantee future results. You are solely responsible for your wagering decisions.</p>
-<p style="margin:0 0 12px; color:rgba(15,23,42,0.68);"><strong style="color:#0f172a;">Subscription:</strong> $25/month, auto-renews until cancelled. You can cancel anytime; refunds generally not issued for the current billing period.</p>
-<p style="margin:0 0 12px; color:rgba(15,23,42,0.68);"><strong style="color:#0f172a;">Privacy:</strong> We collect minimal data (email, payment reference) and do not sell your personal information.</p>
-<p style="margin:0 0 12px; color:rgba(15,23,42,0.68);"><strong style="color:#0f172a;">Responsible gambling:</strong> If gambling stops being fun, get help: <a href="tel:18008889789" style="color:#5c7cff;">1-800-889-9789</a> (TN) or <a href="tel:18004264653" style="color:#5c7cff;">1-800-GAMBLER</a>.</p>
-<p style="margin:14px 0 0;"><a href="#" onclick="switchCleanTab('request');return false;" style="color:#5c7cff; text-decoration:none; font-weight:700;">&lt;- Back to request access</a></p>
-</div>
-<button id="cleanCoverSkip" style="display:block; margin:16px auto 0; padding:8px 16px; border:none; background:transparent; color:rgba(30,41,59,0.35); font-size:12px; font-weight:600; cursor:pointer; letter-spacing:0.02em;">Skip →</button>
-</div>
-</div>
+
 <style id="CLEAN_TABS_WHITE_THEME_V2641">
 #coverTabsClean { border:none !important; border-bottom:none !important; box-shadow:none !important; background:transparent !important; }
 #coverTabsClean::before, #coverTabsClean::after { display:none !important; content:none !important; }
@@ -29591,62 +29483,6 @@ button[data-delete-history],
   opacity: 0 !important;
 }
 </style>
-<script id="LOAD_OVER_COVER_LOGIC_V2636">
-(function(){
-  function isReturningUser(){
-    try{
-      const keys = ['parlayos_key_session','parlayos_bankroll_v1','parlayos_access_granted','parlayos_returning','parlayos_has_visited'];
-      for(let k of keys){ if(localStorage.getItem(k) || sessionStorage.getItem(k)) return true; }
-      const br = localStorage.getItem('parlayos_bankroll_v1');
-      if(br){
-        try{ const d=JSON.parse(br); if(d&&d.history&&d.history.length>1) return true; }catch{}
-      }
-      return false;
-    }catch{ return false; }
-  }
-  function showReturningLoad(){
-    const screen = document.getElementById('returningUserLoadScreen');
-    if(!screen) return;
-    if(!isReturningUser()){
-      try{ localStorage.setItem('parlayos_has_visited','true'); localStorage.setItem('parlayos_returning','true'); }catch{}
-      return;
-    }
-    try{
-      document.body.appendChild(screen);
-      screen.style.zIndex='999999';
-      const cover=document.getElementById('coverPage');
-      const gate=document.getElementById('gateRemoved');
-      if(cover) cover.style.zIndex='1000';
-      if(gate) gate.style.zIndex='1001';
-    }catch{}
-    screen.style.display='flex';
-    void screen.offsetWidth;
-    screen.classList.add('show');
-    screen.style.opacity='1';
-    setTimeout(function(){
-      screen.classList.add('fade-out');
-      screen.classList.remove('show');
-      screen.style.opacity='0';
-      setTimeout(function(){
-        screen.style.display='none';
-        screen.classList.remove('fade-out');
-        try{
-          const cover=document.getElementById('coverPage');
-          const gate=document.getElementById('gateRemoved');
-          if(cover) cover.style.zIndex='';
-          if(gate) gate.style.zIndex='10001';
-        }catch{}
-      },400);
-    },1500);
-    try{ localStorage.setItem('parlayos_returning','true'); }catch{}
-  }
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', showReturningLoad);
-  } else {
-    showReturningLoad();
-  }
-})();
-</script>
 <style id="NEW_COVER_NO_WHITE_LINE_V2638">
 /* ENTIRELY NEW COVER PAGE - NO WHITE LINE UNDERNEATH BUTTONS */
 #coverPage #newCoverTabs,
