@@ -11431,6 +11431,8 @@ html body.pos-ui .theme-card[aria-pressed="true"] { outline:2px solid var(--pos-
 html body.pos-ui[data-pos-theme] { --pos-window:rgba(12,18,30,.48); --pos-glass:rgba(31,40,57,.57); --pos-glass-edge:rgba(235,245,255,.22); --pos-glass-blur:22px; }
 #pos-scene { inset:-18px; filter:blur(2px); }
 html body.pos-ui[data-pos-theme] #osWindow {
+  border-radius:30px!important;
+  overflow:hidden!important;
   background:var(--pos-window)!important;
   -webkit-backdrop-filter:blur(var(--pos-glass-blur)) saturate(125%)!important;
   backdrop-filter:blur(var(--pos-glass-blur)) saturate(125%)!important;
@@ -11440,62 +11442,22 @@ html body.pos-ui[data-pos-theme] #osWindow {
 }
 html body.pos-ui[data-pos-theme] :is(.glass,.menu-btn,.theme-card,.pos-card,.pos-bank-hero,.pos-bank-panel) {
   background:var(--pos-glass)!important;
-  background:color-mix(in srgb,var(--pos-surface) 58%,transparent)!important;
+  background:color-mix(in srgb,var(--pos-surface) 10%,transparent)!important;
   border-color:var(--pos-glass-edge)!important;
   box-shadow:inset 0 1px 0 #ffffff12,0 8px 28px #00000012;
 }
 html body.pos-ui[data-pos-theme] .titlebar { background:var(--pos-glass)!important; border-bottom:1px solid var(--pos-glass-edge); }
 /* Text-entry surfaces stay dense enough to read against any moving highlight. */
 html body.pos-ui[data-pos-theme] :is(input,select,textarea,.pos-dialog,.pos-toast) { background:var(--pos-bg)!important; }
-html body.pos-ui[data-pos-theme="winter"] { --pos-bg:#12202c; --pos-surface:#263d4e; --pos-accent:#b9e3f5; --pos-window:rgba(13,31,46,.48); --pos-glass:rgba(35,60,78,.57); }
-html body.pos-ui[data-pos-theme="summer"] { --pos-window:rgba(45,24,36,.46); --pos-glass:rgba(74,39,56,.56); }
-html body.pos-ui[data-pos-theme="autumn"] { --pos-window:rgba(37,22,17,.48); --pos-glass:rgba(66,40,27,.58); }
-html body.pos-ui[data-pos-theme="spring"] { --pos-window:rgba(11,34,30,.46); --pos-glass:rgba(29,61,46,.57); }
-html body.pos-ui[data-pos-theme="desert"] { --pos-window:rgba(40,26,19,.47); --pos-glass:rgba(64,45,31,.58); }
-html body.pos-ui[data-pos-theme="white"] { --pos-bg:#e9eef4; --pos-surface:#f6f8fc; --pos-text:#152838; --pos-muted:#3f5365; --pos-accent:#6950a8; --pos-window:rgba(242,247,252,.53); --pos-glass:rgba(255,255,255,.62); --pos-glass-edge:rgba(255,255,255,.8); color-scheme:light; }
-html body.pos-ui[data-pos-theme="white"] :is(.pos-hub button[aria-pressed="true"],.pos-dialog button.primary,.pos-bank .pos-bank-primary) { color:#fff!important; }
-html body.pos-ui[data-pos-theme="black"] { --pos-window:rgba(4,7,13,.52); --pos-glass:rgba(19,24,34,.61); }
 html body.pos-ui[data-pos-theme="aurora"] { --pos-window:rgba(5,20,31,.46); --pos-glass:rgba(18,43,55,.57); }
 html body.pos-ui[data-pos-theme="ocean"] { --pos-window:rgba(3,23,38,.47); --pos-glass:rgba(14,48,65,.57); }
 html body.pos-ui[data-pos-theme="neon"] { --pos-window:rgba(17,11,36,.46); --pos-glass:rgba(41,34,63,.58); }
 html body.pos-ui[data-pos-theme="dunes"] { --pos-window:rgba(30,13,28,.46); --pos-glass:rgba(60,40,53,.57); }
-/* The classic palette gets the same layered scenes as the four living themes. */
-[data-scene="original"] .pos-sky { background:radial-gradient(ellipse at 20% 25%,#434b8066,transparent 55%),linear-gradient(145deg,#11182e,#21162f); }
-[data-scene="original"] .pos-light,[data-scene="black"] .pos-light,[data-scene="white"] .pos-light { background:radial-gradient(ellipse at 30% 45%,#a38af455,transparent 40%),radial-gradient(ellipse at 70% 65%,#73c9e744,transparent 38%); filter:blur(28px); animation:pos-aurora 28s ease-in-out infinite alternate; }
-[data-scene="original"] .pos-mote,[data-scene="black"] .pos-mote { background:#d9e8ff; animation:pos-star var(--duration) ease-in-out var(--delay) infinite alternate; }
-[data-scene="winter"] .pos-sky { background:radial-gradient(ellipse at 70% 10%,#83b6cf77,transparent 55%),linear-gradient(#183247,#0a172b); }
-[data-scene="winter"] .pos-light { background:linear-gradient(120deg,transparent 30%,#b8e1ee44,transparent 70%); filter:blur(20px); animation:pos-rays 30s ease-in-out infinite alternate; }
-[data-scene="winter"] .pos-land { height:35%; background:linear-gradient(#5d8399,#1f3a50); clip-path:polygon(0 65%,15% 22%,28% 62%,42% 8%,61% 73%,80% 25%,100% 62%,100% 100%,0 100%); }
-[data-scene="winter"] .pos-mote { top:-10%; width:calc(var(--size)*2); height:calc(var(--size)*2); background:#e7f6ff; animation:pos-fall var(--duration) linear var(--delay) infinite; }
-[data-scene="summer"] .pos-sky { background:radial-gradient(circle at 73% 23%,#ffd69a99,transparent 24%),linear-gradient(#743b60,#cd786066 58%,#283a57); }
-[data-scene="summer"] .pos-light { inset:12% 15% auto auto; width:23vmin; height:23vmin; border-radius:50%; background:#ffc591; filter:blur(8px); animation:pos-sun 22s ease-in-out infinite alternate; }
-[data-scene="summer"] .pos-land { background:repeating-linear-gradient(175deg,#759eac44 0 3px,transparent 4px 24px),linear-gradient(#2e647899,#142b49); border-radius:50% 45% 0 0; animation:pos-current 20s ease-in-out infinite alternate; }
-[data-scene="summer"] .pos-mote { background:#ffdcab; animation:pos-dust var(--duration) ease-in-out var(--delay) infinite alternate; }
-[data-scene="autumn"] .pos-sky { background:radial-gradient(ellipse at 20% 15%,#c1844166,transparent 65%),linear-gradient(#442721,#201914); }
-[data-scene="autumn"] .pos-light { background:linear-gradient(120deg,transparent 30%,#e8af5733,transparent 60%); filter:blur(20px); animation:pos-rays 25s ease-in-out infinite alternate; }
-[data-scene="autumn"] .pos-land { background:#352317; border-radius:65% 40% 0 0; }
-[data-scene="autumn"] .pos-mote { top:-10%; width:calc(var(--size)*5); height:calc(var(--size)*3); border-radius:80% 0 80% 0; background:#d4934d; animation:pos-fall var(--duration) linear var(--delay) infinite; }
-[data-scene="halloween"] .pos-sky { background:radial-gradient(circle at 75% 25%,#b0a3dd55,transparent 20%),linear-gradient(#291b42,#120d23); }
-[data-scene="halloween"] .pos-light { inset:35% -25% -15%; background:repeating-linear-gradient(170deg,transparent 0 12%,#a788c933 15% 22%,transparent 28%); filter:blur(26px); animation:pos-rays 24s ease-in-out infinite alternate; }
-[data-scene="halloween"] .pos-land { background:#0d1020; border-radius:60% 80% 0 0; }
-[data-scene="halloween"] .pos-mote { background:#ffae69; box-shadow:0 0 12px #ed924e; animation:pos-dust var(--duration) ease-in-out var(--delay) infinite alternate; }
-[data-scene="spring"] .pos-sky { background:radial-gradient(ellipse at 15% 10%,#829b7266,transparent 60%),linear-gradient(#25463d,#132b2e); }
-[data-scene="spring"] .pos-light { background:radial-gradient(ellipse at 40% 35%,#e6c1cc55,transparent 40%),radial-gradient(ellipse at 80% 70%,#a4cf8366,transparent 40%); filter:blur(28px); animation:pos-aurora 30s ease-in-out infinite alternate; }
-[data-scene="spring"] .pos-land { border-radius:75% 50% 0 0; background:linear-gradient(#557d6655,#143b30); }
-[data-scene="spring"] .pos-mote { top:-10%; width:calc(var(--size)*4); height:calc(var(--size)*2.5); border-radius:80% 20% 80% 40%; background:#edcad4; animation:pos-fall var(--duration) linear var(--delay) infinite; }
-[data-scene="rain"] .pos-sky { background:radial-gradient(ellipse at 75% 15%,#789eae44,transparent 55%),linear-gradient(#293e53,#101d30); }
-[data-scene="rain"] .pos-light { background:radial-gradient(ellipse at 30% 35%,#8cb9cb33,transparent 48%); filter:blur(25px); animation:pos-rays 26s ease-in-out infinite alternate; }
-[data-scene="rain"] .pos-land { background:linear-gradient(#6b9fab22,#112337); border-radius:55% 70% 0 0; animation:pos-current 22s ease-in-out infinite alternate; }
-[data-scene="rain"] .pos-mote { top:-15%; width:2px; height:34px; border-radius:3px; background:linear-gradient(transparent,#b9dfe580); animation:pos-rain var(--rain) linear var(--delay) infinite; }
-[data-scene="desert"] .pos-sky { background:radial-gradient(circle at 70% 25%,#e5b16b66,transparent 35%),linear-gradient(#6c4b41,#302927); }
-[data-scene="desert"] .pos-light { inset:13% 18% auto auto; width:22vmin; height:22vmin; border-radius:50%; background:#e9c997; filter:blur(5px); animation:pos-sun 28s ease-in-out infinite alternate; }
-[data-scene="desert"] .pos-land { height:36%; bottom:-9%; border-radius:70% 45% 0 0; transform:rotate(-6deg); background:linear-gradient(#b3895866,#473529); }
-[data-scene="desert"] .pos-mote { background:#d4b887; animation:pos-dust var(--duration) ease-in-out var(--delay) infinite alternate; }
-[data-scene="white"] .pos-sky { background:radial-gradient(ellipse at 20% 20%,#bfd6e9,transparent 55%),linear-gradient(145deg,#e6e9f2,#d3d6e8); }
-[data-scene="white"] .pos-mote { width:calc(var(--size)*8); height:calc(var(--size)*8); background:#ffffff80; animation:pos-dust var(--duration) ease-in-out var(--delay) infinite alternate; }
-[data-scene="black"] .pos-sky { background:radial-gradient(ellipse at 75% 20%,#31354a66,transparent 50%),linear-gradient(#05070e,#10131d); }
+
 @keyframes pos-fall { from { transform:translate3d(0,-5vh,0) rotate(0deg); opacity:0; } 10% { opacity:.6; } 90% { opacity:.5; } to { transform:translate3d(90px,120vh,0) rotate(220deg); opacity:0; } }
 @media(max-width:760px) { html body.pos-ui[data-pos-theme] { --pos-glass-blur:14px; } }
+@media(max-width:760px) { html body.pos-ui[data-pos-theme] #osWindow { border-radius:24px!important; } }
+html body.pos-ui[data-pos-theme] :is(.pos-card,.menu-btn,.pos-bank-panel,.pos-bank-hero,.pos-bank-slip) { background:transparent!important; border-radius:22px!important; }
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
   html body.pos-ui[data-pos-theme] #osWindow { background:var(--pos-bg)!important; }
 }
@@ -12183,24 +12145,6 @@ window.switchCoverTab=switchCleanTab;
 </div>
 <div class="settings">
 <div class="toggle-list">
-<!-- Background Music - NEW: theme-specific ambient -->
-<div class="glass glass-blur toggle">
-<div class="left">
-<b>Background Music</b><span>Theme ambient music and tones</span>
-</div>
-<button aria-label="Toggle background music" class="switch" data-key="bgm">
-<i></i>
-</button>
-</div>
-<!-- Perspective Scroll - FIXED: was hidden in morph-bg -->
-<div class="glass glass-blur toggle">
-<div class="left">
-<b>Perspective Scroll</b><span>Cards shrink/grow from middle on scroll</span>
-</div>
-<button aria-label="Toggle perspective scroll" class="switch on" data-key="perspective">
-<i></i>
-</button>
-</div>
 <!-- Reduce Motion -->
 <div class="glass glass-blur toggle">
 <div class="left">
@@ -12212,83 +12156,6 @@ window.switchCoverTab=switchCleanTab;
 </div>
 </div>
 </div>
-<!-- THEMES - SETTINGS ONLY -->
-<div class="glass glass-blur panel-pad" style="margin-top:16px;">
-<div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted);font-weight:800;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;">
-<span>THEMES</span>
-<span id="currentThemeLabel" style="font-size:9px;opacity:0.6;background:rgba(92,124,255,0.15);padding:2px 6px;border-radius:6px;">ORIGINAL</span>
-</div>
-<div class="theme-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-<button class="theme-card" data-theme="original" style="position:relative;overflow:hidden;border-radius:16px;border:1.5px solid rgba(255,255,255,0.15);background:linear-gradient(135deg,#1a1a2e,#16213e);padding:14px;text-align:left;cursor:pointer;">
-<div style="font-size:22px;margin-bottom:6px;">🌌</div>
-<div style="font-weight:800;font-size:12px;color:white;">Original</div>
-<div style="font-size:9px;color:rgba(255,255,255,0.6);margin-top:2px;">Default dark</div>
-</button>
-<button class="theme-card" data-theme="winter" style="position:relative;overflow:hidden;border-radius:16px;border:1.5px solid rgba(255,255,255,0.15);background:linear-gradient(135deg,#2a1f14,#4a2c0a);padding:14px;text-align:left;cursor:pointer;">
-<div style="font-size:22px;margin-bottom:6px;">🔥</div>
-<div style="font-weight:800;font-size:12px;color:white;">Winter Lodge</div>
-<div style="font-size:9px;color:rgba(255,255,255,0.6);margin-top:2px;">Fireplace + snow</div>
-</button>
-<button class="theme-card" data-theme="summer" style="position:relative;overflow:hidden;border-radius:16px;border:1.5px solid rgba(255,255,255,0.15);background:linear-gradient(135deg,#ff8c42,#ff3c00);padding:14px;text-align:left;cursor:pointer;">
-<div style="font-size:22px;margin-bottom:6px;">🏀</div>
-<div style="font-weight:800;font-size:12px;color:white;">Summer Court</div>
-<div style="font-size:9px;color:rgba(255,255,255,0.7);margin-top:2px;">Outdoor hoops</div>
-</button>
-<button class="theme-card" data-theme="autumn" style="position:relative;overflow:hidden;border-radius:16px;border:1.5px solid rgba(255,255,255,0.15);background:linear-gradient(135deg,#8b4513,#ff6b35);padding:14px;text-align:left;cursor:pointer;">
-<div style="font-size:22px;margin-bottom:6px;">🍂</div>
-<div style="font-weight:800;font-size:12px;color:white;">Autumn Leaves</div>
-<div style="font-size:9px;color:rgba(255,255,255,0.7);margin-top:2px;">Falling colors</div>
-</button>
-<button class="theme-card" data-theme="halloween" style="position:relative;overflow:hidden;border-radius:16px;border:1.5px solid rgba(255,255,255,0.15);background:linear-gradient(135deg,#1a0b2e,#2d1b4e);padding:14px;text-align:left;cursor:pointer;">
-<div style="font-size:22px;margin-bottom:6px;">👻</div>
-<div style="font-weight:800;font-size:12px;color:white;">Haunted House</div>
-<div style="font-size:9px;color:rgba(255,255,255,0.6);margin-top:2px;">Ghosts &amp; cobwebs</div>
-</button>
-<button class="theme-card" data-theme="spring" style="position:relative;overflow:hidden;border-radius:16px;border:1.5px solid rgba(255,255,255,0.15);background:linear-gradient(135deg,#2d6a4f,#52b788);padding:14px;text-align:left;cursor:pointer;">
-<div style="font-size:22px;margin-bottom:6px;">🌸</div>
-<div style="font-weight:800;font-size:12px;color:white;">Spring Meadows</div>
-<div style="font-size:9px;color:rgba(255,255,255,0.7);margin-top:2px;">Petals flying</div>
-</button>
-<button class="theme-card" data-theme="rain" style="position:relative;overflow:hidden;border-radius:16px;border:1.5px solid rgba(255,255,255,0.15);background:linear-gradient(135deg,#4a5a7a,#6b7a99);padding:14px;text-align:left;cursor:pointer;">
-<div style="font-size:22px;margin-bottom:6px;">🌧️</div>
-<div style="font-weight:800;font-size:12px;color:white;">Rain City</div>
-<div style="font-size:9px;color:rgba(255,255,255,0.7);margin-top:2px;">Cars + glass rain</div>
-</button>
-<button class="theme-card" data-theme="desert" style="position:relative;overflow:hidden;border-radius:16px;border:1.5px solid rgba(255,255,255,0.15);background:linear-gradient(135deg,#C19A6B,#8B5A2B);padding:14px;text-align:left;cursor:pointer;">
-<div style="font-size:22px;margin-bottom:6px;">🏜️</div>
-<div style="font-weight:800;font-size:12px;color:white;">Desert Canyon</div>
-<div style="font-size:9px;color:rgba(255,255,255,0.7);margin-top:2px;">Pyramids + sphinx</div>
-</button>
-<button class="theme-card" data-theme="white" style="position:relative;overflow:hidden;border-radius:16px;border:1.5px solid rgba(0,0,0,0.10);background:linear-gradient(135deg,#ffffff,#f5f5f7);padding:14px;text-align:left;cursor:pointer;">
-<div style="font-size:22px;margin-bottom:6px;">⬜</div>
-<div style="font-weight:800;font-size:12px;color:#111;">Pure White</div>
-<div style="font-size:9px;color:rgba(0,0,0,0.5);margin-top:2px;">No emojis • clean</div>
-</button>
-<button class="theme-card" data-theme="black" style="position:relative;overflow:hidden;border-radius:16px;border:1.5px solid rgba(255,255,255,0.15);background:linear-gradient(135deg,#0a0a0a,#1a1a1a);padding:14px;text-align:left;cursor:pointer;">
-<div style="font-size:22px;margin-bottom:6px;">⬛</div>
-<div style="font-weight:800;font-size:12px;color:white;">Pure Black</div>
-<div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px;">No emojis • OLED</div>
-</button>
-</div>
-</div>
-<!-- EASTER EGG - EMOJI PLAYGROUND -->
-<div class="glass glass-blur panel-pad" style="margin-top:16px; border:1px dashed rgba(255,255,255,0.18); background:rgba(255,255,255,0.04);">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
-<div style="min-width:0;">
-<div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:rgba(255,255,255,0.55);font-weight:800;display:flex;align-items:center;gap:6px;">
-<span>🥚</span> EASTER EGG • LAB
-                    <span style="background:rgba(92,124,255,0.18);color:#8aa0ff;padding:2px 6px;border-radius:999px;font-size:8px;">SECRET</span>
-</div>
-<div style="font-weight:900;font-size:13.5px;margin-top:5px;letter-spacing:-0.02em;color:white;">Emoji Playground</div>
-<div style="font-size:10.5px;color:rgba(255,255,255,0.6);margin-top:3px;line-height:1.35;">Hides UI • keeps title bar • drag, fling &amp; pop emojis</div>
-</div>
-<button class="btn primary" id="easterEggBtn" style="flex:0 0 auto;padding:10px 16px;border-radius:14px;font-weight:900;font-size:12px;letter-spacing:-0.01em;white-space:nowrap;box-shadow:0 8px 20px rgba(92,124,255,0.25);">
-                  🧪 Play
-                </button>
-</div>
-</div>
-<!-- END EASTER EGG -->
-<!-- END THEMES -->
 </section>
 <!-- ABOUT -->
 <!-- LIVE SCORES SECTION -->
@@ -22408,9 +22275,9 @@ button[data-view-toggle],
 <script id="theme-full-js">
 // Full Background Replacement Themes
 (function(){
-  const THEMES = ['original','winter','summer','autumn','halloween','spring','rain','desert','white','black','aurora','ocean','neon','dunes'];
+  const THEMES = ['aurora','ocean','neon','dunes'];
   const THEME_KEY = 'parlayos_theme';
-  const DEFAULT_THEME = 'white';
+  const DEFAULT_THEME = 'aurora';
 
   function getCurrentUserHash(){
     try{
@@ -22476,306 +22343,10 @@ button[data-view-toggle],
   }
 
   function createThemeElements(theme){
-    const bg = document.getElementById('themeBackground');
-    if(!bg) return;
-    bg.innerHTML = '';
-    bg.className = '';
-
-    if(theme==='white' || theme==='black'){
-      // handled in switch
-    }
-    if(theme==='original'){
-      bg.classList.remove('active');
-      bg.style.opacity = '0';
-      bg.innerHTML = '';
-      document.body.classList.remove(...THEMES.map(t=>'theme-'+t));
-      document.body.classList.add('theme-original');
-
-      // Ensure original space background is visible
-      const morph = document.querySelector('.morph-bg');
-      const fullSpace = document.getElementById('fullPageSpace');
-      const starsCanvas = document.getElementById('starsCanvas');
-      if(morph){ morph.style.display = ''; morph.style.opacity = ''; }
-      if(fullSpace){ fullSpace.style.display = ''; fullSpace.style.opacity = '1'; }
-      if(starsCanvas){ starsCanvas.style.display = ''; starsCanvas.style.opacity = ''; }
-      document.body.style.background = '';
-      document.documentElement.style.background = '';
-      bg.style.background = '';
-      bg.style.backgroundColor = '';
-
-      // Original keeps stars and spaceships only, no extra particle emojis
-
-      return;
-    }
-
-    bg.classList.add('active');
-    bg.style.opacity = '1';
-    document.body.classList.remove(...THEMES.map(t=>'theme-'+t));
+    document.body.classList.remove(...Array.from(document.body.classList).filter(c=>c.startsWith('theme-')));
     document.body.classList.add('theme-'+theme);
-
-    switch(theme){
-      case 'winter':
-        // SNOWY FOREST DAYTIME - NO FIRE
-        const wForest = document.createElement('div');
-        wForest.className = 'theme-winter-forest';
-        bg.appendChild(wForest);
-
-        // Snow-covered trees
-        for(let i=0;i<12;i++){
-          const tree = document.createElement('div');
-          tree.className = 'theme-winter-tree';
-          tree.style.left = (Math.random()*100) + '%';
-          tree.style.bottom = (Math.random()*20) + '%';
-          tree.style.transform = 'scale(' + (0.6 + Math.random()*0.8) + ')';
-          tree.style.opacity = '0.6';
-          bg.appendChild(tree);
-        }
-
-        // Sun for daytime
-        const wSun = document.createElement('div');
-        wSun.className = 'theme-winter-sun';
-        bg.appendChild(wSun);
-
-        // Winter - clean snowy forest, no floating particles
-        break;
-
-      case 'summer':
-        const sCourt = document.createElement('div');
-        sCourt.className = 'theme-summer-court-lines';
-        bg.appendChild(sCourt);
-
-        const sHoop = document.createElement('div');
-        sHoop.className = 'theme-summer-hoop';
-        bg.appendChild(sHoop);
-
-        // Summer - clean court, no floating particles
-        break;
-
-      case 'autumn':
-        const aGround = document.createElement('div');
-        aGround.className = 'theme-autumn-ground';
-        bg.appendChild(aGround);
-
-        // Autumn - clean, no floating particles
-        break;
-
-      case 'halloween':
-        const hMoon = document.createElement('div');
-        hMoon.className = 'theme-halloween-moon';
-        bg.appendChild(hMoon);
-
-        const hHouse = document.createElement('div');
-        hHouse.className = 'theme-halloween-house';
-        bg.appendChild(hHouse);
-
-        for(let i=0;i<2;i++){
-          const win = document.createElement('div');
-          win.className = 'theme-halloween-window';
-          win.style.left = (36 + i*16) + '%';
-          win.style.bottom = (90 + Math.random()*30) + 'px';
-          win.style.animationDelay = Math.random()*2 + 's';
-          bg.appendChild(win);
-        }
-
-        // Halloween - clean, no floating particles
-        break;
-
-      case 'spring':
-        const sHill = document.createElement('div');
-        sHill.className = 'theme-spring-hill';
-        bg.appendChild(sHill);
-
-        // Spring - clean meadow, no floating particles
-        // Keep a few static flowers on ground
-        const flowerEmojis = ['🌷','🌼'];
-        for(let i=0;i<6;i++){
-          const f = document.createElement('div');
-          f.className = 'theme-spring-flower';
-          f.textContent = flowerEmojis[i%2];
-          f.style.left = (10 + i*15) + '%';
-          f.style.bottom = '8%';
-          f.style.fontSize = '18px';
-          f.style.opacity = '0.6';
-          bg.appendChild(f);
-        }
-        break;
-
-      case 'rain':
-        // RAINY DAY CITY WITH CARS + FAKE RAIN BEHIND GLASS
-        const rClouds = document.createElement('div');
-        rClouds.className = 'theme-rain-clouds';
-        bg.appendChild(rClouds);
-
-        const rSkyline = document.createElement('div');
-        rSkyline.className = 'theme-rain-skyline';
-        bg.appendChild(rSkyline);
-        const buildingCount = 18;
-        for(let i=0;i<buildingCount;i++){
-          const b = document.createElement('div');
-          b.className = 'theme-rain-building';
-          const h = 35 + Math.random()*90;
-          const w = 28 + Math.random()*42;
-          b.style.height = h + '%';
-          b.style.width = w + 'px';
-          b.style.opacity = (0.4 + Math.random()*0.5).toString();
-          b.style.marginBottom = (Math.random()*6)+'px';
-          rSkyline.appendChild(b);
-        }
-
-        const rStreet = document.createElement('div');
-        rStreet.className = 'theme-rain-street';
-        bg.appendChild(rStreet);
-
-        for(let i=0;i<5;i++){
-          const p = document.createElement('div');
-          p.className = 'theme-rain-puddle';
-          p.style.left = (Math.random()*80 + 5) + '%';
-          p.style.width = (40 + Math.random()*90) + 'px';
-          p.style.animationDelay = (Math.random()*3) + 's';
-          bg.appendChild(p);
-        }
-
-        const carEmojisTop = ['🚗','🚕','🚙','🚗','🚐'];
-        for(let i=0;i<4;i++){
-          const car = document.createElement('div');
-          car.className = 'theme-rain-car lane-top';
-          car.textContent = carEmojisTop[i % carEmojisTop.length];
-          car.style.animationDuration = (7 + Math.random()*6) + 's';
-          car.style.animationDelay = (i * 2.2 + Math.random()*1.5) + 's';
-          car.style.fontSize = (18 + Math.random()*6) + 'px';
-          bg.appendChild(car);
-        }
-        const carEmojisBot = ['🚕','🚗','🚙','🚕','🚓'];
-        for(let i=0;i<4;i++){
-          const car = document.createElement('div');
-          car.className = 'theme-rain-car lane-bottom';
-          car.textContent = carEmojisBot[i % carEmojisBot.length];
-          car.style.animationDuration = (6.5 + Math.random()*5.5) + 's';
-          car.style.animationDelay = (i * 1.8 + Math.random()) + 's';
-          car.style.fontSize = (20 + Math.random()*6) + 'px';
-          bg.appendChild(car);
-        }
-
-        for(let i=0;i<85;i++){
-          const d = document.createElement('div');
-          const isThick = Math.random() > 0.7;
-          const isGlow = Math.random() > 0.85;
-          d.className = 'theme-rain-drop' + (isThick ? ' thick' : '') + (isGlow ? ' glow' : '');
-          d.style.left = (Math.random()*100) + '%';
-          d.style.height = (14 + Math.random()*28) + 'px';
-          d.style.animationDuration = (0.55 + Math.random()*0.9) + 's';
-          d.style.animationDelay = (Math.random()*2) + 's';
-          d.style.opacity = (0.25 + Math.random()*0.65).toString();
-          bg.appendChild(d);
-        }
-        for(let i=0;i<18;i++){
-          const g = document.createElement('div');
-          g.className = 'theme-rain-glass-streak';
-          g.style.left = (Math.random()*100) + '%';
-          g.style.animationDuration = (3.5 + Math.random()*5) + 's';
-          g.style.animationDelay = (Math.random()*4) + 's';
-          g.style.opacity = (0.15 + Math.random()*0.35).toString();
-          bg.appendChild(g);
-        }
-
-        const rMist = document.createElement('div');
-        rMist.className = 'theme-rain-mist';
-        bg.appendChild(rMist);
-        break;
-
-      case 'desert':
-        const dSky = document.createElement('div');
-        dSky.className = 'theme-desert-sky';
-        bg.appendChild(dSky);
-        const dSun = document.createElement('div');
-        dSun.className = 'theme-desert-sun';
-        bg.appendChild(dSun);
-        const dDunesBack = document.createElement('div');
-        dDunesBack.className = 'theme-desert-dunes-back';
-        bg.appendChild(dDunesBack);
-        const dDunes = document.createElement('div');
-        dDunes.className = 'theme-desert-dunes';
-        bg.appendChild(dDunes);
-        const pyramidPositions = [12, 28, 72, 86];
-        pyramidPositions.forEach((leftPos, i)=>{
-          const pyr = document.createElement('div');
-          pyr.className = 'theme-desert-pyramid';
-          pyr.style.left = leftPos + '%';
-          pyr.style.transform = `scale(${0.75 + Math.random()*0.45})`;
-          pyr.style.opacity = (0.75 + Math.random()*0.25).toString();
-          bg.appendChild(pyr);
-        });
-        const dGround = document.createElement('div');
-        dGround.className = 'theme-desert-ground';
-        bg.appendChild(dGround);
-        const sphinx = document.createElement('div');
-        sphinx.className = 'theme-desert-sphinx';
-        sphinx.innerHTML = `
-          <div class="theme-desert-sphinx-shadow"></div>
-          <div class="theme-desert-sphinx-tail"></div>
-          <div class="theme-desert-sphinx-body"></div>
-          <div class="theme-desert-sphinx-chest"></div>
-          <div class="theme-desert-sphinx-paws"><div></div><div></div></div>
-          <div class="theme-desert-sphinx-head">
-            <div class="theme-desert-sphinx-nemes"></div>
-            <div class="theme-desert-sphinx-face"><span></span><span></span></div>
-            <div class="theme-desert-sphinx-beard"></div>
-          </div>
-        `;
-        bg.appendChild(sphinx);
-        for(let i=0;i<4;i++){
-          const c = document.createElement('div');
-          c.className = 'theme-desert-cactus';
-          c.textContent = '🌵';
-          c.style.left = (6 + i*22 + Math.random()*6) + '%';
-          c.style.animationDelay = (Math.random()*2) + 's';
-          c.style.fontSize = (18 + Math.random()*10) + 'px';
-          bg.appendChild(c);
-        }
-        const t = document.createElement('div');
-        t.className = 'theme-desert-tumbleweed';
-        t.textContent = '🌾';
-        t.style.top = '66%';
-        t.style.animationDuration = '22s';
-        bg.appendChild(t);
-        const dHaze = document.createElement('div');
-        dHaze.className = 'theme-desert-haze';
-        bg.appendChild(dHaze);
-        break;
-
-
-      case 'white':
-        // PURE WHITE - NO EMOJIS, CLEAN
-        bg.style.background = 'linear-gradient(135deg,#ffffff,#f8f8fa)';
-        bg.style.backgroundColor = '#ffffff';
-        document.body.style.background = '#ffffff';
-        document.documentElement.style.background = '#ffffff';
-        // Hide space background
-        const morphW = document.querySelector('.morph-bg');
-        const fullSpaceW = document.getElementById('fullPageSpace');
-        const starsW = document.getElementById('starsCanvas');
-        if(morphW){ morphW.style.display='none'; }
-        if(fullSpaceW){ fullSpaceW.style.display='none'; }
-        if(starsW){ starsW.style.display='none'; }
-        // No emojis, no blobs, pure clean
-        break;
-
-      case 'black':
-        // PURE BLACK - NO EMOJIS, OLED
-        bg.style.background = 'linear-gradient(135deg,#000000,#0a0a0a)';
-        bg.style.backgroundColor = '#000000';
-        document.body.style.background = '#000000';
-        document.documentElement.style.background = '#000000';
-        const morphB = document.querySelector('.morph-bg');
-        const fullSpaceB = document.getElementById('fullPageSpace');
-        const starsB = document.getElementById('starsCanvas');
-        if(morphB){ morphB.style.display='none'; }
-        if(fullSpaceB){ fullSpaceB.style.display='none'; }
-        if(starsB){ starsB.style.display='none'; }
-        // No emojis, pure black for OLED
-        break;
-
-}
+    const bg=document.getElementById('themeBackground');
+    if(bg){bg.replaceChildren();bg.hidden=true;}
   }
 
   function applyTheme(theme){
@@ -37863,7 +37434,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const heading=q('.titlebar h1');if(heading&&!heading.textContent.trim())heading.textContent='ParlayOS';
     const settings=q('#screen-settings');if(settings)new MutationObserver(syncSettings).observe(settings,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
     const cover=q('#cleanTabRequest');if(cover&&!q('.pos-cover-title',cover)){const title=document.createElement('h1');title.className='pos-cover-title';title.textContent='ParlayOS';title.style.cssText='font-size:32px;margin:0 0 16px';cover.prepend(title);Array.from(cover.children).filter(x=>x.textContent.trim()==='MLB Edge Scanner & Parlay Builder').forEach(x=>x.textContent='Sports predictions and game insights');}
-    let saved;try{saved=localStorage.getItem('parlayos_theme');}catch{}if(!saved||['white','light','dark'].includes(saved)){try{window.applyParlayTheme?.('original');}catch{}document.body.classList.remove('theme-white','theme-light');}
+    let saved;try{saved=localStorage.getItem('parlayos_theme');}catch{}if(!['aurora','ocean','neon','dunes'].includes(saved)){try{window.applyParlayTheme?.('aurora');}catch{}document.body.classList.remove('theme-white','theme-light');}
     const parent=q('#screen-mlb')?.parentNode;if(!parent)return;
     for(const name of ['nhl','soccer','sports'])if(!document.getElementById('screen-'+name)){const el=document.createElement('section');el.className='screen';el.id='screen-'+name;el.dataset.screen=name;parent.appendChild(el);}
     const menu=q('#menuGrid');
@@ -37909,16 +37480,6 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
 </script><script id="PARLAYOS_DYNAMIC_THEMES">(function () {
   'use strict';
   const themes = {
-    original: {name:'Original', scene:'original'},
-    winter: {name:'Winter', scene:'winter'},
-    summer: {name:'Summer', scene:'summer'},
-    autumn: {name:'Autumn', scene:'autumn'},
-    halloween: {name:'Halloween', scene:'halloween'},
-    spring: {name:'Spring', scene:'spring'},
-    rain: {name:'Rain', scene:'rain'},
-    desert: {name:'Desert', scene:'desert'},
-    white: {name:'White', scene:'white'},
-    black: {name:'Black', scene:'black'},
     aurora: {name:'Aurora Drift', description:'Northern lights, distant peaks and a field of stars.', mood:'Arctic · Teal & violet'},
     ocean: {name:'Deep Current', description:'Underwater light rays and slowly rising bubbles.', mood:'Ocean · Cyan & midnight'},
     neon: {name:'Neon City', description:'Soft rain over a luminous city skyline.', mood:'After dark · Cyan & pink'},
@@ -37941,7 +37502,8 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   }
   function sync() {
     const selected=Array.from(document.body.classList).find(c=>c.startsWith('theme-'))?.slice(6)||'original';
-    const active=themes[selected]?selected:'';
+    if(!themes[selected]){window.applyParlayTheme?.('aurora');return;}
+    const active=selected;
     if(active!==current){
       current=active;
       if(active){scene.dataset.scene=active;scene.innerHTML=layers();scene.hidden=false;document.body.dataset.posTheme=active;}
@@ -37959,11 +37521,18 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     scene=document.createElement('div');scene.id='pos-scene';scene.className='pos-scenery';scene.hidden=true;
     scene.setAttribute('aria-hidden','true');document.body.prepend(scene);
     panel=document.createElement('section');panel.id='pos-living-themes';panel.setAttribute('aria-labelledby','pos-theme-heading');
-    panel.innerHTML='<header class="pos-theme-intro"><div><p class="pos-theme-eyebrow">MAKE IT YOURS</p><h3 id="pos-theme-heading">Living themes</h3><p>Animated worlds behind frosted glass.</p></div><span class="pos-theme-badge">14 glass themes</span></header><div class="pos-theme-choices" role="group" aria-label="Living themes">'+
+    panel.innerHTML='<header class="pos-theme-intro"><div><p class="pos-theme-eyebrow">MAKE IT YOURS</p><h3 id="pos-theme-heading">Living themes</h3><p>Animated worlds behind frosted glass.</p></div><span class="pos-theme-badge">4 glass themes</span></header><div class="pos-theme-choices" role="group" aria-label="Living themes">'+
       Object.entries(themes).filter(([,t])=>t.description).map(([id,t])=>`<button type="button" class="pos-theme-choice" data-pos-theme-choice="${id}" aria-label="${t.name}" aria-pressed="false"><span class="pos-theme-preview pos-scenery" data-scene="${id}" aria-hidden="true">${layers(true)}</span><span class="pos-theme-copy"><span class="pos-theme-name">${t.name}<span class="pos-theme-check" aria-hidden="true">✓</span></span><span class="pos-theme-mood">${t.mood}</span><span class="pos-theme-description">${t.description}</span></span></button>`).join('')+
       '</div><p class="pos-theme-motion" data-pos-motion-status role="status"></p>';
     const classic=document.getElementById('currentThemeLabel')?.closest('.panel-pad');
-    if(classic)classic.before(panel);else settings.appendChild(panel);
+    if(classic)classic.replaceWith(panel);else settings.appendChild(panel);
+    function removeRetiredSettings(){
+      settings.querySelectorAll('[data-key="bgm"],[data-key="perspective"]').forEach(b=>b.closest('.toggle')?.remove());
+      settings.querySelector('#currentThemeLabel')?.closest('.panel-pad')?.remove();
+      settings.querySelector('#easterEggBtn')?.closest('.panel-pad')?.remove();
+    }
+    removeRetiredSettings();
+    new MutationObserver(removeRetiredSettings).observe(settings,{childList:true,subtree:true});
     panel.addEventListener('click',e=>{const b=e.target.closest('[data-pos-theme-choice]');if(!b)return;
       window.applyParlayTheme?.(b.dataset.posThemeChoice);sync();});
     new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});

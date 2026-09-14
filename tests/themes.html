@@ -7,7 +7,7 @@
 <script>
 const run=document.querySelector('#run'),result=document.querySelector('#result');
 const delay=ms=>new Promise(r=>setTimeout(r,ms)),assert=(ok,m)=>{if(!ok)throw Error(m);};
-const themeIds=['original','winter','summer','autumn','halloween','spring','rain','desert','white','black','aurora','ocean','neon','dunes'];
+const themeIds=['aurora','ocean','neon','dunes'];
 function contrast(a,b){
   const lum=s=>{const v=s.match(/[\d.]+/g).slice(0,3).map(Number).map(x=>{x/=255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4;});return .2126*v[0]+.7152*v[1]+.0722*v[2];};
   const x=lum(a),y=lum(b);return(Math.max(x,y)+.05)/(Math.min(x,y)+.05);
@@ -31,7 +31,7 @@ run.addEventListener('click',async()=>{
   try{
     for(const entry of ['index.html','parlayos.html']){
       frame=document.createElement('iframe');frame.width=390;frame.height=844;frame.title='Theme preview';document.querySelector('#preview').replaceChildren(frame);
-      await load(entry);originalTheme=Array.from(doc.body.classList).find(x=>x.startsWith('theme-'))?.slice(6)||'original';originalMotion=motionButton().classList.contains('on');
+      await load(entry);originalTheme=Array.from(doc.body.classList).find(x=>x.startsWith('theme-'))?.slice(6)||'aurora';originalMotion=motionButton().classList.contains('on');
       for(const [width,height]of [[390,844],[768,1024],[1440,900]]){
         frame.width=width;frame.height=height;frame.scrollIntoView({block:'start'});
         for(const id of themeIds){
@@ -50,6 +50,8 @@ run.addEventListener('click',async()=>{
             const glass=win.getComputedStyle(doc.querySelector('#osWindow'));
             if(!doc.body.classList.contains('reduce-fx'))assert((glass.backdropFilter||glass.webkitBackdropFilter).includes('blur('),'Glass backdrop blur missing');
             assert(glass.filter==='none','Foreground content is blurred');
+            assert(parseFloat(glass.borderTopLeftRadius)>=20,'Window corners are not rounded');
+            assert(!doc.querySelector('.theme-card'),'Old theme controls remain');
             const shouldMove=!win.matchMedia('(prefers-reduced-motion: reduce)').matches&&!doc.body.classList.contains('reduce-fx');
             if(shouldMove){
               const animations=scene.getAnimations({subtree:true}).filter(a=>a.playState==='running');assert(animations.length>0,'Scene is static with motion enabled');
