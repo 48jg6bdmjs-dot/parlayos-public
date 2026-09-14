@@ -37220,7 +37220,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   }
   function openSlip(s) {
     const items=selected(s);
-    openDialog(`${sports[s][1]} selected picks`,items.length?`<p>${E(C.slipSummary(items))}</p>${items.map((x,i)=>`<div class="pos-row"><b>${E(x.selection)}${x.line==null?'':' '+E(x.line)}</b><div class="pos-meta">${E(x.game)} · ${E(C.models[x.model])}${x.modelVersion?' v'+E(x.modelVersion):''} · ${E(C.american(x.odds))}</div><div class="pos-meta">Saved model estimate: ${C.percent(x.probability)} · Forecast: ${E(x.forecastAt||'unavailable')} · Game: ${E(x.startAt||'unavailable')}</div><button type="button" data-pos-remove="${i}" data-pos-sport="${s}">Remove</button></div>`).join('')}<button type="button" class="primary" data-pos-copy="${s}">Copy slip</button>`:'<p>No picks selected. Select a prediction from a game card to begin.</p>');
+    openDialog(`${sports[s][1]} selected picks`,items.length?`<p>${E(C.slipSummary(items))}</p>${items.map((x,i)=>`<div class="pos-row"><b>${E(x.selection)}${x.line==null?'':' '+E(x.line)}</b><div class="pos-meta">${E(x.game)} · ${E(C.models[x.model])}${x.modelVersion?' v'+E(x.modelVersion):''} · ${E(C.american(x.odds))}</div><div class="pos-meta">Saved model estimate: ${C.percent(x.probability)} · Forecast: ${E(x.forecastAt||'unavailable')} · Game: ${E(x.startAt||'unavailable')}</div><button type="button" data-pos-remove="${i}" data-pos-sport="${s}">Remove</button></div>`).join('')}<div class="pos-actions"><button type="button" class="primary" data-pos-copy="${s}">Copy slip</button><button type="button" data-pos-clear="${s}">Clear all</button></div>`:'<p>No picks selected. Select a prediction from a game card to begin.</p>');
   }
   async function copy(s){const text=C.slipText(selected(s));try{await navigator.clipboard.writeText(text);notify('Slip copied');}catch{openDialog('Copy your slip',`<p>Select and copy the text below.</p><textarea readonly aria-label="Slip text">${E(text)}</textarea>`);q('textarea',dialog).select();}}
   function renderLive() {
@@ -37301,6 +37301,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     if(b.dataset.posAdd){add(b.dataset.posSport,b.dataset.posGame,b.dataset.posAdd);return true;}
     if(b.dataset.posSlip){openSlip(b.dataset.posSlip);return true;}
     if(b.dataset.posRemove!==undefined){const s=b.dataset.posSport;state.slips[s]=selected(s).filter((_,i)=>i!==Number(b.dataset.posRemove));write('parlayos:ui:slips',state.slips);renderSport(s);openSlip(s);return true;}
+    if(b.dataset.posClear&&sports[b.dataset.posClear]){const s=b.dataset.posClear;state.slips[s]=[];write('parlayos:ui:slips',state.slips);renderSport(s);openSlip(s);return true;}
     if(b.dataset.posCopy){copy(b.dataset.posCopy);return true;}
     if(b.dataset.posRefresh!==undefined){load();return true;}
     if(b.dataset.posResults!==undefined){modelResults();return true;}
