@@ -11293,6 +11293,14 @@ html body.pos-ui .pos-legacy, html body.pos-ui [data-pos-legacy] { display:none!
 .pos-empty { padding:28px 20px; border:1px dashed #ffffff50; border-radius:18px; color:var(--pos-muted); grid-column:1/-1; }
 .pos-detail { margin-top:12px; }
 .pos-detail summary { cursor:pointer; min-height:44px; padding:10px 0; }
+.pos-evidence { border-top:1px solid #ffffff26; overflow-wrap:anywhere; }
+.pos-evidence h4 { margin:20px 0 8px; font-size:15px; }
+.pos-evidence dl { display:grid; gap:6px; font-size:14px; }
+.pos-evidence dt { color:var(--pos-muted); }
+.pos-evidence dd { margin:0 0 8px; }
+.pos-evidence ul { padding-left:20px; font-size:14px; }
+.pos-evidence li { margin-bottom:10px; }
+.pos-evidence a { color:var(--pos-accent); text-decoration:underline; }
 .pos-stats { display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:14px; }
 .pos-stats div { padding:10px; border-radius:10px; background:#00000020; }
 .pos-stats small { display:block; color:var(--pos-muted); }
@@ -37010,6 +37018,51 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       edge:hasPrice?Number(m.probability)-implied:null};
   }
   const forecast=(game,sport,model,kind,now=Date.now())=>market(game,sport,model,kind,now,true);
+  function evidence(game, sport, model, feed={}, benchmark=null, now=Date.now()) {
+    const p=forecast(game,sport,model,'ml',now), r=record(game,model);
+    const archived=p.snapshotLabel?.startsWith('Archived pregame')===true;
+    const raw=archived?p:(r?.markets?.ml||{});
+    const version=raw.model_version||(!archived?r?.model_version||r?.ensemble_version:null)||null;
+    const stamp=value=>{const t=typeof value==='string'&&/T\d{2}:\d{2}/.test(value)?Date.parse(value):NaN;return Number.isFinite(t)?{iso:new Date(t).toISOString(),ageMinutes:Math.floor((now-t)/60000),future:t>now+60000}:null;};
+    const sources=[],limitations=[];
+    const add=(label,input)=>{
+      if(!input||typeof input!=='object'){limitations.push(label+': provenance unavailable');return;}
+      let url=null;try{const u=new URL(input.source_url);if(u.protocol==='https:'&&!u.username&&!u.password)url=u.href;}catch{}
+      sources.push({label,name:typeof input.source==='string'?input.source:'Source not supplied',url,
+        validation:input.data_status||'not supplied',fetched:stamp(input.fetched_at),season:input.season||null});
+      if(input.data_status!=='validated')limitations.push(label+': validated input status not supplied');
+      if(input.prior_season)limitations.push(label+': uses prior-season statistics');
+    };
+    if(archived)limitations.push('Input provenance was not saved with this archived forecast. Current refreshed inputs are not evidence for the original prediction.');
+    else {
+      if(typeof game.source==='string')sources.push({label:'Game schedule',name:game.source,url:null,validation:'not supplied',fetched:null,season:null});
+      for(const side of ['away','home']){
+        const label=side==='away'?'Away':'Home';
+        add(label+' team statistics',game.team_context?.[side]||game.stats?.[side]);
+        if(sport==='MLB'){
+          add(label+' pitcher statistics',game.pitchers?.[side+'_stats']);
+          const lineup=game.lineups?.[side];
+          const measured=Array.isArray(lineup)?lineup.filter(x=>x?.data_status==='validated').length:0;
+          limitations.push(label+' lineup: '+(game.lineups?.[side+'_source']||'confirmation not supplied')+'; '+measured+' players marked validated in the feed');
+        }
+      }
+      if(game.weather?.reason)limitations.push(game.weather.reason);
+      if(Array.isArray(game.model_assumptions))limitations.push(...game.model_assumptions.filter(x=>typeof x==='string'));
+      if(typeof raw.inputs?.assumptions==='string')limitations.push(raw.inputs.assumptions);
+      if(typeof raw.inputs?.weight_policy==='string')limitations.push(raw.inputs.weight_policy);
+      if(raw.methodology)limitations.push(raw.methodology);
+      limitations.push('Injury coverage and source completeness are not independently verified by this panel.');
+    }
+    const missing=['ml','ou','k'].map(kind=>({market:kind,...forecast(game,sport,model,kind,now)})).filter(x=>!x.available).map(x=>({market:x.market,reason:x.reason}));
+    const outcome=sport==='SOC'?'three_way_90_minutes':'binary winner';
+    const matches=version&&Array.isArray(benchmark?.model_scores)?benchmark.model_scores.filter(x=>x.sport===sport&&x.model===model&&x.version===version&&x.outcome_type===outcome):[];
+    const candidate=matches.length===1?matches[0]:null;
+    const results=candidate&&Number.isInteger(candidate.n)&&candidate.n>0&&probability(candidate.accuracy)&&numeric(candidate.brier)&&Number(candidate.brier)>=0&&numeric(candidate.log_loss)&&Number(candidate.log_loss)>=0?candidate:null;
+    return {version,archived,status:!p.available?'Unavailable':p.closed?'Game started':p.stale?'Refresh required':'Estimate available',
+      reason:p.reason||null,forecastAt:stamp(archived?p.timestamp:raw.timestamp||game.generated_at),feedAt:stamp(feed.generated_at||feed.updated),
+      quality:archived?'Archived inputs not retained':game.data_quality?.status||'Not supplied',
+      sources,limitations:[...new Set(limitations)],missing,results,benchmarkAt:stamp(benchmark?.updated)};
+  }
   function american(value) {
     return numeric(value) && Math.abs(Number(value)) >= 100 ? (Number(value) > 0 ? '+' : '') + String(Number(value)) : 'Odds unavailable';
   }
@@ -37060,7 +37113,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const p=items.reduce((v,x)=>v*Number(x.probability),1);
     return `${items.length===1?'Saved model estimate':'Estimated chance every pick wins'}: ${percent(p)}.${items.length>1?' Assumes independent games.':''} Uncalibrated model estimates; not a guarantee.`;
   }
-  return {models,numeric,probability,percent,escape,applicable,record,id,market,forecast,american,start,score,toggle,legacyPicks,slipText,goalTotal,slipSummary};
+  return {models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,slipSummary};
 });
 </script><script id="PARLAYOS_UI_CONSISTENCY">(function () {
   'use strict';
@@ -37076,6 +37129,15 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   const teams=g=>`${g.away??g.a??'Away'} vs ${g.home??g.b??'Home'}`;
   const selected=s=>A(state.slips[s]);
   let dialog, returnFocus;
+  let benchmark=null, benchmarkError=false;
+
+  function evidencePanel(g,s) {
+    const info=C.evidence(g,s,model(s),state.data[s],benchmark);
+    const time=t=>!t?'Timestamp not supplied':t.future?'Future timestamp — check source or device clock':new Date(t.iso).toLocaleString()+` · ${Math.max(0,t.ageMinutes)} minutes ago`;
+    const score=info.results;
+    const results=score?`${score.n} settled games · Correct winner ${C.percent(score.accuracy)} · Brier ${Number(score.brier).toFixed(3)} · Log loss ${Number(score.log_loss).toFixed(3)}`:benchmarkError?'Model results could not be loaded. Use Refresh data to retry.':!benchmark?'Model results are loading.':'No measured results for this sport and exact model version.';
+    return `<details class="pos-detail pos-evidence" data-pos-detail="evidence"><summary>Prediction evidence</summary><p><b>${E(C.models[model(s)])}${info.version?' · v'+E(info.version):''}</b><br>${E(info.status)}</p>${info.reason?`<p>${E(info.reason)}</p>`:''}<dl><dt>Forecast generated</dt><dd>${E(time(info.forecastAt))}</dd><dt>Latest feed refresh</dt><dd>${E(time(info.feedAt))}</dd><dt>Input status reported by the feed</dt><dd>${E(info.quality)}</dd></dl><h4>Source evidence</h4><p class="pos-meta">A feed validation flag is not proof of prediction accuracy. Fetch times do not establish when the underlying statistics were updated.</p>${info.sources.length?`<ul>${info.sources.map(x=>`<li><b>${E(x.label)}</b>: ${x.url?`<a href="${E(x.url)}" target="_blank" rel="noopener noreferrer">${E(x.name)}</a>`:E(x.name)}${x.season?' · season '+E(x.season):''}<br><span class="pos-meta">Validation: ${E(x.validation)} · ${E(time(x.fetched))}</span></li>`).join('')}</ul>`:'<p>Original source evidence is unavailable.</p>'}<h4>Missing information and limitations</h4><ul>${info.limitations.map(x=>`<li>${E(x)}</li>`).join('')}${info.missing.map(x=>`<li>${E(labels(s)[x.market])}: ${E(x.reason)}</li>`).join('')}</ul><h4>Measured moneyline performance</h4><p>${E(results)}</p><p class="pos-meta">Results updated: ${E(time(info.benchmarkAt))}. Lower Brier and log loss are better. These results do not establish profitability or guarantee future wins. Models may have been evaluated on different games.</p><button type="button" data-pos-results>View all model results</button></details>`;
+  }
 
   function notify(text) {
     let node=q('#pos-toast');
@@ -37175,7 +37237,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       if(!p.available)return `<section class="pos-market"><div class="pos-market-title">${label}</div><div class="pos-meta">Prediction unavailable</div><div class="pos-meta">${E(p.reason)}</div></section>`;
       const isSelected=selected(s).some(x=>x.gameId===id&&x.market===kind&&x.model===m);
       return `<section class="pos-market"><div class="pos-market-title"><span>${label}</span><span class="pos-prob" aria-label="Model estimate ${C.percent(p.probability)}">${C.percent(p.probability)}</span></div><div class="pos-meta pos-forecast-label">${E(p.snapshotLabel)}</div><div class="pos-pick">${p.player_name&&!/^pitcher$/i.test(p.player_name)?E(p.player_name)+' · ':''}${E(p.selection)}${p.line==null?'':' '+E(p.line)}</div><div class="pos-meta">${E(C.american(p.odds))}${p.edge==null?'':' · Edge '+(p.edge>=0?'+':'')+(p.edge*100).toFixed(1)+'%'}${C.probability(p.confidence)?' · Confidence '+C.percent(p.confidence):''}${p.calibration_status==='unvalidated'?' · Accuracy not yet validated':''}</div>${p.outcomes?.draw!=null?`<div class="pos-meta">Away ${C.percent(p.outcomes.away)} · Draw ${C.percent(p.outcomes.draw)} · Home ${C.percent(p.outcomes.home)}</div>`:''}${p.inputs?.family_count===1?'<div class="pos-meta">One independent model family available.</div>':''}<div class="pos-actions"><button type="button" data-pos-add="${kind}" data-pos-game="${E(id)}" data-pos-sport="${s}" aria-pressed="${isSelected}"${p.actionable?'':' disabled'}>${p.actionable?(isSelected?'Selected ✓':'Select '+label):p.closed?'Game started':p.stale?'Refresh required':'Selection incomplete'}</button></div></section>`;
-    }).join('')}${goalForecast(g,s)}${details(g)}</article>`;
+    }).join('')}${evidencePanel(g,s)}${goalForecast(g,s)}${details(g)}</article>`;
   }
   function renderSport(s) {
     if(!sports[s])return;
@@ -37248,7 +37310,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   async function fetchJSON(file){const response=await fetch('./'+file,{cache:'no-store',signal:AbortSignal.timeout(12000)});if(!response.ok)throw new Error(String(response.status));return response.json();}
   async function load(){
     if(load.pending)return;load.pending=true;state.loading=true;renderAll();
-    await Promise.all(Object.entries(sports).map(async([s,v])=>{try{const d=await fetchJSON('parlayos_'+v[2]+'_chd.json');if(!Array.isArray(d.games))throw new Error('games missing');state.data[s]=d;delete state.errors[s];}catch{state.errors[s]=true;}}));
+    await Promise.all([...Object.entries(sports).map(async([s,v])=>{try{const d=await fetchJSON('parlayos_'+v[2]+'_chd.json');if(!Array.isArray(d.games))throw new Error('games missing');state.data[s]=d;delete state.errors[s];}catch{state.errors[s]=true;}}), (async()=>{try{const d=await fetchJSON('data/model_benchmark.json');if(!Array.isArray(d.model_scores))throw Error('Missing model results');benchmark=d;benchmarkError=false;}catch{benchmark=null;benchmarkError=true;}})()]);
     try{const d=await fetchJSON('live_scores.json');if(!d.sports)throw new Error('sports missing');state.live=d;delete state.errors.live;}catch{state.errors.live=true;}
     state.loading=false;load.pending=false;renderAll();renderLive();renderFantasy();
   }
