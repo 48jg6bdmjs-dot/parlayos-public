@@ -11504,6 +11504,21 @@ html body.pos-ui #screen-bankroll > :not(#pos-bankroll){display:none!important}
 .pos-bank-import{border:1px solid #ffffff25;border-radius:16px;padding:18px;margin-bottom:18px}.pos-bank-import>summary{cursor:pointer;font-weight:650;min-height:24px}.pos-bank-import p{color:var(--pos-muted);font-size:14px}.pos-bank-footnote{font-size:12px;text-align:center}
 .pos-bank-dialog{max-width:540px}.pos-bank-dialog form{display:grid;gap:16px}.pos-bank-dialog label{display:grid;gap:7px;font-size:14px;color:var(--pos-muted)}.pos-bank-dialog input,.pos-bank-dialog textarea{padding:12px;border:1px solid;border-radius:10px;width:100%;min-width:0}.pos-bank-dialog textarea{min-height:90px;resize:vertical}.pos-bank-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pos-bank-dialog [data-bank-message]{margin:0;color:#ffabba}.pos-bank-dialog p{font-size:14px}
 html body.pos-ui #pos-bank-import-mount .glass{padding:16px!important;margin:0!important}html body.pos-ui #pos-bank-import-mount button{min-height:44px!important}html body.pos-ui #pos-bank-import-mount [style*="color:"]{color:var(--pos-text)!important}
+html body.pos-ui #pos-bank-import-mount .pos-import-layout{display:flex;flex-direction:column;gap:14px;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.pos-import-heading{margin:12px 0 0;font-size:16px;line-height:1.4}
+.pos-import-field{display:flex;flex-direction:column;gap:8px;min-width:0;font-size:14px;font-weight:600;color:var(--pos-text)}
+.pos-import-amounts{display:grid;grid-template-columns:1fr 1.5fr;gap:14px;min-width:0}
+.pos-import-toolbar,.pos-import-source-actions{display:flex;flex-wrap:wrap;gap:10px}
+html body.pos-ui #pos-bank-import-mount .pos-import-layout :is(input:not([type=file]),textarea){width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;margin:0!important;padding:12px!important;font-family:inherit!important;font-size:16px!important;border:1px solid #ffffff40!important;border-radius:12px!important}
+html body.pos-ui #pos-bank-import-mount .pos-import-layout textarea{min-height:150px!important;resize:vertical!important}
+html body.pos-ui #pos-bank-import-mount .pos-import-layout button{position:static!important;flex:1 1 150px!important;min-width:0!important;max-width:100%!important;height:auto!important;margin:0!important;padding:12px 14px!important;font-size:14px!important;white-space:normal!important;line-height:1.4!important}
+html body.pos-ui #pos-bank-import-mount #brDkImportBtn{flex:none!important;width:100%!important;background:var(--pos-accent)!important;color:#111522!important;border-color:transparent!important}
+.pos-import-layout .pos-import-help{font-size:13px;margin:0;color:var(--pos-muted)}
+.pos-import-alternatives{border-top:1px solid #ffffff25;border-bottom:1px solid #ffffff25;padding:12px 0}
+.pos-import-alternatives>summary{min-height:44px;cursor:pointer;font-size:14px;font-weight:600;display:list-item;align-content:center}
+.pos-import-alternatives[open]>*:not(summary){margin-top:12px}
+.pos-import-layout :is(#brDkMsg,#brDkPreview){max-width:100%;overflow-wrap:anywhere}
+@media(max-width:480px){.pos-import-amounts{grid-template-columns:1fr}.pos-bank-import{padding:16px}.pos-import-toolbar,.pos-import-source-actions{flex-direction:column}html body.pos-ui #pos-bank-import-mount :is(.pos-import-toolbar,.pos-import-source-actions) button{flex:none!important;width:100%!important}}
 @media(max-width:800px){.pos-bank-columns{grid-template-columns:1fr}.pos-bank-hero,.pos-bank-panel{padding:20px}.pos-bank-heading{gap:16px}.pos-bank-heading .pos-actions{width:100%}.pos-bank-heading .pos-actions button{flex:1}.pos-bank-heading h2{font-size:30px}}
 @media(max-width:480px){.pos-bank-metrics{grid-template-columns:1fr;gap:16px}.pos-bank-metric{display:grid;grid-template-columns:1fr auto;align-items:center}.pos-bank-metric small{grid-column:1/-1}.pos-bank-metric strong{font-size:23px}.pos-bank-filters{flex-wrap:wrap}.pos-bank-filters input{flex-basis:100%}.pos-bank-filters select{width:100%}.pos-bank-panel,.pos-bank-hero{padding:16px}.pos-bank-slip>summary{padding:13px;gap:10px}.pos-bank-return{font-size:16px}}
 </style></head>
@@ -37512,6 +37527,48 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   }
   function open(title,body){opener=document.activeElement;dialog.innerHTML=`<header><h2>${title}</h2><button type="button" data-bank-close>Close</button></header>${body}`;dialog.showModal();}
   function close(){dialog.close();opener?.focus();}
+  function organizeImport(importer){
+    const find=id=>importer.querySelector('#'+id);
+    const ids=['brDkLinkInput','brDkTextInput','brDkStakeInput','brDkOddsInput','brDkImportBtn','brDkPasteBtn','brDkClearBtn','brDkMsg','brDkPreview','brDkRipBtn','brPhotoStripBtn','brPhotoFileInput'];
+    const nodes=Object.fromEntries(ids.map(id=>[id,find(id)]));
+    if(!nodes.brDkTextInput||!nodes.brDkImportBtn)return;
+    importer.classList.add('pos-import-layout');
+    importer.replaceChildren();
+    const section=(tag,cls,text)=>{const el=document.createElement(tag);el.className=cls;if(text)el.textContent=text;return el;};
+    const title=text=>importer.appendChild(section('h4','pos-import-heading',text));
+    const field=(id,label,parent,placeholder)=>{const input=nodes[id];if(!input)return;const wrap=section('label','pos-import-field',label);wrap.htmlFor=id;input.setAttribute('aria-label',label);if(placeholder)input.placeholder=placeholder;wrap.appendChild(input);parent.appendChild(wrap);};
+    title('1. Review wager details');
+    const amounts=section('div','pos-import-amounts');importer.appendChild(amounts);
+    field('brDkStakeInput','Wager ($)',amounts,'0.00');
+    field('brDkOddsInput','Combined American odds',amounts,'Auto-detected or enter odds');
+    importer.appendChild(section('p','pos-import-help','Use the wager and combined odds shown on your existing slip.'));
+    title('2. Add your slip');
+    const toolbar=section('div','pos-import-toolbar');importer.appendChild(toolbar);
+    for(const [id,label]of [['brDkPasteBtn','Paste from clipboard'],['brDkClearBtn','Clear fields']]){if(nodes[id]){nodes[id].textContent=label;toolbar.appendChild(nodes[id]);}}
+    field('brDkTextInput','Slip text',importer,'Paste selections, odds and wager here.');
+    const alternatives=section('details','pos-import-alternatives');alternatives.appendChild(section('summary','','Use a share link or photo'));
+    alternatives.appendChild(section('p','pos-import-help','Link and photo imports can log the slip automatically. Check the wager above first.'));
+    field('brDkLinkInput','Sportsbook share link',alternatives,'https://…');
+    const sourceActions=section('div','pos-import-source-actions');alternatives.appendChild(sourceActions);importer.appendChild(alternatives);
+    title('3. Save pasted slip');
+    nodes.brDkImportBtn.textContent='Import and log slip';importer.appendChild(nodes.brDkImportBtn);
+    for(const id of ['brDkMsg','brDkPreview'])if(nodes[id]){nodes[id].setAttribute('role','status');nodes[id].setAttribute('aria-live','polite');importer.appendChild(nodes[id]);}
+    for(const id of ['brDkRipBtn','brPhotoStripBtn','brPhotoFileInput'])if(nodes[id])importer.appendChild(nodes[id]);
+    // Move late-created import controls without cloning away their listeners.
+    // The save button stays a direct child so the legacy photo installer sees
+    // its existing button anywhere in this container and cannot duplicate it.
+    const observer=new MutationObserver(arrangeSources);
+    function arrangeSources(){
+      observer.disconnect();
+      for(const [id,label]of [['brDkRipBtn','Import from link'],['brPhotoStripBtn','Import from photo']]){
+        const button=find(id);if(!button)continue;
+        if(!button.dataset.posImportLabel){button.textContent=label;button.dataset.posImportLabel='true';}
+        if(button.parentElement!==sourceActions)sourceActions.appendChild(button);
+      }
+      observer.observe(importer,{childList:true,subtree:true});
+    }
+    arrangeSources();
+  }
   function boot(){
     if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot,{once:true});return;}
     const screen=q('#screen-bankroll');if(!screen||q('#pos-bankroll'))return;
@@ -37519,7 +37576,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     host=document.createElement('div');host.id='pos-bankroll';host.className='pos-hub pos-bank';
     host.innerHTML=`<header class="pos-bank-heading"><div><span class="pos-bank-eyebrow">YOUR TRACKING SPACE</span><h2>Bankroll</h2><p>Track wagers. Understand your results.</p></div><div class="pos-actions"><button type="button" data-bank-adjust>Adjust starting balance</button><button type="button" class="pos-bank-primary" data-bank-log>Log a slip</button></div></header><section class="pos-bank-hero" id="pos-bank-overview" aria-label="Bankroll overview"></section><div class="pos-bank-columns"><section class="pos-bank-panel"><div class="pos-bank-section-heading"><h3>Settled performance</h3><span>All time</span></div><p class="pos-meta">Cumulative net results. Pending stakes do not count as losses.</p><div id="pos-bank-chart"></div></section><section class="pos-bank-panel"><div class="pos-bank-section-heading"><h3>Pending slips <span id="pos-bank-pending-count"></span></h3></div><div id="pos-bank-pending"></div></section></div><section class="pos-bank-panel"><div class="pos-bank-section-heading"><h3>Slip history</h3><span id="pos-bank-history-count"></span></div><div class="pos-bank-filters"><input type="search" id="pos-bank-search" aria-label="Search slip history" placeholder="Search slip names"><select id="pos-bank-filter" aria-label="Filter slip results"><option value="all">All results</option><option value="win">Won</option><option value="loss">Lost</option><option value="push">Push</option></select></div><div id="pos-bank-history"></div></section><details class="pos-bank-import"><summary>Import an existing sportsbook slip</summary><p>Import tools are optional. Review the wager and odds before logging.</p><div id="pos-bank-import-mount"></div></details><p class="pos-meta pos-bank-footnote">Virtual tracking only. Logging or marking a result does not place a bet or move money. Records are saved in this browser.</p>`;
     screen.appendChild(host);
-    const importer=q('#brDkTextInput')?.closest('.glass');if(importer){importer.removeAttribute('data-pos-legacy');q('#pos-bank-import-mount').appendChild(importer);}
+    const importer=q('#brDkTextInput')?.closest('.glass');if(importer){importer.removeAttribute('data-pos-legacy');q('#pos-bank-import-mount').appendChild(importer);organizeImport(importer);}
     for(const [id,label]of [['brDkLinkInput','Sportsbook share link'],['brDkTextInput','Slip text'],['brDkStakeInput','Imported wager amount'],['brDkOddsInput','Imported American odds']])q('#'+id)?.setAttribute('aria-label',label);
     dialog=document.createElement('dialog');dialog.className='pos-dialog pos-bank-dialog';dialog.setAttribute('aria-label','Bankroll action');document.body.appendChild(dialog);
     dialog.addEventListener('cancel',()=>opener?.focus());dialog.addEventListener('click',e=>{if(e.target===dialog||e.target.closest('[data-bank-close]'))close();});
