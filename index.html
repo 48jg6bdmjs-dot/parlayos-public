@@ -37104,6 +37104,10 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       if(!['monte_carlo','zips','steamer','season_stats'].includes(model)||ml.evaluation!=='analytic_poisson')return null;
       d={type:'independent_poisson',away_mean:ml.inputs?.away_mean,home_mean:ml.inputs?.home_mean,
         model_ids:[model],scope:'Independent run estimates; extra innings and sportsbook settlement rules are not modeled'};
+    } else if(['NFL','NBA'].includes(sport)) {
+      if(model!=='monte_carlo'||ml.evaluation!=='analytic_poisson'||ml.sim_type!=='score_differential_poisson')return null;
+      d={type:'independent_poisson',sport,away_mean:ml.inputs?.away_mean,home_mean:ml.inputs?.home_mean,model_ids:[model],
+        scope:'Experimental independent Poisson points baseline; scoring increments, score correlation and overtime are not modeled. Total probabilities have not been calibrated'};
     } else if(['NHL','SOC'].includes(sport)) {
       d=game.score_distribution;
       if(!Array.isArray(d?.model_ids)||!d.model_ids.includes(model))return null;
@@ -37111,9 +37115,11 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     return goalTotal(d,1)?d:null;
   }
   function goalTotal(distribution, line) {
-    if(distribution?.type!=='independent_poisson'||!numeric(line)||Number(line)<.5||Number(line)>20||Number(line)*2!==Math.round(Number(line)*2))return null;
+    const maxLine=distribution?.sport==='NBA'?400:distribution?.sport==='NFL'?150:20;
+    const maxMean=distribution?.sport==='NBA'?200:distribution?.sport==='NFL'?75:12;
+    if(distribution?.type!=='independent_poisson'||!numeric(line)||Number(line)<.5||Number(line)>maxLine||Number(line)*2!==Math.round(Number(line)*2))return null;
     const a=Number(distribution.away_mean),h=Number(distribution.home_mean);
-    if(!numeric(distribution.away_mean)||!numeric(distribution.home_mean)||a<=0||h<=0||a>12||h>12)return null;
+    if(!numeric(distribution.away_mean)||!numeric(distribution.home_mean)||a<=0||h<=0||a>maxMean||h>maxMean)return null;
     const mean=a+h,threshold=Number(line);let p=Math.exp(-mean),under=0,push=0;
     for(let k=0;k<=Math.floor(threshold);k++){if(k>0)p*=mean/k;if(k<threshold)under+=p;else push=p;}
     return {over:Math.max(0,1-under-push),under,push};
@@ -37246,10 +37252,10 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   }
   function goalForecast(g,s) {
     const m=model(s),d=C.totalDistribution(g,s,m),key=s+':'+C.id(g)+':'+m;
-    if(!d)return s==='MLB'?'<p class="pos-meta">Run totals require a current Monte Carlo, ZiPS, Steamer or Season Stats scoring estimate. Combined and CHD totals are not available.</p>':'';
-    const unit=s==='MLB'?'runs':'goals',title=s==='MLB'?'Run':'Goal';
+    if(!d)return s==='MLB'?'<p class="pos-meta">Run totals require a current Monte Carlo, ZiPS, Steamer or Season Stats scoring estimate. Combined and CHD totals are not available.</p>':['NFL','NBA'].includes(s)?'<p class="pos-meta">Point totals require a current Monte Carlo scoring estimate. Other models do not supply a compatible points distribution.</p>':'';
+    const points=['NFL','NBA'].includes(s),unit=points?'points':s==='MLB'?'runs':'goals',title=points?'Point':s==='MLB'?'Run':'Goal',maxLine=s==='NBA'?400:s==='NFL'?150:20;
     const line=state.goalLines[key],p=C.goalTotal(d,line);
-    return `<details class="pos-detail" data-pos-detail="goal"><summary>${title} forecast and total calculator</summary><p class="pos-meta">Estimated ${unit}: ${E(g.away)} ${Number(d.away_mean).toFixed(2)} · ${E(g.home)} ${Number(d.home_mean).toFixed(2)}. Uncalibrated model estimate.</p><p class="pos-meta">${E(d.scope)}. Enter your own total line; this calculator does not supply bookmaker odds.</p><form data-pos-total-form data-pos-game="${E(C.id(g))}" data-pos-sport="${s}" data-pos-model="${E(m)}"><label>Total ${unit} line <input type="number" name="line" min="0.5" max="20" step="0.5" required value="${p?E(line):''}" placeholder="Enter a line"></label><button type="submit">Calculate total</button></form><p role="status" data-pos-total-result>${p?`Your line ${E(line)}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}`:''}</p></details>`;
+    return `<details class="pos-detail" data-pos-detail="goal"><summary>${title} forecast and total calculator</summary><p class="pos-meta">Estimated ${unit}: ${E(g.away)} ${Number(d.away_mean).toFixed(2)} · ${E(g.home)} ${Number(d.home_mean).toFixed(2)}. Uncalibrated model estimate.</p><p class="pos-meta">${E(d.scope)}. Enter your own total line; this calculator does not supply bookmaker odds.</p><form data-pos-total-form data-pos-game="${E(C.id(g))}" data-pos-sport="${s}" data-pos-model="${E(m)}"><label>Total ${unit} line <input type="number" name="line" min="0.5" max="${maxLine}" step="0.5" required value="${p?E(line):''}" placeholder="Enter a line"></label><button type="submit">Calculate total</button></form><p role="status" data-pos-total-result>${p?`Your line ${E(line)}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}`:''}</p></details>`;
   }
   async function modelResults() {
     openDialog('Model results','<p role="status">Loading verified outcomes…</p>');
@@ -37401,7 +37407,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     dialog=document.createElement('dialog');dialog.className='pos-dialog';dialog.id='pos-dialog';dialog.setAttribute('aria-label','ParlayOS details');document.body.appendChild(dialog);
     dialog.addEventListener('click',e=>{if(e.target===dialog)closeDialog();});dialog.addEventListener('cancel',()=>returnFocus?.focus());
     document.addEventListener('input',e=>{const b=e.target;if(b.matches('[data-pos-search]')){state.query[b.dataset.posSearch]=b.value;renderSport(b.dataset.posSearch);}});
-    document.addEventListener('submit',e=>{const f=e.target;if(!f.matches('[data-pos-total-form]'))return;e.preventDefault();e.stopImmediatePropagation();const s=f.dataset.posSport,g=games(s).find(g=>C.id(g)===f.dataset.posGame);const result=q('[data-pos-total-result]',f.parentElement),m=model(s);const line=f.elements.line.value,p=g&&f.dataset.posModel===m?C.goalTotal(C.totalDistribution(g,s,m),line):null;if(!p){result.textContent='No current scoring estimate is available, or the line is invalid. Refresh and enter a line in half-point increments from 0.5 to 20.';return;}state.goalLines[s+':'+C.id(g)+':'+m]=Number(line);q('[data-pos-total-result]',f.parentElement).textContent=`Your line ${line}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}`;},true);
+    document.addEventListener('submit',e=>{const f=e.target;if(!f.matches('[data-pos-total-form]'))return;e.preventDefault();e.stopImmediatePropagation();const s=f.dataset.posSport,g=games(s).find(g=>C.id(g)===f.dataset.posGame);const result=q('[data-pos-total-result]',f.parentElement),m=model(s);const line=f.elements.line.value,p=g&&f.dataset.posModel===m?C.goalTotal(C.totalDistribution(g,s,m),line):null;if(!p){result.textContent='No current scoring estimate is available, or the line is invalid. Refresh and enter a line in half-point increments within the displayed input limits.';return;}state.goalLines[s+':'+C.id(g)+':'+m]=Number(line);q('[data-pos-total-result]',f.parentElement).textContent=`Your line ${line}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}`;},true);
     // Close pregame selections at kickoff even if a tab stays open between feeds.
     setInterval(()=>{if(!state.loading)renderAll();},60000);
     renderAll();load();
