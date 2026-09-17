@@ -11370,6 +11370,9 @@ html body.pos-ui [data-pos-total-form] input, html body.pos-ui [data-pos-total-f
   width:100%; min-width:0; max-width:100%; min-height:44px;
 }
 
+html body.pos-ui [data-pos-nhl-prop-form], html body.pos-ui [data-pos-nhl-prop-form] label { display:grid; gap:10px; min-width:0; }
+html body.pos-ui [data-pos-nhl-prop-form] input, html body.pos-ui [data-pos-nhl-prop-form] select, html body.pos-ui [data-pos-nhl-prop-form] button { width:100%; min-width:0; max-width:100%; min-height:44px; }
+
 /* Decorative CSS scenes: no external assets, canvas loops or input interception. */
 html body.pos-ui[data-pos-theme="aurora"] { --pos-bg:#071923; --pos-surface:#122b37; --pos-accent:#83e9c6; --pos-text:#f0fcf8; --pos-muted:#b7d1d4; --pos-window:rgba(5,20,31,.64); }
 html body.pos-ui[data-pos-theme="ocean"] { --pos-bg:#051c2c; --pos-surface:#0e3041; --pos-accent:#83deef; --pos-text:#effaff; --pos-muted:#b6d0de; --pos-window:rgba(3,23,38,.66); }
@@ -37093,6 +37096,19 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   function american(value) {
     return numeric(value) && Math.abs(Number(value)) >= 100 ? (Number(value) > 0 ? '+' : '') + String(Number(value)) : 'Odds unavailable';
   }
+  function nhlPropInputs(game,now=Date.now()) {
+    const at=new Date(game.generated_at||'').getTime(),kickoff=start(game);
+    if(!Number.isFinite(at)||at>now+60000||now-at>86400000||!kickoff||kickoff.getTime()<=now||game.game_type!==2||game.data_quality?.prediction_available===false)return [];
+    const rows=Array.isArray(game.player_prop_models)?game.player_prop_models:[];
+    return rows.filter(p=>p&&['shots','points','saves'].includes(p.metric)&&p.model_id==='nhl_'+p.metric+'_season_poisson'&&p.model_version==='1.0.0'&&p.distribution==='poisson'&&p.data_status==='validated'&&p.player_id&&p.player_name&&p.source&&p.season&&Number.isInteger(p.games)&&p.games>=10&&numeric(p.mean)&&Number(p.mean)>=0&&Number(p.mean)<=(p.metric==='saves'?60:15)&&rows.filter(x=>x?.player_id===p.player_id&&x?.metric===p.metric).length===1);
+  }
+  function nhlProp(game,player,metric,line,now=Date.now()) {
+    const input=nhlPropInputs(game,now).find(p=>String(p.player_id)===String(player)&&p.metric===metric);
+    if(!input||!numeric(line)||Number(line)<.5||Number(line)>100||Number(line)*2!==Math.round(Number(line)*2))return null;
+    let mass=Math.exp(-input.mean),under=0,push=0;
+    for(let k=0;k<=Math.floor(Number(line));k++){if(k)mass*=input.mean/k;if(k<Number(line))under+=mass;else push=mass;}
+    return {input,over:Math.max(0,1-under-push),under,push};
+  }
   function pitcherPropInputs(game,now=Date.now()) {
     const at=new Date(game.generated_at||'').getTime(),kickoff=start(game);
     if(!Number.isFinite(at)||at>now+60000||now-at>86400000||!kickoff||kickoff.getTime()<=now||game.data_quality?.prediction_available===false)return [];
@@ -37194,7 +37210,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const p=items.reduce((v,x)=>v*Number(x.probability),1);
     return `${items.length===1?'Saved model estimate':'Estimated chance every pick wins'}: ${percent(p)}.${items.length>1?' Assumes independent games.':''} Uncalibrated model estimates; not a guarantee.`;
   }
-  return {models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,pitcherPropInputs,pitcherProp,teamMetrics,totalDistribution,slipSummary};
+  return {models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,nhlPropInputs,nhlProp,pitcherPropInputs,pitcherProp,teamMetrics,totalDistribution,slipSummary};
 });
 </script><script id="PARLAYOS_UI_CONSISTENCY">(function () {
   'use strict';
@@ -37256,6 +37272,10 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   }
   function timeLabel(g,s){const d=C.start(g,A(state.live.sports?.[s]));return d?d.toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Start time unavailable';}
   function playerPropPanel(g,s) {
+    if(s==='NHL') {
+      const rows=C.nhlPropInputs(g);
+      return `<section class="pos-market" data-pos-market="props"><div class="pos-market-title">Player props · NHL season models</div>${rows.length?`<p class="pos-meta">Shots, points and saves use separate uncalibrated season-rate models. Starting status and playing time are unconfirmed.</p><form data-pos-nhl-prop-form data-pos-game="${E(C.id(g))}"><label>Player and statistic <select name="prop">${rows.map(p=>`<option value="${E(p.player_id+':'+p.metric)}">${E(p.player_name)} · ${E(p.metric)} · mean ${Number(p.mean).toFixed(2)} · ${p.games} appearances · season ${E(p.season)}</option>`).join('')}</select></label><label>Sportsbook prop line <input type="number" name="line" min="0.5" max="100" step="0.5" required placeholder="Enter a line"></label><button type="submit">Calculate player prop</button></form><p role="status" data-pos-nhl-prop-result></p><p class="pos-meta">Prior-season club data conditional on participation, including overtime. Opponent, injuries and minutes are not adjusted. These models do not establish an edge or supply bookmaker odds.</p>`:'<p class="pos-meta">Models installed; no eligible player inputs for this game. Requires a future regular-season game, current-roster identity and at least 10 prior-season appearances. No prop percentage or selection is available.</p>'}</section>`;
+    }
     if(s!=='MLB') {
       const examples={NFL:'passing, rushing and receiving',NBA:'points, rebounds and assists',NHL:'shots, points and saves',SOC:'shots and goals'};
       return `<section class="pos-market" data-pos-market="props"><div class="pos-market-title">Player props</div><p class="pos-meta">${E(examples[s])}: unavailable.</p><p class="pos-meta">A supported player-specific model and verified player statistics are not connected for this sport. No prop percentage or selection is available.</p></section>`;
@@ -37447,6 +37467,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     dialog=document.createElement('dialog');dialog.className='pos-dialog';dialog.id='pos-dialog';dialog.setAttribute('aria-label','ParlayOS details');document.body.appendChild(dialog);
     dialog.addEventListener('click',e=>{if(e.target===dialog)closeDialog();});dialog.addEventListener('cancel',()=>returnFocus?.focus());
     document.addEventListener('input',e=>{const b=e.target;if(b.matches('[data-pos-search]')){state.query[b.dataset.posSearch]=b.value;renderSport(b.dataset.posSearch);}});
+    document.addEventListener('submit',e=>{const f=e.target;if(!f.matches('[data-pos-nhl-prop-form]'))return;e.preventDefault();e.stopImmediatePropagation();const g=games('NHL').find(g=>C.id(g)===f.dataset.posGame),[player,metric]=f.elements.prop.value.split(':'),p=g?C.nhlProp(g,player,metric,f.elements.line.value):null,result=q('[data-pos-nhl-prop-result]',f.parentElement);result.textContent=p?`${p.input.player_name} · ${p.input.metric} · your line ${f.elements.line.value}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}. Uncalibrated season baseline.`:'Current player inputs are unavailable or the line is invalid. Refresh and review the selection.';},true);
     document.addEventListener('submit',e=>{const f=e.target;if(!f.matches('[data-pos-prop-form]'))return;e.preventDefault();e.stopImmediatePropagation();const g=games('MLB').find(g=>C.id(g)===f.dataset.posGame),side=f.elements.side.value,p=g?C.pitcherProp(g,side,f.elements.innings.value,f.elements.line.value):null,result=q('[data-pos-prop-result]',f.parentElement);if(!p||p.player.id!==f.elements.side.selectedOptions[0]?.dataset.playerId){result.textContent='Current pitcher inputs are unavailable or an entry is invalid. Refresh and review the player and line.';return;}result.textContent=`${p.player.name} · assumed ${f.elements.innings.value} innings · expected strikeouts ${p.mean.toFixed(2)} · your line ${f.elements.line.value}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}. Uncalibrated baseline.`;},true);
     document.addEventListener('submit',e=>{const f=e.target;if(!f.matches('[data-pos-total-form]'))return;e.preventDefault();e.stopImmediatePropagation();const s=f.dataset.posSport,g=games(s).find(g=>C.id(g)===f.dataset.posGame);const result=q('[data-pos-total-result]',f.parentElement),m=model(s);const line=f.elements.line.value,p=g&&f.dataset.posModel===m?C.goalTotal(C.totalDistribution(g,s,m),line):null;if(!p){result.textContent='No current scoring estimate is available, or the line is invalid. Refresh and enter a line in half-point increments within the displayed input limits.';return;}state.goalLines[s+':'+C.id(g)+':'+m]=Number(line);q('[data-pos-total-result]',f.parentElement).textContent=`Your line ${line}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}`;},true);
     // Close pregame selections at kickoff even if a tab stays open between feeds.
