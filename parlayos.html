@@ -37098,6 +37098,15 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   function american(value) {
     return numeric(value) && Math.abs(Number(value)) >= 100 ? (Number(value) > 0 ? '+' : '') + String(Number(value)) : 'Odds unavailable';
   }
+  function highestMarketSide(game,sport,model,kind,now=Date.now()) {
+    if(kind!=='ou'&&!(kind==='k'&&sport==='MLB'))return null;
+    const p=market(game,sport,model,kind,now);
+    if(!p.available||!p.actionable||!numeric(p.line)||!/^over$|^under$/i.test(p.selection))return null;
+    if(kind==='k'&&(!p.player_id||!p.player_name))return null;
+    if(!probability(p.pA)||!probability(p.pB)||Math.abs(Number(p.pA)+Number(p.pB)-1)>1e-6||Number(p.pA)===Number(p.pB))return null;
+    const over=Number(p.pA)>Number(p.pB);
+    return {selection:over?'Over':'Under',probability:Math.max(Number(p.pA),Number(p.pB)),line:Number(p.line),player_name:p.player_name||null,model,calibration_status:p.calibration_status};
+  }
   function nhlPropInputs(game,now=Date.now()) {
     const at=new Date(game.generated_at||'').getTime(),kickoff=start(game);
     if(!Number.isFinite(at)||at>now+60000||now-at>86400000||!kickoff||kickoff.getTime()<=now||game.game_type!==2||game.data_quality?.prediction_available===false)return [];
@@ -37212,7 +37221,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const p=items.reduce((v,x)=>v*Number(x.probability),1);
     return `${items.length===1?'Saved model estimate':'Estimated chance every pick wins'}: ${percent(p)}.${items.length>1?' Assumes independent games.':''} Uncalibrated model estimates; not a guarantee.`;
   }
-  return {models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,nhlPropInputs,nhlProp,pitcherPropInputs,pitcherProp,teamMetrics,totalDistribution,slipSummary};
+  return {models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,highestMarketSide,nhlPropInputs,nhlProp,pitcherPropInputs,pitcherProp,teamMetrics,totalDistribution,slipSummary};
 });
 </script><script id="PARLAYOS_UI_CONSISTENCY">(function () {
   'use strict';
@@ -37221,7 +37230,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   const E=C.escape, A=v=>Array.isArray(v)?v:[], q=(s,r=document)=>r.querySelector(s);
   const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback;}catch{return fallback;}};
   const write=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value));}catch{}};
-  const state={data:{},errors:{},models:read('parlayos:ui:models',{}),slips:read('parlayos:ui:slips',{}),query:{},active:'MLB',liveSport:'ALL',live:{sports:{}},fantasy:'MLB',crew:read('parlayos:ui:crew',{}),loading:true,totalModels:{},goalLines:{}};
+  const state={data:{},errors:{},models:read('parlayos:ui:models',{}),slips:read('parlayos:ui:slips',{}),query:{},active:'MLB',liveSport:'ALL',live:{sports:{}},fantasy:'MLB',crew:read('parlayos:ui:crew',{}),loading:true};
   const model=s=>C.models[state.models[s]]?state.models[s]:'final_combined';
   const games=s=>[...new Map(A(state.data[s]?.games).filter(g=>g&&typeof g==='object').map(g=>[C.id(g),g])).values()];
   const labels=s=>({ml:'Moneyline',ou:'Over / Under',k:s==='MLB'?'Pitcher strikeouts':s==='NHL'?'Puck line':s==='SOC'?'Handicap':'Spread'});
@@ -37273,18 +37282,9 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     screen.appendChild(host);
   }
   function timeLabel(g,s){const d=C.start(g,A(state.live.sports?.[s]));return d?d.toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Start time unavailable';}
-  function playerPropPanel(g,s) {
-    if(s==='NHL') {
-      const rows=C.nhlPropInputs(g);
-      return `<section class="pos-market" data-pos-market="props"><div class="pos-market-title">Player props · NHL season models</div>${rows.length?`<p class="pos-meta">Shots, points and saves use separate uncalibrated season-rate models. Starting status and playing time are unconfirmed.</p><form data-pos-nhl-prop-form data-pos-game="${E(C.id(g))}"><label>Player and statistic <select name="prop">${rows.map(p=>`<option value="${E(p.player_id+':'+p.metric)}">${E(p.player_name)} · ${E(p.metric)} · mean ${Number(p.mean).toFixed(2)} · ${p.games} appearances · season ${E(p.season)}</option>`).join('')}</select></label><label>Sportsbook prop line <input type="number" name="line" min="0.5" max="100" step="0.5" required placeholder="Enter a line"></label><button type="submit">Calculate player prop</button></form><p role="status" data-pos-nhl-prop-result></p><p class="pos-meta">Prior-season club data conditional on participation, including overtime. Opponent, injuries and minutes are not adjusted. These models do not establish an edge or supply bookmaker odds.</p>`:'<p class="pos-meta">Models installed; no eligible player inputs for this game. Requires a future regular-season game, current-roster identity and at least 10 prior-season appearances. No prop percentage or selection is available.</p>'}</section>`;
-    }
-    if(s!=='MLB') {
-      const examples={NFL:'passing, rushing and receiving',NBA:'points, rebounds and assists',NHL:'shots, points and saves',SOC:'shots and goals'};
-      return `<section class="pos-market" data-pos-market="props"><div class="pos-market-title">Player props</div><p class="pos-meta">${E(examples[s])}: unavailable.</p><p class="pos-meta">A supported player-specific model and verified player statistics are not connected for this sport. No prop percentage or selection is available.</p></section>`;
-    }
-    const players=C.pitcherPropInputs(g);
-    if(!players.length)return '<section class="pos-market" data-pos-market="props"><div class="pos-market-title">Player props · Pitcher strikeouts</div><p class="pos-meta">Unavailable: current scheduled-pitcher identity and validated season statistics are required (at least 10 innings).</p></section>';
-    return `<section class="pos-market" data-pos-market="props"><div class="pos-market-title">Player props · Pitcher strikeouts</div><p class="pos-meta">Experimental season-rate baseline, independent of the selected moneyline model. Scheduled pitchers are not confirmed starters. Opponent lineup, pitch limits and injuries are not modeled.</p>${players.map(p=>`<p class="pos-meta">${E(p.name)} · ${p.k9.toFixed(2)} K/9 · ${p.innings.toFixed(1)} season innings · ${E(p.source)}</p>`).join('')}<form data-pos-prop-form data-pos-game="${E(C.id(g))}"><label>Pitcher <select name="side">${players.map(p=>`<option value="${p.side}" data-player-id="${E(p.id)}">${E(p.name)}</option>`).join('')}</select></label><label>Assumed innings pitched <input name="innings" type="number" min="0.1" max="9" step="0.1" required placeholder="Your workload assumption"></label><label>Sportsbook strikeout line <input name="line" type="number" min="0.5" max="27" step="0.5" required placeholder="Enter a line"></label><button type="submit">Calculate strikeouts</button></form><p role="status" data-pos-prop-result></p><p class="pos-meta">Uncalibrated Poisson estimate. Innings input is a decimal workload, not baseball innings notation. No bookmaker odds or guaranteed picks are supplied.</p></section>`;
+  function compactMarket(g,s,kind) {
+    const prop=kind==='k',p=C.highestMarketSide(g,s,model(s),kind),label=prop?'Player props':'Over / Under';
+    return `<section class="pos-market" data-pos-market="${prop?'props':'ou'}"><div class="pos-market-title"><span>${label}</span>${p?`<span class="pos-prob">${C.percent(p.probability)}</span>`:''}</div>${p?`<div class="pos-pick">${p.player_name?E(p.player_name)+' · ':''}${E(p.selection)} ${E(p.line)}${prop?' strikeouts':''}</div><p class="pos-meta">${E(C.models[p.model])} · Model estimate${p.calibration_status==='unvalidated'?' · Accuracy not yet validated':''}</p>`:`<p class="pos-meta">No line-backed ${prop?'player-prop':'total'} prediction available.</p>`}</section>`;
   }
   function metricsPanel(g,s) {
     const teams=C.teamMetrics(g,s);
@@ -37311,20 +37311,6 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     }
     if(g.venue?.name||typeof g.venue==='string')rows.push(['Venue',g.venue.name||g.venue]);
     return rows.length?`<details class="pos-detail" data-pos-detail="game"><summary>Game details</summary><div class="pos-stats">${rows.map(([k,v])=>`<div><small>${E(k)}</small>${E(v)}</div>`).join('')}</div></details>`:'';
-  }
-  function totalModels(g,s) {
-    return Object.keys(C.models).filter(m=>C.totalDistribution(g,s,m));
-  }
-  function totalModel(g,s) {
-    const options=totalModels(g,s),selected=state.totalModels[s+':'+C.id(g)];
-    return options.includes(selected)?selected:options[0]||null;
-  }
-  function goalForecast(g,s) {
-    const options=totalModels(g,s),m=totalModel(g,s),d=m?C.totalDistribution(g,s,m):null,key=s+':'+C.id(g)+':'+m;
-    if(!d)return '<p class="pos-meta">No current scoring distribution is available for this game. Refresh data; totals remain unavailable for started games or missing/stale inputs.</p>';
-    const points=['NFL','NBA'].includes(s),unit=points?'points':s==='MLB'?'runs':'goals',title=points?'Point':s==='MLB'?'Run':'Goal',maxLine=s==='NBA'?400:s==='NFL'?150:20;
-    const line=state.goalLines[key],p=C.goalTotal(d,line);
-    return `<div class="pos-inline-total"><p class="pos-meta">${title} forecast · Totals model: ${E(C.models[m])}</p><p class="pos-meta">Totals use the model chosen below, independently of your moneyline selection.</p><p class="pos-meta">Estimated ${unit}: ${E(g.away)} ${Number(d.away_mean).toFixed(2)} · ${E(g.home)} ${Number(d.home_mean).toFixed(2)}. Uncalibrated model estimate.</p><p class="pos-meta">${E(d.scope)}. Enter your own total line; this calculator does not supply bookmaker odds.</p><form data-pos-total-form data-pos-game="${E(C.id(g))}" data-pos-sport="${s}" data-pos-model="${E(m)}"><label>Over / Under model <select data-pos-total-model name="totalModel">${options.map(id=>`<option value="${id}"${id===m?' selected':''}>${E(C.models[id])}</option>`).join('')}</select></label><label>Total ${unit} line <input type="number" name="line" min="0.5" max="${maxLine}" step="0.5" required value="${p?E(line):''}" placeholder="Enter a line"></label><button type="submit">Calculate total</button></form><p role="status" data-pos-total-result>${p?`Your line ${E(line)}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}`:''}</p></div>`;
   }
   async function modelResults() {
     openDialog('Model results','<p role="status">Loading verified outcomes…</p>');
@@ -37358,11 +37344,12 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   function card(g,s) {
     const id=C.id(g),m=model(s);
     return `<article class="pos-card" data-pos-game="${E(id)}" data-pos-model="${m}"><div class="pos-card-head"><span>${E(timeLabel(g,s))}</span><span>${E(C.models[m])}</span></div><h3>${E(g.away??g.a??'Away')} <span>vs</span> ${E(g.home??g.b??'Home')}</h3>${Object.entries(labels(s)).filter(([kind])=>s!=='MLB'||kind!=='k').map(([kind,label])=>{
+      if(kind==='ou')return compactMarket(g,s,'ou');
       const p=C.forecast(g,s,m,kind);
-      if(!p.available)return `<section class="pos-market" data-pos-market="${kind}"><div class="pos-market-title">${label}</div><div class="pos-meta">${kind==='ou'&&totalModel(g,s)?'Enter your line to calculate over / under':'Prediction unavailable'}</div>${kind==='ou'?goalForecast(g,s):`<div class="pos-meta">${E(p.reason)}</div>`}</section>`;
+      if(!p.available)return `<section class="pos-market"><div class="pos-market-title">${label}</div><p class="pos-meta">${E(p.reason)}</p></section>`;
       const isSelected=selected(s).some(x=>x.gameId===id&&x.market===kind&&x.model===m);
       return `<section class="pos-market"><div class="pos-market-title"><span>${label}</span><span class="pos-prob" aria-label="Model estimate ${C.percent(p.probability)}">${C.percent(p.probability)}</span></div><div class="pos-meta pos-forecast-label">${E(p.snapshotLabel)}</div><div class="pos-pick">${p.player_name&&!/^pitcher$/i.test(p.player_name)?E(p.player_name)+' · ':''}${E(p.selection)}${p.line==null?'':' '+E(p.line)}</div><div class="pos-meta">${E(C.american(p.odds))}${p.edge==null?'':' · Edge '+(p.edge>=0?'+':'')+(p.edge*100).toFixed(1)+'%'}${C.probability(p.confidence)?' · Confidence '+C.percent(p.confidence):''}${p.calibration_status==='unvalidated'?' · Accuracy not yet validated':''}</div>${p.outcomes?.draw!=null?`<div class="pos-meta">Away ${C.percent(p.outcomes.away)} · Draw ${C.percent(p.outcomes.draw)} · Home ${C.percent(p.outcomes.home)}</div>`:''}${p.inputs?.family_count===1?'<div class="pos-meta">One independent model family available.</div>':''}<div class="pos-actions"><button type="button" data-pos-add="${kind}" data-pos-game="${E(id)}" data-pos-sport="${s}" aria-pressed="${isSelected}"${p.actionable?'':' disabled'}>${p.actionable?(isSelected?'Selected ✓':'Select '+label):p.closed?'Game started':p.stale?'Refresh required':'Selection incomplete'}</button></div></section>`;
-    }).join('')}${playerPropPanel(g,s)}${metricsPanel(g,s)}${evidencePanel(g,s)}${details(g)}</article>`;
+    }).join('')}${compactMarket(g,s,'k')}${metricsPanel(g,s)}${evidencePanel(g,s)}${details(g)}</article>`;
   }
   function renderSport(s) {
     if(!sports[s])return;
@@ -37476,10 +37463,6 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     dialog=document.createElement('dialog');dialog.className='pos-dialog';dialog.id='pos-dialog';dialog.setAttribute('aria-label','ParlayOS details');document.body.appendChild(dialog);
     dialog.addEventListener('click',e=>{if(e.target===dialog)closeDialog();});dialog.addEventListener('cancel',()=>returnFocus?.focus());
     document.addEventListener('input',e=>{const b=e.target;if(b.matches('[data-pos-search]')){state.query[b.dataset.posSearch]=b.value;renderSport(b.dataset.posSearch);}});
-    document.addEventListener('submit',e=>{const f=e.target;if(!f.matches('[data-pos-nhl-prop-form]'))return;e.preventDefault();e.stopImmediatePropagation();const g=games('NHL').find(g=>C.id(g)===f.dataset.posGame),[player,metric]=f.elements.prop.value.split(':'),p=g?C.nhlProp(g,player,metric,f.elements.line.value):null,result=q('[data-pos-nhl-prop-result]',f.parentElement);result.textContent=p?`${p.input.player_name} · ${p.input.metric} · your line ${f.elements.line.value}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}. Uncalibrated season baseline.`:'Current player inputs are unavailable or the line is invalid. Refresh and review the selection.';},true);
-    document.addEventListener('submit',e=>{const f=e.target;if(!f.matches('[data-pos-prop-form]'))return;e.preventDefault();e.stopImmediatePropagation();const g=games('MLB').find(g=>C.id(g)===f.dataset.posGame),side=f.elements.side.value,p=g?C.pitcherProp(g,side,f.elements.innings.value,f.elements.line.value):null,result=q('[data-pos-prop-result]',f.parentElement);if(!p||p.player.id!==f.elements.side.selectedOptions[0]?.dataset.playerId){result.textContent='Current pitcher inputs are unavailable or an entry is invalid. Refresh and review the player and line.';return;}result.textContent=`${p.player.name} · assumed ${f.elements.innings.value} innings · expected strikeouts ${p.mean.toFixed(2)} · your line ${f.elements.line.value}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}. Uncalibrated baseline.`;},true);
-    document.addEventListener('change',e=>{const select=e.target;if(!select.matches('[data-pos-total-model]'))return;e.stopImmediatePropagation();const f=select.closest('[data-pos-total-form]'),s=f.dataset.posSport,g=games(s).find(g=>C.id(g)===f.dataset.posGame);if(!g||!totalModels(g,s).includes(select.value))return;state.totalModels[s+':'+C.id(g)]=select.value;const line=f.elements.line.value;if(C.goalTotal(C.totalDistribution(g,s,select.value),line))state.goalLines[s+':'+C.id(g)+':'+select.value]=Number(line);renderSport(s);},true);
-    document.addEventListener('submit',e=>{const f=e.target;if(!f.matches('[data-pos-total-form]'))return;e.preventDefault();e.stopImmediatePropagation();const s=f.dataset.posSport,g=games(s).find(g=>C.id(g)===f.dataset.posGame);const result=q('[data-pos-total-result]',f.parentElement),m=g?totalModel(g,s):null;const line=f.elements.line.value,p=g&&f.dataset.posModel===m?C.goalTotal(C.totalDistribution(g,s,m),line):null;if(!p){result.textContent='No current scoring estimate is available, or the line is invalid. Refresh and enter a line in half-point increments within the displayed input limits.';return;}state.goalLines[s+':'+C.id(g)+':'+m]=Number(line);q('[data-pos-total-result]',f.parentElement).textContent=`${C.models[m]} · Your line ${line}: Over ${C.percent(p.over)} · Under ${C.percent(p.under)} · Push ${C.percent(p.push)}`;},true);
     // Close pregame selections at kickoff even if a tab stays open between feeds.
     setInterval(()=>{if(!state.loading)renderAll();},60000);
     renderAll();load();
