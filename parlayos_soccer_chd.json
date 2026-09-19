@@ -1,7 +1,7 @@
 {
   "version": "league-sources-v6",
   "sport": "SOC",
-  "updated": "2026-09-18T15:52:59.236565+00:00",
+  "updated": "2026-09-19T03:14:25.605160+00:00",
   "source": "OpenLigaDB",
   "status": "ok",
   "source_url": "https://api.openligadb.de/getmatchdata/bl1/2026",
@@ -12,683 +12,9 @@
     "license_url": "https://opendatacommons.org/licenses/odbl/1-0/"
   },
   "coverage": "Bundesliga only. Other Soccer leagues are not covered by this feed.",
-  "schedule_start": "2026-09-18",
-  "schedule_end": "2026-09-24",
+  "schedule_start": "2026-09-19",
+  "schedule_end": "2026-09-25",
   "games": [
-    {
-      "id": "soc_openligadb_83183",
-      "event_id": "83183",
-      "provider": "openligadb",
-      "sport": "SOC",
-      "league": "Bundesliga",
-      "league_id": "bl1",
-      "season": 2026,
-      "source": "OpenLigaDB",
-      "source_url": "https://api.openligadb.de/getmatchdata/bl1/2026",
-      "attribution": {
-        "name": "OpenLigaDB",
-        "url": "https://www.openligadb.de/",
-        "license": "ODbL-1.0",
-        "license_url": "https://opendatacommons.org/licenses/odbl/1-0/"
-      },
-      "startAt": "2026-09-18T18:30:00+00:00",
-      "date": "2026-09-18",
-      "generated_at": "2026-09-18T15:52:57.846370+00:00",
-      "completed": false,
-      "state": "pre",
-      "status": "Scheduled",
-      "markets": {},
-      "stats": {
-        "home": {
-          "games": 20.0,
-          "goals_for": 68.0,
-          "goals_against": 20.0,
-          "current_games": 3,
-          "prior_games": 34,
-          "season": 2026,
-          "source": "OpenLigaDB",
-          "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 2.9039682539682543,
-          "conceding_rate": 1.1896825396825397
-        },
-        "away": {
-          "games": 20.0,
-          "goals_for": 26.0,
-          "goals_against": 39.0,
-          "current_games": 3,
-          "prior_games": 34,
-          "season": 2026,
-          "source": "OpenLigaDB",
-          "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.4039682539682539,
-          "conceding_rate": 1.8682539682539683
-        }
-      },
-      "model_assumptions": [
-        "Season goal-rate baseline; no injury or confirmed lineup adjustment",
-        "Previous season weighted 0.5; team rates shrunk by eight league-average games"
-      ],
-      "home": "FC Bayern M\u00fcnchen",
-      "home_abbr": "Bayern",
-      "home_team": {
-        "id": "40",
-        "name": "FC Bayern M\u00fcnchen"
-      },
-      "away": "1. FC Union Berlin",
-      "away_abbr": "Union Berlin",
-      "away_team": {
-        "id": "80",
-        "name": "1. FC Union Berlin"
-      },
-      "data_quality": {
-        "status": "validated_inputs",
-        "prediction_available": true
-      },
-      "models": {
-        "monte_carlo": {
-          "model_id": "monte_carlo",
-          "model_name": "Monte Carlo",
-          "model_version": "league-goals-1.0.0",
-          "sport": "SOC",
-          "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
-          "markets": {
-            "ml": {
-              "model_id": "monte_carlo",
-              "model_name": "Monte Carlo",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ml",
-              "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            },
-            "ou": {
-              "model_id": "monte_carlo",
-              "model_name": "Monte Carlo",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ou",
-              "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            },
-            "k": {
-              "model_id": "monte_carlo",
-              "model_name": "Monte Carlo",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "k",
-              "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            }
-          }
-        },
-        "zips": {
-          "model_id": "zips",
-          "model_name": "ZiPS",
-          "model_version": "league-goals-1.0.0",
-          "sport": "SOC",
-          "status": "unavailable",
-          "reason": "This model is MLB-only",
-          "markets": {
-            "ml": {
-              "model_id": "zips",
-              "model_name": "ZiPS",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ml",
-              "status": "unavailable",
-              "reason": "This model is MLB-only",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            },
-            "ou": {
-              "model_id": "zips",
-              "model_name": "ZiPS",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ou",
-              "status": "unavailable",
-              "reason": "This model is MLB-only",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            },
-            "k": {
-              "model_id": "zips",
-              "model_name": "ZiPS",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "k",
-              "status": "unavailable",
-              "reason": "This model is MLB-only",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            }
-          }
-        },
-        "steamer": {
-          "model_id": "steamer",
-          "model_name": "Steamer",
-          "model_version": "league-goals-1.0.0",
-          "sport": "SOC",
-          "status": "unavailable",
-          "reason": "This model is MLB-only",
-          "markets": {
-            "ml": {
-              "model_id": "steamer",
-              "model_name": "Steamer",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ml",
-              "status": "unavailable",
-              "reason": "This model is MLB-only",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            },
-            "ou": {
-              "model_id": "steamer",
-              "model_name": "Steamer",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ou",
-              "status": "unavailable",
-              "reason": "This model is MLB-only",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            },
-            "k": {
-              "model_id": "steamer",
-              "model_name": "Steamer",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "k",
-              "status": "unavailable",
-              "reason": "This model is MLB-only",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            }
-          }
-        },
-        "my_chd": {
-          "model_id": "my_chd",
-          "model_name": "My CHD",
-          "model_version": "league-goals-1.0.0",
-          "sport": "SOC",
-          "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
-          "markets": {
-            "ml": {
-              "model_id": "my_chd",
-              "model_name": "My CHD",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ml",
-              "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            },
-            "ou": {
-              "model_id": "my_chd",
-              "model_name": "My CHD",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ou",
-              "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            },
-            "k": {
-              "model_id": "my_chd",
-              "model_name": "My CHD",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "k",
-              "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            }
-          }
-        },
-        "season_stats": {
-          "model_id": "season_stats",
-          "model_name": "Season Stats",
-          "model_version": "league-goals-1.0.0",
-          "sport": "SOC",
-          "status": "available",
-          "reason": null,
-          "markets": {
-            "ml": {
-              "model_id": "season_stats",
-              "model_name": "Season Stats",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ml",
-              "status": "available",
-              "reason": null,
-              "selection": "FC Bayern M\u00fcnchen",
-              "probability": 0.8655450840556779,
-              "pA": 0.04935203115453316,
-              "pB": 0.8655450840556779,
-              "pDraw": 0.08510288478978828,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
-              "outcomes": {
-                "away": 0.04935203115453316,
-                "draw": 0.08510288478978828,
-                "home": 0.8655450840556779
-              },
-              "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-              "calibration_status": "unvalidated",
-              "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-              "inputs": {
-                "source_models": [
-                  "season_stats"
-                ],
-                "family_count": 1,
-                "market_available": false,
-                "combination": "Single independent family; no consensus uplift",
-                "away_mean": 0.8815013376530363,
-                "home_mean": 3.6580185780126695
-              }
-            },
-            "ou": {
-              "model_id": "season_stats",
-              "model_name": "Season Stats",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ou",
-              "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            },
-            "k": {
-              "model_id": "season_stats",
-              "model_name": "Season Stats",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "k",
-              "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            }
-          }
-        },
-        "chd_master_predictor": {
-          "model_id": "chd_master_predictor",
-          "model_name": "CHD Master Predictor",
-          "model_version": "league-goals-1.0.0",
-          "sport": "SOC",
-          "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
-          "markets": {
-            "ml": {
-              "model_id": "chd_master_predictor",
-              "model_name": "CHD Master Predictor",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ml",
-              "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            },
-            "ou": {
-              "model_id": "chd_master_predictor",
-              "model_name": "CHD Master Predictor",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ou",
-              "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            },
-            "k": {
-              "model_id": "chd_master_predictor",
-              "model_name": "CHD Master Predictor",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "k",
-              "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            }
-          }
-        },
-        "final_combined": {
-          "model_id": "final_combined",
-          "model_name": "Final Combined All Models",
-          "model_version": "league-goals-1.0.0",
-          "sport": "SOC",
-          "status": "available",
-          "reason": null,
-          "markets": {
-            "ml": {
-              "model_id": "final_combined",
-              "model_name": "Final Combined All Models",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ml",
-              "status": "available",
-              "reason": null,
-              "selection": "FC Bayern M\u00fcnchen",
-              "probability": 0.8655450840556779,
-              "pA": 0.04935203115453316,
-              "pB": 0.8655450840556779,
-              "pDraw": 0.08510288478978828,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
-              "outcomes": {
-                "away": 0.04935203115453316,
-                "draw": 0.08510288478978828,
-                "home": 0.8655450840556779
-              },
-              "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-              "calibration_status": "unvalidated",
-              "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-              "inputs": {
-                "source_models": [
-                  "season_stats"
-                ],
-                "family_count": 1,
-                "market_available": false,
-                "combination": "Single independent family; no consensus uplift",
-                "away_mean": 0.8815013376530363,
-                "home_mean": 3.6580185780126695
-              }
-            },
-            "ou": {
-              "model_id": "final_combined",
-              "model_name": "Final Combined All Models",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "ou",
-              "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            },
-            "k": {
-              "model_id": "final_combined",
-              "model_name": "Final Combined All Models",
-              "model_version": "league-goals-1.0.0",
-              "sport": "SOC",
-              "market": "k",
-              "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
-              "selection": null,
-              "probability": null,
-              "pA": null,
-              "pB": null,
-              "pDraw": null,
-              "confidence": null,
-              "odds": null,
-              "line": null,
-              "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
-            }
-          }
-        }
-      },
-      "ensemble": {
-        "model_id": "final_combined",
-        "model_name": "Final Combined All Models",
-        "model_version": "league-goals-1.0.0",
-        "sport": "SOC",
-        "status": "available",
-        "reason": null,
-        "markets": {
-          "ml": {
-            "model_id": "final_combined",
-            "model_name": "Final Combined All Models",
-            "model_version": "league-goals-1.0.0",
-            "sport": "SOC",
-            "market": "ml",
-            "status": "available",
-            "reason": null,
-            "selection": "FC Bayern M\u00fcnchen",
-            "probability": 0.8655450840556779,
-            "pA": 0.04935203115453316,
-            "pB": 0.8655450840556779,
-            "pDraw": 0.08510288478978828,
-            "confidence": null,
-            "odds": null,
-            "line": null,
-            "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00",
-            "outcomes": {
-              "away": 0.04935203115453316,
-              "draw": 0.08510288478978828,
-              "home": 0.8655450840556779
-            },
-            "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-            "calibration_status": "unvalidated",
-            "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-            "inputs": {
-              "source_models": [
-                "season_stats"
-              ],
-              "family_count": 1,
-              "market_available": false,
-              "combination": "Single independent family; no consensus uplift",
-              "away_mean": 0.8815013376530363,
-              "home_mean": 3.6580185780126695
-            }
-          },
-          "ou": {
-            "model_id": "final_combined",
-            "model_name": "Final Combined All Models",
-            "model_version": "league-goals-1.0.0",
-            "sport": "SOC",
-            "market": "ou",
-            "status": "unavailable",
-            "reason": "A verified bookmaker line is required for a market selection",
-            "selection": null,
-            "probability": null,
-            "pA": null,
-            "pB": null,
-            "pDraw": null,
-            "confidence": null,
-            "odds": null,
-            "line": null,
-            "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
-          },
-          "k": {
-            "model_id": "final_combined",
-            "model_name": "Final Combined All Models",
-            "model_version": "league-goals-1.0.0",
-            "sport": "SOC",
-            "market": "k",
-            "status": "unavailable",
-            "reason": "A verified bookmaker line is required for a market selection",
-            "selection": null,
-            "probability": null,
-            "pA": null,
-            "pB": null,
-            "pDraw": null,
-            "confidence": null,
-            "odds": null,
-            "line": null,
-            "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
-          }
-        }
-      },
-      "score_distribution": {
-        "type": "independent_poisson",
-        "away_mean": 0.8815013376530363,
-        "home_mean": 3.6580185780126695,
-        "scope": "90 minutes plus stoppage time; three outcomes including draw",
-        "model_ids": [
-          "season_stats",
-          "final_combined"
-        ],
-        "calibration_status": "unvalidated",
-        "note": "Season baseline; injuries and confirmed lineups are not modeled. No bookmaker line supplied."
-      }
-    },
     {
       "id": "soc_openligadb_83186",
       "event_id": "83186",
@@ -707,7 +33,7 @@
       },
       "startAt": "2026-09-19T13:30:00+00:00",
       "date": "2026-09-19",
-      "generated_at": "2026-09-18T15:52:57.846370+00:00",
+      "generated_at": "2026-09-19T03:14:24.469069+00:00",
       "completed": false,
       "state": "pre",
       "status": "Scheduled",
@@ -722,8 +48,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.8146825396825397,
-          "conceding_rate": 1.9218253968253969
+          "scoring_rate": 1.8175808997632201,
+          "conceding_rate": 1.9247237569060773
         },
         "away": {
           "games": 20.0,
@@ -734,8 +60,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.7432539682539683,
-          "conceding_rate": 1.5289682539682539
+          "scoring_rate": 1.7461523283346487,
+          "conceding_rate": 1.5318666140489345
         }
       },
       "model_assumptions": [
@@ -784,7 +110,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -803,7 +129,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -822,7 +148,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -851,7 +177,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -870,7 +196,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -889,7 +215,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -918,7 +244,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -937,7 +263,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -956,7 +282,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -985,7 +311,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -1004,7 +330,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -1023,7 +349,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -1044,19 +370,19 @@
               "status": "available",
               "reason": null,
               "selection": "Eintracht Frankfurt",
-              "probability": 0.4117842534900032,
-              "pA": 0.37043669419894937,
-              "pB": 0.4117842534900032,
-              "pDraw": 0.21777905231104802,
+              "probability": 0.4192766705137702,
+              "pA": 0.36273043028517327,
+              "pB": 0.4192766705137702,
+              "pDraw": 0.21799289920105616,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
+              "timestamp": "2026-09-19T03:14:24.469069+00:00",
               "outcomes": {
-                "away": 0.37043669419894937,
-                "draw": 0.21777905231104802,
-                "home": 0.4117842534900032
+                "away": 0.36273043028517327,
+                "draw": 0.21799289920105616,
+                "home": 0.4192766705137702
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -1068,8 +394,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.7681096355049126,
-                "home_mean": 1.8707564784883408
+                "away_mean": 1.7426075871851605,
+                "home_mean": 1.8827911110301718
               }
             },
             "ou": {
@@ -1089,7 +415,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -1108,7 +434,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -1137,7 +463,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -1156,7 +482,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -1175,7 +501,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -1196,19 +522,19 @@
               "status": "available",
               "reason": null,
               "selection": "Eintracht Frankfurt",
-              "probability": 0.4117842534900032,
-              "pA": 0.37043669419894937,
-              "pB": 0.4117842534900032,
-              "pDraw": 0.21777905231104802,
+              "probability": 0.4192766705137702,
+              "pA": 0.36273043028517327,
+              "pB": 0.4192766705137702,
+              "pDraw": 0.21799289920105616,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
+              "timestamp": "2026-09-19T03:14:24.469069+00:00",
               "outcomes": {
-                "away": 0.37043669419894937,
-                "draw": 0.21777905231104802,
-                "home": 0.4117842534900032
+                "away": 0.36273043028517327,
+                "draw": 0.21799289920105616,
+                "home": 0.4192766705137702
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -1220,8 +546,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.7681096355049126,
-                "home_mean": 1.8707564784883408
+                "away_mean": 1.7426075871851605,
+                "home_mean": 1.8827911110301718
               }
             },
             "ou": {
@@ -1241,7 +567,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -1260,7 +586,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         }
@@ -1282,19 +608,19 @@
             "status": "available",
             "reason": null,
             "selection": "Eintracht Frankfurt",
-            "probability": 0.4117842534900032,
-            "pA": 0.37043669419894937,
-            "pB": 0.4117842534900032,
-            "pDraw": 0.21777905231104802,
+            "probability": 0.4192766705137702,
+            "pA": 0.36273043028517327,
+            "pB": 0.4192766705137702,
+            "pDraw": 0.21799289920105616,
             "confidence": null,
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00",
+            "timestamp": "2026-09-19T03:14:24.469069+00:00",
             "outcomes": {
-              "away": 0.37043669419894937,
-              "draw": 0.21777905231104802,
-              "home": 0.4117842534900032
+              "away": 0.36273043028517327,
+              "draw": 0.21799289920105616,
+              "home": 0.4192766705137702
             },
             "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
             "calibration_status": "unvalidated",
@@ -1306,8 +632,8 @@
               "family_count": 1,
               "market_available": false,
               "combination": "Single independent family; no consensus uplift",
-              "away_mean": 1.7681096355049126,
-              "home_mean": 1.8707564784883408
+              "away_mean": 1.7426075871851605,
+              "home_mean": 1.8827911110301718
             }
           },
           "ou": {
@@ -1327,7 +653,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -1346,14 +672,14 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           }
         }
       },
       "score_distribution": {
         "type": "independent_poisson",
-        "away_mean": 1.7681096355049126,
-        "home_mean": 1.8707564784883408,
+        "away_mean": 1.7426075871851605,
+        "home_mean": 1.8827911110301718,
         "scope": "90 minutes plus stoppage time; three outcomes including draw",
         "model_ids": [
           "season_stats",
@@ -1381,7 +707,7 @@
       },
       "startAt": "2026-09-19T13:30:00+00:00",
       "date": "2026-09-19",
-      "generated_at": "2026-09-18T15:52:57.846370+00:00",
+      "generated_at": "2026-09-19T03:14:24.469069+00:00",
       "completed": false,
       "state": "pre",
       "status": "Scheduled",
@@ -1396,8 +722,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.3325396825396825,
-          "conceding_rate": 1.8503968253968253
+          "scoring_rate": 1.335438042620363,
+          "conceding_rate": 1.853295185477506
         },
         "away": {
           "games": 20.0,
@@ -1408,8 +734,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.4753968253968253,
-          "conceding_rate": 1.5289682539682539
+          "scoring_rate": 1.478295185477506,
+          "conceding_rate": 1.5318666140489345
         }
       },
       "model_assumptions": [
@@ -1458,7 +784,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -1477,7 +803,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -1496,7 +822,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -1525,7 +851,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -1544,7 +870,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -1563,7 +889,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -1592,7 +918,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -1611,7 +937,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -1630,7 +956,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -1659,7 +985,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -1678,7 +1004,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -1697,7 +1023,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -1718,19 +1044,19 @@
               "status": "available",
               "reason": null,
               "selection": "1. FSV Mainz 05",
-              "probability": 0.389232723719712,
-              "pA": 0.389232723719712,
-              "pB": 0.3588752152320601,
-              "pDraw": 0.2518920610482276,
+              "probability": 0.3821521874751472,
+              "pA": 0.3821521874751472,
+              "pB": 0.36529431795189193,
+              "pDraw": 0.2525534945729612,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
+              "timestamp": "2026-09-19T03:14:24.469069+00:00",
               "outcomes": {
-                "away": 0.389232723719712,
-                "draw": 0.2518920610482276,
-                "home": 0.3588752152320601
+                "away": 0.3821521874751472,
+                "draw": 0.2525534945729612,
+                "home": 0.36529431795189193
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -1742,8 +1068,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.4408153260960643,
-                "home_mean": 1.373715341081095
+                "away_mean": 1.420544445644193,
+                "home_mean": 1.3833501861208495
               }
             },
             "ou": {
@@ -1763,7 +1089,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -1782,7 +1108,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -1811,7 +1137,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -1830,7 +1156,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -1849,7 +1175,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -1870,19 +1196,19 @@
               "status": "available",
               "reason": null,
               "selection": "1. FSV Mainz 05",
-              "probability": 0.389232723719712,
-              "pA": 0.389232723719712,
-              "pB": 0.3588752152320601,
-              "pDraw": 0.2518920610482276,
+              "probability": 0.3821521874751472,
+              "pA": 0.3821521874751472,
+              "pB": 0.36529431795189193,
+              "pDraw": 0.2525534945729612,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
+              "timestamp": "2026-09-19T03:14:24.469069+00:00",
               "outcomes": {
-                "away": 0.389232723719712,
-                "draw": 0.2518920610482276,
-                "home": 0.3588752152320601
+                "away": 0.3821521874751472,
+                "draw": 0.2525534945729612,
+                "home": 0.36529431795189193
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -1894,8 +1220,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.4408153260960643,
-                "home_mean": 1.373715341081095
+                "away_mean": 1.420544445644193,
+                "home_mean": 1.3833501861208495
               }
             },
             "ou": {
@@ -1915,7 +1241,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -1934,7 +1260,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         }
@@ -1956,19 +1282,19 @@
             "status": "available",
             "reason": null,
             "selection": "1. FSV Mainz 05",
-            "probability": 0.389232723719712,
-            "pA": 0.389232723719712,
-            "pB": 0.3588752152320601,
-            "pDraw": 0.2518920610482276,
+            "probability": 0.3821521874751472,
+            "pA": 0.3821521874751472,
+            "pB": 0.36529431795189193,
+            "pDraw": 0.2525534945729612,
             "confidence": null,
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00",
+            "timestamp": "2026-09-19T03:14:24.469069+00:00",
             "outcomes": {
-              "away": 0.389232723719712,
-              "draw": 0.2518920610482276,
-              "home": 0.3588752152320601
+              "away": 0.3821521874751472,
+              "draw": 0.2525534945729612,
+              "home": 0.36529431795189193
             },
             "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
             "calibration_status": "unvalidated",
@@ -1980,8 +1306,8 @@
               "family_count": 1,
               "market_available": false,
               "combination": "Single independent family; no consensus uplift",
-              "away_mean": 1.4408153260960643,
-              "home_mean": 1.373715341081095
+              "away_mean": 1.420544445644193,
+              "home_mean": 1.3833501861208495
             }
           },
           "ou": {
@@ -2001,7 +1327,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -2020,14 +1346,14 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           }
         }
       },
       "score_distribution": {
         "type": "independent_poisson",
-        "away_mean": 1.4408153260960643,
-        "home_mean": 1.373715341081095,
+        "away_mean": 1.420544445644193,
+        "home_mean": 1.3833501861208495,
         "scope": "90 minutes plus stoppage time; three outcomes including draw",
         "model_ids": [
           "season_stats",
@@ -2055,7 +1381,7 @@
       },
       "startAt": "2026-09-19T13:30:00+00:00",
       "date": "2026-09-19",
-      "generated_at": "2026-09-18T15:52:57.846370+00:00",
+      "generated_at": "2026-09-19T03:14:24.469069+00:00",
       "completed": false,
       "state": "pre",
       "status": "Scheduled",
@@ -2070,8 +1396,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.1896825396825397,
-          "conceding_rate": 1.8682539682539683
+          "scoring_rate": 1.1925808997632201,
+          "conceding_rate": 1.8711523283346487
         },
         "away": {
           "games": 20.0,
@@ -2082,8 +1408,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.5289682539682539,
-          "conceding_rate": 1.8503968253968253
+          "scoring_rate": 1.5318666140489345,
+          "conceding_rate": 1.853295185477506
         }
       },
       "model_assumptions": [
@@ -2132,7 +1458,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -2151,7 +1477,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -2170,7 +1496,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -2199,7 +1525,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -2218,7 +1544,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -2237,7 +1563,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -2266,7 +1592,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -2285,7 +1611,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -2304,7 +1630,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -2333,7 +1659,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -2352,7 +1678,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -2371,7 +1697,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -2391,20 +1717,20 @@
               "market": "ml",
               "status": "available",
               "reason": null,
-              "selection": "1. FC K\u00f6ln",
-              "probability": 0.38344206228001765,
-              "pA": 0.38344206228001765,
-              "pB": 0.3731965523847158,
-              "pDraw": 0.24336138533526627,
+              "selection": "Hamburger SV",
+              "probability": 0.37990226134864963,
+              "pA": 0.3762076990062005,
+              "pB": 0.37990226134864963,
+              "pDraw": 0.24389003964515044,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
+              "timestamp": "2026-09-19T03:14:24.469069+00:00",
               "outcomes": {
-                "away": 0.38344206228001765,
-                "draw": 0.24336138533526627,
-                "home": 0.3731965523847158
+                "away": 0.3762076990062005,
+                "draw": 0.24389003964515044,
+                "home": 0.37990226134864963
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -2416,8 +1742,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.5075404774206376,
-                "home_mean": 1.484274039157665
+                "away_mean": 1.486206518645795,
+                "home_mean": 1.4945824727158452
               }
             },
             "ou": {
@@ -2437,7 +1763,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -2456,7 +1782,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -2485,7 +1811,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -2504,7 +1830,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -2523,7 +1849,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -2543,20 +1869,20 @@
               "market": "ml",
               "status": "available",
               "reason": null,
-              "selection": "1. FC K\u00f6ln",
-              "probability": 0.38344206228001765,
-              "pA": 0.38344206228001765,
-              "pB": 0.3731965523847158,
-              "pDraw": 0.24336138533526627,
+              "selection": "Hamburger SV",
+              "probability": 0.37990226134864963,
+              "pA": 0.3762076990062005,
+              "pB": 0.37990226134864963,
+              "pDraw": 0.24389003964515044,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
+              "timestamp": "2026-09-19T03:14:24.469069+00:00",
               "outcomes": {
-                "away": 0.38344206228001765,
-                "draw": 0.24336138533526627,
-                "home": 0.3731965523847158
+                "away": 0.3762076990062005,
+                "draw": 0.24389003964515044,
+                "home": 0.37990226134864963
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -2568,8 +1894,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.5075404774206376,
-                "home_mean": 1.484274039157665
+                "away_mean": 1.486206518645795,
+                "home_mean": 1.4945824727158452
               }
             },
             "ou": {
@@ -2589,7 +1915,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -2608,7 +1934,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         }
@@ -2629,20 +1955,20 @@
             "market": "ml",
             "status": "available",
             "reason": null,
-            "selection": "1. FC K\u00f6ln",
-            "probability": 0.38344206228001765,
-            "pA": 0.38344206228001765,
-            "pB": 0.3731965523847158,
-            "pDraw": 0.24336138533526627,
+            "selection": "Hamburger SV",
+            "probability": 0.37990226134864963,
+            "pA": 0.3762076990062005,
+            "pB": 0.37990226134864963,
+            "pDraw": 0.24389003964515044,
             "confidence": null,
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00",
+            "timestamp": "2026-09-19T03:14:24.469069+00:00",
             "outcomes": {
-              "away": 0.38344206228001765,
-              "draw": 0.24336138533526627,
-              "home": 0.3731965523847158
+              "away": 0.3762076990062005,
+              "draw": 0.24389003964515044,
+              "home": 0.37990226134864963
             },
             "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
             "calibration_status": "unvalidated",
@@ -2654,8 +1980,8 @@
               "family_count": 1,
               "market_available": false,
               "combination": "Single independent family; no consensus uplift",
-              "away_mean": 1.5075404774206376,
-              "home_mean": 1.484274039157665
+              "away_mean": 1.486206518645795,
+              "home_mean": 1.4945824727158452
             }
           },
           "ou": {
@@ -2675,7 +2001,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -2694,14 +2020,14 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           }
         }
       },
       "score_distribution": {
         "type": "independent_poisson",
-        "away_mean": 1.5075404774206376,
-        "home_mean": 1.484274039157665,
+        "away_mean": 1.486206518645795,
+        "home_mean": 1.4945824727158452,
         "scope": "90 minutes plus stoppage time; three outcomes including draw",
         "model_ids": [
           "season_stats",
@@ -2729,7 +2055,7 @@
       },
       "startAt": "2026-09-19T13:30:00+00:00",
       "date": "2026-09-19",
-      "generated_at": "2026-09-18T15:52:57.846370+00:00",
+      "generated_at": "2026-09-19T03:14:24.469069+00:00",
       "completed": false,
       "state": "pre",
       "status": "Scheduled",
@@ -2744,8 +2070,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.3146825396825397,
-          "conceding_rate": 1.761111111111111
+          "scoring_rate": 1.3175808997632201,
+          "conceding_rate": 1.7640094711917915
         },
         "away": {
           "games": 20.0,
@@ -2756,8 +2082,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.6003968253968253,
-          "conceding_rate": 1.6718253968253969
+          "scoring_rate": 1.603295185477506,
+          "conceding_rate": 1.6747237569060773
         }
       },
       "model_assumptions": [
@@ -2806,7 +2132,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -2825,7 +2151,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -2844,7 +2170,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -2873,7 +2199,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -2892,7 +2218,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -2911,7 +2237,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -2940,7 +2266,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -2959,7 +2285,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -2978,7 +2304,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -3007,7 +2333,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -3026,7 +2352,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -3045,7 +2371,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -3065,20 +2391,20 @@
               "market": "ml",
               "status": "available",
               "reason": null,
-              "selection": "FC Augsburg",
-              "probability": 0.37901064300312565,
-              "pA": 0.37901064300312565,
-              "pB": 0.3765649621793381,
-              "pDraw": 0.2444243948175361,
+              "selection": "SV Werder Bremen",
+              "probability": 0.38322900316501407,
+              "pA": 0.3718565443392749,
+              "pB": 0.38322900316501407,
+              "pDraw": 0.2449144524957107,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
+              "timestamp": "2026-09-19T03:14:24.469069+00:00",
               "outcomes": {
-                "away": 0.37901064300312565,
-                "draw": 0.2444243948175361,
-                "home": 0.3765649621793381
+                "away": 0.3718565443392749,
+                "draw": 0.2449144524957107,
+                "home": 0.38322900316501407
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -3090,8 +2416,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.4874728189738455,
-                "home_mean": 1.4819376863763583
+                "away_mean": 1.4664371941431282,
+                "home_mean": 1.492134285446623
               }
             },
             "ou": {
@@ -3111,7 +2437,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -3130,7 +2456,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -3159,7 +2485,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -3178,7 +2504,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -3197,7 +2523,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -3217,20 +2543,20 @@
               "market": "ml",
               "status": "available",
               "reason": null,
-              "selection": "FC Augsburg",
-              "probability": 0.37901064300312565,
-              "pA": 0.37901064300312565,
-              "pB": 0.3765649621793381,
-              "pDraw": 0.2444243948175361,
+              "selection": "SV Werder Bremen",
+              "probability": 0.38322900316501407,
+              "pA": 0.3718565443392749,
+              "pB": 0.38322900316501407,
+              "pDraw": 0.2449144524957107,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
+              "timestamp": "2026-09-19T03:14:24.469069+00:00",
               "outcomes": {
-                "away": 0.37901064300312565,
-                "draw": 0.2444243948175361,
-                "home": 0.3765649621793381
+                "away": 0.3718565443392749,
+                "draw": 0.2449144524957107,
+                "home": 0.38322900316501407
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -3242,8 +2568,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.4874728189738455,
-                "home_mean": 1.4819376863763583
+                "away_mean": 1.4664371941431282,
+                "home_mean": 1.492134285446623
               }
             },
             "ou": {
@@ -3263,7 +2589,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -3282,7 +2608,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         }
@@ -3303,20 +2629,20 @@
             "market": "ml",
             "status": "available",
             "reason": null,
-            "selection": "FC Augsburg",
-            "probability": 0.37901064300312565,
-            "pA": 0.37901064300312565,
-            "pB": 0.3765649621793381,
-            "pDraw": 0.2444243948175361,
+            "selection": "SV Werder Bremen",
+            "probability": 0.38322900316501407,
+            "pA": 0.3718565443392749,
+            "pB": 0.38322900316501407,
+            "pDraw": 0.2449144524957107,
             "confidence": null,
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00",
+            "timestamp": "2026-09-19T03:14:24.469069+00:00",
             "outcomes": {
-              "away": 0.37901064300312565,
-              "draw": 0.2444243948175361,
-              "home": 0.3765649621793381
+              "away": 0.3718565443392749,
+              "draw": 0.2449144524957107,
+              "home": 0.38322900316501407
             },
             "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
             "calibration_status": "unvalidated",
@@ -3328,8 +2654,8 @@
               "family_count": 1,
               "market_available": false,
               "combination": "Single independent family; no consensus uplift",
-              "away_mean": 1.4874728189738455,
-              "home_mean": 1.4819376863763583
+              "away_mean": 1.4664371941431282,
+              "home_mean": 1.492134285446623
             }
           },
           "ou": {
@@ -3349,7 +2675,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -3368,14 +2694,14 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           }
         }
       },
       "score_distribution": {
         "type": "independent_poisson",
-        "away_mean": 1.4874728189738455,
-        "home_mean": 1.4819376863763583,
+        "away_mean": 1.4664371941431282,
+        "home_mean": 1.492134285446623,
         "scope": "90 minutes plus stoppage time; three outcomes including draw",
         "model_ids": [
           "season_stats",
@@ -3403,7 +2729,7 @@
       },
       "startAt": "2026-09-19T16:30:00+00:00",
       "date": "2026-09-19",
-      "generated_at": "2026-09-18T15:52:57.846370+00:00",
+      "generated_at": "2026-09-19T03:14:24.469069+00:00",
       "completed": false,
       "state": "pre",
       "status": "Scheduled",
@@ -3418,8 +2744,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.9575396825396825,
-          "conceding_rate": 1.636111111111111
+          "scoring_rate": 1.960438042620363,
+          "conceding_rate": 1.6390094711917915
         },
         "away": {
           "games": 20.0,
@@ -3430,8 +2756,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 2.011111111111111,
-          "conceding_rate": 1.1539682539682539
+          "scoring_rate": 2.0140094711917915,
+          "conceding_rate": 1.1568666140489345
         }
       },
       "model_assumptions": [
@@ -3480,7 +2806,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -3499,7 +2825,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -3518,7 +2844,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -3547,7 +2873,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -3566,7 +2892,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -3585,7 +2911,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -3614,7 +2940,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -3633,7 +2959,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -3652,7 +2978,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -3681,7 +3007,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -3700,7 +3026,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -3719,7 +3045,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -3740,19 +3066,19 @@
               "status": "available",
               "reason": null,
               "selection": "Borussia Dortmund",
-              "probability": 0.42988995527501384,
-              "pA": 0.42988995527501384,
-              "pB": 0.3396018584485286,
-              "pDraw": 0.230508186276457,
+              "probability": 0.4219784056095113,
+              "pA": 0.4219784056095113,
+              "pB": 0.34653232927331545,
+              "pDraw": 0.2314892651171735,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
+              "timestamp": "2026-09-19T03:14:24.469069+00:00",
               "outcomes": {
-                "away": 0.42988995527501384,
-                "draw": 0.230508186276457,
-                "home": 0.3396018584485286
+                "away": 0.4219784056095113,
+                "draw": 0.2314892651171735,
+                "home": 0.34653232927331545
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -3764,8 +3090,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.7365346745905883,
-                "home_mean": 1.5230794732880844
+                "away_mean": 1.7115596447343178,
+                "home_mean": 1.533641483814975
               }
             },
             "ou": {
@@ -3785,7 +3111,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -3804,7 +3130,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -3833,7 +3159,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -3852,7 +3178,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -3871,7 +3197,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -3892,19 +3218,19 @@
               "status": "available",
               "reason": null,
               "selection": "Borussia Dortmund",
-              "probability": 0.42988995527501384,
-              "pA": 0.42988995527501384,
-              "pB": 0.3396018584485286,
-              "pDraw": 0.230508186276457,
+              "probability": 0.4219784056095113,
+              "pA": 0.4219784056095113,
+              "pB": 0.34653232927331545,
+              "pDraw": 0.2314892651171735,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
+              "timestamp": "2026-09-19T03:14:24.469069+00:00",
               "outcomes": {
-                "away": 0.42988995527501384,
-                "draw": 0.230508186276457,
-                "home": 0.3396018584485286
+                "away": 0.4219784056095113,
+                "draw": 0.2314892651171735,
+                "home": 0.34653232927331545
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -3916,8 +3242,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.7365346745905883,
-                "home_mean": 1.5230794732880844
+                "away_mean": 1.7115596447343178,
+                "home_mean": 1.533641483814975
               }
             },
             "ou": {
@@ -3937,7 +3263,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -3956,7 +3282,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         }
@@ -3978,19 +3304,19 @@
             "status": "available",
             "reason": null,
             "selection": "Borussia Dortmund",
-            "probability": 0.42988995527501384,
-            "pA": 0.42988995527501384,
-            "pB": 0.3396018584485286,
-            "pDraw": 0.230508186276457,
+            "probability": 0.4219784056095113,
+            "pA": 0.4219784056095113,
+            "pB": 0.34653232927331545,
+            "pDraw": 0.2314892651171735,
             "confidence": null,
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00",
+            "timestamp": "2026-09-19T03:14:24.469069+00:00",
             "outcomes": {
-              "away": 0.42988995527501384,
-              "draw": 0.230508186276457,
-              "home": 0.3396018584485286
+              "away": 0.4219784056095113,
+              "draw": 0.2314892651171735,
+              "home": 0.34653232927331545
             },
             "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
             "calibration_status": "unvalidated",
@@ -4002,8 +3328,8 @@
               "family_count": 1,
               "market_available": false,
               "combination": "Single independent family; no consensus uplift",
-              "away_mean": 1.7365346745905883,
-              "home_mean": 1.5230794732880844
+              "away_mean": 1.7115596447343178,
+              "home_mean": 1.533641483814975
             }
           },
           "ou": {
@@ -4023,7 +3349,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -4042,14 +3368,14 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           }
         }
       },
       "score_distribution": {
         "type": "independent_poisson",
-        "away_mean": 1.7365346745905883,
-        "home_mean": 1.5230794732880844,
+        "away_mean": 1.7115596447343178,
+        "home_mean": 1.533641483814975,
         "scope": "90 minutes plus stoppage time; three outcomes including draw",
         "model_ids": [
           "season_stats",
@@ -4077,7 +3403,7 @@
       },
       "startAt": "2026-09-20T13:30:00+00:00",
       "date": "2026-09-20",
-      "generated_at": "2026-09-18T15:52:57.846370+00:00",
+      "generated_at": "2026-09-19T03:14:24.469069+00:00",
       "completed": false,
       "state": "pre",
       "status": "Scheduled",
@@ -4092,8 +3418,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.9753968253968253,
-          "conceding_rate": 1.4932539682539683
+          "scoring_rate": 1.978295185477506,
+          "conceding_rate": 1.4961523283346487
         },
         "away": {
           "games": 20.0,
@@ -4104,8 +3430,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.9753968253968253,
-          "conceding_rate": 1.4218253968253969
+          "scoring_rate": 1.978295185477506,
+          "conceding_rate": 1.4247237569060773
         }
       },
       "model_assumptions": [
@@ -4154,7 +3480,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -4173,7 +3499,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -4192,7 +3518,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -4221,7 +3547,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -4240,7 +3566,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -4259,7 +3585,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -4288,7 +3614,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -4307,7 +3633,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -4326,7 +3652,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -4355,7 +3681,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -4374,7 +3700,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -4393,7 +3719,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -4414,19 +3740,19 @@
               "status": "available",
               "reason": null,
               "selection": "Bayer 04 Leverkusen",
-              "probability": 0.4585369597161069,
-              "pA": 0.3199693378595945,
-              "pB": 0.4585369597161069,
-              "pDraw": 0.22149370242429864,
+              "probability": 0.4657772091777447,
+              "pA": 0.31303943245532223,
+              "pB": 0.4657772091777447,
+              "pDraw": 0.22118335836693295,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
+              "timestamp": "2026-09-19T03:14:24.469069+00:00",
               "outcomes": {
-                "away": 0.3199693378595945,
-                "draw": 0.22149370242429864,
-                "home": 0.4585369597161069
+                "away": 0.31303943245532223,
+                "draw": 0.22118335836693295,
+                "home": 0.4657772091777447
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -4438,8 +3764,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.5567634592463313,
-                "home_mean": 1.893733003079967
+                "away_mean": 1.5346734264852955,
+                "home_mean": 1.9059398832093697
               }
             },
             "ou": {
@@ -4459,7 +3785,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -4478,7 +3804,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -4507,7 +3833,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -4526,7 +3852,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -4545,7 +3871,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -4566,19 +3892,19 @@
               "status": "available",
               "reason": null,
               "selection": "Bayer 04 Leverkusen",
-              "probability": 0.4585369597161069,
-              "pA": 0.3199693378595945,
-              "pB": 0.4585369597161069,
-              "pDraw": 0.22149370242429864,
+              "probability": 0.4657772091777447,
+              "pA": 0.31303943245532223,
+              "pB": 0.4657772091777447,
+              "pDraw": 0.22118335836693295,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00",
+              "timestamp": "2026-09-19T03:14:24.469069+00:00",
               "outcomes": {
-                "away": 0.3199693378595945,
-                "draw": 0.22149370242429864,
-                "home": 0.4585369597161069
+                "away": 0.31303943245532223,
+                "draw": 0.22118335836693295,
+                "home": 0.4657772091777447
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -4590,8 +3916,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.5567634592463313,
-                "home_mean": 1.893733003079967
+                "away_mean": 1.5346734264852955,
+                "home_mean": 1.9059398832093697
               }
             },
             "ou": {
@@ -4611,7 +3937,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -4630,7 +3956,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         }
@@ -4652,19 +3978,19 @@
             "status": "available",
             "reason": null,
             "selection": "Bayer 04 Leverkusen",
-            "probability": 0.4585369597161069,
-            "pA": 0.3199693378595945,
-            "pB": 0.4585369597161069,
-            "pDraw": 0.22149370242429864,
+            "probability": 0.4657772091777447,
+            "pA": 0.31303943245532223,
+            "pB": 0.4657772091777447,
+            "pDraw": 0.22118335836693295,
             "confidence": null,
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00",
+            "timestamp": "2026-09-19T03:14:24.469069+00:00",
             "outcomes": {
-              "away": 0.3199693378595945,
-              "draw": 0.22149370242429864,
-              "home": 0.4585369597161069
+              "away": 0.31303943245532223,
+              "draw": 0.22118335836693295,
+              "home": 0.4657772091777447
             },
             "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
             "calibration_status": "unvalidated",
@@ -4676,8 +4002,8 @@
               "family_count": 1,
               "market_available": false,
               "combination": "Single independent family; no consensus uplift",
-              "away_mean": 1.5567634592463313,
-              "home_mean": 1.893733003079967
+              "away_mean": 1.5346734264852955,
+              "home_mean": 1.9059398832093697
             }
           },
           "ou": {
@@ -4697,7 +4023,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -4716,14 +4042,14 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           }
         }
       },
       "score_distribution": {
         "type": "independent_poisson",
-        "away_mean": 1.5567634592463313,
-        "home_mean": 1.893733003079967,
+        "away_mean": 1.5346734264852955,
+        "home_mean": 1.9059398832093697,
         "scope": "90 minutes plus stoppage time; three outcomes including draw",
         "model_ids": [
           "season_stats",
@@ -4751,7 +4077,7 @@
       },
       "startAt": "2026-09-20T15:30:00+00:00",
       "date": "2026-09-20",
-      "generated_at": "2026-09-18T15:52:57.846370+00:00",
+      "generated_at": "2026-09-19T03:14:24.469069+00:00",
       "completed": false,
       "state": "pre",
       "status": "Scheduled",
@@ -4804,7 +4130,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -4823,7 +4149,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -4842,7 +4168,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -4871,7 +4197,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -4890,7 +4216,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -4909,7 +4235,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -4938,7 +4264,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -4957,7 +4283,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -4976,7 +4302,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -5005,7 +4331,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -5024,7 +4350,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -5043,7 +4369,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -5072,7 +4398,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "season_stats",
@@ -5091,7 +4417,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -5110,7 +4436,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -5139,7 +4465,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -5158,7 +4484,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -5177,7 +4503,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -5206,7 +4532,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "final_combined",
@@ -5225,7 +4551,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -5244,7 +4570,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         }
@@ -5274,7 +4600,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           },
           "ou": {
             "model_id": "final_combined",
@@ -5293,7 +4619,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -5312,7 +4638,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           }
         }
       }
@@ -5335,7 +4661,7 @@
       },
       "startAt": "2026-09-20T17:30:00+00:00",
       "date": "2026-09-20",
-      "generated_at": "2026-09-18T15:52:57.846370+00:00",
+      "generated_at": "2026-09-19T03:14:24.469069+00:00",
       "completed": false,
       "state": "pre",
       "status": "Scheduled",
@@ -5350,8 +4676,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.8503968253968253,
-          "conceding_rate": 1.6539682539682539
+          "scoring_rate": 1.853295185477506,
+          "conceding_rate": 1.6568666140489345
         }
       },
       "model_assumptions": [
@@ -5401,7 +4727,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -5420,7 +4746,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -5439,7 +4765,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -5468,7 +4794,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -5487,7 +4813,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -5506,7 +4832,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -5535,7 +4861,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -5554,7 +4880,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -5573,7 +4899,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -5602,7 +4928,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -5621,7 +4947,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -5640,7 +4966,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -5669,7 +4995,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "season_stats",
@@ -5688,7 +5014,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -5707,7 +5033,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -5736,7 +5062,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -5755,7 +5081,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -5774,7 +5100,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         },
@@ -5803,7 +5129,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "ou": {
               "model_id": "final_combined",
@@ -5822,7 +5148,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -5841,7 +5167,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-09-18T15:52:57.846370+00:00"
+              "timestamp": "2026-09-19T03:14:24.469069+00:00"
             }
           }
         }
@@ -5871,7 +5197,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           },
           "ou": {
             "model_id": "final_combined",
@@ -5890,7 +5216,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -5909,11 +5235,11 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-09-18T15:52:57.846370+00:00"
+            "timestamp": "2026-09-19T03:14:24.469069+00:00"
           }
         }
       }
     }
   ],
-  "count": 9
+  "count": 8
 }
