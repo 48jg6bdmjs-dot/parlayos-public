@@ -37126,9 +37126,10 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const p=market(game,sport,model,kind,now);
     if(!p.available||!p.actionable||!numeric(p.line)||!/^over$|^under$/i.test(p.selection))return null;
     if(kind==='k'&&(!p.player_id||!p.player_name))return null;
-    if(!probability(p.pA)||!probability(p.pB)||Math.abs(Number(p.pA)+Number(p.pB)-1)>1e-6||Number(p.pA)===Number(p.pB))return null;
+    const push=p.pPush??0;
+    if(!probability(p.pA)||!probability(p.pB)||!probability(push)||Math.abs(Number(p.pA)+Number(p.pB)+Number(push)-1)>1e-6||Number(p.pA)===Number(p.pB))return null;
     const over=Number(p.pA)>Number(p.pB);
-    return {selection:over?'Over':'Under',probability:Math.max(Number(p.pA),Number(p.pB)),line:Number(p.line),player_name:p.player_name||null,model,calibration_status:p.calibration_status};
+    return {selection:over?'Over':'Under',probability:Math.max(Number(p.pA),Number(p.pB)),push:Number(push),line:Number(p.line),player_name:p.player_name||null,model,calibration_status:p.calibration_status};
   }
   function nhlPropInputs(game,now=Date.now()) {
     const at=new Date(game.generated_at||'').getTime(),kickoff=start(game);
@@ -37205,6 +37206,85 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     for(let k=0;k<=Math.floor(threshold);k++){if(k>0)p*=mean/k;if(k<threshold)under+=p;else push=p;}
     return {over:Math.max(0,1-under-push),under,push};
   }
+  function automaticMarket(game,sport,model,kind,now=Date.now()) {
+    const supplied=highestMarketSide(game,sport,model,kind,now);
+    if(supplied)return {...supplied,available:true,line_type:'supplied',model_label:models[model],metric:kind==='k'?'strikeouts':'',notes:''};
+    const missing=reason=>({available:false,reason});
+    if(!['ou','k'].includes(kind)||!models[model]||!applicable(sport,model))return missing('This model does not cover this sport.');
+    if(game.data_quality?.prediction_available===false)return missing(game.data_quality.reason||'Validated prediction inputs are missing.');
+    if(sport==='NHL'&&game.game_type!==2)return missing('NHL season-rate estimates cover regular-season games only.');
+    const generated=Date.parse(game.generated_at||''),kickoff=start(game)?.getTime();
+    if(!Number.isFinite(generated)||!Number.isFinite(kickoff))return missing('A dated forecast and game start time are required.');
+    if(generated>now+60000||now-generated>86400000)return missing('Refresh required before an automatic estimate can be shown.');
+    if(generated>=kickoff)return missing('No saved pregame estimate is available for this market.');
+    const at=Math.min(now,kickoff-1),closed=kickoff<=now;
+    // Reference thresholds sit nearest the predicted mean, never at a searched
+    // extreme chosen just to produce an impressive percentage. They are NOT
+    // bookmaker lines, prices, or actionable selections.
+    const reference=mean=>Math.floor(mean)+.5;
+    const stronger=(p,line,extra)=>{
+      if(!p||!probability(p.over)||!probability(p.under)||!probability(p.push)||Math.abs(p.over+p.under+p.push-1)>1e-6||Math.abs(p.over-p.under)<1e-12)return null;
+      return {available:true,selection:p.over>p.under?'Over':'Under',probability:Math.max(p.over,p.under),push:p.push,line,
+        line_type:'model_reference',calibration_status:'unvalidated',actionable:false,closed,...extra};
+    };
+    if(kind==='ou') {
+      let sources=[],independent=false;
+      const direct=totalDistribution(game,sport,model,at);
+      if(direct)sources=[{family:model,d:direct}];
+      else if(['final_combined','my_chd','chd_master_predictor'].includes(model)||(['NFL','NBA'].includes(sport)&&model==='season_stats')) {
+        independent=model!=='final_combined';
+        for(const mid of ['monte_carlo','zips','steamer','season_stats']) {
+          const d=totalDistribution(game,sport,mid,at);
+          if(d)sources.push({family:sport==='MLB'&&['monte_carlo','zips','steamer'].includes(mid)?'run_projection':mid,d});
+        }
+      }
+      if(!sources.length)return missing('A validated scoring distribution is missing from this feed.');
+      // Average probabilities within model families, then across families;
+      // preserve the mixture instead of pretending averaged means are Poisson.
+      const families=new Map();
+      for(const {family,d} of sources) {
+        if(!families.has(family))families.set(family,new Map());
+        families.get(family).set(JSON.stringify([d.type,d.away_mean,d.home_mean]),d);
+      }
+      const groups=[...families.values()].map(g=>[...g.values()]);
+      const average=fn=>groups.reduce((sum,g)=>sum+g.reduce((v,d)=>v+fn(d),0)/g.length,0)/groups.length;
+      const mean=average(d=>Number(d.away_mean)+Number(d.home_mean));
+      const observed=[game.odds?.totals?.line,game.markets?.totals?.line,game.total?.line,game.total_line].find(numeric);
+      const line=observed===undefined?reference(mean):Number(observed);
+      if(!groups.every(g=>g.every(d=>goalTotal(d,line))))return missing('The supplied total line is outside this scoring model’s supported range.');
+      const p={over:average(d=>goalTotal(d,line).over),under:average(d=>goalTotal(d,line).under),push:average(d=>goalTotal(d,line).push)};
+      return stronger(p,line,{mean,metric:sport==='MLB'?'runs':['NFL','NBA'].includes(sport)?'points':'goals',
+        line_type:observed===undefined?'model_reference':'supplied',
+        model_label:direct?models[model]+' scoring model':groups.length>1?'Scoring ensemble':'Scoring baseline',
+        notes:(independent?'Separate from the selected moneyline model. ':!direct?'Only models with scoring distributions are included. ':'')+(sport==='NFL'||sport==='NBA'?'Experimental Poisson points estimate; scoring increments and overtime are not modeled.':sport==='NHL'?'Season scoring baseline; overtime and settlement rules are not modeled.':sport==='SOC'?'90 minutes plus stoppage time.':'Extra innings and confirmed lineup changes are not modeled.')})||missing('Neither side has a higher estimated probability.');
+    }
+    const candidates=[];
+    if(sport==='MLB') {
+      for(const player of pitcherPropInputs(game,at)) {
+        const stats=game.pitchers?.[player.side+'_stats']||{};
+        const starts=Number(stats.games_started),appearances=Number(stats.games_pitched);
+        // Total season innings include relief appearances. Without a starter
+        // split, dividing a mixed-role total by starts would inflate workload.
+        if(!numeric(stats.games_started)||!numeric(stats.games_pitched)||!Number.isInteger(starts)||starts<5||appearances!==starts)continue;
+        const workload=player.innings/starts,mean=player.k9*workload/9;
+        if(workload<=0||workload>9||mean<=0||mean>27)continue;
+        const line=reference(mean),p=pitcherProp(game,player.side,workload,line,at);
+        const candidate=stronger(p,line,{mean,player_id:player.id,player_name:player.name,metric:'strikeouts',model_label:'Pitcher season-rate model',
+          notes:`Based on ${workload.toFixed(1)} IP/start across ${starts} starts. Scheduled starter, not confirmed; opponent, pitch limits and injuries are not modeled. Independent of the moneyline model.`});
+        if(candidate)candidates.push(candidate);
+      }
+    } else if(sport==='NHL') {
+      for(const player of nhlPropInputs(game,at)) {
+        if(Number(player.mean)<=0)continue;
+        const line=reference(Number(player.mean)),p=nhlProp(game,player.player_id,player.metric,line,at);
+        const candidate=stronger(p,line,{mean:Number(player.mean),player_id:String(player.player_id),player_name:player.player_name,metric:player.metric,model_label:'NHL season-rate model',
+          notes:`Prior-season average across ${player.games} appearances. Conditional on playing; lineup, minutes and starter status are not confirmed. Independent of the moneyline model.`});
+        if(candidate)candidates.push(candidate);
+      }
+    }
+    candidates.sort((a,b)=>b.probability-a.probability||a.player_id.localeCompare(b.player_id)||a.metric.localeCompare(b.metric));
+    return candidates[0]||missing(sport==='MLB'?'A named starter with at least five starts and separate starting workload is required.':'Validated player-rate inputs are not available in this sport’s feed.');
+  }
   function start(game, liveGames = []) {
     const normalized = g => String(g.gamePk ?? g.game_id ?? g.id ?? '').replace(/^(mlb|nba|nfl|nhl|soc)_/i,'');
     const source = liveGames.find(g => normalized(g) && normalized(g) === normalized(game));
@@ -37244,7 +37324,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const p=items.reduce((v,x)=>v*Number(x.probability),1);
     return `${items.length===1?'Saved model estimate':'Estimated chance every pick wins'}: ${percent(p)}.${items.length>1?' Assumes independent games.':''} Uncalibrated model estimates; not a guarantee.`;
   }
-  return {models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,highestMarketSide,nhlPropInputs,nhlProp,pitcherPropInputs,pitcherProp,teamMetrics,totalDistribution,slipSummary};
+  return {models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,highestMarketSide,automaticMarket,nhlPropInputs,nhlProp,pitcherPropInputs,pitcherProp,teamMetrics,totalDistribution,slipSummary};
 });
 </script><script id="PARLAYOS_UI_CONSISTENCY">(function () {
   'use strict';
@@ -37306,8 +37386,8 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   }
   function timeLabel(g,s){const d=C.start(g,A(state.live.sports?.[s]));return d?d.toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Start time unavailable';}
   function compactMarket(g,s,kind) {
-    const prop=kind==='k',p=C.highestMarketSide(g,s,model(s),kind),label=prop?'Player props':'Over / Under';
-    return `<section class="pos-market" data-pos-market="${prop?'props':'ou'}"><div class="pos-market-title"><span>${label}</span>${p?`<span class="pos-prob">${C.percent(p.probability)}</span>`:''}</div>${p?`<div class="pos-pick">${p.player_name?E(p.player_name)+' · ':''}${E(p.selection)} ${E(p.line)}${prop?' strikeouts':''}</div><p class="pos-meta">${E(C.models[p.model])} · Model estimate${p.calibration_status==='unvalidated'?' · Accuracy not yet validated':''}</p>`:`<p class="pos-meta">No line-backed ${prop?'player-prop':'total'} prediction available.</p>`}</section>`;
+    const prop=kind==='k',p=C.automaticMarket(g,s,model(s),kind),label=prop?'Player props':'Over / Under';
+    return `<section class="pos-market" data-pos-market="${prop?'props':'ou'}"><div class="pos-market-title"><span>${label}</span>${p.available?`<span class="pos-prob" aria-label="Model estimate ${C.percent(p.probability)}">${C.percent(p.probability)}</span>`:''}</div>${p.available?`<div class="pos-pick">${p.player_name?E(p.player_name)+' · ':''}${E(p.selection)} ${E(p.line)}${p.metric?' '+E(p.metric):''}</div><p class="pos-meta">${p.line_type==='model_reference'?'Model reference threshold · not a sportsbook line':'Supplied line'}${p.closed?' · Pregame estimate; game started':''}</p><p class="pos-meta">${E(p.model_label)} · ${p.calibration_status==='unvalidated'?'Accuracy not yet validated':'Model estimate'}${p.push>0?' · Push '+C.percent(p.push):''}</p>${p.notes?`<details class="pos-detail" data-pos-detail="${prop?'prop':'total'}-method"><summary>Estimate details</summary><p class="pos-meta">${E(p.notes)}</p></details>`:''}`:`<p class="pos-meta">${E(p.reason)}</p>`}</section>`;
   }
   function metricsPanel(g,s) {
     const teams=C.teamMetrics(g,s);
