@@ -11312,6 +11312,29 @@ html body.pos-ui .pos-legacy, html body.pos-ui [data-pos-legacy] { display:none!
 .pos-dialog header { display:flex; justify-content:space-between; align-items:center; gap:16px; }
 .pos-dialog h2 { margin:0; font-size:22px; }
 .pos-dialog textarea { width:100%; min-height:150px; margin:16px 0; }
+.pos-lab { min-width:0; overflow-wrap:anywhere; }
+.pos-lab-intro { font-size:20px; font-weight:700; }
+.pos-lab-sport { margin:16px 0; padding:16px; border:1px solid #ffffff30; border-radius:18px; background:#ffffff05; }
+.pos-lab-sport>summary { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; min-height:44px; align-items:center; cursor:pointer; font-weight:700; }
+.pos-lab-sport>summary::before { content:'+'; color:var(--pos-accent); }
+.pos-lab-sport[open]>summary::before { content:'−'; }
+.pos-lab-sport>summary span:first-of-type { flex:1; }
+.pos-lab-sport>summary span:last-child { font-size:13px; color:var(--pos-muted); }
+.pos-lab-model { border-top:1px solid #ffffff25; padding:18px 0; }
+.pos-lab h4 { margin:8px 0; font-size:17px; }
+.pos-lab-metrics { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:14px 0; }
+.pos-lab-metrics dt,.pos-lab-metrics small { font-size:11px; color:var(--pos-muted); }
+.pos-lab-metrics dd { margin:6px 0; font-size:21px; font-weight:700; font-variant-numeric:tabular-nums; }
+.pos-lab-detail { font-size:13px; margin:12px 0; }
+.pos-lab-detail summary { min-height:44px; padding:10px 0; box-sizing:border-box; cursor:pointer; }
+.pos-lab-detail li { margin:10px 0; }
+.pos-lab-detail ul { padding-left:20px; }
+.pos-lab-band { display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px; padding:10px 0; border-bottom:1px solid #ffffff20; }
+.pos-lab-experiment { border-radius:14px; border:1px solid #ffffff25; padding:14px; background:#00000018; }
+.pos-lab-progress { margin:14px 0; }
+.pos-lab-progress span { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:12px; }
+.pos-lab-progress progress { display:block; width:100%; height:8px; margin-top:8px; accent-color:var(--pos-accent); }
+@media(max-width:400px) { .pos-lab-sport { padding:12px; } .pos-lab-metrics dd { font-size:18px; } }
 .pos-toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:2147483647; padding:12px 18px; border-radius:14px; color:var(--pos-text); background:var(--pos-surface); border:1px solid var(--pos-accent); max-width:90vw; }
 html body.pos-ui #screen-settings .setting-title { font-size:16px!important; }
 html body.pos-ui #screen-settings .setting-desc { font-size:14px!important; color:var(--pos-muted)!important; }
@@ -37312,14 +37335,27 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     if(g.venue?.name||typeof g.venue==='string')rows.push(['Venue',g.venue.name||g.venue]);
     return rows.length?`<details class="pos-detail" data-pos-detail="game"><summary>Game details</summary><div class="pos-stats">${rows.map(([k,v])=>`<div><small>${E(k)}</small>${E(v)}</div>`).join('')}</div></details>`:'';
   }
+  function modelLabHTML(r,active=state.active) {
+    const lab=r.model_lab,fmt=n=>C.numeric(n)?Number(n).toFixed(3):'—';
+    const date=t=>t&&Number.isFinite(Date.parse(t))?new Date(t).toLocaleDateString([],{year:'numeric',month:'short',day:'numeric'}):'Unavailable';
+    const experiment=x=>{
+      if(!x||x.status==='not_recorded')return '<p class="pos-meta">No challenger snapshot has been archived for this sport.</p>';
+      const statuses={collecting_training_data:'Collecting training games',shadow_evaluation:'Shadow evaluation',active_after_prospective_gate:'Prospective gate passed'};
+      const progress=(label,value,required)=>`<div class="pos-lab-progress"><span>${E(label)} <b>${E(value)} / ${E(required)}</b></span><progress aria-label="${E(label)}" value="${C.numeric(value)?Math.max(0,Number(value)):0}" max="${C.numeric(required)?Math.max(1,Number(required)):1}"></progress></div>`;
+      return `<p><b>${E(statuses[x.status]||'Status unavailable')}</b> · ${x.active&&x.promotion_passed?'Active in the archived forecast':'Not promoted'}</p><p class="pos-meta">Last archived state: ${E(date(x.captured_at))} · ${E(x.version)}</p>${progress('Training games',x.training_games,x.required_training_games)}${progress('Later evaluation games',x.evaluation_games,x.required_evaluation_games)}${progress('Evaluation days',x.evaluation_days,x.required_evaluation_days)}<p class="pos-meta">The challenger must beat frozen default weights on both probability scores in a separate prospective evaluation. Training performance cannot promote it.</p>`;
+    };
+    const score=x=>`<article class="pos-lab-model"><h4>${E(C.models[x.model]||x.model)}</h4><p class="pos-meta">v${E(x.version)} · ${E(x.n)} identical games</p><dl class="pos-lab-metrics"><div><dt>Correct winner</dt><dd>${C.percent(x.accuracy)}</dd><small>${E(x.correct)} / ${E(x.n)}</small></div><div><dt>Brier score</dt><dd>${fmt(x.brier)}</dd><small>Lower is better</small></div><div><dt>Log loss</dt><dd>${fmt(x.log_loss)}</dd><small>Lower is better</small></div></dl><details class="pos-lab-detail"><summary>Probability reliability &amp; misses</summary><p class="pos-meta">Compare predicted win chances with actual win rates. Small groups are noisy.</p>${A(x.reliability).map(b=>`<div class="pos-lab-band"><b>${C.percent(b.mean_probability)} predicted</b><span>${C.percent(b.observed_win_rate)} won · ${E(b.n)} games</span></div>`).join('')}<p>${E(x.confident_misses)} misses among ${E(x.confident_games)} picks estimated at ${C.percent(lab?.confident_threshold)} or higher.</p>${A(x.miss_examples).length?`<p class="pos-meta">Up to three highest-confidence misses in this comparison:</p><ul>${A(x.miss_examples).map(m=>`<li><b>${E(m.selection)} · ${C.percent(m.probability)}</b><br>${E(m.away)} vs ${E(m.home)} · ${E(date(m.start_at))}<br>Actual winner: ${E(m.actual_winner)}</li>`).join('')}</ul>`:''}</details></article>`;
+    const current=lab?.schema_version===1?A(lab.sports):[];
+    return `<div class="pos-lab"><p class="pos-lab-intro">Same games. Frozen forecasts. Measured results.</p><p class="pos-meta">Moneyline evidence only. Winner accuracy measures correct picks; Brier score and log loss measure probability quality. A higher win rate can still come with worse probability estimates.</p>${current.length?current.map(s=>`<details class="pos-lab-sport" ${s.sport===active?'open':''}><summary><span>${E(sports[s.sport]?.[1]||s.sport)}</span><span>${E(s.matched_games)} shared games</span></summary><p class="pos-meta">Latest archived versions · ${E(s.outcome_type)}${s.matched_games?` · ${E(date(s.first_start))}–${E(date(s.last_start))}`:''}</p>${s.scores?.length>1?'<p>Every model below is scored on the same games, ordered by Brier score. This is a sample ranking, not proof of future superiority.</p>':'<p>Not enough overlapping model results for a comparison yet.</p>'}<details class="pos-lab-detail"><summary>Which games count?</summary><p>${E(s.verified_games)} verified settled games; ${E(s.excluded_from_comparison)} excluded because a latest-version forecast is missing for at least one model.</p><ul>${Object.entries(s.versions||{}).map(([mid,v])=>`<li>${E(C.models[mid]||mid)} v${E(v)}: ${E(s.coverage?.[mid]??0)} eligible games before matching.</li>`).join('')}</ul><p class="pos-meta">New versions can reset the shared sample. No old-version results are substituted.</p></details>${A(s.scores).map(score).join('')}<section class="pos-lab-experiment"><h4>Learning challenger</h4>${experiment(s.experiment)}</section></details>`).join(''):'<p>The matched comparison has not been published yet. Historical results are available below.</p>'}<details class="pos-lab-detail"><summary>Historical results by version</summary><p class="pos-meta">These groups can contain different games. Use the shared-game comparison above to compare models.</p>${A(r.model_scores).map(x=>`<div class="pos-row"><b>${E(sports[x.sport]?.[1]||x.sport)} · ${E(C.models[x.model]||x.model)}</b><p class="pos-meta">Version ${E(x.version)} · ${E(x.n)} games · ${E(x.outcome_type)}</p><p>Brier ${fmt(x.brier)} · Log loss ${fmt(x.log_loss)} · Correct winner ${C.percent(x.accuracy)}</p></div>`).join('')||'<p>No verified results yet.</p>'}</details><p class="pos-meta">Updated ${E(date(lab?.as_of||r.updated))}. ${E(lab?.policy||r.policy)}</p></div>`;
+  }
   async function modelResults() {
-    openDialog('Model results','<p role="status">Loading verified outcomes…</p>');
+    openDialog('Model Lab','<p role="status">Loading verified outcomes…</p>');
     try {
       const r=await fetchJSON('data/model_benchmark.json');
-      const rows=A(r.model_scores),fmt=n=>C.numeric(n)?Number(n).toFixed(3):'—';
       if(!dialog.open)return;
-      openDialog('Model results',`<p>${E(r.verified_settled_games)} games settled from ${E(r.captured_games)} archived pregame forecasts.</p><p class="pos-meta">Early evidence, not proof of future accuracy. Lower Brier score and log loss are better. Compare only the same sport and outcome type.</p>${rows.map(x=>`<div class="pos-row"><b>${E(sports[x.sport]?.[1]||x.sport)} · ${E(C.models[x.model]||x.model)}</b><p class="pos-meta">Version ${E(x.version)} · ${E(x.n)} games · ${E(x.outcome_type||'binary winner')}</p><p>Brier ${fmt(x.brier)} · Log loss ${fmt(x.log_loss)} · Correct winner ${C.percent(x.accuracy)}</p></div>`).join('')||'<p>No verified results are available yet.</p>'}<p class="pos-meta">${E(r.policy)}</p>`);
-    } catch {if(dialog.open)openDialog('Model results','<p>Results could not be loaded. Try again after the next successful data refresh.</p>');}
+      openDialog('Model Lab',modelLabHTML(r));
+      q('[data-pos-close]',dialog)?.focus();
+    } catch {if(dialog.open)openDialog('Model Lab','<p>Results could not be loaded. Try again after the next successful data refresh.</p>');}
   }
   function reconcileCards(grid,markup) {
     if(grid.__posHTML===markup)return;
@@ -37377,7 +37413,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       let attribution=q('.pos-attribution',host);
       if(!attribution){attribution=document.createElement('p');attribution.className='pos-meta pos-attribution';status.after(attribution);}
       attribution.innerHTML=feed.attribution?.name==='OpenLigaDB'?'<a href="https://www.openligadb.de/" target="_blank" rel="noopener">Data: OpenLigaDB</a> · <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL 1.0</a>':'';
-      if(!q('[data-pos-results]',host)){const b=document.createElement('button');b.type='button';b.dataset.posResults='';b.textContent='Model results';q('.pos-toolbar',host).appendChild(b);}
+      if(!q('[data-pos-results]',host)){const b=document.createElement('button');b.type='button';b.dataset.posResults='';b.textContent='Model Lab';q('.pos-toolbar',host).appendChild(b);}
       const empty=feed.status==='provider_failed'?'The game provider could not be reached.':feed.status==='no_games_scheduled'?`No games scheduled${feed.schedule_start?' for '+feed.schedule_start+' through '+feed.schedule_end:''}.${feed.preseason_start?' Preseason starts '+feed.preseason_start+'.':''}`:'No games available.';
       const grid=q('.pos-grid',host),cards=filtered.length?filtered.map(g=>card(g,s)).join(''):`<div class="pos-empty">${E(state.loading?'Loading games…':state.errors[s]?'Game data is temporarily unavailable.':all.length?'No matching games. Clear your search to see the slate.':empty)}</div>`;
       reconcileCards(grid,cards);

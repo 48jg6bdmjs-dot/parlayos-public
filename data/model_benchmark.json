@@ -1,8 +1,8 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-09-20T15:29:47.466873+00:00",
+  "updated": "2026-09-20T17:46:59.805934+00:00",
   "captured_games": 227,
-  "verified_settled_games": 195,
+  "verified_settled_games": 196,
   "model_scores": [
     {
       "sport": "MLB",
@@ -1051,11 +1051,11 @@
       "sport": "SOC",
       "model": "season_stats",
       "version": "league-goals-1.0.0",
-      "n": 12,
+      "n": 13,
       "outcome_type": "three_way_90_minutes",
-      "brier": 0.5639589358270939,
-      "log_loss": 0.955429942410964,
-      "accuracy": 0.5833333333333334,
+      "brier": 0.554779176254041,
+      "log_loss": 0.9419133607229353,
+      "accuracy": 0.6153846153846154,
       "uniform_baseline_brier": 0.6666666666666666,
       "uniform_baseline_log_loss": 1.0986122886681098,
       "calibration_bins": []
@@ -1064,11 +1064,11 @@
       "sport": "SOC",
       "model": "final_combined",
       "version": "league-goals-1.0.0",
-      "n": 12,
+      "n": 13,
       "outcome_type": "three_way_90_minutes",
-      "brier": 0.5639589358270939,
-      "log_loss": 0.955429942410964,
-      "accuracy": 0.5833333333333334,
+      "brier": 0.554779176254041,
+      "log_loss": 0.9419133607229353,
+      "accuracy": 0.6153846153846154,
       "uniform_baseline_brier": 0.6666666666666666,
       "uniform_baseline_log_loss": 1.0986122886681098,
       "calibration_bins": []
@@ -1578,6 +1578,591 @@
       ]
     }
   ],
+  "model_lab": {
+    "schema_version": 1,
+    "as_of": "2026-09-20T17:46:59.805948+00:00",
+    "market": "moneyline",
+    "confident_threshold": 0.65,
+    "sports": [
+      {
+        "sport": "MLB",
+        "outcome_type": "binary winner",
+        "status": "descriptive_evidence",
+        "versions": {
+          "monte_carlo": "2.2.0",
+          "zips": "2.2.0",
+          "steamer": "2.2.0",
+          "my_chd": "2.2.0",
+          "season_stats": "2.2.0",
+          "chd_master_predictor": "2.2.0",
+          "final_combined": "2.2.0"
+        },
+        "verified_games": 166,
+        "matched_games": 72,
+        "excluded_from_comparison": 94,
+        "coverage": {
+          "monte_carlo": 81,
+          "zips": 81,
+          "steamer": 81,
+          "my_chd": 72,
+          "season_stats": 81,
+          "chd_master_predictor": 72,
+          "final_combined": 81
+        },
+        "first_start": "2026-09-14T22:40:00+00:00",
+        "last_start": "2026-09-20T01:38:00+00:00",
+        "scores": [
+          {
+            "model": "season_stats",
+            "version": "2.2.0",
+            "n": 72,
+            "correct": 47,
+            "accuracy": 0.6527777777777778,
+            "brier": 0.22713898954821124,
+            "log_loss": 0.6462282467273627,
+            "reliability": [
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 46,
+                "mean_probability": 0.5326601465503696,
+                "observed_win_rate": 0.5869565217391305
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 20,
+                "mean_probability": 0.6412321982934376,
+                "observed_win_rate": 0.8
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 6,
+                "mean_probability": 0.7149182561014623,
+                "observed_win_rate": 0.6666666666666666
+              }
+            ],
+            "confident_games": 12,
+            "confident_misses": 3,
+            "miss_examples": [
+              {
+                "event_id": "824467",
+                "away": "Los Angeles Dodgers",
+                "home": "Cincinnati Reds",
+                "start_at": "2026-09-16T22:40:00+00:00",
+                "selection": "Los Angeles Dodgers",
+                "probability": 0.7254369011936942,
+                "actual_winner": "Cincinnati Reds"
+              },
+              {
+                "event_id": "824463",
+                "away": "Chicago Cubs",
+                "home": "Cincinnati Reds",
+                "start_at": "2026-09-18T22:40:00+00:00",
+                "selection": "Chicago Cubs",
+                "probability": 0.7037106737972344,
+                "actual_winner": "Cincinnati Reds"
+              },
+              {
+                "event_id": "823655",
+                "away": "New York Yankees",
+                "home": "Minnesota Twins",
+                "start_at": "2026-09-16T17:40:00+00:00",
+                "selection": "New York Yankees",
+                "probability": 0.6521510574970961,
+                "actual_winner": "Minnesota Twins"
+              }
+            ]
+          },
+          {
+            "model": "zips",
+            "version": "2.2.0",
+            "n": 72,
+            "correct": 48,
+            "accuracy": 0.6666666666666666,
+            "brier": 0.22758424093350904,
+            "log_loss": 0.6466719959187022,
+            "reliability": [
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 39,
+                "mean_probability": 0.5388290031996531,
+                "observed_win_rate": 0.6410256410256411
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 20,
+                "mean_probability": 0.6448623365918684,
+                "observed_win_rate": 0.7
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 11,
+                "mean_probability": 0.7356259300939751,
+                "observed_win_rate": 0.6363636363636364
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 2,
+                "mean_probability": 0.8012661731759184,
+                "observed_win_rate": 1.0
+              }
+            ],
+            "confident_games": 24,
+            "confident_misses": 7,
+            "miss_examples": [
+              {
+                "event_id": "824467",
+                "away": "Los Angeles Dodgers",
+                "home": "Cincinnati Reds",
+                "start_at": "2026-09-16T22:40:00+00:00",
+                "selection": "Los Angeles Dodgers",
+                "probability": 0.7486071555072504,
+                "actual_winner": "Cincinnati Reds"
+              },
+              {
+                "event_id": "823655",
+                "away": "New York Yankees",
+                "home": "Minnesota Twins",
+                "start_at": "2026-09-16T17:40:00+00:00",
+                "selection": "New York Yankees",
+                "probability": 0.7405989209670533,
+                "actual_winner": "Minnesota Twins"
+              },
+              {
+                "event_id": "825029",
+                "away": "New York Yankees",
+                "home": "Arizona Diamondbacks",
+                "start_at": "2026-09-20T00:10:00+00:00",
+                "selection": "New York Yankees",
+                "probability": 0.7203669957067866,
+                "actual_winner": "Arizona Diamondbacks"
+              }
+            ]
+          },
+          {
+            "model": "monte_carlo",
+            "version": "2.2.0",
+            "n": 72,
+            "correct": 47,
+            "accuracy": 0.6527777777777778,
+            "brier": 0.2279366727235501,
+            "log_loss": 0.6474327599596191,
+            "reliability": [
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 39,
+                "mean_probability": 0.538468100588771,
+                "observed_win_rate": 0.6153846153846154
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 19,
+                "mean_probability": 0.641816354338767,
+                "observed_win_rate": 0.6842105263157895
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 12,
+                "mean_probability": 0.7330000414362691,
+                "observed_win_rate": 0.6666666666666666
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 2,
+                "mean_probability": 0.8005523098884935,
+                "observed_win_rate": 1.0
+              }
+            ],
+            "confident_games": 24,
+            "confident_misses": 7,
+            "miss_examples": [
+              {
+                "event_id": "824467",
+                "away": "Los Angeles Dodgers",
+                "home": "Cincinnati Reds",
+                "start_at": "2026-09-16T22:40:00+00:00",
+                "selection": "Los Angeles Dodgers",
+                "probability": 0.7473100777954368,
+                "actual_winner": "Cincinnati Reds"
+              },
+              {
+                "event_id": "823655",
+                "away": "New York Yankees",
+                "home": "Minnesota Twins",
+                "start_at": "2026-09-16T17:40:00+00:00",
+                "selection": "New York Yankees",
+                "probability": 0.7426172123205314,
+                "actual_winner": "Minnesota Twins"
+              },
+              {
+                "event_id": "822683",
+                "away": "Philadelphia Phillies",
+                "home": "Washington Nationals",
+                "start_at": "2026-09-15T22:45:00+00:00",
+                "selection": "Philadelphia Phillies",
+                "probability": 0.7240110951172999,
+                "actual_winner": "Washington Nationals"
+              }
+            ]
+          },
+          {
+            "model": "steamer",
+            "version": "2.2.0",
+            "n": 72,
+            "correct": 47,
+            "accuracy": 0.6527777777777778,
+            "brier": 0.2280719762564205,
+            "log_loss": 0.6477260826667308,
+            "reliability": [
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 39,
+                "mean_probability": 0.5383473273822346,
+                "observed_win_rate": 0.6153846153846154
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 19,
+                "mean_probability": 0.6417159815796601,
+                "observed_win_rate": 0.6842105263157895
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 12,
+                "mean_probability": 0.7331054064950164,
+                "observed_win_rate": 0.6666666666666666
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 2,
+                "mean_probability": 0.8002553843340952,
+                "observed_win_rate": 1.0
+              }
+            ],
+            "confident_games": 24,
+            "confident_misses": 7,
+            "miss_examples": [
+              {
+                "event_id": "824467",
+                "away": "Los Angeles Dodgers",
+                "home": "Cincinnati Reds",
+                "start_at": "2026-09-16T22:40:00+00:00",
+                "selection": "Los Angeles Dodgers",
+                "probability": 0.7469627537890586,
+                "actual_winner": "Cincinnati Reds"
+              },
+              {
+                "event_id": "823655",
+                "away": "New York Yankees",
+                "home": "Minnesota Twins",
+                "start_at": "2026-09-16T17:40:00+00:00",
+                "selection": "New York Yankees",
+                "probability": 0.7433031052370577,
+                "actual_winner": "Minnesota Twins"
+              },
+              {
+                "event_id": "822683",
+                "away": "Philadelphia Phillies",
+                "home": "Washington Nationals",
+                "start_at": "2026-09-15T22:45:00+00:00",
+                "selection": "Philadelphia Phillies",
+                "probability": 0.7258896081122772,
+                "actual_winner": "Washington Nationals"
+              }
+            ]
+          },
+          {
+            "model": "final_combined",
+            "version": "2.2.0",
+            "n": 72,
+            "correct": 50,
+            "accuracy": 0.6944444444444444,
+            "brier": 0.23207237142756526,
+            "log_loss": 0.6567486698274867,
+            "reliability": [
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 56,
+                "mean_probability": 0.5366727413041016,
+                "observed_win_rate": 0.6785714285714286
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 16,
+                "mean_probability": 0.6280323642340595,
+                "observed_win_rate": 0.75
+              }
+            ],
+            "confident_games": 3,
+            "confident_misses": 1,
+            "miss_examples": [
+              {
+                "event_id": "824467",
+                "away": "Los Angeles Dodgers",
+                "home": "Cincinnati Reds",
+                "start_at": "2026-09-16T22:40:00+00:00",
+                "selection": "Los Angeles Dodgers",
+                "probability": 0.6538443720844735,
+                "actual_winner": "Cincinnati Reds"
+              }
+            ]
+          },
+          {
+            "model": "chd_master_predictor",
+            "version": "2.2.0",
+            "n": 72,
+            "correct": 41,
+            "accuracy": 0.5694444444444444,
+            "brier": 0.2479416433936188,
+            "log_loss": 0.6890284389931493,
+            "reliability": [
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 72,
+                "mean_probability": 0.5130719327766612,
+                "observed_win_rate": 0.5694444444444444
+              }
+            ],
+            "confident_games": 0,
+            "confident_misses": 0,
+            "miss_examples": []
+          },
+          {
+            "model": "my_chd",
+            "version": "2.2.0",
+            "n": 72,
+            "correct": 41,
+            "accuracy": 0.5694444444444444,
+            "brier": 0.2479416433936188,
+            "log_loss": 0.6890284389931493,
+            "reliability": [
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 72,
+                "mean_probability": 0.5130719327766612,
+                "observed_win_rate": 0.5694444444444444
+              }
+            ],
+            "confident_games": 0,
+            "confident_misses": 0,
+            "miss_examples": []
+          }
+        ],
+        "experiment": {
+          "version": "family-brier-1",
+          "captured_at": "2026-09-20T10:40:43.862079+00:00",
+          "status": "collecting_training_data",
+          "active": false,
+          "training_games": 70,
+          "required_training_games": 100,
+          "evaluation_games": 0,
+          "required_evaluation_games": 100,
+          "evaluation_days": 0,
+          "required_evaluation_days": 20,
+          "promotion_passed": false
+        }
+      },
+      {
+        "sport": "NFL",
+        "outcome_type": "binary winner",
+        "status": "insufficient_comparison",
+        "versions": {
+          "monte_carlo": "2.2.0",
+          "my_chd": "2.2.0",
+          "season_stats": "2.2.0",
+          "chd_master_predictor": "2.2.0",
+          "final_combined": "2.2.0"
+        },
+        "verified_games": 17,
+        "matched_games": 0,
+        "excluded_from_comparison": 17,
+        "coverage": {
+          "monte_carlo": 0,
+          "my_chd": 0,
+          "season_stats": 0,
+          "chd_master_predictor": 0,
+          "final_combined": 0
+        },
+        "first_start": null,
+        "last_start": null,
+        "scores": [],
+        "experiment": {
+          "version": "family-brier-1",
+          "captured_at": "2026-09-18T10:37:15.969015+00:00",
+          "status": "collecting_training_data",
+          "active": false,
+          "training_games": 0,
+          "required_training_games": 100,
+          "evaluation_games": 0,
+          "required_evaluation_games": 100,
+          "evaluation_days": 0,
+          "required_evaluation_days": 20,
+          "promotion_passed": false
+        }
+      },
+      {
+        "sport": "NBA",
+        "outcome_type": "binary winner",
+        "status": "insufficient_comparison",
+        "versions": {},
+        "verified_games": 0,
+        "matched_games": 0,
+        "excluded_from_comparison": 0,
+        "coverage": {},
+        "first_start": null,
+        "last_start": null,
+        "scores": [],
+        "experiment": {
+          "status": "not_recorded",
+          "active": false
+        }
+      },
+      {
+        "sport": "NHL",
+        "outcome_type": "binary winner",
+        "status": "insufficient_comparison",
+        "versions": {},
+        "verified_games": 0,
+        "matched_games": 0,
+        "excluded_from_comparison": 0,
+        "coverage": {},
+        "first_start": null,
+        "last_start": null,
+        "scores": [],
+        "experiment": {
+          "status": "not_recorded",
+          "active": false
+        }
+      },
+      {
+        "sport": "SOC",
+        "outcome_type": "three_way_90_minutes",
+        "status": "descriptive_evidence",
+        "versions": {
+          "season_stats": "league-goals-1.0.0",
+          "final_combined": "league-goals-1.0.0"
+        },
+        "verified_games": 13,
+        "matched_games": 13,
+        "excluded_from_comparison": 0,
+        "coverage": {
+          "season_stats": 13,
+          "final_combined": 13
+        },
+        "first_start": "2026-09-12T13:30:00+00:00",
+        "last_start": "2026-09-20T13:30:00+00:00",
+        "scores": [
+          {
+            "model": "final_combined",
+            "version": "league-goals-1.0.0",
+            "n": 13,
+            "correct": 8,
+            "accuracy": 0.6153846153846154,
+            "brier": 0.554779176254041,
+            "log_loss": 0.9419133607229353,
+            "reliability": [
+              {
+                "lower": 0,
+                "upper": 0.5,
+                "n": 9,
+                "mean_probability": 0.4263738303779954,
+                "observed_win_rate": 0.5555555555555556
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 2,
+                "mean_probability": 0.5238541842887021,
+                "observed_win_rate": 0.5
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 1,
+                "mean_probability": 0.6509370157373321,
+                "observed_win_rate": 1.0
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 1,
+                "mean_probability": 0.8633682813199067,
+                "observed_win_rate": 1.0
+              }
+            ],
+            "confident_games": 2,
+            "confident_misses": 0,
+            "miss_examples": []
+          },
+          {
+            "model": "season_stats",
+            "version": "league-goals-1.0.0",
+            "n": 13,
+            "correct": 8,
+            "accuracy": 0.6153846153846154,
+            "brier": 0.554779176254041,
+            "log_loss": 0.9419133607229353,
+            "reliability": [
+              {
+                "lower": 0,
+                "upper": 0.5,
+                "n": 9,
+                "mean_probability": 0.4263738303779954,
+                "observed_win_rate": 0.5555555555555556
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 2,
+                "mean_probability": 0.5238541842887021,
+                "observed_win_rate": 0.5
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 1,
+                "mean_probability": 0.6509370157373321,
+                "observed_win_rate": 1.0
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 1,
+                "mean_probability": 0.8633682813199067,
+                "observed_win_rate": 1.0
+              }
+            ],
+            "confident_games": 2,
+            "confident_misses": 0,
+            "miss_examples": []
+          }
+        ],
+        "experiment": {
+          "status": "not_recorded",
+          "active": false
+        }
+      }
+    ],
+    "policy": "Latest archived version of each model, evaluated on identical settled games. Version changes can reset the common sample. Conflicting duplicate events, invalid probabilities, missing result provenance and post-start forecasts are excluded. Descriptive results do not establish a superior future model or profitability. Totals and props are not evaluated by this moneyline archive."
+  },
   "learning_policy": {
     "training_games_required": 100,
     "prospective_evaluation_games_required": 100,
