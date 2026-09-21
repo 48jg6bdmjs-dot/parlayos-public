@@ -1,8 +1,8 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-09-21T03:26:34.449338+00:00",
-  "captured_games": 227,
-  "verified_settled_games": 224,
+  "updated": "2026-09-21T12:03:52.590867+00:00",
+  "captured_games": 244,
+  "verified_settled_games": 225,
   "model_scores": [
     {
       "sport": "MLB",
@@ -1581,13 +1581,13 @@
       "sport": "NFL",
       "model": "monte_carlo",
       "version": "2.2.0",
-      "n": 13,
+      "n": 14,
       "outcome_type": "binary winner",
       "uniform_baseline_brier": 0.25,
       "uniform_baseline_log_loss": 0.6931471805599453,
-      "brier": 0.2493017791616194,
-      "log_loss": 0.6911097240095205,
-      "accuracy": 0.5384615384615384,
+      "brier": 0.25034504470605756,
+      "log_loss": 0.6932425440763021,
+      "accuracy": 0.5,
       "calibration_bins": [
         {
           "lower": 0.2,
@@ -1611,6 +1611,13 @@
           "observed_away_rate": 0.5714285714285714
         },
         {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 1,
+          "mean_forecast": 0.5137192781897069,
+          "observed_away_rate": 0.0
+        },
+        {
           "lower": 0.7,
           "upper": 0.8,
           "n": 2,
@@ -1630,13 +1637,13 @@
       "sport": "NFL",
       "model": "my_chd",
       "version": "2.2.0",
-      "n": 13,
+      "n": 14,
       "outcome_type": "binary winner",
       "uniform_baseline_brier": 0.25,
       "uniform_baseline_log_loss": 0.6931471805599453,
-      "brier": 0.24925259786722223,
-      "log_loss": 0.6916523038796701,
-      "accuracy": 0.6153846153846154,
+      "brier": 0.24983625193663336,
+      "log_loss": 0.6928196942771201,
+      "accuracy": 0.5714285714285714,
       "calibration_bins": [
         {
           "lower": 0.4,
@@ -1648,9 +1655,9 @@
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 12,
-          "mean_forecast": 0.5061239225800641,
-          "observed_away_rate": 0.6666666666666666
+          "n": 13,
+          "mean_forecast": 0.506219732081837,
+          "observed_away_rate": 0.6153846153846154
         }
       ]
     },
@@ -1658,13 +1665,13 @@
       "sport": "NFL",
       "model": "season_stats",
       "version": "2.2.0",
-      "n": 13,
+      "n": 14,
       "outcome_type": "binary winner",
       "uniform_baseline_brier": 0.25,
       "uniform_baseline_log_loss": 0.6931471805599453,
-      "brier": 0.2400256263602018,
-      "log_loss": 0.6721878675349665,
-      "accuracy": 0.5384615384615384,
+      "brier": 0.24126100717601826,
+      "log_loss": 0.6747308863730963,
+      "accuracy": 0.5,
       "calibration_bins": [
         {
           "lower": 0.3,
@@ -1681,6 +1688,13 @@
           "observed_away_rate": 0.5
         },
         {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 1,
+          "mean_forecast": 0.5072681320383058,
+          "observed_away_rate": 0.0
+        },
+        {
           "lower": 0.6,
           "upper": 0.7,
           "n": 3,
@@ -1693,13 +1707,13 @@
       "sport": "NFL",
       "model": "chd_master_predictor",
       "version": "2.2.0",
-      "n": 13,
+      "n": 14,
       "outcome_type": "binary winner",
       "uniform_baseline_brier": 0.25,
       "uniform_baseline_log_loss": 0.6931471805599453,
-      "brier": 0.24925259786722223,
-      "log_loss": 0.6916523038796701,
-      "accuracy": 0.6153846153846154,
+      "brier": 0.24983625193663336,
+      "log_loss": 0.6928196942771201,
+      "accuracy": 0.5714285714285714,
       "calibration_bins": [
         {
           "lower": 0.4,
@@ -1711,9 +1725,9 @@
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 12,
-          "mean_forecast": 0.5061239225800641,
-          "observed_away_rate": 0.6666666666666666
+          "n": 13,
+          "mean_forecast": 0.506219732081837,
+          "observed_away_rate": 0.6153846153846154
         }
       ]
     },
@@ -1721,13 +1735,13 @@
       "sport": "NFL",
       "model": "final_combined",
       "version": "2.2.0",
-      "n": 13,
+      "n": 14,
       "outcome_type": "binary winner",
       "uniform_baseline_brier": 0.25,
       "uniform_baseline_log_loss": 0.6931471805599453,
-      "brier": 0.24190120164313958,
-      "log_loss": 0.6764154235626744,
-      "accuracy": 0.5384615384615384,
+      "brier": 0.24315915655833684,
+      "log_loss": 0.6789696493962561,
+      "accuracy": 0.5,
       "calibration_bins": [
         {
           "lower": 0.3,
@@ -1744,6 +1758,13 @@
           "observed_away_rate": 0.5555555555555556
         },
         {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 1,
+          "mean_forecast": 0.5094237631441051,
+          "observed_away_rate": 0.0
+        },
+        {
           "lower": 0.6,
           "upper": 0.7,
           "n": 3,
@@ -1755,7 +1776,7 @@
   ],
   "model_lab": {
     "schema_version": 1,
-    "as_of": "2026-09-21T03:26:34.449351+00:00",
+    "as_of": "2026-09-21T12:03:52.590889+00:00",
     "market": "moneyline",
     "confident_threshold": 0.65,
     "sports": [
@@ -2143,10 +2164,10 @@
         ],
         "experiment": {
           "version": "family-brier-1",
-          "captured_at": "2026-09-20T10:40:43.862079+00:00",
+          "captured_at": "2026-09-21T12:03:52.158162+00:00",
           "status": "collecting_training_data",
           "active": false,
-          "training_games": 70,
+          "training_games": 85,
           "required_training_games": 100,
           "evaluation_games": 0,
           "required_evaluation_games": 100,
@@ -2166,34 +2187,34 @@
           "chd_master_predictor": "2.2.0",
           "final_combined": "2.2.0"
         },
-        "verified_games": 30,
-        "matched_games": 13,
+        "verified_games": 31,
+        "matched_games": 14,
         "excluded_from_comparison": 17,
         "coverage": {
-          "monte_carlo": 13,
-          "my_chd": 13,
-          "season_stats": 13,
-          "chd_master_predictor": 13,
-          "final_combined": 13
+          "monte_carlo": 14,
+          "my_chd": 14,
+          "season_stats": 14,
+          "chd_master_predictor": 14,
+          "final_combined": 14
         },
         "first_start": "2026-09-20T17:00:00+00:00",
-        "last_start": "2026-09-20T20:25:00+00:00",
+        "last_start": "2026-09-21T00:20:00+00:00",
         "scores": [
           {
             "model": "season_stats",
             "version": "2.2.0",
-            "n": 13,
+            "n": 14,
             "correct": 7,
-            "accuracy": 0.5384615384615384,
-            "brier": 0.2400256263602018,
-            "log_loss": 0.6721878675349665,
+            "accuracy": 0.5,
+            "brier": 0.24126100717601826,
+            "log_loss": 0.6747308863730963,
             "reliability": [
               {
                 "lower": 0.5,
                 "upper": 0.6,
-                "n": 8,
-                "mean_probability": 0.5380467221968663,
-                "observed_win_rate": 0.5
+                "n": 9,
+                "mean_probability": 0.5346268788459151,
+                "observed_win_rate": 0.4444444444444444
               },
               {
                 "lower": 0.6,
@@ -2210,18 +2231,18 @@
           {
             "model": "final_combined",
             "version": "2.2.0",
-            "n": 13,
+            "n": 14,
             "correct": 7,
-            "accuracy": 0.5384615384615384,
-            "brier": 0.24190120164313958,
-            "log_loss": 0.6764154235626744,
+            "accuracy": 0.5,
+            "brier": 0.24315915655833684,
+            "log_loss": 0.6789696493962561,
             "reliability": [
               {
                 "lower": 0.5,
                 "upper": 0.6,
-                "n": 9,
-                "mean_probability": 0.5395327123382399,
-                "observed_win_rate": 0.4444444444444444
+                "n": 10,
+                "mean_probability": 0.5365218174188263,
+                "observed_win_rate": 0.4
               },
               {
                 "lower": 0.6,
@@ -2238,18 +2259,18 @@
           {
             "model": "chd_master_predictor",
             "version": "2.2.0",
-            "n": 13,
+            "n": 14,
             "correct": 8,
-            "accuracy": 0.6153846153846154,
-            "brier": 0.24925259786722218,
-            "log_loss": 0.69165230387967,
+            "accuracy": 0.5714285714285714,
+            "brier": 0.2498362519366333,
+            "log_loss": 0.69281969427712,
             "reliability": [
               {
                 "lower": 0.5,
                 "upper": 0.6,
-                "n": 13,
-                "mean_probability": 0.5060749176025034,
-                "observed_win_rate": 0.6153846153846154
+                "n": 14,
+                "mean_probability": 0.5061673839239755,
+                "observed_win_rate": 0.5714285714285714
               }
             ],
             "confident_games": 0,
@@ -2259,18 +2280,18 @@
           {
             "model": "my_chd",
             "version": "2.2.0",
-            "n": 13,
+            "n": 14,
             "correct": 8,
-            "accuracy": 0.6153846153846154,
-            "brier": 0.24925259786722218,
-            "log_loss": 0.69165230387967,
+            "accuracy": 0.5714285714285714,
+            "brier": 0.2498362519366333,
+            "log_loss": 0.69281969427712,
             "reliability": [
               {
                 "lower": 0.5,
                 "upper": 0.6,
-                "n": 13,
-                "mean_probability": 0.5060749176025034,
-                "observed_win_rate": 0.6153846153846154
+                "n": 14,
+                "mean_probability": 0.5061673839239755,
+                "observed_win_rate": 0.5714285714285714
               }
             ],
             "confident_games": 0,
@@ -2280,18 +2301,18 @@
           {
             "model": "monte_carlo",
             "version": "2.2.0",
-            "n": 13,
+            "n": 14,
             "correct": 7,
-            "accuracy": 0.5384615384615384,
-            "brier": 0.24930177916161947,
-            "log_loss": 0.6911097240095206,
+            "accuracy": 0.5,
+            "brier": 0.2503450447060576,
+            "log_loss": 0.6932425440763023,
             "reliability": [
               {
                 "lower": 0.5,
                 "upper": 0.6,
-                "n": 7,
-                "mean_probability": 0.5601854856761797,
-                "observed_win_rate": 0.42857142857142855
+                "n": 8,
+                "mean_probability": 0.5543772097403705,
+                "observed_win_rate": 0.375
               },
               {
                 "lower": 0.6,
@@ -2341,10 +2362,10 @@
         ],
         "experiment": {
           "version": "family-brier-1",
-          "captured_at": "2026-09-18T10:37:15.969015+00:00",
+          "captured_at": "2026-09-21T12:03:52.158162+00:00",
           "status": "collecting_training_data",
           "active": false,
-          "training_games": 0,
+          "training_games": 13,
           "required_training_games": 100,
           "evaluation_games": 0,
           "required_evaluation_games": 100,
