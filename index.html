@@ -37273,6 +37273,26 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
           notes:`Based on ${workload.toFixed(1)} IP/start across ${starts} starts. Scheduled starter, not confirmed; opponent, pitch limits and injuries are not modeled. Independent of the moneyline model.`});
         if(candidate)candidates.push(candidate);
       }
+    } else if(sport==='NFL') {
+      const rows=Array.isArray(game.player_prop_models)?game.player_prop_models:[];
+      const allowed={passing_yards:'passing yards',rushing_yards:'rushing yards',receiving_yards:'receiving yards'};
+      const season=new Date(kickoff).getUTCFullYear()-(new Date(kickoff).getUTCMonth()<2?1:0);
+      for(const player of rows) {
+        const values=player.observations,generatedAt=Date.parse(player.generated_at||''),lastGame=Date.parse(player.latest_game_at||'');
+        if(player.model_id!=='nfl_player_empirical_v1'||player.model_version!=='1.0.0'||player.data_status!=='validated'||player.distribution!=='empirical_smoothed'||!allowed[player.metric])continue;
+        if(!player.player_id||!player.player_name||!player.source||player.season!==season||![game.away_abbr,game.home_abbr].includes(player.team))continue;
+        if(!Number.isFinite(generatedAt)||generatedAt>=kickoff||generatedAt>now+60000||now-generatedAt>86400000||!Number.isFinite(lastGame)||generatedAt-lastGame<43200000||generatedAt-lastGame>21*86400000)continue;
+        if(!Array.isArray(values)||values.length<8||values.length>17||player.games!==values.length||!Number.isInteger(player.current_season_games)||player.current_season_games<1||player.current_season_games>values.length)continue;
+        if(!Array.isArray(player.game_ids)||player.game_ids.length!==values.length||new Set(player.game_ids).size!==values.length||!player.game_ids.every(id=>typeof id==='string'&&id.length>0))continue;
+        if(rows.filter(r=>r.player_id===player.player_id&&r.metric===player.metric).length!==1||!values.every(v=>typeof v==='number'&&Number.isInteger(v)&&v>=-100&&v<=1000))continue;
+        const mean=values.reduce((a,b)=>a+b,0)/values.length;
+        if(mean<=0||!numeric(player.mean)||Math.abs(Number(player.mean)-mean)>1e-6)continue;
+        const line=reference(mean),over=(values.filter(v=>v>line).length+1)/(values.length+2);
+        const candidate=stronger({over,under:1-over,push:0},line,{mean,player_id:String(player.player_id),player_name:player.player_name,
+          metric:allowed[player.metric],model_label:'NFL historical-frequency estimate',
+          notes:`Smoothed frequency across ${values.length} same-team appearances (${player.current_season_games} this season). Current roster; conditional on playing in a similar role. Injuries and opponent matchups are not adjusted. Independent of the moneyline model; not a measured prediction hit rate.`});
+        if(candidate)candidates.push(candidate);
+      }
     } else if(sport==='NHL') {
       for(const player of nhlPropInputs(game,at)) {
         if(Number(player.mean)<=0)continue;
