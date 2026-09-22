@@ -37129,7 +37129,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const push=p.pPush??0;
     if(!probability(p.pA)||!probability(p.pB)||!probability(push)||Math.abs(Number(p.pA)+Number(p.pB)+Number(push)-1)>1e-6||Number(p.pA)===Number(p.pB))return null;
     const over=Number(p.pA)>Number(p.pB);
-    return {selection:over?'Over':'Under',probability:Math.max(Number(p.pA),Number(p.pB)),push:Number(push),line:Number(p.line),player_name:p.player_name||null,model,calibration_status:p.calibration_status};
+    return {selection:over?'Over':'Under',probability:Math.max(Number(p.pA),Number(p.pB)),push:Number(push),line:Number(p.line),player_id:p.player_id==null?null:String(p.player_id),player_name:p.player_name||null,model,calibration_status:p.calibration_status};
   }
   function nhlPropInputs(game,now=Date.now()) {
     const at=new Date(game.generated_at||'').getTime(),kickoff=start(game);
@@ -37323,28 +37323,47 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const raw = side === 'away' ? (game.aScore ?? game.awayScore) : (game.bScore ?? game.homeScore);
     return active && numeric(raw) ? String(raw) : '—';
   }
-  function toggle(items, entry) {
-    // Another model's view of the same market is an alternative, not a new leg.
-    const key = x => [x.sport, x.gameId, x.market].join(':');
-    const found = items.some(x => key(x) === key(entry) && x.model === entry.model);
-    const rest = items.filter(x => key(x) !== key(entry));
-    return found ? rest : [...rest, entry];
+  function automaticPick(game,sport,model,kind,now=Date.now()) {
+    if(!['ou','props'].includes(kind))return null;
+    const p=automaticMarket(game,sport,model,kind==='props'?'k':'ou',now);
+    const kickoff=start(game)?.getTime(),generated=Date.parse(game.generated_at||'');
+    if(!p.available||p.closed||!numeric(p.line)||!probability(p.probability)||!Number.isFinite(kickoff)||kickoff<=now||!Number.isFinite(generated)||generated>=kickoff||generated>now+60000||now-generated>86400000)return null;
+    if(kind==='props'&&(!p.player_id||!p.player_name||!p.metric))return null;
+    // Selection saves an estimate for tracking. Reference thresholds do not
+    // become observed sportsbook lines, prices, or calibrated win probabilities.
+    return {sport,gameId:id(game),market:kind,model,selection:p.selection,line:Number(p.line),odds:null,
+      game:`${game.away??game.a??'Away'} vs ${game.home??game.b??'Home'}`,
+      playerId:p.player_id==null?null:String(p.player_id),playerName:p.player_name||null,metric:p.metric||'',
+      probability:p.probability,push:p.push||0,lineType:p.line_type,modelLabel:p.model_label,
+      calibrationStatus:p.calibration_status||'unvalidated',notes:p.notes||'',
+      forecastAt:new Date(generated).toISOString(),startAt:new Date(kickoff).toISOString(),selectedAt:new Date(now).toISOString()};
   }
+  const pickKey=x=>JSON.stringify([x.sport,String(x.gameId),x.market,...(x.market==='props'?[String(x.playerId),x.metric]:[])]);
+  const samePick=(a,b)=>pickKey(a)===pickKey(b)&&a.model===b.model&&a.selection===b.selection&&(a.line??null)===(b.line??null)&&(a.lineType??null)===(b.lineType??null);
+  function toggle(items, entry) {
+    // A changed line/side or model replaces the previous view of this market.
+    const found=items.some(x=>samePick(x,entry));
+    const rest=items.filter(x=>pickKey(x)!==pickKey(entry));
+    return found?rest:[...rest,entry];
+  }
+  const pickLabel=x=>`${x.playerName?x.playerName+' · ':''}${x.selection}${x.line==null?'':' '+x.line}${x.metric?' '+x.metric:''}`;
+  const pickContext=x=>`${x.modelLabel||models[x.model]||x.model}${x.modelVersion?' v'+x.modelVersion:''}${x.lineType==='model_reference'?' · Model reference threshold · not a sportsbook line':x.lineType==='supplied'?' · Supplied line':''}`;
   function legacyPicks(items, sport, model) {
     if(!Array.isArray(items))return [];
     return items.filter(x=>x&&x.gameId&&x.label).map(x=>({sport,model,gameId:String(x.gameId),market:x.market||'ml',selection:String(x.label),line:null,odds:numeric(x.oddsAmerican)?Number(x.oddsAmerican):null,game:x.game||('Saved '+sport+' pick')}));
   }
   function slipText(items) {
-    return ['ParlayOS · Prediction slip', ...items.map((x,i) => `${i+1}. ${x.game} · ${x.selection}${x.line == null ? '' : ' '+x.line} · ${american(x.odds)} · ${models[x.model] || x.model}${x.modelVersion?' v'+x.modelVersion:''}\nSaved model estimate: ${percent(x.probability)} · Forecast: ${x.forecastAt||'unavailable'} · Game: ${x.startAt||'unavailable'}`),slipSummary(items)].join('\n');
+    return ['ParlayOS · Prediction slip', ...items.map((x,i) => `${i+1}. ${x.game} · ${pickLabel(x)} · ${american(x.odds)} · ${pickContext(x)}\nSaved model estimate: ${percent(x.probability)}${x.push>0?' · Push '+percent(x.push):''} · Forecast: ${x.forecastAt||'unavailable'} · Game: ${x.startAt||'unavailable'}`),slipSummary(items)].join('\n');
   }
   function slipSummary(items) {
     if(!items.length)return 'No picks selected.';
     if(items.some(x=>!probability(x.probability)))return 'Combined estimate unavailable: one or more saved picks lack a forecast snapshot.';
     if(new Set(items.map(x=>x.sport+':'+x.gameId)).size!==items.length)return 'Combined estimate unavailable: picks from the same game require a joint model.';
+    if(items.some(x=>x.lineType==='model_reference'))return 'Saved reference estimates for tracking. Combined betting probability is unavailable for model-generated thresholds.';
     const p=items.reduce((v,x)=>v*Number(x.probability),1);
     return `${items.length===1?'Saved model estimate':'Estimated chance every pick wins'}: ${percent(p)}.${items.length>1?' Assumes independent games.':''} Uncalibrated model estimates; not a guarantee.`;
   }
-  return {models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,highestMarketSide,automaticMarket,nhlPropInputs,nhlProp,pitcherPropInputs,pitcherProp,teamMetrics,totalDistribution,slipSummary};
+  return {automaticPick,samePick,pickLabel,pickContext,models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,highestMarketSide,automaticMarket,nhlPropInputs,nhlProp,pitcherPropInputs,pitcherProp,teamMetrics,totalDistribution,slipSummary};
 });
 </script><script id="PARLAYOS_UI_CONSISTENCY">(function () {
   'use strict';
@@ -37407,7 +37426,10 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   function timeLabel(g,s){const d=C.start(g,A(state.live.sports?.[s]));return d?d.toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Start time unavailable';}
   function compactMarket(g,s,kind) {
     const prop=kind==='k',p=C.automaticMarket(g,s,model(s),kind),label=prop?'Player props':'Over / Under';
-    return `<section class="pos-market" data-pos-market="${prop?'props':'ou'}"><div class="pos-market-title"><span>${label}</span>${p.available?`<span class="pos-prob" aria-label="Model estimate ${C.percent(p.probability)}">${C.percent(p.probability)}</span>`:''}</div>${p.available?`<div class="pos-pick">${p.player_name?E(p.player_name)+' · ':''}${E(p.selection)} ${E(p.line)}${p.metric?' '+E(p.metric):''}</div><p class="pos-meta">${p.line_type==='model_reference'?'Model reference threshold · not a sportsbook line':'Supplied line'}${p.closed?' · Pregame estimate; game started':''}</p><p class="pos-meta">${E(p.model_label)} · ${p.calibration_status==='unvalidated'?'Accuracy not yet validated':'Model estimate'}${p.push>0?' · Push '+C.percent(p.push):''}</p>${p.notes?`<details class="pos-detail" data-pos-detail="${prop?'prop':'total'}-method"><summary>Estimate details</summary><p class="pos-meta">${E(p.notes)}</p></details>`:''}`:`<p class="pos-meta">${E(p.reason)}</p>`}</section>`;
+    const entry=C.automaticPick(g,s,model(s),prop?'props':'ou');
+    const isSelected=entry&&selected(s).some(x=>C.samePick(x,entry));
+    const button=p.available?`<div class="pos-actions"><button type="button" data-pos-auto="${prop?'props':'ou'}" data-pos-game="${E(C.id(g))}" data-pos-sport="${s}" aria-pressed="${!!isSelected}"${entry?'':' disabled'}>${entry?(isSelected?'Selected ✓':prop?'Select Player Prop':'Select Over / Under'):p.closed?'Game started':'Refresh required'}</button></div>`:'';
+    return `<section class="pos-market" data-pos-market="${prop?'props':'ou'}"><div class="pos-market-title"><span>${label}</span>${p.available?`<span class="pos-prob" aria-label="Model estimate ${C.percent(p.probability)}">${C.percent(p.probability)}</span>`:''}</div>${p.available?`<div class="pos-pick">${p.player_name?E(p.player_name)+' · ':''}${E(p.selection)} ${E(p.line)}${p.metric?' '+E(p.metric):''}</div><p class="pos-meta">${p.line_type==='model_reference'?'Model reference threshold · not a sportsbook line':'Supplied line'}${p.closed?' · Pregame estimate; game started':''}</p><p class="pos-meta">${E(p.model_label)} · ${p.calibration_status==='unvalidated'?'Accuracy not yet validated':'Model estimate'}${p.push>0?' · Push '+C.percent(p.push):''}</p>${p.notes?`<details class="pos-detail" data-pos-detail="${prop?'prop':'total'}-method"><summary>Estimate details</summary><p class="pos-meta">${E(p.notes)}</p></details>`:''}`:`<p class="pos-meta">${E(p.reason)}</p>`}${button}</section>`;
   }
   function metricsPanel(g,s) {
     const teams=C.teamMetrics(g,s);
@@ -37528,9 +37550,14 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       startAt:C.start(g)?.toISOString()||null,selectedAt:new Date().toISOString()};
     state.slips[s]=C.toggle(selected(s),entry);write('parlayos:ui:slips',state.slips);renderSport(s);
   }
+  function addAutomatic(s,gameId,kind) {
+    const g=games(s).find(g=>C.id(g)===gameId);if(!g)return;
+    const entry=C.automaticPick(g,s,model(s),kind);if(!entry)return;
+    state.slips[s]=C.toggle(selected(s),entry);write('parlayos:ui:slips',state.slips);renderSport(s);
+  }
   function openSlip(s) {
     const items=selected(s);
-    openDialog(`${sports[s][1]} selected picks`,items.length?`<p>${E(C.slipSummary(items))}</p>${items.map((x,i)=>`<div class="pos-row"><b>${E(x.selection)}${x.line==null?'':' '+E(x.line)}</b><div class="pos-meta">${E(x.game)} · ${E(C.models[x.model])}${x.modelVersion?' v'+E(x.modelVersion):''} · ${E(C.american(x.odds))}</div><div class="pos-meta">Saved model estimate: ${C.percent(x.probability)} · Forecast: ${E(x.forecastAt||'unavailable')} · Game: ${E(x.startAt||'unavailable')}</div><button type="button" data-pos-remove="${i}" data-pos-sport="${s}">Remove</button></div>`).join('')}<div class="pos-actions"><button type="button" class="primary" data-pos-copy="${s}">Copy slip</button><button type="button" data-pos-clear="${s}">Clear all</button></div>`:'<p>No picks selected. Select a prediction from a game card to begin.</p>');
+    openDialog(`${sports[s][1]} selected picks`,items.length?`<p>${E(C.slipSummary(items))}</p>${items.map((x,i)=>`<div class="pos-row"><b>${E(C.pickLabel(x))}</b><div class="pos-meta">${E(x.game)} · ${E(C.pickContext(x))} · ${E(C.american(x.odds))}</div><div class="pos-meta">Saved model estimate: ${C.percent(x.probability)}${x.push>0?' · Push '+C.percent(x.push):''} · Forecast: ${E(x.forecastAt||'unavailable')} · Game: ${E(x.startAt||'unavailable')}</div><button type="button" data-pos-remove="${i}" data-pos-sport="${s}">Remove</button></div>`).join('')}<div class="pos-actions"><button type="button" class="primary" data-pos-copy="${s}">Copy slip</button><button type="button" data-pos-clear="${s}">Clear all</button></div>`:'<p>No picks selected. Select a prediction from a game card to begin.</p>');
   }
   async function copy(s){const text=C.slipText(selected(s));try{await navigator.clipboard.writeText(text);notify('Slip copied');}catch{openDialog('Copy your slip',`<p>Select and copy the text below.</p><textarea readonly aria-label="Slip text">${E(text)}</textarea>`);q('textarea',dialog).select();}}
   function renderLive() {
@@ -37607,6 +37634,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const b=e.target.closest?.('button,[data-go]');if(!b)return false;
     if(b.dataset.posClose!==undefined){closeDialog();return true;}
     if(b.dataset.posModel){state.models[b.dataset.posSport]=b.dataset.posModel;write('parlayos:ui:models',state.models);renderSport(b.dataset.posSport);return true;}
+    if(b.dataset.posAuto){addAutomatic(b.dataset.posSport,b.dataset.posGame,b.dataset.posAuto);return true;}
     if(b.dataset.posAdd){add(b.dataset.posSport,b.dataset.posGame,b.dataset.posAdd);return true;}
     if(b.dataset.posSlip){openSlip(b.dataset.posSlip);return true;}
     if(b.dataset.posRemove!==undefined){const s=b.dataset.posSport;state.slips[s]=selected(s).filter((_,i)=>i!==Number(b.dataset.posRemove));write('parlayos:ui:slips',state.slips);renderSport(s);openSlip(s);return true;}
