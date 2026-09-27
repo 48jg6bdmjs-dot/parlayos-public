@@ -1,14 +1,1115 @@
 {
-  "runDate": "Sep 26 2026 11:47 PM",
-  "pickCount": 0,
-  "games": [],
+  "runDate": "Sep 27 2026 07:27 AM",
+  "pickCount": 1,
+  "games": [
+    {
+      "id": "nba_401902644",
+      "event_id": "401902644",
+      "sport": "NBA",
+      "home": "Toronto Raptors",
+      "away": "Miami Heat",
+      "home_abbr": "TOR",
+      "away_abbr": "MIA",
+      "startAt": "2026-10-03T23:00Z",
+      "date": "2026-10-03",
+      "generated_at": "2026-09-27T11:27:01.984741+00:00",
+      "source": "ESPN schedule with validated season team statistics",
+      "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20260927-20261003&limit=100",
+      "stats": {
+        "home": {
+          "off_rtg": 113.86100580631212,
+          "def_rtg": 111.0508176739133,
+          "net": 2.810188132398821,
+          "pace": 100.67902456,
+          "possessions_per_game_estimate": 100.67902456,
+          "points_per_game": 114.63415,
+          "points_allowed_per_game": 111.80488,
+          "games_played": 82,
+          "season": 2026,
+          "prior_season": true,
+          "source": "espn_boxscore_derived",
+          "data_status": "validated",
+          "ratings_estimated": true,
+          "pace_estimated": true,
+          "metric_basis": "FGA + 0.44*FTA - ORB + TOV per game; ratings use estimated possessions; no overtime adjustment",
+          "abbr": "TOR",
+          "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/28/statistics?season=2026&seasontype=2",
+          "opponent_source_url": "https://site.api.espn.com/apis/v2/sports/basketball/nba/standings?season=2026",
+          "fetched_at": "2026-09-27T11:27:01.496157+00:00"
+        },
+        "away": {
+          "off_rtg": 114.49278732738657,
+          "def_rtg": 112.28633600355886,
+          "net": 2.2064513238277073,
+          "pace": 105.56634423999999,
+          "possessions_per_game_estimate": 105.56634423999999,
+          "points_per_game": 120.86585,
+          "points_allowed_per_game": 118.53658,
+          "games_played": 82,
+          "season": 2026,
+          "prior_season": true,
+          "source": "espn_boxscore_derived",
+          "data_status": "validated",
+          "ratings_estimated": true,
+          "pace_estimated": true,
+          "metric_basis": "FGA + 0.44*FTA - ORB + TOV per game; ratings use estimated possessions; no overtime adjustment",
+          "abbr": "MIA",
+          "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/14/statistics?season=2026&seasontype=2",
+          "opponent_source_url": "https://site.api.espn.com/apis/v2/sports/basketball/nba/standings?season=2026",
+          "fetched_at": "2026-09-27T11:27:01.539283+00:00"
+        }
+      },
+      "odds": {},
+      "total_line": null,
+      "status": "Scheduled",
+      "factorsA": {
+        "off_rating": 0.48309291091288553,
+        "def_rating": 0.590455466548038,
+        "pace": 0.5278317212,
+        "rest": 0.5,
+        "home_court": 0.4
+      },
+      "factorsB": {
+        "off_rating": 0.4620335268770707,
+        "def_rating": 0.6316394108695567,
+        "pace": 0.5033951228,
+        "rest": 0.5,
+        "home_court": 0.6
+      },
+      "chd": {
+        "pA": 0.5073694461031117,
+        "pB": 0.49263055389688826,
+        "raw_score": 0.029482758620689654,
+        "model": "ensemble(0.66*simple+0.34*wave_true)",
+        "simple_p": 0.5112481019468548,
+        "wave_p": 0.5,
+        "edge": 0.0,
+        "mag": 0.0,
+        "entropy": 0.0,
+        "confidence": 0.95
+      },
+      "data_quality": {
+        "status": "validated",
+        "prediction_available": true
+      },
+      "model_assumptions": [
+        "Current injuries, roster changes and rest are not modeled",
+        "Completed-season team prior"
+      ],
+      "models": {
+        "monte_carlo": {
+          "model_id": "monte_carlo",
+          "model_name": "Monte Carlo",
+          "model_version": "2.2.0",
+          "methodology": "Independent Poisson score model using measured lineup, opposing-pitcher and team-efficiency inputs. Moneyline probabilities integrate the distribution directly to avoid simulation noise; supported totals retain Monte Carlo evaluation. Tied modeled scores split equally. The scoring and overtime assumptions remain uncalibrated.",
+          "sport": "NBA",
+          "status": "available",
+          "reason": null,
+          "markets": {
+            "ml": {
+              "model_id": "monte_carlo",
+              "model_name": "Monte Carlo",
+              "model_version": "2.2.0",
+              "methodology": "Independent Poisson score model using measured lineup, opposing-pitcher and team-efficiency inputs. Moneyline probabilities integrate the distribution directly to avoid simulation noise; supported totals retain Monte Carlo evaluation. Tied modeled scores split equally. The scoring and overtime assumptions remain uncalibrated.",
+              "sport": "NBA",
+              "market": "ml",
+              "implementation_type": "internal_baseline",
+              "selection": "Toronto Raptors",
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": 0.5081327196928684,
+              "pA": 0.4918672803071316,
+              "pB": 0.5081327196928684,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "available",
+              "reason": null,
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {
+                "sims": 0,
+                "away_mean": 116.2933,
+                "home_mean": 116.6046,
+                "tie_policy": "equal split; uncalibrated"
+              },
+              "sims": 0,
+              "sim_type": "score_differential_poisson",
+              "evaluation": "analytic_poisson",
+              "calibration_status": "unvalidated"
+            },
+            "ou": {
+              "model_id": "monte_carlo",
+              "model_name": "Monte Carlo",
+              "model_version": "2.2.0",
+              "methodology": "Independent Poisson score model using measured lineup, opposing-pitcher and team-efficiency inputs. Moneyline probabilities integrate the distribution directly to avoid simulation noise; supported totals retain Monte Carlo evaluation. Tied modeled scores split equally. The scoring and overtime assumptions remain uncalibrated.",
+              "sport": "NBA",
+              "market": "ou",
+              "implementation_type": "internal_baseline",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "No observed total line; a model prior is not a market",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            },
+            "k": {
+              "model_id": "monte_carlo",
+              "model_name": "Monte Carlo",
+              "model_version": "2.2.0",
+              "methodology": "Independent Poisson score model using measured lineup, opposing-pitcher and team-efficiency inputs. Moneyline probabilities integrate the distribution directly to avoid simulation noise; supported totals retain Monte Carlo evaluation. Tied modeled scores split equally. The scoring and overtime assumptions remain uncalibrated.",
+              "sport": "NBA",
+              "market": "k",
+              "implementation_type": "internal_baseline",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "No validated player-prop or spread adapter is configured",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            }
+          }
+        },
+        "zips": {
+          "model_id": "zips",
+          "model_name": "ZiPS",
+          "model_version": "3.0.0",
+          "methodology": "Published player projections imported by MLBAM ID, with source dates and coverage validation. ParlayOS converts projected lineup OPS and starter ERA/workload into game probabilities; remaining innings use verified team ERA. This is not an official provider game-win forecast. No substitute predictions when exports are absent.",
+          "sport": "NBA",
+          "status": "unavailable",
+          "reason": "model not applicable / no inputs",
+          "markets": {
+            "ml": {
+              "model_id": "zips",
+              "model_name": "ZiPS",
+              "model_version": "3.0.0",
+              "methodology": "Published player projections imported by MLBAM ID, with source dates and coverage validation. ParlayOS converts projected lineup OPS and starter ERA/workload into game probabilities; remaining innings use verified team ERA. This is not an official provider game-win forecast. No substitute predictions when exports are absent.",
+              "sport": "NBA",
+              "market": "ml",
+              "implementation_type": "published_projection_adapter",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "ZiPS not applicable to NBA",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            },
+            "ou": {
+              "model_id": "zips",
+              "model_name": "ZiPS",
+              "model_version": "3.0.0",
+              "methodology": "Published player projections imported by MLBAM ID, with source dates and coverage validation. ParlayOS converts projected lineup OPS and starter ERA/workload into game probabilities; remaining innings use verified team ERA. This is not an official provider game-win forecast. No substitute predictions when exports are absent.",
+              "sport": "NBA",
+              "market": "ou",
+              "implementation_type": "published_projection_adapter",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "ZiPS not applicable to NBA",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            },
+            "k": {
+              "model_id": "zips",
+              "model_name": "ZiPS",
+              "model_version": "3.0.0",
+              "methodology": "Published player projections imported by MLBAM ID, with source dates and coverage validation. ParlayOS converts projected lineup OPS and starter ERA/workload into game probabilities; remaining innings use verified team ERA. This is not an official provider game-win forecast. No substitute predictions when exports are absent.",
+              "sport": "NBA",
+              "market": "k",
+              "implementation_type": "published_projection_adapter",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "ZiPS not applicable to NBA",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            }
+          }
+        },
+        "steamer": {
+          "model_id": "steamer",
+          "model_name": "Steamer",
+          "model_version": "3.0.0",
+          "methodology": "Published player projections imported by MLBAM ID, with source dates and coverage validation. ParlayOS converts projected lineup OPS and starter ERA/workload into game probabilities; remaining innings use verified team ERA. This is not an official provider game-win forecast. No substitute predictions when exports are absent.",
+          "sport": "NBA",
+          "status": "unavailable",
+          "reason": "model not applicable / no inputs",
+          "markets": {
+            "ml": {
+              "model_id": "steamer",
+              "model_name": "Steamer",
+              "model_version": "3.0.0",
+              "methodology": "Published player projections imported by MLBAM ID, with source dates and coverage validation. ParlayOS converts projected lineup OPS and starter ERA/workload into game probabilities; remaining innings use verified team ERA. This is not an official provider game-win forecast. No substitute predictions when exports are absent.",
+              "sport": "NBA",
+              "market": "ml",
+              "implementation_type": "published_projection_adapter",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "Steamer not applicable to NBA",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            },
+            "ou": {
+              "model_id": "steamer",
+              "model_name": "Steamer",
+              "model_version": "3.0.0",
+              "methodology": "Published player projections imported by MLBAM ID, with source dates and coverage validation. ParlayOS converts projected lineup OPS and starter ERA/workload into game probabilities; remaining innings use verified team ERA. This is not an official provider game-win forecast. No substitute predictions when exports are absent.",
+              "sport": "NBA",
+              "market": "ou",
+              "implementation_type": "published_projection_adapter",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "Steamer not applicable to NBA",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            },
+            "k": {
+              "model_id": "steamer",
+              "model_name": "Steamer",
+              "model_version": "3.0.0",
+              "methodology": "Published player projections imported by MLBAM ID, with source dates and coverage validation. ParlayOS converts projected lineup OPS and starter ERA/workload into game probabilities; remaining innings use verified team ERA. This is not an official provider game-win forecast. No substitute predictions when exports are absent.",
+              "sport": "NBA",
+              "market": "k",
+              "implementation_type": "published_projection_adapter",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "Steamer not applicable to NBA",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            }
+          }
+        },
+        "my_chd": {
+          "model_id": "my_chd",
+          "model_name": "My CHD",
+          "model_version": "2.2.0",
+          "methodology": "Internal CHD matchup heuristic. My CHD and CHD Master expose the same winner probability and share one ensemble family; neither is an external projection system.",
+          "sport": "NBA",
+          "status": "available",
+          "reason": null,
+          "markets": {
+            "ml": {
+              "model_id": "my_chd",
+              "model_name": "My CHD",
+              "model_version": "2.2.0",
+              "methodology": "Internal CHD matchup heuristic. My CHD and CHD Master expose the same winner probability and share one ensemble family; neither is an external projection system.",
+              "sport": "NBA",
+              "market": "ml",
+              "implementation_type": "internal_baseline",
+              "selection": "Miami Heat",
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": 0.5073694461031117,
+              "pA": 0.5073694461031117,
+              "pB": 0.49263055389688826,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "available",
+              "reason": null,
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {
+                "model": "ensemble(0.66*simple+0.34*wave_true)",
+                "raw_score": 0.0295
+              },
+              "calibration_status": "unvalidated"
+            },
+            "ou": {
+              "model_id": "my_chd",
+              "model_name": "My CHD",
+              "model_version": "2.2.0",
+              "methodology": "Internal CHD matchup heuristic. My CHD and CHD Master expose the same winner probability and share one ensemble family; neither is an external projection system.",
+              "sport": "NBA",
+              "market": "ou",
+              "implementation_type": "internal_baseline",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "No observed total line; a model prior is not a market",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            },
+            "k": {
+              "model_id": "my_chd",
+              "model_name": "My CHD",
+              "model_version": "2.2.0",
+              "methodology": "Internal CHD matchup heuristic. My CHD and CHD Master expose the same winner probability and share one ensemble family; neither is an external projection system.",
+              "sport": "NBA",
+              "market": "k",
+              "implementation_type": "internal_baseline",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "No validated player-prop or spread adapter is configured",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            }
+          }
+        },
+        "season_stats": {
+          "model_id": "season_stats",
+          "model_name": "Season Stats",
+          "model_version": "2.2.0",
+          "methodology": "MLB team season runs scored/allowed with a 30-game prior; measured lineup/workload projection if team context is absent. NFL/NBA measured team season efficiency. NFL/NBA probability coefficients are unfitted heuristics, not trained player projection systems; source seasons may be prior seasons.",
+          "sport": "NBA",
+          "status": "available",
+          "reason": null,
+          "markets": {
+            "ml": {
+              "model_id": "season_stats",
+              "model_name": "Season Stats",
+              "model_version": "2.2.0",
+              "methodology": "MLB team season runs scored/allowed with a 30-game prior; measured lineup/workload projection if team context is absent. NFL/NBA measured team season efficiency. NFL/NBA probability coefficients are unfitted heuristics, not trained player projection systems; source seasons may be prior seasons.",
+              "sport": "NBA",
+              "market": "ml",
+              "implementation_type": "internal_baseline",
+              "selection": "Toronto Raptors",
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": 0.5090560521285667,
+              "pA": 0.4909439478714333,
+              "pB": 0.5090560521285667,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "available",
+              "reason": null,
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {
+                "off_rtg_a": 114.493,
+                "off_rtg_b": 113.861
+              },
+              "calibration_status": "unvalidated"
+            },
+            "ou": {
+              "model_id": "season_stats",
+              "model_name": "Season Stats",
+              "model_version": "2.2.0",
+              "methodology": "MLB team season runs scored/allowed with a 30-game prior; measured lineup/workload projection if team context is absent. NFL/NBA measured team season efficiency. NFL/NBA probability coefficients are unfitted heuristics, not trained player projection systems; source seasons may be prior seasons.",
+              "sport": "NBA",
+              "market": "ou",
+              "implementation_type": "internal_baseline",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "No observed total line; a model prior is not a market",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            },
+            "k": {
+              "model_id": "season_stats",
+              "model_name": "Season Stats",
+              "model_version": "2.2.0",
+              "methodology": "MLB team season runs scored/allowed with a 30-game prior; measured lineup/workload projection if team context is absent. NFL/NBA measured team season efficiency. NFL/NBA probability coefficients are unfitted heuristics, not trained player projection systems; source seasons may be prior seasons.",
+              "sport": "NBA",
+              "market": "k",
+              "implementation_type": "internal_baseline",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "No validated player-prop or spread adapter is configured",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            }
+          }
+        },
+        "chd_master_predictor": {
+          "model_id": "chd_master_predictor",
+          "model_name": "CHD Master Predictor",
+          "model_version": "2.2.0",
+          "methodology": "The same CHD winner probability as My CHD, with optional market-price comparison when supplied. Market prices do not change this win forecast. Not an independent prediction engine.",
+          "sport": "NBA",
+          "status": "available",
+          "reason": null,
+          "markets": {
+            "ml": {
+              "model_id": "chd_master_predictor",
+              "model_name": "CHD Master Predictor",
+              "model_version": "2.2.0",
+              "methodology": "The same CHD winner probability as My CHD, with optional market-price comparison when supplied. Market prices do not change this win forecast. Not an independent prediction engine.",
+              "sport": "NBA",
+              "market": "ml",
+              "implementation_type": "internal_baseline",
+              "selection": "Miami Heat",
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": 0.5073694461031117,
+              "pA": 0.5073694461031117,
+              "pB": 0.49263055389688826,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "available",
+              "reason": null,
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {
+                "model": "ensemble(0.66*simple+0.34*wave_true)",
+                "raw_score": 0.0295
+              },
+              "calibration_status": "unvalidated"
+            },
+            "ou": {
+              "model_id": "chd_master_predictor",
+              "model_name": "CHD Master Predictor",
+              "model_version": "2.2.0",
+              "methodology": "The same CHD winner probability as My CHD, with optional market-price comparison when supplied. Market prices do not change this win forecast. Not an independent prediction engine.",
+              "sport": "NBA",
+              "market": "ou",
+              "implementation_type": "internal_baseline",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "No observed total line; a model prior is not a market",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            },
+            "k": {
+              "model_id": "chd_master_predictor",
+              "model_name": "CHD Master Predictor",
+              "model_version": "2.2.0",
+              "methodology": "The same CHD winner probability as My CHD, with optional market-price comparison when supplied. Market prices do not change this win forecast. Not an independent prediction engine.",
+              "sport": "NBA",
+              "market": "k",
+              "implementation_type": "internal_baseline",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "No validated player-prop or spread adapter is configured",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {}
+            }
+          }
+        },
+        "final_combined": {
+          "model_id": "final_combined",
+          "model_name": "Final Combined All Models",
+          "model_version": "2.3.0",
+          "sport": "NBA",
+          "status": "available",
+          "reason": null,
+          "markets": {
+            "ml": {
+              "model_id": "final_combined",
+              "model_name": "Final Combined All Models",
+              "model_version": "2.3.0",
+              "methodology": "Family-balanced ensemble of compatible validated predictions, with disagreement shrinkage. No paid odds dependency. Weights are conservative priors pending chronological out-of-sample evaluation.",
+              "sport": "NBA",
+              "market": "ml",
+              "implementation_type": "internal_ensemble",
+              "selection": "Toronto Raptors",
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": 0.5032484461665453,
+              "pA": 0.4967515538334547,
+              "pB": 0.5032484461665453,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "available",
+              "reason": null,
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {
+                "available_models": [
+                  "monte_carlo",
+                  "my_chd",
+                  "season_stats",
+                  "chd_master_predictor"
+                ],
+                "unavailable_models": [
+                  "zips",
+                  "steamer"
+                ],
+                "weights": {
+                  "monte_carlo": 0.3333333333333333,
+                  "my_chd": 0.16666666666666666,
+                  "chd_master_predictor": 0.16666666666666666,
+                  "season_stats": 0.3333333333333333
+                },
+                "model_families": {
+                  "monte_carlo": "score_simulation",
+                  "zips": "mlb_run_projection",
+                  "steamer": "mlb_run_projection",
+                  "my_chd": "chd",
+                  "chd_master_predictor": "chd",
+                  "season_stats": "season_stats"
+                },
+                "family_count": 3,
+                "family_probabilities": {
+                  "score_simulation": 0.4918672803071316,
+                  "chd": 0.5073694461031117,
+                  "season_stats": 0.4909439478714333
+                },
+                "unshrunk_probability_away": 0.4967268914272256,
+                "base_probability": 0.4967515538334547,
+                "learning": {
+                  "version": "family-brier-1",
+                  "signature": "9a1030de746a1e352768",
+                  "training_games": 0,
+                  "required_training_games": 100,
+                  "status": "collecting_training_data",
+                  "active": false,
+                  "p_away": null
+                },
+                "weight_policy": "equal family priors; not fitted",
+                "market_available": false
+              },
+              "ensemble_version": "2.3.0",
+              "calibration_status": "unvalidated",
+              "model_disagreement": 0.007534857362888978,
+              "agreement": {
+                "total": 4,
+                "available": 4,
+                "supporting": [
+                  "Monte Carlo",
+                  "Season Stats"
+                ],
+                "opposing": [
+                  "My CHD",
+                  "CHD Master Predictor"
+                ],
+                "unavailable": [
+                  "zips",
+                  "steamer"
+                ],
+                "agreement_ratio": 0.6666666666666666,
+                "agreement_basis": "family weight; duplicate forecasts share a vote",
+                "model_votes": {
+                  "monte_carlo": {
+                    "pA": 0.4918672803071316,
+                    "weight": 0.3333333333333333
+                  },
+                  "my_chd": {
+                    "pA": 0.5073694461031117,
+                    "weight": 0.16666666666666666
+                  },
+                  "season_stats": {
+                    "pA": 0.4909439478714333,
+                    "weight": 0.3333333333333333
+                  },
+                  "chd_master_predictor": {
+                    "pA": 0.5073694461031117,
+                    "weight": 0.16666666666666666
+                  }
+                },
+                "market_available": false,
+                "ensemble_version": "2.3.0"
+              }
+            },
+            "ou": {
+              "model_id": "final_combined",
+              "model_name": "Final Combined All Models",
+              "model_version": "2.3.0",
+              "methodology": "Family-balanced ensemble of compatible validated predictions, with disagreement shrinkage. No paid odds dependency. Weights are conservative priors pending chronological out-of-sample evaluation.",
+              "sport": "NBA",
+              "market": "ou",
+              "implementation_type": "internal_ensemble",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "no compatible validated model predictions",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {},
+              "agreement": {
+                "total": 0,
+                "available": 0,
+                "supporting": [],
+                "opposing": [],
+                "unavailable": [
+                  "monte_carlo",
+                  "zips",
+                  "steamer",
+                  "my_chd",
+                  "season_stats",
+                  "chd_master_predictor"
+                ],
+                "ensemble_version": "2.3.0"
+              }
+            },
+            "k": {
+              "model_id": "final_combined",
+              "model_name": "Final Combined All Models",
+              "model_version": "2.3.0",
+              "methodology": "Family-balanced ensemble of compatible validated predictions, with disagreement shrinkage. No paid odds dependency. Weights are conservative priors pending chronological out-of-sample evaluation.",
+              "sport": "NBA",
+              "market": "k",
+              "implementation_type": "internal_ensemble",
+              "selection": null,
+              "player_id": null,
+              "player_name": null,
+              "line": null,
+              "odds": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "implied_probability": null,
+              "edge": null,
+              "ev": null,
+              "confidence": null,
+              "status": "unavailable",
+              "reason": "no compatible validated model predictions",
+              "timestamp": "2026-09-27T11:27:01.984741+00:00",
+              "inputs": {},
+              "agreement": {
+                "total": 0,
+                "available": 0,
+                "supporting": [],
+                "opposing": [],
+                "unavailable": [
+                  "monte_carlo",
+                  "zips",
+                  "steamer",
+                  "my_chd",
+                  "season_stats",
+                  "chd_master_predictor"
+                ],
+                "ensemble_version": "2.3.0"
+              }
+            }
+          }
+        }
+      },
+      "ensemble": {
+        "ensemble_version": "2.3.0",
+        "sport": "NBA",
+        "markets": {
+          "ml": {
+            "model_id": "final_combined",
+            "model_name": "Final Combined All Models",
+            "model_version": "2.3.0",
+            "methodology": "Family-balanced ensemble of compatible validated predictions, with disagreement shrinkage. No paid odds dependency. Weights are conservative priors pending chronological out-of-sample evaluation.",
+            "sport": "NBA",
+            "market": "ml",
+            "implementation_type": "internal_ensemble",
+            "selection": "Toronto Raptors",
+            "player_id": null,
+            "player_name": null,
+            "line": null,
+            "odds": null,
+            "probability": 0.5032484461665453,
+            "pA": 0.4967515538334547,
+            "pB": 0.5032484461665453,
+            "implied_probability": null,
+            "edge": null,
+            "ev": null,
+            "confidence": null,
+            "status": "available",
+            "reason": null,
+            "timestamp": "2026-09-27T11:27:01.984741+00:00",
+            "inputs": {
+              "available_models": [
+                "monte_carlo",
+                "my_chd",
+                "season_stats",
+                "chd_master_predictor"
+              ],
+              "unavailable_models": [
+                "zips",
+                "steamer"
+              ],
+              "weights": {
+                "monte_carlo": 0.3333333333333333,
+                "my_chd": 0.16666666666666666,
+                "chd_master_predictor": 0.16666666666666666,
+                "season_stats": 0.3333333333333333
+              },
+              "model_families": {
+                "monte_carlo": "score_simulation",
+                "zips": "mlb_run_projection",
+                "steamer": "mlb_run_projection",
+                "my_chd": "chd",
+                "chd_master_predictor": "chd",
+                "season_stats": "season_stats"
+              },
+              "family_count": 3,
+              "family_probabilities": {
+                "score_simulation": 0.4918672803071316,
+                "chd": 0.5073694461031117,
+                "season_stats": 0.4909439478714333
+              },
+              "unshrunk_probability_away": 0.4967268914272256,
+              "base_probability": 0.4967515538334547,
+              "learning": {
+                "version": "family-brier-1",
+                "signature": "9a1030de746a1e352768",
+                "training_games": 0,
+                "required_training_games": 100,
+                "status": "collecting_training_data",
+                "active": false,
+                "p_away": null
+              },
+              "weight_policy": "equal family priors; not fitted",
+              "market_available": false
+            },
+            "ensemble_version": "2.3.0",
+            "calibration_status": "unvalidated",
+            "model_disagreement": 0.007534857362888978,
+            "agreement": {
+              "total": 4,
+              "available": 4,
+              "supporting": [
+                "Monte Carlo",
+                "Season Stats"
+              ],
+              "opposing": [
+                "My CHD",
+                "CHD Master Predictor"
+              ],
+              "unavailable": [
+                "zips",
+                "steamer"
+              ],
+              "agreement_ratio": 0.6666666666666666,
+              "agreement_basis": "family weight; duplicate forecasts share a vote",
+              "model_votes": {
+                "monte_carlo": {
+                  "pA": 0.4918672803071316,
+                  "weight": 0.3333333333333333
+                },
+                "my_chd": {
+                  "pA": 0.5073694461031117,
+                  "weight": 0.16666666666666666
+                },
+                "season_stats": {
+                  "pA": 0.4909439478714333,
+                  "weight": 0.3333333333333333
+                },
+                "chd_master_predictor": {
+                  "pA": 0.5073694461031117,
+                  "weight": 0.16666666666666666
+                }
+              },
+              "market_available": false,
+              "ensemble_version": "2.3.0"
+            }
+          },
+          "ou": {
+            "model_id": "final_combined",
+            "model_name": "Final Combined All Models",
+            "model_version": "2.3.0",
+            "methodology": "Family-balanced ensemble of compatible validated predictions, with disagreement shrinkage. No paid odds dependency. Weights are conservative priors pending chronological out-of-sample evaluation.",
+            "sport": "NBA",
+            "market": "ou",
+            "implementation_type": "internal_ensemble",
+            "selection": null,
+            "player_id": null,
+            "player_name": null,
+            "line": null,
+            "odds": null,
+            "probability": null,
+            "pA": null,
+            "pB": null,
+            "implied_probability": null,
+            "edge": null,
+            "ev": null,
+            "confidence": null,
+            "status": "unavailable",
+            "reason": "no compatible validated model predictions",
+            "timestamp": "2026-09-27T11:27:01.984741+00:00",
+            "inputs": {},
+            "agreement": {
+              "total": 0,
+              "available": 0,
+              "supporting": [],
+              "opposing": [],
+              "unavailable": [
+                "monte_carlo",
+                "zips",
+                "steamer",
+                "my_chd",
+                "season_stats",
+                "chd_master_predictor"
+              ],
+              "ensemble_version": "2.3.0"
+            }
+          },
+          "k": {
+            "model_id": "final_combined",
+            "model_name": "Final Combined All Models",
+            "model_version": "2.3.0",
+            "methodology": "Family-balanced ensemble of compatible validated predictions, with disagreement shrinkage. No paid odds dependency. Weights are conservative priors pending chronological out-of-sample evaluation.",
+            "sport": "NBA",
+            "market": "k",
+            "implementation_type": "internal_ensemble",
+            "selection": null,
+            "player_id": null,
+            "player_name": null,
+            "line": null,
+            "odds": null,
+            "probability": null,
+            "pA": null,
+            "pB": null,
+            "implied_probability": null,
+            "edge": null,
+            "ev": null,
+            "confidence": null,
+            "status": "unavailable",
+            "reason": "no compatible validated model predictions",
+            "timestamp": "2026-09-27T11:27:01.984741+00:00",
+            "inputs": {},
+            "agreement": {
+              "total": 0,
+              "available": 0,
+              "supporting": [],
+              "opposing": [],
+              "unavailable": [
+                "monte_carlo",
+                "zips",
+                "steamer",
+                "my_chd",
+                "season_stats",
+                "chd_master_predictor"
+              ],
+              "ensemble_version": "2.3.0"
+            }
+          }
+        },
+        "agreement": {
+          "ml": {
+            "total": 4,
+            "available": 4,
+            "supporting": [
+              "Monte Carlo",
+              "Season Stats"
+            ],
+            "opposing": [
+              "My CHD",
+              "CHD Master Predictor"
+            ],
+            "unavailable": [
+              "zips",
+              "steamer"
+            ],
+            "agreement_ratio": 0.6666666666666666,
+            "agreement_basis": "family weight; duplicate forecasts share a vote",
+            "model_votes": {
+              "monte_carlo": {
+                "pA": 0.4918672803071316,
+                "weight": 0.3333333333333333
+              },
+              "my_chd": {
+                "pA": 0.5073694461031117,
+                "weight": 0.16666666666666666
+              },
+              "season_stats": {
+                "pA": 0.4909439478714333,
+                "weight": 0.3333333333333333
+              },
+              "chd_master_predictor": {
+                "pA": 0.5073694461031117,
+                "weight": 0.16666666666666666
+              }
+            },
+            "market_available": false,
+            "ensemble_version": "2.3.0"
+          },
+          "ou": {
+            "total": 0,
+            "available": 0,
+            "supporting": [],
+            "opposing": [],
+            "unavailable": [
+              "monte_carlo",
+              "zips",
+              "steamer",
+              "my_chd",
+              "season_stats",
+              "chd_master_predictor"
+            ],
+            "ensemble_version": "2.3.0"
+          },
+          "k": {
+            "total": 0,
+            "available": 0,
+            "supporting": [],
+            "opposing": [],
+            "unavailable": [
+              "monte_carlo",
+              "zips",
+              "steamer",
+              "my_chd",
+              "season_stats",
+              "chd_master_predictor"
+            ],
+            "ensemble_version": "2.3.0"
+          }
+        }
+      }
+    }
+  ],
   "chd_meta": {
     "model": "NBA completed-season box-score-derived ratings (estimated possessions)",
     "calibration_status": "unvalidated"
   },
-  "updated": "2026-09-27T03:47:36.995093+00:00",
-  "generated_at": "2026-09-27T03:47:36.995093+00:00",
-  "status": "no_games_scheduled",
+  "updated": "2026-09-27T11:27:01.988870+00:00",
+  "generated_at": "2026-09-27T11:27:01.988870+00:00",
+  "status": "ok",
   "data_quality_gate": {
     "invalid_games": 0,
     "policy": "fail-closed: unavailable data never becomes a prediction"
