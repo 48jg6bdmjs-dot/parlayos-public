@@ -1,8 +1,8 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-09-30T11:58:21.825228+00:00",
-  "captured_games": 412,
-  "verified_settled_games": 334,
+  "updated": "2026-09-30T17:51:19.612101+00:00",
+  "captured_games": 417,
+  "verified_settled_games": 338,
   "model_scores": [
     {
       "sport": "MLB",
@@ -2010,11 +2010,67 @@
           "observed_away_rate": 1.0
         }
       ]
+    },
+    {
+      "sport": "NHL",
+      "model": "season_stats",
+      "version": "league-goals-1.0.0",
+      "n": 4,
+      "outcome_type": "binary winner",
+      "uniform_baseline_brier": 0.25,
+      "uniform_baseline_log_loss": 0.6931471805599453,
+      "brier": 0.23192694045660267,
+      "log_loss": 0.6568543255504545,
+      "accuracy": 0.75,
+      "calibration_bins": [
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 3,
+          "mean_forecast": 0.46668913981518606,
+          "observed_away_rate": 0.3333333333333333
+        },
+        {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 1,
+          "mean_forecast": 0.5570361627124818,
+          "observed_away_rate": 1.0
+        }
+      ]
+    },
+    {
+      "sport": "NHL",
+      "model": "final_combined",
+      "version": "league-goals-1.0.0",
+      "n": 4,
+      "outcome_type": "binary winner",
+      "uniform_baseline_brier": 0.25,
+      "uniform_baseline_log_loss": 0.6931471805599453,
+      "brier": 0.23192694045660267,
+      "log_loss": 0.6568543255504545,
+      "accuracy": 0.75,
+      "calibration_bins": [
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 3,
+          "mean_forecast": 0.46668913981518606,
+          "observed_away_rate": 0.3333333333333333
+        },
+        {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 1,
+          "mean_forecast": 0.5570361627124818,
+          "observed_away_rate": 1.0
+        }
+      ]
     }
   ],
   "model_lab": {
     "schema_version": 1,
-    "as_of": "2026-09-30T11:58:21.825249+00:00",
+    "as_of": "2026-09-30T17:51:19.612125+00:00",
     "market": "moneyline",
     "confident_threshold": 0.65,
     "sports": [
@@ -2139,21 +2195,64 @@
       {
         "sport": "NHL",
         "outcome_type": "binary winner",
-        "status": "insufficient_comparison",
+        "status": "descriptive_evidence",
         "versions": {
           "season_stats": "league-goals-1.0.0",
           "final_combined": "league-goals-1.0.0"
         },
-        "verified_games": 0,
-        "matched_games": 0,
+        "verified_games": 4,
+        "matched_games": 4,
         "excluded_from_comparison": 0,
         "coverage": {
-          "season_stats": 0,
-          "final_combined": 0
+          "season_stats": 4,
+          "final_combined": 4
         },
-        "first_start": null,
-        "last_start": null,
-        "scores": [],
+        "first_start": "2026-09-29T23:00:00+00:00",
+        "last_start": "2026-09-30T02:30:00+00:00",
+        "scores": [
+          {
+            "model": "final_combined",
+            "version": "league-goals-1.0.0",
+            "n": 4,
+            "correct": 3,
+            "accuracy": 0.75,
+            "brier": 0.23192694045660267,
+            "log_loss": 0.6568543255504545,
+            "reliability": [
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 4,
+                "mean_probability": 0.5392421858167309,
+                "observed_win_rate": 0.75
+              }
+            ],
+            "confident_games": 0,
+            "confident_misses": 0,
+            "miss_examples": []
+          },
+          {
+            "model": "season_stats",
+            "version": "league-goals-1.0.0",
+            "n": 4,
+            "correct": 3,
+            "accuracy": 0.75,
+            "brier": 0.23192694045660267,
+            "log_loss": 0.6568543255504545,
+            "reliability": [
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 4,
+                "mean_probability": 0.5392421858167309,
+                "observed_win_rate": 0.75
+              }
+            ],
+            "confident_games": 0,
+            "confident_misses": 0,
+            "miss_examples": []
+          }
+        ],
         "experiment": {
           "status": "not_recorded",
           "active": false
