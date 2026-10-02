@@ -31,6 +31,7 @@ jobs:
           done
           python - <<'PY'
           import json
+          import hashlib
           from pathlib import Path
 
           files = {
@@ -72,7 +73,13 @@ jobs:
               assert isinstance(live.get('sports', {}).get(sport), list), f'live_scores missing {sport}'
           assert isinstance(live.get('games'), list), 'live_scores games missing'
           assert Path('index.html').read_text(encoding='utf-8') == Path('parlayos.html').read_text(encoding='utf-8'), 'HTML parity mismatch'
-          print('OK five-sport public artifact contract')
+          release = json.loads(Path('data/release_status.json').read_text(encoding='utf-8'))
+          assert release.get('schema_version') == 1 and release.get('source_commit'), 'release provenance missing'
+          expected = {'index.html', 'parlayos.html', 'parlayos_chd_data.json', 'live_scores.json', 'data/model_benchmark.json', *files.values()}
+          assert set(release.get('sha256', {})) == expected, 'release hash contract missing files'
+          for name, digest in release['sha256'].items():
+              assert hashlib.sha256(Path(name).read_bytes()).hexdigest() == digest, f'release hash mismatch: {name}'
+          print('OK five-sport public artifact contract and release hashes')
           PY
 
       - name: Validate browser JavaScript and UI contract
@@ -94,13 +101,13 @@ jobs:
       - name: Prepare artifact
         run: |
           mkdir -p site/data site/tests
-          cp tests/themes.html tests/bankroll.html site/tests/
+          cp tests/themes.html tests/bankroll.html tests/slate-controls.html site/tests/
           if [ -f tests/model-switch.html ]; then cp tests/model-switch.html tests/candidate-frame.css site/tests/; fi
           if [ -f tests/screen-layout.html ]; then cp tests/screen-layout.html site/tests/; fi
           cp index.html parlayos.html about.html favicon.ico site/
           cp parlayos_chd_data.json parlayos_mlb_chd.json parlayos_nfl_chd.json parlayos_nba_chd.json parlayos_nhl_chd.json parlayos_soccer_chd.json live_scores.json site/
           cp live_scores.json site/data/live_scores.json
-          if [ -f data/model_benchmark.json ]; then cp data/model_benchmark.json site/data/; fi
+          cp data/model_benchmark.json data/release_status.json site/data/
           ls -lh site
 
       - name: Upload artifact
