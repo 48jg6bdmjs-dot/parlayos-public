@@ -11403,6 +11403,18 @@ html body.pos-ui [data-pos-total-model] { width:100%; min-width:0; max-width:100
 .pos-model-notice p:last-child { margin-bottom:0; }
 .pos-models button { min-width:0; overflow-wrap:anywhere; white-space:normal; }
 
+
+/* Slate tools remain readable without adding another scroll container. */
+.pos-coverage { padding:16px; margin:16px 0; border:1px solid #ffffff28; border-radius:18px; background:#ffffff05; }
+.pos-coverage h3 { margin:0 0 12px; font-size:16px; }
+.pos-coverage-counts { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+.pos-coverage-counts b { display:block; font-size:25px; font-variant-numeric:tabular-nums; }
+.pos-coverage-counts span { display:block; color:var(--pos-muted); font-size:12px; }
+.pos-slate-controls { display:flex; flex-wrap:wrap; gap:12px; margin:16px 0; }
+.pos-slate-controls label { flex:1 1 180px; font-size:13px; color:var(--pos-muted); }
+.pos-slate-controls select { display:block; width:100%; min-height:44px; padding:10px; margin-top:6px; border:1px solid #ffffff40; border-radius:12px; }
+@media(max-width:500px) { .pos-coverage-counts { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
 /* Decorative CSS scenes: no external assets, canvas loops or input interception. */
 html body.pos-ui[data-pos-theme="aurora"] { --pos-bg:#071923; --pos-surface:#122b37; --pos-accent:#83e9c6; --pos-text:#f0fcf8; --pos-muted:#b7d1d4; --pos-window:rgba(5,20,31,.64); }
 html body.pos-ui[data-pos-theme="ocean"] { --pos-bg:#051c2c; --pos-surface:#0e3041; --pos-accent:#83deef; --pos-text:#effaff; --pos-muted:#b6d0de; --pos-window:rgba(3,23,38,.66); }
@@ -37407,7 +37419,23 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     const p=items.reduce((v,x)=>v*Number(x.probability),1);
     return `${items.length===1?'Saved model estimate':'Estimated chance every pick wins'}: ${percent(p)}.${items.length>1?' Assumes independent games.':''} Uncalibrated model estimates; not a guarantee.`;
   }
-  return {modelInfo,modelCoverage,automaticPick,samePick,pickLabel,pickContext,models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,highestMarketSide,automaticMarket,nhlPropInputs,nhlProp,pitcherPropInputs,pitcherProp,teamMetrics,totalDistribution,slipSummary};
+  function slateView(games,sport,model,options={},now=Date.now()) {
+    const rows=(Array.isArray(games)?games:[]).map(g=>{
+      const ml=forecast(g,sport,model,'ml',now),ou=automaticMarket(g,sport,model,'ou',now),props=automaticMarket(g,sport,model,'k',now);
+      return {game:g,ml,ou,props,ready:{ml:ml.available&&ml.actionable&&!ml.closed&&!ml.stale,ou:!!automaticPick(g,sport,model,'ou',now),props:!!automaticPick(g,sport,model,'props',now)},upcoming:!!start(g)&&start(g).getTime()>now};
+    });
+    const counts={total:rows.length,upcoming:0,ml:0,ou:0,props:0,blocked:0};
+    for(const r of rows){if(r.upcoming)counts.upcoming++;for(const k of ['ml','ou','props'])if(r.ready[k])counts[k]++;if(r.game.data_quality?.prediction_available===false)counts.blocked++;}
+    const query=String(options.query||'').trim().toLowerCase();
+    const filtered=rows.filter(r=>`${r.game.away||r.game.a||''} ${r.game.home||r.game.b||''}`.toLowerCase().includes(query)&&
+      (!options.filter||options.filter==='all'||options.filter==='upcoming'&&r.upcoming||['ml','ou','props'].includes(options.filter)&&r.ready[options.filter]));
+    filtered.sort((a,b)=>{
+      if(options.sort==='probability'){const ap=a.ml.available&&!a.ml.closed&&!a.ml.stale?Number(a.ml.probability):-1,bp=b.ml.available&&!b.ml.closed&&!b.ml.stale?Number(b.ml.probability):-1;if(ap!==bp)return bp-ap;}
+      return (start(a.game)?.getTime()??Infinity)-(start(b.game)?.getTime()??Infinity)||id(a.game).localeCompare(id(b.game));
+    });
+    return {counts,games:filtered.map(r=>r.game)};
+  }
+  return {slateView,modelInfo,modelCoverage,automaticPick,samePick,pickLabel,pickContext,models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,highestMarketSide,automaticMarket,nhlPropInputs,nhlProp,pitcherPropInputs,pitcherProp,teamMetrics,totalDistribution,slipSummary};
 });
 </script><script id="PARLAYOS_UI_CONSISTENCY">(function () {
   'use strict';
@@ -37416,7 +37444,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   const E=C.escape, A=v=>Array.isArray(v)?v:[], q=(s,r=document)=>r.querySelector(s);
   const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback;}catch{return fallback;}};
   const write=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value));}catch{}};
-  const state={data:{},errors:{},models:read('parlayos:ui:models',{}),slips:read('parlayos:ui:slips',{}),query:{},active:'MLB',liveSport:'ALL',live:{sports:{}},fantasy:'MLB',crew:read('parlayos:ui:crew',{}),loading:true};
+  const state={data:{},errors:{},models:read('parlayos:ui:models',{}),slips:read('parlayos:ui:slips',{}),query:{},filters:read('parlayos:ui:filters',{}),sorts:read('parlayos:ui:sorts',{}),active:'MLB',liveSport:'ALL',live:{sports:{}},fantasy:'MLB',crew:read('parlayos:ui:crew',{}),loading:true};
   const model=s=>C.models[state.models[s]]?state.models[s]:'final_combined';
   const games=s=>[...new Map(A(state.data[s]?.games).filter(g=>g&&typeof g==='object').map(g=>[C.id(g),g])).values()];
   const labels=s=>({ml:'Moneyline',ou:'Over / Under',k:s==='MLB'?'Pitcher strikeouts':s==='NHL'?'Puck line':s==='SOC'?'Handicap':'Spread'});
@@ -37464,7 +37492,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     if(q(':scope > .pos-hub',screen))return;
     Array.from(screen.children).forEach(el=>el.setAttribute('data-pos-legacy',''));
     const host=document.createElement('div');host.className='pos-hub';host.dataset.posSport=sport;
-    host.innerHTML=`<div class="pos-heading"><h2></h2><button type="button" data-pos-slip="${sport}">Selected picks <span data-pos-count>0</span></button></div><nav class="pos-nav" aria-label="Sports">${Object.entries(sports).map(([s,v])=>`<button type="button" data-pos-sport="${s}">${v[0]} ${v[1]}</button>`).join('')}</nav><div class="pos-toolbar"><input type="search" data-pos-search="${sport}" aria-label="Search ${sports[sport][1]} games" placeholder="Search teams or matchups"><button type="button" data-pos-refresh>Refresh data</button></div><div class="pos-label">Prediction model</div><div class="pos-models" role="group" aria-label="${sports[sport][1]} prediction model"></div><div class="pos-status" role="status"></div><div class="pos-grid"></div>`;
+    host.innerHTML=`<div class="pos-heading"><h2></h2><button type="button" data-pos-slip="${sport}">Selected picks <span data-pos-count>0</span></button></div><nav class="pos-nav" aria-label="Sports">${Object.entries(sports).map(([s,v])=>`<button type="button" data-pos-sport="${s}">${v[0]} ${v[1]}</button>`).join('')}</nav><div class="pos-toolbar"><input type="search" data-pos-search="${sport}" aria-label="Search ${sports[sport][1]} games" placeholder="Search teams or matchups"><button type="button" data-pos-refresh>Refresh data</button></div><div class="pos-label">Prediction model</div><div class="pos-models" role="group" aria-label="${sports[sport][1]} prediction model"></div><div class="pos-status" role="status"></div><section class="pos-coverage" aria-label="Current market coverage"></section><div class="pos-slate-controls"><label>Show<select data-pos-filter="${sport}" aria-label="Filter games"><option value="all">All games</option><option value="upcoming">Upcoming games</option><option value="ml">Moneyline available</option><option value="ou">Over / Under available</option><option value="props">Player props available</option></select></label><label>Sort<select data-pos-sort="${sport}" aria-label="Sort games"><option value="start">Start time</option><option value="probability">Moneyline estimate</option></select></label></div><div class="pos-grid"></div>`;
     screen.appendChild(host);
   }
   function timeLabel(g,s){const d=C.start(g,A(state.live.sports?.[s]));return d?d.toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Start time unavailable';}
@@ -37583,7 +37611,10 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       let notice=q('.pos-model-notice',host);
       if(!notice){notice=document.createElement('div');notice.className='pos-model-notice';notice.setAttribute('role','status');mh.after(notice);}
       notice.innerHTML=modelNotice(s,all);
-      const filtered=all.filter(g=>teams(g).toLowerCase().includes((state.query[s]||'').toLowerCase()));
+      const view=C.slateView(all,s,model(s),{query:state.query[s],filter:state.filters[s],sort:state.sorts[s]});
+      const filtered=view.games;
+      for(const [key,attr] of [['filters','filter'],['sorts','sort']]){const select=q('[data-pos-'+attr+']',host);select.dataset['pos'+attr[0].toUpperCase()+attr.slice(1)]=s;select.value=state[key][s]||(attr==='filter'?'all':'start');}
+      q('.pos-coverage',host).innerHTML=`<h3>Current market coverage</h3><div class="pos-coverage-counts">${[['upcoming','Upcoming games'],['ml','Moneyline'],['ou','Over / Under'],['props','Player props']].map(([k,label])=>`<div><b>${E(view.counts[k])}</b><span>${label}</span></div>`).join('')}</div><p class="pos-meta">Counts show usable pregame estimates for the selected model. Totals and props may use separately labeled models and reference thresholds. Availability does not measure accuracy.${view.counts.blocked?' '+E(view.counts.blocked)+' games have rejected prediction inputs.':''}</p>`;
       const unavailable=all.length&&!all.some(g=>Object.keys(labels(s)).some(k=>C.forecast(g,s,model(s),k).available));
       const status=q('.pos-status',host);
       const updated=new Date(state.data[s]?.updated||state.data[s]?.runDate||state.data[s]?.generated_at||'');
@@ -37596,7 +37627,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       attribution.innerHTML=feed.attribution?.name==='OpenLigaDB'?'<a href="https://www.openligadb.de/" target="_blank" rel="noopener">Data: OpenLigaDB</a> · <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL 1.0</a>':'';
       if(!q('[data-pos-results]',host)){const b=document.createElement('button');b.type='button';b.dataset.posResults='';b.textContent='Model Lab';q('.pos-toolbar',host).appendChild(b);}
       const empty=feed.status==='provider_failed'?'The game provider could not be reached.':feed.status==='no_games_scheduled'?`No games scheduled${feed.schedule_start?' for '+feed.schedule_start+' through '+feed.schedule_end:''}.${feed.preseason_start?' Preseason starts '+feed.preseason_start+'.':''}`:'No games available.';
-      const grid=q('.pos-grid',host),cards=filtered.length?filtered.map(g=>card(g,s)).join(''):`<div class="pos-empty">${E(state.loading?'Loading games…':state.errors[s]?'Game data is temporarily unavailable.':all.length?'No matching games. Clear your search to see the slate.':empty)}</div>`;
+      const grid=q('.pos-grid',host),cards=filtered.length?filtered.map(g=>card(g,s)).join(''):`<div class="pos-empty">${E(state.loading?'Loading games…':state.errors[s]?'Game data is temporarily unavailable.':all.length?'No games match your search and market filter. Choose All games or clear your search.':empty)}</div>`;
       reconcileCards(grid,cards);
     });
   }
@@ -37685,6 +37716,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     dialog=document.createElement('dialog');dialog.className='pos-dialog';dialog.id='pos-dialog';dialog.setAttribute('aria-label','ParlayOS details');document.body.appendChild(dialog);
     dialog.addEventListener('click',e=>{if(e.target===dialog)closeDialog();});dialog.addEventListener('cancel',()=>returnFocus?.focus());
     document.addEventListener('input',e=>{const b=e.target;if(b.matches('[data-pos-search]')){state.query[b.dataset.posSearch]=b.value;renderSport(b.dataset.posSearch);}});
+    document.addEventListener('change',e=>{const el=e.target;for(const [attr,key] of [['posFilter','filters'],['posSort','sorts']])if(el.dataset?.[attr]&&sports[el.dataset[attr]]){const sport=el.dataset[attr];state[key][sport]=el.value;write('parlayos:ui:'+key,state[key]);renderSport(sport);}});
     // Close pregame selections at kickoff even if a tab stays open between feeds.
     setInterval(()=>{if(!state.loading)renderAll();},60000);
     renderAll();load();
@@ -37719,6 +37751,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
   window.ParlayOSUI={handle,navigate,renderSport};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+
 </script><script id="PARLAYOS_DYNAMIC_THEMES">(function () {
   'use strict';
   const themes = {

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ParlayOS live slate regression</title>
+<style>body{font:16px/1.5 system-ui;margin:20px;color:#172033}button{font:inherit;padding:12px}pre{white-space:pre-wrap}iframe{display:block;border:0;margin-top:16px}</style>
+<h1>Live slate and model controls</h1>
+<p>Checks both published entrypoints at phone, tablet and desktop widths. Uses the live feeds, changes every usable model, and tests the new filters and sort controls. No picks are added. Original preferences are restored.</p>
+<button id="run">Run live slate checks</button><pre id="result" role="status">Ready.</pre><div id="preview"></div>
+<script>
+const output=document.querySelector('#result'),button=document.querySelector('#run');
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+const assert=(ok,text)=>{if(!ok)throw Error(text)};
+button.addEventListener('click',async()=>{
+ button.disabled=true;let frame,passed=0,modelCases=0,emptySports=0;const failures=[];
+ const keys=['parlayos:ui:filters','parlayos:ui:sorts','parlayos:ui:models'];
+ const saved=Object.fromEntries(keys.map(k=>[k,localStorage.getItem(k)]));
+ try{
+  for(const entry of ['index.html','parlayos.html']){
+   frame=document.createElement('iframe');frame.width=390;frame.height=844;frame.title=entry+' preview';
+   const loaded=new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Page load timeout')),30000);frame.onload=()=>{clearTimeout(timer);resolve()}});
+   frame.src='../'+entry+'?slate-regression='+Date.now();document.querySelector('#preview').replaceChildren(frame);await loaded;
+   const win=frame.contentWindow,doc=frame.contentDocument;
+   assert(win.ParlayOSUI&&win.ParlayOSContract?.slateView,'New slate UI did not initialize');
+   win.ParlayOSUI.navigate('sports');
+   const started=Date.now();while(doc.querySelector('#screen-sports .pos-status')?.textContent.includes('Loading')){if(Date.now()-started>30000)throw Error('Feeds did not finish loading');await delay(100)}
+   for(const width of [390,768,1440]){
+    frame.width=width;await delay(100);
+    for(const sport of ['MLB','NFL','NBA','NHL','SOC']){
+     const label=entry+' '+width+'px '+sport;
+     try{
+      doc.querySelector('#screen-sports .pos-nav [data-pos-sport="'+sport+'"]').click();await delay(80);
+      const hub=doc.querySelector('#screen-sports .pos-hub');
+      const filter=hub.querySelector('[data-pos-filter]'),sort=hub.querySelector('[data-pos-sort]');
+      filter.value='all';filter.dispatchEvent(new win.Event('change',{bubbles:true}));
+      const all=hub.querySelectorAll('.pos-card').length;if(!all)emptySports++;
+      assert(hub.querySelectorAll('.pos-coverage-counts b').length===4,'Coverage counts missing');
+      const models=[...hub.querySelectorAll('.pos-models button:not(:disabled)')];
+      for(const model of models){
+       const nodes=new Map([...hub.querySelectorAll('.pos-card')].map(n=>[n.dataset.posGame,n]));
+       model.click();await delay(80);
+       assert(hub.querySelector('.pos-models [aria-pressed="true"]')?.dataset.posModel===model.dataset.posModel,'Model switch reverted');
+       for(const card of hub.querySelectorAll('.pos-card'))assert(nodes.get(card.dataset.posGame)===card,'Model switch replaced a card node');
+       modelCases++;
+      }
+      for(const value of ['upcoming','ml','ou','props','all']){
+       filter.value=value;filter.dispatchEvent(new win.Event('change',{bubbles:true}));await delay(80);
+       const count=hub.querySelectorAll('.pos-card').length;
+       if(value!=='all'){
+        const position={upcoming:0,ml:1,ou:2,props:3}[value];
+        assert(count===Number(hub.querySelectorAll('.pos-coverage-counts b')[position].textContent),'Filter count disagrees with coverage');
+       }else assert(count===all,'All games filter did not restore the slate');
+       assert(doc.documentElement.scrollWidth<=width+1,'Horizontal overflow');
+      }
+      sort.value='probability';sort.dispatchEvent(new win.Event('change',{bubbles:true}));await delay(80);
+      assert(hub.querySelectorAll('.pos-card').length===all,'Sorting lost cards');
+      for(const select of [filter,sort])assert(select.getBoundingClientRect().height>=44,'Control touch target too small');
+      passed++;
+     }catch(error){failures.push(label+': '+error.message)}
+     output.textContent='Running: '+passed+' sport/viewport cases, '+modelCases+' model switches, '+failures.length+' failures.';
+    }
+   }
+   frame.remove();frame=null;
+  }
+ }catch(error){failures.push(error.message)}
+ finally{
+  frame?.remove();for(const [key,value] of Object.entries(saved)){if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,value)}
+  output.textContent=(failures.length?'FAIL':'PASS')+': '+passed+' sport/viewport cases; '+modelCases+' usable model switches; '+emptySports+' empty-slate cases; '+failures.length+' failures.\n'+failures.join('\n');
+  output.dataset.complete='true';button.disabled=false;
+ }
+});
+</script></html>
