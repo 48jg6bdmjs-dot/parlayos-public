@@ -1,7 +1,7 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-10-03T03:53:45.544766+00:00",
-  "captured_games": 448,
+  "updated": "2026-10-03T11:09:09.300854+00:00",
+  "captured_games": 454,
   "verified_settled_games": 354,
   "model_scores": [
     {
@@ -2105,7 +2105,7 @@
   ],
   "model_lab": {
     "schema_version": 1,
-    "as_of": "2026-10-03T03:53:45.544785+00:00",
+    "as_of": "2026-10-03T11:09:09.300879+00:00",
     "market": "moneyline",
     "confident_threshold": 0.65,
     "sports": [
@@ -2114,35 +2114,35 @@
         "outcome_type": "binary winner",
         "status": "insufficient_comparison",
         "versions": {
-          "monte_carlo": "2.2.1",
+          "monte_carlo": "2.3.0",
           "zips": "2.2.0",
           "steamer": "2.2.0",
-          "my_chd": "2.2.1",
-          "season_stats": "2.2.1",
-          "chd_master_predictor": "2.2.1",
-          "final_combined": "2.3.1"
+          "my_chd": "2.4.0",
+          "season_stats": "2.3.0",
+          "chd_master_predictor": "2.4.0",
+          "final_combined": "2.5.0"
         },
         "verified_games": 278,
         "matched_games": 0,
         "excluded_from_comparison": 278,
         "coverage": {
-          "monte_carlo": 23,
+          "monte_carlo": 0,
           "zips": 128,
           "steamer": 128,
-          "my_chd": 19,
-          "season_stats": 23,
-          "chd_master_predictor": 19,
-          "final_combined": 23
+          "my_chd": 0,
+          "season_stats": 0,
+          "chd_master_predictor": 0,
+          "final_combined": 0
         },
         "first_start": null,
         "last_start": null,
         "scores": [],
         "experiment": {
           "version": "family-brier-1",
-          "captured_at": "2026-10-01T04:18:01.767291+00:00",
+          "captured_at": "2026-10-03T11:09:08.360177+00:00",
           "status": "collecting_training_data",
           "active": false,
-          "training_games": 2,
+          "training_games": 0,
           "required_training_games": 100,
           "evaluation_games": 0,
           "required_evaluation_games": 100,
@@ -2215,7 +2215,7 @@
         "scores": [],
         "experiment": {
           "version": "family-brier-1",
-          "captured_at": "2026-10-02T04:10:51.276072+00:00",
+          "captured_at": "2026-10-03T11:09:08.360177+00:00",
           "status": "collecting_training_data",
           "active": false,
           "training_games": 0,
@@ -2424,8 +2424,8 @@
       {
         "id": "prior_runs",
         "label": "Prior run model inputs (October 2 baseline)",
-        "current_model": null,
-        "captured_pairs": 0,
+        "current_model": "monte_carlo",
+        "captured_pairs": 4,
         "settled_pairs": 0,
         "scores": [],
         "current_minus_shadow_brier": null,
@@ -2434,8 +2434,8 @@
       {
         "id": "legacy_chd",
         "label": "Legacy CHD calculation (August 20 source)",
-        "current_model": null,
-        "captured_pairs": 0,
+        "current_model": "my_chd",
+        "captured_pairs": 3,
         "settled_pairs": 0,
         "scores": [],
         "current_minus_shadow_brier": null,
