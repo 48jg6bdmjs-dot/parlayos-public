@@ -1,7 +1,7 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-10-02T23:07:19.694710+00:00",
-  "captured_games": 444,
+  "updated": "2026-10-03T00:53:39.306647+00:00",
+  "captured_games": 446,
   "verified_settled_games": 354,
   "model_scores": [
     {
@@ -2105,7 +2105,7 @@
   ],
   "model_lab": {
     "schema_version": 1,
-    "as_of": "2026-10-02T23:07:19.694732+00:00",
+    "as_of": "2026-10-03T00:53:39.306669+00:00",
     "market": "moneyline",
     "confident_threshold": 0.65,
     "sports": [
@@ -2417,6 +2417,34 @@
       }
     ],
     "policy": "Latest archived version of each model, evaluated on identical settled games. Version changes can reset the common sample. Conflicting duplicate events, invalid probabilities, missing result provenance and post-start forecasts are excluded. Descriptive results do not establish a superior future model or profitability. Totals and props are not evaluated by this moneyline archive."
+  },
+  "mlb_comparison": {
+    "schema_version": 1,
+    "comparisons": [
+      {
+        "id": "prior_runs",
+        "label": "Prior run model inputs (October 2 baseline)",
+        "current_model": null,
+        "captured_pairs": 0,
+        "settled_pairs": 0,
+        "scores": [],
+        "current_minus_shadow_brier": null,
+        "status": "collecting_pregame_pairs"
+      },
+      {
+        "id": "legacy_chd",
+        "label": "Legacy CHD calculation (August 20 source)",
+        "current_model": null,
+        "captured_pairs": 0,
+        "settled_pairs": 0,
+        "scores": [],
+        "current_minus_shadow_brier": null,
+        "status": "collecting_pregame_pairs"
+      }
+    ],
+    "active": false,
+    "original_ace_status": "not_comparable_without_frozen_original_forecasts_and_dated_market_inputs",
+    "policy": "Same games, same frozen pregame source inputs. Shadow versions never vote in Combined. The legacy CHD calculation is not the market-anchored MLB ACE website. No retrospective backfill, training-accuracy promotion or guaranteed profitability. Lower Brier/log loss is better."
   },
   "learning_policy": {
     "training_games_required": 100,
