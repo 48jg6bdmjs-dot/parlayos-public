@@ -37224,6 +37224,40 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     for(let k=0;k<=Math.floor(threshold);k++){if(k)mass*=mean/k;if(k<threshold)under+=mass;else push=mass;}
     return {player,mean,under,push,over:Math.max(0,1-under-push)};
   }
+  function mlbWorkloadPropInputs(game,now=Date.now()) {
+    const generated=Date.parse(game.generated_at||''),kickoff=start(game)?.getTime(),rows=game.player_prop_models;
+    if(game.player_prop_policy!=='recent-start-mixture-1'||!Array.isArray(rows)||!Number.isFinite(generated)||!Number.isFinite(kickoff)||generated>=kickoff||kickoff<=now||generated>now+60000||now-generated>86400000||game.data_quality?.prediction_available===false)return [];
+    const validDate=d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&Number.isFinite(Date.parse(d))&&new Date(d).toISOString().slice(0,10)===d;
+    if(!validDate(game.date))return [];
+    return rows.filter(p=>{
+      const stats=game.pitchers?.[p?.side+'_stats'],pid=game.pitchers?.[p?.side+'_id'],name=game.pitchers?.[p?.side];
+      if(!p||p.model_id!=='mlb_pitcher_workload_mixture'||p.model_version!=='1.0.0'||p.distribution!=='poisson_workload_mixture'||p.metric!=='strikeouts'||p.data_status!=='validated'||p.calibration_status!=='unvalidated'||p.source!=='mlb_statsapi'||!['away','home'].includes(p.side)||!pid||String(p.player_id)!==String(pid)||p.player_name!==name||typeof name!=='string'||!name.trim())return false;
+      if(p.generated_at!==game.generated_at||p.target_date!==game.date||p.season!==Number(game.date.slice(0,4))||p.sample_starts!==5||stats?.data_status!=='validated'||stats.source!=='mlb_statsapi'||String(stats.pitcher_id)!==String(pid)||stats.season!==p.season||!numeric(stats.k9)||Number(stats.k9)!==p.k9||p.k9<=0||p.k9>27||!numeric(p.season_innings)||p.season_innings<10)return false;
+      const innings=String(stats.innings_pitched??'').match(/^(\d+)(?:\.([012]))?$/);
+      if(!innings||Math.abs(Number(innings[1])+Number(innings[2]||0)/3-p.season_innings)>1e-6)return false;
+      const fetched=Date.parse(p.fetched_at||'');
+      if(!Number.isFinite(fetched)||generated-fetched<0||generated-fetched>86400000)return false;
+      if(!Array.isArray(p.starts)||p.starts.length!==5||!Array.isArray(p.component_means)||p.component_means.length!==5||rows.filter(r=>String(r?.player_id)===String(pid)&&r?.metric==='strikeouts').length!==1)return false;
+      const ids=new Set();let previous='',sum=0;
+      for(let i=0;i<5;i++){
+        const r=p.starts[i],mean=p.component_means[i];
+        if(!r||typeof r.event_id!=='string'||!r.event_id||ids.has(r.event_id)||!validDate(r.date)||r.date>=game.date||r.date.slice(0,4)!==game.date.slice(0,4)||r.date<previous||typeof r.innings!=='number'||!Number.isFinite(r.innings)||r.innings<0||r.innings>12||Math.abs(r.innings*3-Math.round(r.innings*3))>1e-6||!Number.isInteger(r.pitches)||r.pitches<=0||r.pitches>200||typeof mean!=='number'||!Number.isFinite(mean)||mean<0||mean>27||Math.abs(mean-p.k9*r.innings/9)>1e-6)return false;
+        ids.add(r.event_id);previous=r.date;sum+=mean;
+      }
+      const age=(Date.parse(game.date)-Date.parse(previous))/86400000,mean=sum/5;
+      const variance=mean+p.component_means.reduce((n,m)=>n+(m-mean)**2,0)/5;
+      return age>0&&age<=30&&numeric(p.mean)&&p.mean>0&&Math.abs(p.mean-mean)<1e-6&&numeric(p.variance)&&Math.abs(p.variance-variance)<1e-6;
+    });
+  }
+  function mlbWorkloadProp(input,line) {
+    if(!numeric(line)||Number(line)<.5||Number(line)>27||Number(line)*2!==Math.round(Number(line)*2))return null;
+    let under=0,push=0;
+    for(const mean of input.component_means){
+      let mass=Math.exp(-mean);
+      for(let k=0;k<=Math.floor(Number(line));k++){if(k)mass*=mean/k;if(k<Number(line))under+=mass/5;else push+=mass/5;}
+    }
+    return {under,push,over:Math.max(0,1-under-push)};
+  }
   function teamMetrics(game,sport) {
     const fields={
       NFL:[['games_played','Games sampled',0],['off_eff','Offensive efficiency',3],['def_eff','Defensive efficiency',3],['offensive_plays','Offensive plays',0],['defensive_plays','Defensive plays',0]],
@@ -37321,7 +37355,16 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     }
     const candidates=[];
     if(sport==='MLB') {
-      for(const player of pitcherPropInputs(game,at)) {
+      for(const player of mlbWorkloadPropInputs(game,at)) {
+        const line=reference(player.mean),p=mlbWorkloadProp(player,line);
+        const candidate=stronger(p,line,{mean:player.mean,player_id:String(player.player_id),player_name:player.player_name,metric:'strikeouts',
+          model_label:'Recent-start workload mixture',model_version:player.model_version,
+          notes:'Five verified prior regular-season starts, using season strikeouts per inning. Workload variation is included. Scheduled starter, not confirmed; opponent, current pitch limits, injuries and postseason roles are not adjusted. Experimental and independent of the moneyline model.'});
+        if(candidate)candidates.push(candidate);
+      }
+      // Compatibility for older published feeds only. A new feed never silently
+      // replaces rejected/missing mixture inputs with the old season-IP shortcut.
+      for(const player of game.player_prop_policy?[]:pitcherPropInputs(game,at)) {
         const stats=game.pitchers?.[player.side+'_stats']||{};
         const starts=Number(stats.games_started),appearances=Number(stats.games_pitched);
         // Total season innings include relief appearances. Without a starter
@@ -37364,7 +37407,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
       }
     }
     candidates.sort((a,b)=>b.probability-a.probability||a.player_id.localeCompare(b.player_id)||a.metric.localeCompare(b.metric));
-    return candidates[0]||missing(sport==='MLB'?'A named starter with at least five starts and separate starting workload is required.':'Validated player-rate inputs are not available in this sport’s feed.');
+    return candidates[0]||missing(sport==='MLB'?(game.player_prop_policy?'Five recent verified starter game logs and dated season strikeout inputs are required.':'A named starter with at least five starts and separate starting workload is required.'):'Validated player-rate inputs are not available in this sport’s feed.');
   }
   function start(game, liveGames = []) {
     const normalized = g => String(g.gamePk ?? g.game_id ?? g.id ?? '').replace(/^(mlb|nba|nfl|nhl|soc)_/i,'');
@@ -37440,7 +37483,7 @@ html body.other-screen-active .titlebar .parlayos-titlebar-logo {
     });
     return {counts,games:filtered.map(r=>r.game)};
   }
-  return {slateView,modelInfo,modelCoverage,automaticPick,samePick,pickLabel,pickContext,models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,highestMarketSide,automaticMarket,nhlPropInputs,nhlProp,pitcherPropInputs,pitcherProp,teamMetrics,totalDistribution,slipSummary};
+  return {slateView,modelInfo,modelCoverage,automaticPick,samePick,pickLabel,pickContext,models,numeric,probability,percent,escape,applicable,record,id,market,forecast,evidence,american,start,score,toggle,legacyPicks,slipText,goalTotal,highestMarketSide,automaticMarket,nhlPropInputs,nhlProp,pitcherPropInputs,pitcherProp,mlbWorkloadPropInputs,mlbWorkloadProp,teamMetrics,totalDistribution,slipSummary};
 });
 </script><script id="PARLAYOS_UI_CONSISTENCY">(function () {
   'use strict';
