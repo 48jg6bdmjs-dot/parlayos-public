@@ -1,8 +1,8 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-10-10T17:06:37.461487+00:00",
+  "updated": "2026-10-10T21:11:59.328399+00:00",
   "captured_games": 575,
-  "verified_settled_games": 440,
+  "verified_settled_games": 441,
   "model_scores": [
     {
       "sport": "MLB",
@@ -1051,11 +1051,11 @@
       "sport": "SOC",
       "model": "season_stats",
       "version": "league-goals-1.0.0",
-      "n": 17,
+      "n": 18,
       "outcome_type": "three_way_90_minutes",
-      "brier": 0.6657325492278946,
-      "log_loss": 1.0906306640910635,
-      "accuracy": 0.5294117647058824,
+      "brier": 0.6407384835969183,
+      "log_loss": 1.0565305512411511,
+      "accuracy": 0.5555555555555556,
       "uniform_baseline_brier": 0.6666666666666666,
       "uniform_baseline_log_loss": 1.0986122886681098,
       "calibration_bins": []
@@ -1064,11 +1064,11 @@
       "sport": "SOC",
       "model": "final_combined",
       "version": "league-goals-1.0.0",
-      "n": 17,
+      "n": 18,
       "outcome_type": "three_way_90_minutes",
-      "brier": 0.6657325492278946,
-      "log_loss": 1.0906306640910635,
-      "accuracy": 0.5294117647058824,
+      "brier": 0.6407384835969183,
+      "log_loss": 1.0565305512411511,
+      "accuracy": 0.5555555555555556,
       "uniform_baseline_brier": 0.6666666666666666,
       "uniform_baseline_log_loss": 1.0986122886681098,
       "calibration_bins": []
@@ -2658,7 +2658,7 @@
   ],
   "model_lab": {
     "schema_version": 1,
-    "as_of": "2026-10-10T17:06:37.461507+00:00",
+    "as_of": "2026-10-10T21:11:59.328417+00:00",
     "market": "moneyline",
     "confident_threshold": 0.65,
     "sports": [
@@ -3199,24 +3199,24 @@
           "season_stats": "league-goals-1.0.0",
           "final_combined": "league-goals-1.0.0"
         },
-        "verified_games": 17,
-        "matched_games": 17,
+        "verified_games": 18,
+        "matched_games": 18,
         "excluded_from_comparison": 0,
         "coverage": {
-          "season_stats": 17,
-          "final_combined": 17
+          "season_stats": 18,
+          "final_combined": 18
         },
         "first_start": "2026-09-12T13:30:00+00:00",
-        "last_start": "2026-10-10T13:30:00+00:00",
+        "last_start": "2026-10-10T16:30:00+00:00",
         "scores": [
           {
             "model": "final_combined",
             "version": "league-goals-1.0.0",
-            "n": 17,
-            "correct": 9,
-            "accuracy": 0.5294117647058824,
-            "brier": 0.6657325492278946,
-            "log_loss": 1.0906306640910635,
+            "n": 18,
+            "correct": 10,
+            "accuracy": 0.5555555555555556,
+            "brier": 0.6407384835969183,
+            "log_loss": 1.0565305512411514,
             "reliability": [
               {
                 "lower": 0,
@@ -3235,9 +3235,9 @@
               {
                 "lower": 0.6,
                 "upper": 0.7,
-                "n": 3,
-                "mean_probability": 0.6584220025981697,
-                "observed_win_rate": 0.3333333333333333
+                "n": 4,
+                "mean_probability": 0.6490037259946491,
+                "observed_win_rate": 0.5
               },
               {
                 "lower": 0.7,
@@ -3280,11 +3280,11 @@
           {
             "model": "season_stats",
             "version": "league-goals-1.0.0",
-            "n": 17,
-            "correct": 9,
-            "accuracy": 0.5294117647058824,
-            "brier": 0.6657325492278946,
-            "log_loss": 1.0906306640910635,
+            "n": 18,
+            "correct": 10,
+            "accuracy": 0.5555555555555556,
+            "brier": 0.6407384835969183,
+            "log_loss": 1.0565305512411514,
             "reliability": [
               {
                 "lower": 0,
@@ -3303,9 +3303,9 @@
               {
                 "lower": 0.6,
                 "upper": 0.7,
-                "n": 3,
-                "mean_probability": 0.6584220025981697,
-                "observed_win_rate": 0.3333333333333333
+                "n": 4,
+                "mean_probability": 0.6490037259946491,
+                "observed_win_rate": 0.5
               },
               {
                 "lower": 0.7,
