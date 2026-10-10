@@ -1,7 +1,7 @@
 {
   "version": "league-sources-v6",
   "sport": "SOC",
-  "updated": "2026-10-10T11:57:02.510857+00:00",
+  "updated": "2026-10-10T17:06:22.940957+00:00",
   "source": "OpenLigaDB",
   "status": "ok",
   "source_url": "https://api.openligadb.de/getmatchdata/bl1/2026",
@@ -33,35 +33,35 @@
       },
       "startAt": "2026-10-10T13:30:00+00:00",
       "date": "2026-10-10",
-      "generated_at": "2026-10-10T11:57:01.296697+00:00",
-      "completed": false,
-      "state": "pre",
-      "status": "Scheduled",
+      "generated_at": "2026-10-10T17:06:21.873542+00:00",
+      "completed": true,
+      "state": "post",
+      "status": "Final",
       "markets": {},
       "stats": {
         "home": {
-          "games": 21.0,
-          "goals_for": 39.5,
-          "goals_against": 36.0,
-          "current_games": 4,
+          "games": 22.0,
+          "goals_for": 41.5,
+          "goals_against": 39.0,
+          "current_games": 5,
           "prior_games": 34,
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.8237749546279494,
-          "conceding_rate": 1.7030852994555354
+          "scoring_rate": 1.8311965811965814,
+          "conceding_rate": 1.7478632478632479
         },
         "away": {
-          "games": 21.0,
-          "goals_for": 22.0,
-          "goals_against": 40.0,
-          "current_games": 4,
+          "games": 22.0,
+          "goals_for": 25.0,
+          "goals_against": 42.0,
+          "current_games": 5,
           "prior_games": 34,
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.2203266787658804,
-          "conceding_rate": 1.8410163339382941
+          "scoring_rate": 1.2811965811965813,
+          "conceding_rate": 1.847863247863248
         }
       },
       "model_assumptions": [
@@ -80,9 +80,12 @@
         "id": "100",
         "name": "Hamburger SV"
       },
+      "away_score": 3,
+      "home_score": 2,
       "data_quality": {
-        "status": "validated_inputs",
-        "prediction_available": true
+        "status": "insufficient",
+        "prediction_available": false,
+        "reason": "Pregame predictions are unavailable after the scheduled start or for completed games"
       },
       "models": {
         "monte_carlo": {
@@ -91,7 +94,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "monte_carlo",
@@ -100,7 +103,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -110,7 +113,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -119,7 +122,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -129,7 +132,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -138,7 +141,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -148,7 +151,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -177,7 +180,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -196,7 +199,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -215,7 +218,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -244,7 +247,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -263,7 +266,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -282,7 +285,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -292,7 +295,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "my_chd",
@@ -301,7 +304,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -311,7 +314,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -320,7 +323,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -330,7 +333,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -339,7 +342,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -349,7 +352,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -358,8 +361,8 @@
           "model_name": "Season Stats",
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
-          "status": "available",
-          "reason": null,
+          "status": "unavailable",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "season_stats",
@@ -367,37 +370,18 @@
               "model_version": "league-goals-1.0.0",
               "sport": "SOC",
               "market": "ml",
-              "status": "available",
-              "reason": null,
-              "selection": "TSG Hoffenheim",
-              "probability": 0.6420529038122507,
-              "pA": 0.1675102799406015,
-              "pB": 0.6420529038122507,
-              "pDraw": 0.19043681624714723,
+              "status": "unavailable",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
+              "selection": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "pDraw": null,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00",
-              "outcomes": {
-                "away": 0.1675102799406015,
-                "draw": 0.19043681624714723,
-                "home": 0.6420529038122507
-              },
-              "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-              "calibration_status": "unvalidated",
-              "implementation_type": "internal_baseline",
-              "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-              "inputs": {
-                "source_models": [
-                  "season_stats"
-                ],
-                "family_count": 1,
-                "market_available": false,
-                "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.0777572406075606,
-                "home_mean": 2.2710712045943353
-              }
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "season_stats",
@@ -406,7 +390,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -416,7 +400,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -425,7 +409,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -435,7 +419,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -445,7 +429,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "chd_master_predictor",
@@ -454,7 +438,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -464,7 +448,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -473,7 +457,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -483,7 +467,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -492,7 +476,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -502,7 +486,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -511,8 +495,8 @@
           "model_name": "Final Combined All Models",
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
-          "status": "available",
-          "reason": null,
+          "status": "unavailable",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "final_combined",
@@ -520,37 +504,18 @@
               "model_version": "league-goals-1.0.0",
               "sport": "SOC",
               "market": "ml",
-              "status": "available",
-              "reason": null,
-              "selection": "TSG Hoffenheim",
-              "probability": 0.6420529038122507,
-              "pA": 0.1675102799406015,
-              "pB": 0.6420529038122507,
-              "pDraw": 0.19043681624714723,
+              "status": "unavailable",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
+              "selection": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "pDraw": null,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00",
-              "outcomes": {
-                "away": 0.1675102799406015,
-                "draw": 0.19043681624714723,
-                "home": 0.6420529038122507
-              },
-              "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-              "calibration_status": "unvalidated",
-              "implementation_type": "internal_ensemble",
-              "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-              "inputs": {
-                "source_models": [
-                  "season_stats"
-                ],
-                "family_count": 1,
-                "market_available": false,
-                "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.0777572406075606,
-                "home_mean": 2.2710712045943353
-              }
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "final_combined",
@@ -559,7 +524,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -569,7 +534,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -578,7 +543,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -588,7 +553,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         }
@@ -598,8 +563,8 @@
         "model_name": "Final Combined All Models",
         "model_version": "league-goals-1.0.0",
         "sport": "SOC",
-        "status": "available",
-        "reason": null,
+        "status": "unavailable",
+        "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
         "markets": {
           "ml": {
             "model_id": "final_combined",
@@ -607,37 +572,18 @@
             "model_version": "league-goals-1.0.0",
             "sport": "SOC",
             "market": "ml",
-            "status": "available",
-            "reason": null,
-            "selection": "TSG Hoffenheim",
-            "probability": 0.6420529038122507,
-            "pA": 0.1675102799406015,
-            "pB": 0.6420529038122507,
-            "pDraw": 0.19043681624714723,
+            "status": "unavailable",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
+            "selection": null,
+            "probability": null,
+            "pA": null,
+            "pB": null,
+            "pDraw": null,
             "confidence": null,
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00",
-            "outcomes": {
-              "away": 0.1675102799406015,
-              "draw": 0.19043681624714723,
-              "home": 0.6420529038122507
-            },
-            "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-            "calibration_status": "unvalidated",
-            "implementation_type": "internal_ensemble",
-            "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-            "inputs": {
-              "source_models": [
-                "season_stats"
-              ],
-              "family_count": 1,
-              "market_available": false,
-              "combination": "Single independent family; no consensus uplift",
-              "away_mean": 1.0777572406075606,
-              "home_mean": 2.2710712045943353
-            }
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "ou": {
             "model_id": "final_combined",
@@ -646,7 +592,7 @@
             "sport": "SOC",
             "market": "ou",
             "status": "unavailable",
-            "reason": "A verified bookmaker line is required for a market selection",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -656,7 +602,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -665,7 +611,7 @@
             "sport": "SOC",
             "market": "k",
             "status": "unavailable",
-            "reason": "A verified bookmaker line is required for a market selection",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -675,21 +621,48 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           }
         }
       },
-      "score_distribution": {
-        "type": "independent_poisson",
-        "away_mean": 1.0777572406075606,
-        "home_mean": 2.2710712045943353,
-        "scope": "90 minutes plus stoppage time; three outcomes including draw",
-        "model_ids": [
-          "season_stats",
-          "final_combined"
-        ],
-        "calibration_status": "unvalidated",
-        "note": "Season baseline; injuries and confirmed lineups are not modeled. No bookmaker line supplied."
+      "pregame_snapshot": {
+        "event_id": "83194",
+        "sport": "SOC",
+        "away": "Hamburger SV",
+        "home": "TSG Hoffenheim",
+        "generated_at": "2026-10-04T04:25:00.653938+00:00",
+        "captured_at": "2026-10-04T04:25:23.279772+00:00",
+        "start_at": "2026-10-10T13:30:00+00:00",
+        "forecasts": {
+          "season_stats": {
+            "model_id": "season_stats",
+            "model_version": "league-goals-1.0.0",
+            "status": "available",
+            "pA": 0.1670819598799692,
+            "pB": 0.6427403563005989,
+            "pDraw": 0.19017768381943212,
+            "probability": 0.6427403563005989,
+            "selection": "TSG Hoffenheim",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          },
+          "final_combined": {
+            "model_id": "final_combined",
+            "model_version": "league-goals-1.0.0",
+            "status": "available",
+            "pA": 0.1670819598799692,
+            "pB": 0.6427403563005989,
+            "pDraw": 0.19017768381943212,
+            "probability": 0.6427403563005989,
+            "selection": "TSG Hoffenheim",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          }
+        }
       }
     },
     {
@@ -710,35 +683,35 @@
       },
       "startAt": "2026-10-10T13:30:00+00:00",
       "date": "2026-10-10",
-      "generated_at": "2026-10-10T11:57:01.296697+00:00",
-      "completed": false,
-      "state": "pre",
-      "status": "Scheduled",
+      "generated_at": "2026-10-10T17:06:21.873542+00:00",
+      "completed": true,
+      "state": "post",
+      "status": "Final",
       "markets": {},
       "stats": {
         "home": {
-          "games": 21.0,
-          "goals_for": 33.5,
-          "goals_against": 36.5,
-          "current_games": 4,
+          "games": 22.0,
+          "goals_for": 35.5,
+          "goals_against": 38.5,
+          "current_games": 5,
           "prior_games": 34,
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.6168784029038112,
-          "conceding_rate": 1.7203266787658804
+          "scoring_rate": 1.6311965811965812,
+          "conceding_rate": 1.7311965811965813
         },
         "away": {
-          "games": 21.0,
-          "goals_for": 75.0,
-          "goals_against": 20.0,
-          "current_games": 4,
+          "games": 22.0,
+          "goals_for": 77.0,
+          "goals_against": 22.0,
+          "current_games": 5,
           "prior_games": 34,
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 3.047912885662432,
-          "conceding_rate": 1.151361161524501
+          "scoring_rate": 3.0145299145299145,
+          "conceding_rate": 1.1811965811965812
         }
       },
       "model_assumptions": [
@@ -757,9 +730,12 @@
         "id": "40",
         "name": "FC Bayern M\u00fcnchen"
       },
+      "away_score": 2,
+      "home_score": 2,
       "data_quality": {
-        "status": "validated_inputs",
-        "prediction_available": true
+        "status": "insufficient",
+        "prediction_available": false,
+        "reason": "Pregame predictions are unavailable after the scheduled start or for completed games"
       },
       "models": {
         "monte_carlo": {
@@ -768,7 +744,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "monte_carlo",
@@ -777,7 +753,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -787,7 +763,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -796,7 +772,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -806,7 +782,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -815,7 +791,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -825,7 +801,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -854,7 +830,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -873,7 +849,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -892,7 +868,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -921,7 +897,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -940,7 +916,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -959,7 +935,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -969,7 +945,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "my_chd",
@@ -978,7 +954,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -988,7 +964,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -997,7 +973,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1007,7 +983,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -1016,7 +992,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1026,7 +1002,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -1035,8 +1011,8 @@
           "model_name": "Season Stats",
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
-          "status": "available",
-          "reason": null,
+          "status": "unavailable",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "season_stats",
@@ -1044,37 +1020,18 @@
               "model_version": "league-goals-1.0.0",
               "sport": "SOC",
               "market": "ml",
-              "status": "available",
-              "reason": null,
-              "selection": "FC Bayern M\u00fcnchen",
-              "probability": 0.6820247580266638,
-              "pA": 0.6820247580266638,
-              "pB": 0.15430517087323034,
-              "pDraw": 0.16367007110010595,
+              "status": "unavailable",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
+              "selection": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "pDraw": null,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00",
-              "outcomes": {
-                "away": 0.6820247580266638,
-                "draw": 0.16367007110010595,
-                "home": 0.15430517087323034
-              },
-              "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-              "calibration_status": "unvalidated",
-              "implementation_type": "internal_baseline",
-              "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-              "inputs": {
-                "source_models": [
-                  "season_stats"
-                ],
-                "family_count": 1,
-                "market_available": false,
-                "combination": "Single independent family; no consensus uplift",
-                "away_mean": 2.7190795742480716,
-                "home_mean": 1.25918864094742
-              }
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "season_stats",
@@ -1083,7 +1040,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1093,7 +1050,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -1102,7 +1059,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1112,7 +1069,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -1122,7 +1079,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "chd_master_predictor",
@@ -1131,7 +1088,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1141,7 +1098,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -1150,7 +1107,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1160,7 +1117,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -1169,7 +1126,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1179,7 +1136,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -1188,8 +1145,8 @@
           "model_name": "Final Combined All Models",
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
-          "status": "available",
-          "reason": null,
+          "status": "unavailable",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "final_combined",
@@ -1197,37 +1154,18 @@
               "model_version": "league-goals-1.0.0",
               "sport": "SOC",
               "market": "ml",
-              "status": "available",
-              "reason": null,
-              "selection": "FC Bayern M\u00fcnchen",
-              "probability": 0.6820247580266638,
-              "pA": 0.6820247580266638,
-              "pB": 0.15430517087323034,
-              "pDraw": 0.16367007110010595,
+              "status": "unavailable",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
+              "selection": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "pDraw": null,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00",
-              "outcomes": {
-                "away": 0.6820247580266638,
-                "draw": 0.16367007110010595,
-                "home": 0.15430517087323034
-              },
-              "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-              "calibration_status": "unvalidated",
-              "implementation_type": "internal_ensemble",
-              "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-              "inputs": {
-                "source_models": [
-                  "season_stats"
-                ],
-                "family_count": 1,
-                "market_available": false,
-                "combination": "Single independent family; no consensus uplift",
-                "away_mean": 2.7190795742480716,
-                "home_mean": 1.25918864094742
-              }
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "final_combined",
@@ -1236,7 +1174,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1246,7 +1184,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -1255,7 +1193,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1265,7 +1203,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         }
@@ -1275,8 +1213,8 @@
         "model_name": "Final Combined All Models",
         "model_version": "league-goals-1.0.0",
         "sport": "SOC",
-        "status": "available",
-        "reason": null,
+        "status": "unavailable",
+        "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
         "markets": {
           "ml": {
             "model_id": "final_combined",
@@ -1284,37 +1222,18 @@
             "model_version": "league-goals-1.0.0",
             "sport": "SOC",
             "market": "ml",
-            "status": "available",
-            "reason": null,
-            "selection": "FC Bayern M\u00fcnchen",
-            "probability": 0.6820247580266638,
-            "pA": 0.6820247580266638,
-            "pB": 0.15430517087323034,
-            "pDraw": 0.16367007110010595,
+            "status": "unavailable",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
+            "selection": null,
+            "probability": null,
+            "pA": null,
+            "pB": null,
+            "pDraw": null,
             "confidence": null,
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00",
-            "outcomes": {
-              "away": 0.6820247580266638,
-              "draw": 0.16367007110010595,
-              "home": 0.15430517087323034
-            },
-            "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-            "calibration_status": "unvalidated",
-            "implementation_type": "internal_ensemble",
-            "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-            "inputs": {
-              "source_models": [
-                "season_stats"
-              ],
-              "family_count": 1,
-              "market_available": false,
-              "combination": "Single independent family; no consensus uplift",
-              "away_mean": 2.7190795742480716,
-              "home_mean": 1.25918864094742
-            }
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "ou": {
             "model_id": "final_combined",
@@ -1323,7 +1242,7 @@
             "sport": "SOC",
             "market": "ou",
             "status": "unavailable",
-            "reason": "A verified bookmaker line is required for a market selection",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -1333,7 +1252,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -1342,7 +1261,7 @@
             "sport": "SOC",
             "market": "k",
             "status": "unavailable",
-            "reason": "A verified bookmaker line is required for a market selection",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -1352,21 +1271,48 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           }
         }
       },
-      "score_distribution": {
-        "type": "independent_poisson",
-        "away_mean": 2.7190795742480716,
-        "home_mean": 1.25918864094742,
-        "scope": "90 minutes plus stoppage time; three outcomes including draw",
-        "model_ids": [
-          "season_stats",
-          "final_combined"
-        ],
-        "calibration_status": "unvalidated",
-        "note": "Season baseline; injuries and confirmed lineups are not modeled. No bookmaker line supplied."
+      "pregame_snapshot": {
+        "event_id": "83196",
+        "sport": "SOC",
+        "away": "FC Bayern M\u00fcnchen",
+        "home": "FC Augsburg",
+        "generated_at": "2026-10-04T04:25:00.653938+00:00",
+        "captured_at": "2026-10-04T04:25:23.279772+00:00",
+        "start_at": "2026-10-10T13:30:00+00:00",
+        "forecasts": {
+          "season_stats": {
+            "model_id": "season_stats",
+            "model_version": "league-goals-1.0.0",
+            "status": "available",
+            "pA": 0.6815886357565784,
+            "pB": 0.15461823867068444,
+            "pDraw": 0.1637931255727366,
+            "probability": 0.6815886357565784,
+            "selection": "FC Bayern M\u00fcnchen",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          },
+          "final_combined": {
+            "model_id": "final_combined",
+            "model_version": "league-goals-1.0.0",
+            "status": "available",
+            "pA": 0.6815886357565784,
+            "pB": 0.15461823867068444,
+            "pDraw": 0.1637931255727366,
+            "probability": 0.6815886357565784,
+            "selection": "FC Bayern M\u00fcnchen",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          }
+        }
       }
     },
     {
@@ -1387,35 +1333,35 @@
       },
       "startAt": "2026-10-10T13:30:00+00:00",
       "date": "2026-10-10",
-      "generated_at": "2026-10-10T11:57:01.296697+00:00",
-      "completed": false,
-      "state": "pre",
-      "status": "Scheduled",
+      "generated_at": "2026-10-10T17:06:21.873542+00:00",
+      "completed": true,
+      "state": "post",
+      "status": "Final",
       "markets": {},
       "stats": {
         "home": {
-          "games": 21.0,
-          "goals_for": 32.0,
-          "goals_against": 32.5,
-          "current_games": 4,
+          "games": 22.0,
+          "goals_for": 35.0,
+          "goals_against": 36.5,
+          "current_games": 5,
           "prior_games": 34,
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.5651542649727768,
-          "conceding_rate": 1.5823956442831217
+          "scoring_rate": 1.6145299145299146,
+          "conceding_rate": 1.6645299145299146
         },
         "away": {
-          "games": 21.0,
-          "goals_for": 44.0,
-          "goals_against": 28.5,
-          "current_games": 4,
+          "games": 22.0,
+          "goals_for": 48.0,
+          "goals_against": 31.5,
+          "current_games": 5,
           "prior_games": 34,
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.9789473684210528,
-          "conceding_rate": 1.444464609800363
+          "scoring_rate": 2.047863247863248,
+          "conceding_rate": 1.4978632478632479
         }
       },
       "model_assumptions": [
@@ -1434,9 +1380,12 @@
         "id": "6",
         "name": "Bayer 04 Leverkusen"
       },
+      "away_score": 4,
+      "home_score": 3,
       "data_quality": {
-        "status": "validated_inputs",
-        "prediction_available": true
+        "status": "insufficient",
+        "prediction_available": false,
+        "reason": "Pregame predictions are unavailable after the scheduled start or for completed games"
       },
       "models": {
         "monte_carlo": {
@@ -1445,7 +1394,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "monte_carlo",
@@ -1454,7 +1403,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1464,7 +1413,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -1473,7 +1422,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1483,7 +1432,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -1492,7 +1441,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1502,7 +1451,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -1531,7 +1480,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -1550,7 +1499,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -1569,7 +1518,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -1598,7 +1547,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -1617,7 +1566,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -1636,7 +1585,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -1646,7 +1595,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "my_chd",
@@ -1655,7 +1604,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1665,7 +1614,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -1674,7 +1623,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1684,7 +1633,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -1693,7 +1642,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1703,7 +1652,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -1712,8 +1661,8 @@
           "model_name": "Season Stats",
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
-          "status": "available",
-          "reason": null,
+          "status": "unavailable",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "season_stats",
@@ -1721,37 +1670,18 @@
               "model_version": "league-goals-1.0.0",
               "sport": "SOC",
               "market": "ml",
-              "status": "available",
-              "reason": null,
-              "selection": "Bayer 04 Leverkusen",
-              "probability": 0.40237872492116716,
-              "pA": 0.40237872492116716,
-              "pB": 0.3616666205053354,
-              "pDraw": 0.2359546545734977,
+              "status": "unavailable",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
+              "selection": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "pDraw": null,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00",
-              "outcomes": {
-                "away": 0.40237872492116716,
-                "draw": 0.2359546545734977,
-                "home": 0.3616666205053354
-              },
-              "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-              "calibration_status": "unvalidated",
-              "implementation_type": "internal_baseline",
-              "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-              "inputs": {
-                "source_models": [
-                  "season_stats"
-                ],
-                "family_count": 1,
-                "market_available": false,
-                "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.6238943315249126,
-                "home_mean": 1.5292057297256758
-              }
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "season_stats",
@@ -1760,7 +1690,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1770,7 +1700,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -1779,7 +1709,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1789,7 +1719,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -1799,7 +1729,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "chd_master_predictor",
@@ -1808,7 +1738,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1818,7 +1748,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -1827,7 +1757,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1837,7 +1767,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -1846,7 +1776,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1856,7 +1786,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -1865,8 +1795,8 @@
           "model_name": "Final Combined All Models",
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
-          "status": "available",
-          "reason": null,
+          "status": "unavailable",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "final_combined",
@@ -1874,37 +1804,18 @@
               "model_version": "league-goals-1.0.0",
               "sport": "SOC",
               "market": "ml",
-              "status": "available",
-              "reason": null,
-              "selection": "Bayer 04 Leverkusen",
-              "probability": 0.40237872492116716,
-              "pA": 0.40237872492116716,
-              "pB": 0.3616666205053354,
-              "pDraw": 0.2359546545734977,
+              "status": "unavailable",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
+              "selection": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "pDraw": null,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00",
-              "outcomes": {
-                "away": 0.40237872492116716,
-                "draw": 0.2359546545734977,
-                "home": 0.3616666205053354
-              },
-              "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-              "calibration_status": "unvalidated",
-              "implementation_type": "internal_ensemble",
-              "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-              "inputs": {
-                "source_models": [
-                  "season_stats"
-                ],
-                "family_count": 1,
-                "market_available": false,
-                "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.6238943315249126,
-                "home_mean": 1.5292057297256758
-              }
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "final_combined",
@@ -1913,7 +1824,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1923,7 +1834,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -1932,7 +1843,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -1942,7 +1853,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         }
@@ -1952,8 +1863,8 @@
         "model_name": "Final Combined All Models",
         "model_version": "league-goals-1.0.0",
         "sport": "SOC",
-        "status": "available",
-        "reason": null,
+        "status": "unavailable",
+        "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
         "markets": {
           "ml": {
             "model_id": "final_combined",
@@ -1961,37 +1872,18 @@
             "model_version": "league-goals-1.0.0",
             "sport": "SOC",
             "market": "ml",
-            "status": "available",
-            "reason": null,
-            "selection": "Bayer 04 Leverkusen",
-            "probability": 0.40237872492116716,
-            "pA": 0.40237872492116716,
-            "pB": 0.3616666205053354,
-            "pDraw": 0.2359546545734977,
+            "status": "unavailable",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
+            "selection": null,
+            "probability": null,
+            "pA": null,
+            "pB": null,
+            "pDraw": null,
             "confidence": null,
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00",
-            "outcomes": {
-              "away": 0.40237872492116716,
-              "draw": 0.2359546545734977,
-              "home": 0.3616666205053354
-            },
-            "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-            "calibration_status": "unvalidated",
-            "implementation_type": "internal_ensemble",
-            "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-            "inputs": {
-              "source_models": [
-                "season_stats"
-              ],
-              "family_count": 1,
-              "market_available": false,
-              "combination": "Single independent family; no consensus uplift",
-              "away_mean": 1.6238943315249126,
-              "home_mean": 1.5292057297256758
-            }
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "ou": {
             "model_id": "final_combined",
@@ -2000,7 +1892,7 @@
             "sport": "SOC",
             "market": "ou",
             "status": "unavailable",
-            "reason": "A verified bookmaker line is required for a market selection",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -2010,7 +1902,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -2019,7 +1911,7 @@
             "sport": "SOC",
             "market": "k",
             "status": "unavailable",
-            "reason": "A verified bookmaker line is required for a market selection",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -2029,21 +1921,48 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           }
         }
       },
-      "score_distribution": {
-        "type": "independent_poisson",
-        "away_mean": 1.6238943315249126,
-        "home_mean": 1.5292057297256758,
-        "scope": "90 minutes plus stoppage time; three outcomes including draw",
-        "model_ids": [
-          "season_stats",
-          "final_combined"
-        ],
-        "calibration_status": "unvalidated",
-        "note": "Season baseline; injuries and confirmed lineups are not modeled. No bookmaker line supplied."
+      "pregame_snapshot": {
+        "event_id": "83197",
+        "sport": "SOC",
+        "away": "Bayer 04 Leverkusen",
+        "home": "1. FSV Mainz 05",
+        "generated_at": "2026-10-04T04:25:00.653938+00:00",
+        "captured_at": "2026-10-04T04:25:23.279772+00:00",
+        "start_at": "2026-10-10T13:30:00+00:00",
+        "forecasts": {
+          "season_stats": {
+            "model_id": "season_stats",
+            "model_version": "league-goals-1.0.0",
+            "status": "available",
+            "pA": 0.4018507563076797,
+            "pB": 0.36222117200367016,
+            "pDraw": 0.23592807168864993,
+            "probability": 0.4018507563076797,
+            "selection": "Bayer 04 Leverkusen",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          },
+          "final_combined": {
+            "model_id": "final_combined",
+            "model_version": "league-goals-1.0.0",
+            "status": "available",
+            "pA": 0.4018507563076797,
+            "pB": 0.36222117200367016,
+            "pDraw": 0.23592807168864993,
+            "probability": 0.4018507563076797,
+            "selection": "Bayer 04 Leverkusen",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          }
+        }
       }
     },
     {
@@ -2064,23 +1983,35 @@
       },
       "startAt": "2026-10-10T13:30:00+00:00",
       "date": "2026-10-10",
-      "generated_at": "2026-10-10T11:57:01.296697+00:00",
-      "completed": false,
-      "state": "pre",
-      "status": "Scheduled",
+      "generated_at": "2026-10-10T17:06:21.873542+00:00",
+      "completed": true,
+      "state": "post",
+      "status": "Final",
       "markets": {},
       "stats": {
         "home": {
-          "games": 21.0,
-          "goals_for": 26.0,
+          "games": 22.0,
+          "goals_for": 27.0,
           "goals_against": 46.0,
-          "current_games": 4,
+          "current_games": 5,
           "prior_games": 34,
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.3582577132486389,
-          "conceding_rate": 2.047912885662432
+          "scoring_rate": 1.347863247863248,
+          "conceding_rate": 1.9811965811965813
+        },
+        "away": {
+          "games": 5.0,
+          "goals_for": 8.0,
+          "goals_against": 8.0,
+          "current_games": 5,
+          "prior_games": 0,
+          "season": 2026,
+          "source": "OpenLigaDB",
+          "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
+          "scoring_rate": 1.648915187376726,
+          "conceding_rate": 1.648915187376726
         }
       },
       "model_assumptions": [
@@ -2099,10 +2030,12 @@
         "id": "198",
         "name": "SV 07 Elversberg"
       },
+      "away_score": 0,
+      "home_score": 1,
       "data_quality": {
         "status": "insufficient",
         "prediction_available": false,
-        "reason": "At least five completed top-division matches per team are required; promoted teams may need more history"
+        "reason": "Pregame predictions are unavailable after the scheduled start or for completed games"
       },
       "models": {
         "monte_carlo": {
@@ -2111,7 +2044,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "monte_carlo",
@@ -2120,7 +2053,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2130,7 +2063,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -2139,7 +2072,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2149,7 +2082,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -2158,7 +2091,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2168,7 +2101,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -2197,7 +2130,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -2216,7 +2149,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -2235,7 +2168,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -2264,7 +2197,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -2283,7 +2216,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -2302,7 +2235,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -2312,7 +2245,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "my_chd",
@@ -2321,7 +2254,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2331,7 +2264,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -2340,7 +2273,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2350,7 +2283,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -2359,7 +2292,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2369,7 +2302,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -2379,7 +2312,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "season_stats",
@@ -2388,7 +2321,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2398,7 +2331,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "season_stats",
@@ -2407,7 +2340,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2417,7 +2350,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -2426,7 +2359,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2436,7 +2369,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -2446,7 +2379,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "chd_master_predictor",
@@ -2455,7 +2388,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2465,7 +2398,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -2474,7 +2407,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2484,7 +2417,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -2493,7 +2426,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2503,7 +2436,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -2513,7 +2446,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "final_combined",
@@ -2522,7 +2455,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2532,7 +2465,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "final_combined",
@@ -2541,7 +2474,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2551,7 +2484,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -2560,7 +2493,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2570,7 +2503,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         }
@@ -2581,7 +2514,7 @@
         "model_version": "league-goals-1.0.0",
         "sport": "SOC",
         "status": "unavailable",
-        "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+        "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
         "markets": {
           "ml": {
             "model_id": "final_combined",
@@ -2590,7 +2523,7 @@
             "sport": "SOC",
             "market": "ml",
             "status": "unavailable",
-            "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -2600,7 +2533,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "ou": {
             "model_id": "final_combined",
@@ -2609,7 +2542,7 @@
             "sport": "SOC",
             "market": "ou",
             "status": "unavailable",
-            "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -2619,7 +2552,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -2628,7 +2561,7 @@
             "sport": "SOC",
             "market": "k",
             "status": "unavailable",
-            "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -2638,7 +2571,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           }
         }
       }
@@ -2661,23 +2594,35 @@
       },
       "startAt": "2026-10-10T13:30:00+00:00",
       "date": "2026-10-10",
-      "generated_at": "2026-10-10T11:57:01.296697+00:00",
-      "completed": false,
-      "state": "pre",
-      "status": "Scheduled",
+      "generated_at": "2026-10-10T17:06:21.873542+00:00",
+      "completed": true,
+      "state": "post",
+      "status": "Final",
       "markets": {},
       "stats": {
+        "home": {
+          "games": 5.0,
+          "goals_for": 3.0,
+          "goals_against": 7.0,
+          "current_games": 5,
+          "prior_games": 0,
+          "season": 2026,
+          "source": "OpenLigaDB",
+          "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
+          "scoring_rate": 1.2642998027613415,
+          "conceding_rate": 1.5719921104536492
+        },
         "away": {
-          "games": 21.0,
-          "goals_for": 41.5,
+          "games": 22.0,
+          "goals_for": 43.5,
           "goals_against": 33.5,
-          "current_games": 4,
+          "current_games": 5,
           "prior_games": 34,
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.8927404718693286,
-          "conceding_rate": 1.6168784029038112
+          "scoring_rate": 1.897863247863248,
+          "conceding_rate": 1.5645299145299145
         }
       },
       "model_assumptions": [
@@ -2696,10 +2641,12 @@
         "id": "16",
         "name": "VfB Stuttgart"
       },
+      "away_score": 2,
+      "home_score": 0,
       "data_quality": {
         "status": "insufficient",
         "prediction_available": false,
-        "reason": "At least five completed top-division matches per team are required; promoted teams may need more history"
+        "reason": "Pregame predictions are unavailable after the scheduled start or for completed games"
       },
       "models": {
         "monte_carlo": {
@@ -2708,7 +2655,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "monte_carlo",
@@ -2717,7 +2664,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2727,7 +2674,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -2736,7 +2683,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2746,7 +2693,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -2755,7 +2702,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2765,7 +2712,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -2794,7 +2741,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -2813,7 +2760,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -2832,7 +2779,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -2861,7 +2808,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -2880,7 +2827,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -2899,7 +2846,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -2909,7 +2856,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "my_chd",
@@ -2918,7 +2865,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2928,7 +2875,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -2937,7 +2884,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2947,7 +2894,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -2956,7 +2903,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2966,7 +2913,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -2976,7 +2923,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "season_stats",
@@ -2985,7 +2932,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -2995,7 +2942,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "season_stats",
@@ -3004,7 +2951,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3014,7 +2961,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -3023,7 +2970,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3033,7 +2980,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -3043,7 +2990,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "chd_master_predictor",
@@ -3052,7 +2999,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3062,7 +3009,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -3071,7 +3018,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3081,7 +3028,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -3090,7 +3037,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3100,7 +3047,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -3110,7 +3057,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "final_combined",
@@ -3119,7 +3066,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3129,7 +3076,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "final_combined",
@@ -3138,7 +3085,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3148,7 +3095,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -3157,7 +3104,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3167,7 +3114,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         }
@@ -3178,7 +3125,7 @@
         "model_version": "league-goals-1.0.0",
         "sport": "SOC",
         "status": "unavailable",
-        "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+        "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
         "markets": {
           "ml": {
             "model_id": "final_combined",
@@ -3187,7 +3134,7 @@
             "sport": "SOC",
             "market": "ml",
             "status": "unavailable",
-            "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -3197,7 +3144,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "ou": {
             "model_id": "final_combined",
@@ -3206,7 +3153,7 @@
             "sport": "SOC",
             "market": "ou",
             "status": "unavailable",
-            "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -3216,7 +3163,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -3225,7 +3172,7 @@
             "sport": "SOC",
             "market": "k",
             "status": "unavailable",
-            "reason": "At least five completed top-division matches per team are required; promoted teams may need more history",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -3235,7 +3182,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           }
         }
       }
@@ -3258,7 +3205,7 @@
       },
       "startAt": "2026-10-10T16:30:00+00:00",
       "date": "2026-10-10",
-      "generated_at": "2026-10-10T11:57:01.296697+00:00",
+      "generated_at": "2026-10-10T17:06:21.873542+00:00",
       "completed": false,
       "state": "pre",
       "status": "Scheduled",
@@ -3273,8 +3220,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.9099818511796733,
-          "conceding_rate": 1.444464609800363
+          "scoring_rate": 1.91158267020336,
+          "conceding_rate": 1.4460654288240495
         },
         "away": {
           "games": 21.0,
@@ -3285,8 +3232,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.8237749546279494,
-          "conceding_rate": 1.9272232304900183
+          "scoring_rate": 1.8253757736516358,
+          "conceding_rate": 1.9288240495137048
         }
       },
       "model_assumptions": [
@@ -3306,8 +3253,9 @@
         "name": "Eintracht Frankfurt"
       },
       "data_quality": {
-        "status": "validated_inputs",
-        "prediction_available": true
+        "status": "insufficient",
+        "prediction_available": false,
+        "reason": "Pregame predictions are unavailable after the scheduled start or for completed games"
       },
       "models": {
         "monte_carlo": {
@@ -3316,7 +3264,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "monte_carlo",
@@ -3325,7 +3273,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3335,7 +3283,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -3344,7 +3292,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3354,7 +3302,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -3363,7 +3311,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3373,7 +3321,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -3402,7 +3350,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -3421,7 +3369,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -3440,7 +3388,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -3469,7 +3417,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -3488,7 +3436,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -3507,7 +3455,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -3517,7 +3465,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "my_chd",
@@ -3526,7 +3474,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3536,7 +3484,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -3545,7 +3493,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3555,7 +3503,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -3564,7 +3512,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3574,7 +3522,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -3583,8 +3531,8 @@
           "model_name": "Season Stats",
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
-          "status": "available",
-          "reason": null,
+          "status": "unavailable",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "season_stats",
@@ -3592,37 +3540,18 @@
               "model_version": "league-goals-1.0.0",
               "sport": "SOC",
               "market": "ml",
-              "status": "available",
-              "reason": null,
-              "selection": "RB Leipzig",
-              "probability": 0.6200184185624725,
-              "pA": 0.1969138381285724,
-              "pB": 0.6200184185624725,
-              "pDraw": 0.1830677433089546,
+              "status": "unavailable",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
+              "selection": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "pDraw": null,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00",
-              "outcomes": {
-                "away": 0.1969138381285724,
-                "draw": 0.1830677433089546,
-                "home": 0.6200184185624725
-              },
-              "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-              "calibration_status": "unvalidated",
-              "implementation_type": "internal_baseline",
-              "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-              "inputs": {
-                "source_models": [
-                  "season_stats"
-                ],
-                "family_count": 1,
-                "market_available": false,
-                "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.3661129123929592,
-                "home_mean": 2.4897923273317235
-              }
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "season_stats",
@@ -3631,7 +3560,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3641,7 +3570,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -3650,7 +3579,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3660,7 +3589,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -3670,7 +3599,7 @@
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
           "status": "unavailable",
-          "reason": "This model has no validated implementation for these league inputs",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "chd_master_predictor",
@@ -3679,7 +3608,7 @@
               "sport": "SOC",
               "market": "ml",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3689,7 +3618,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -3698,7 +3627,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3708,7 +3637,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -3717,7 +3646,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "This model has no validated implementation for these league inputs",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3727,7 +3656,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -3736,8 +3665,8 @@
           "model_name": "Final Combined All Models",
           "model_version": "league-goals-1.0.0",
           "sport": "SOC",
-          "status": "available",
-          "reason": null,
+          "status": "unavailable",
+          "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
           "markets": {
             "ml": {
               "model_id": "final_combined",
@@ -3745,37 +3674,18 @@
               "model_version": "league-goals-1.0.0",
               "sport": "SOC",
               "market": "ml",
-              "status": "available",
-              "reason": null,
-              "selection": "RB Leipzig",
-              "probability": 0.6200184185624725,
-              "pA": 0.1969138381285724,
-              "pB": 0.6200184185624725,
-              "pDraw": 0.1830677433089546,
+              "status": "unavailable",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
+              "selection": null,
+              "probability": null,
+              "pA": null,
+              "pB": null,
+              "pDraw": null,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00",
-              "outcomes": {
-                "away": 0.1969138381285724,
-                "draw": 0.1830677433089546,
-                "home": 0.6200184185624725
-              },
-              "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-              "calibration_status": "unvalidated",
-              "implementation_type": "internal_ensemble",
-              "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-              "inputs": {
-                "source_models": [
-                  "season_stats"
-                ],
-                "family_count": 1,
-                "market_available": false,
-                "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.3661129123929592,
-                "home_mean": 2.4897923273317235
-              }
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "final_combined",
@@ -3784,7 +3694,7 @@
               "sport": "SOC",
               "market": "ou",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3794,7 +3704,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -3803,7 +3713,7 @@
               "sport": "SOC",
               "market": "k",
               "status": "unavailable",
-              "reason": "A verified bookmaker line is required for a market selection",
+              "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
               "selection": null,
               "probability": null,
               "pA": null,
@@ -3813,7 +3723,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         }
@@ -3823,8 +3733,8 @@
         "model_name": "Final Combined All Models",
         "model_version": "league-goals-1.0.0",
         "sport": "SOC",
-        "status": "available",
-        "reason": null,
+        "status": "unavailable",
+        "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
         "markets": {
           "ml": {
             "model_id": "final_combined",
@@ -3832,37 +3742,18 @@
             "model_version": "league-goals-1.0.0",
             "sport": "SOC",
             "market": "ml",
-            "status": "available",
-            "reason": null,
-            "selection": "RB Leipzig",
-            "probability": 0.6200184185624725,
-            "pA": 0.1969138381285724,
-            "pB": 0.6200184185624725,
-            "pDraw": 0.1830677433089546,
+            "status": "unavailable",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
+            "selection": null,
+            "probability": null,
+            "pA": null,
+            "pB": null,
+            "pDraw": null,
             "confidence": null,
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00",
-            "outcomes": {
-              "away": 0.1969138381285724,
-              "draw": 0.1830677433089546,
-              "home": 0.6200184185624725
-            },
-            "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
-            "calibration_status": "unvalidated",
-            "implementation_type": "internal_ensemble",
-            "methodology": "Independent Poisson scoring from measured team/goalie season inputs; uncalibrated baseline",
-            "inputs": {
-              "source_models": [
-                "season_stats"
-              ],
-              "family_count": 1,
-              "market_available": false,
-              "combination": "Single independent family; no consensus uplift",
-              "away_mean": 1.3661129123929592,
-              "home_mean": 2.4897923273317235
-            }
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "ou": {
             "model_id": "final_combined",
@@ -3871,7 +3762,7 @@
             "sport": "SOC",
             "market": "ou",
             "status": "unavailable",
-            "reason": "A verified bookmaker line is required for a market selection",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -3881,7 +3772,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -3890,7 +3781,7 @@
             "sport": "SOC",
             "market": "k",
             "status": "unavailable",
-            "reason": "A verified bookmaker line is required for a market selection",
+            "reason": "Pregame predictions are unavailable after the scheduled start or for completed games",
             "selection": null,
             "probability": null,
             "pA": null,
@@ -3900,21 +3791,48 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           }
         }
       },
-      "score_distribution": {
-        "type": "independent_poisson",
-        "away_mean": 1.3661129123929592,
-        "home_mean": 2.4897923273317235,
-        "scope": "90 minutes plus stoppage time; three outcomes including draw",
-        "model_ids": [
-          "season_stats",
-          "final_combined"
-        ],
-        "calibration_status": "unvalidated",
-        "note": "Season baseline; injuries and confirmed lineups are not modeled. No bookmaker line supplied."
+      "pregame_snapshot": {
+        "event_id": "83193",
+        "sport": "SOC",
+        "away": "Eintracht Frankfurt",
+        "home": "RB Leipzig",
+        "generated_at": "2026-10-04T04:25:00.653938+00:00",
+        "captured_at": "2026-10-04T04:25:23.279772+00:00",
+        "start_at": "2026-10-10T16:30:00+00:00",
+        "forecasts": {
+          "season_stats": {
+            "model_id": "season_stats",
+            "model_version": "league-goals-1.0.0",
+            "status": "available",
+            "pA": 0.1964177625914591,
+            "pB": 0.6207488961840867,
+            "pDraw": 0.182833341224454,
+            "probability": 0.6207488961840867,
+            "selection": "RB Leipzig",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          },
+          "final_combined": {
+            "model_id": "final_combined",
+            "model_version": "league-goals-1.0.0",
+            "status": "available",
+            "pA": 0.1964177625914591,
+            "pB": 0.6207488961840867,
+            "pDraw": 0.182833341224454,
+            "probability": 0.6207488961840867,
+            "selection": "RB Leipzig",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          }
+        }
       }
     },
     {
@@ -3935,7 +3853,7 @@
       },
       "startAt": "2026-10-11T13:30:00+00:00",
       "date": "2026-10-11",
-      "generated_at": "2026-10-10T11:57:01.296697+00:00",
+      "generated_at": "2026-10-10T17:06:21.873542+00:00",
       "completed": false,
       "state": "pre",
       "status": "Scheduled",
@@ -3950,8 +3868,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.5134301270417423,
-          "conceding_rate": 1.8582577132486389
+          "scoring_rate": 1.515030946065429,
+          "conceding_rate": 1.8598585322723253
         },
         "away": {
           "games": 21.0,
@@ -3962,8 +3880,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.3927404718693286,
-          "conceding_rate": 1.9272232304900183
+          "scoring_rate": 1.394341290893015,
+          "conceding_rate": 1.9288240495137048
         }
       },
       "model_assumptions": [
@@ -4012,7 +3930,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -4031,7 +3949,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -4050,7 +3968,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -4079,7 +3997,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -4098,7 +4016,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -4117,7 +4035,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -4146,7 +4064,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -4165,7 +4083,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -4184,7 +4102,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -4213,7 +4131,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -4232,7 +4150,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -4251,7 +4169,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -4272,19 +4190,19 @@
               "status": "available",
               "reason": null,
               "selection": "1. FC K\u00f6ln",
-              "probability": 0.5214927374793897,
-              "pA": 0.26008885564476886,
-              "pB": 0.5214927374793897,
-              "pDraw": 0.2184184068758409,
+              "probability": 0.5151928060687393,
+              "pA": 0.2651691603278461,
+              "pB": 0.5151928060687393,
+              "pDraw": 0.21963803360341444,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00",
+              "timestamp": "2026-10-10T17:06:21.873542+00:00",
               "outcomes": {
-                "away": 0.26008885564476886,
-                "draw": 0.2184184068758409,
-                "home": 0.5214927374793897
+                "away": 0.2651691603278461,
+                "draw": 0.21963803360341444,
+                "home": 0.5151928060687393
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -4297,8 +4215,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.3420990940605986,
-                "home_mean": 1.9728599598649978
+                "away_mean": 1.3531405200612008,
+                "home_mean": 1.955122337543641
               }
             },
             "ou": {
@@ -4318,7 +4236,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -4337,7 +4255,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -4366,7 +4284,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -4385,7 +4303,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -4404,7 +4322,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -4425,19 +4343,19 @@
               "status": "available",
               "reason": null,
               "selection": "1. FC K\u00f6ln",
-              "probability": 0.5214927374793897,
-              "pA": 0.26008885564476886,
-              "pB": 0.5214927374793897,
-              "pDraw": 0.2184184068758409,
+              "probability": 0.5151928060687393,
+              "pA": 0.2651691603278461,
+              "pB": 0.5151928060687393,
+              "pDraw": 0.21963803360341444,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00",
+              "timestamp": "2026-10-10T17:06:21.873542+00:00",
               "outcomes": {
-                "away": 0.26008885564476886,
-                "draw": 0.2184184068758409,
-                "home": 0.5214927374793897
+                "away": 0.2651691603278461,
+                "draw": 0.21963803360341444,
+                "home": 0.5151928060687393
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -4450,8 +4368,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.3420990940605986,
-                "home_mean": 1.9728599598649978
+                "away_mean": 1.3531405200612008,
+                "home_mean": 1.955122337543641
               }
             },
             "ou": {
@@ -4471,7 +4389,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -4490,7 +4408,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         }
@@ -4512,19 +4430,19 @@
             "status": "available",
             "reason": null,
             "selection": "1. FC K\u00f6ln",
-            "probability": 0.5214927374793897,
-            "pA": 0.26008885564476886,
-            "pB": 0.5214927374793897,
-            "pDraw": 0.2184184068758409,
+            "probability": 0.5151928060687393,
+            "pA": 0.2651691603278461,
+            "pB": 0.5151928060687393,
+            "pDraw": 0.21963803360341444,
             "confidence": null,
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00",
+            "timestamp": "2026-10-10T17:06:21.873542+00:00",
             "outcomes": {
-              "away": 0.26008885564476886,
-              "draw": 0.2184184068758409,
-              "home": 0.5214927374793897
+              "away": 0.2651691603278461,
+              "draw": 0.21963803360341444,
+              "home": 0.5151928060687393
             },
             "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
             "calibration_status": "unvalidated",
@@ -4537,8 +4455,8 @@
               "family_count": 1,
               "market_available": false,
               "combination": "Single independent family; no consensus uplift",
-              "away_mean": 1.3420990940605986,
-              "home_mean": 1.9728599598649978
+              "away_mean": 1.3531405200612008,
+              "home_mean": 1.955122337543641
             }
           },
           "ou": {
@@ -4558,7 +4476,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -4577,14 +4495,14 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           }
         }
       },
       "score_distribution": {
         "type": "independent_poisson",
-        "away_mean": 1.3420990940605986,
-        "home_mean": 1.9728599598649978,
+        "away_mean": 1.3531405200612008,
+        "home_mean": 1.955122337543641,
         "scope": "90 minutes plus stoppage time; three outcomes including draw",
         "model_ids": [
           "season_stats",
@@ -4612,7 +4530,7 @@
       },
       "startAt": "2026-10-11T15:30:00+00:00",
       "date": "2026-10-11",
-      "generated_at": "2026-10-10T11:57:01.296697+00:00",
+      "generated_at": "2026-10-10T17:06:21.873542+00:00",
       "completed": false,
       "state": "pre",
       "status": "Scheduled",
@@ -4627,8 +4545,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.75480943738657,
-          "conceding_rate": 1.547912885662432
+          "scoring_rate": 1.7564102564102564,
+          "conceding_rate": 1.5495137046861185
         }
       },
       "model_assumptions": [
@@ -4678,7 +4596,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -4697,7 +4615,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -4716,7 +4634,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -4745,7 +4663,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -4764,7 +4682,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -4783,7 +4701,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -4812,7 +4730,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -4831,7 +4749,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -4850,7 +4768,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -4879,7 +4797,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -4898,7 +4816,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -4917,7 +4835,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -4946,7 +4864,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "season_stats",
@@ -4965,7 +4883,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -4984,7 +4902,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -5013,7 +4931,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -5032,7 +4950,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -5051,7 +4969,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -5080,7 +4998,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "final_combined",
@@ -5099,7 +5017,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -5118,7 +5036,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         }
@@ -5148,7 +5066,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "ou": {
             "model_id": "final_combined",
@@ -5167,7 +5085,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -5186,7 +5104,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           }
         }
       }
@@ -5209,7 +5127,7 @@
       },
       "startAt": "2026-10-16T18:30:00+00:00",
       "date": "2026-10-16",
-      "generated_at": "2026-10-10T11:57:01.296697+00:00",
+      "generated_at": "2026-10-10T17:06:21.873542+00:00",
       "completed": false,
       "state": "pre",
       "status": "Scheduled",
@@ -5224,8 +5142,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.8237749546279494,
-          "conceding_rate": 1.9272232304900183
+          "scoring_rate": 1.8253757736516358,
+          "conceding_rate": 1.9288240495137048
         },
         "away": {
           "games": 21.0,
@@ -5236,8 +5154,8 @@
           "season": 2026,
           "source": "OpenLigaDB",
           "metric_basis": "Weighted completed 90-minute goals; half-weight prior season and eight-game league shrinkage",
-          "scoring_rate": 1.5134301270417423,
-          "conceding_rate": 1.8582577132486389
+          "scoring_rate": 1.515030946065429,
+          "conceding_rate": 1.8598585322723253
         }
       },
       "model_assumptions": [
@@ -5286,7 +5204,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "monte_carlo",
@@ -5305,7 +5223,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "monte_carlo",
@@ -5324,7 +5242,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -5353,7 +5271,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "zips",
@@ -5372,7 +5290,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "zips",
@@ -5391,7 +5309,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -5420,7 +5338,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "steamer",
@@ -5439,7 +5357,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "steamer",
@@ -5458,7 +5376,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -5487,7 +5405,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "my_chd",
@@ -5506,7 +5424,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "my_chd",
@@ -5525,7 +5443,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -5546,19 +5464,19 @@
               "status": "available",
               "reason": null,
               "selection": "Eintracht Frankfurt",
-              "probability": 0.5515757912161254,
-              "pA": 0.24985087545704743,
-              "pB": 0.5515757912161254,
-              "pDraw": 0.19857333332682647,
+              "probability": 0.544850787666867,
+              "pA": 0.2551946042951484,
+              "pB": 0.544850787666867,
+              "pDraw": 0.19995460803798476,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00",
+              "timestamp": "2026-10-10T17:06:21.873542+00:00",
               "outcomes": {
-                "away": 0.24985087545704743,
-                "draw": 0.19857333332682647,
-                "home": 0.5515757912161254
+                "away": 0.2551946042951484,
+                "draw": 0.19995460803798476,
+                "home": 0.544850787666867
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -5571,8 +5489,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.5125259692298318,
-                "home_mean": 2.2923401088171724
+                "away_mean": 1.5247829099864811,
+                "home_mean": 2.2713915986319377
               }
             },
             "ou": {
@@ -5592,7 +5510,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "season_stats",
@@ -5611,7 +5529,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -5640,7 +5558,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -5659,7 +5577,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "chd_master_predictor",
@@ -5678,7 +5596,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         },
@@ -5699,19 +5617,19 @@
               "status": "available",
               "reason": null,
               "selection": "Eintracht Frankfurt",
-              "probability": 0.5515757912161254,
-              "pA": 0.24985087545704743,
-              "pB": 0.5515757912161254,
-              "pDraw": 0.19857333332682647,
+              "probability": 0.544850787666867,
+              "pA": 0.2551946042951484,
+              "pB": 0.544850787666867,
+              "pDraw": 0.19995460803798476,
               "confidence": null,
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00",
+              "timestamp": "2026-10-10T17:06:21.873542+00:00",
               "outcomes": {
-                "away": 0.24985087545704743,
-                "draw": 0.19857333332682647,
-                "home": 0.5515757912161254
+                "away": 0.2551946042951484,
+                "draw": 0.19995460803798476,
+                "home": 0.544850787666867
               },
               "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
               "calibration_status": "unvalidated",
@@ -5724,8 +5642,8 @@
                 "family_count": 1,
                 "market_available": false,
                 "combination": "Single independent family; no consensus uplift",
-                "away_mean": 1.5125259692298318,
-                "home_mean": 2.2923401088171724
+                "away_mean": 1.5247829099864811,
+                "home_mean": 2.2713915986319377
               }
             },
             "ou": {
@@ -5745,7 +5663,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             },
             "k": {
               "model_id": "final_combined",
@@ -5764,7 +5682,7 @@
               "odds": null,
               "line": null,
               "edge": null,
-              "timestamp": "2026-10-10T11:57:01.296697+00:00"
+              "timestamp": "2026-10-10T17:06:21.873542+00:00"
             }
           }
         }
@@ -5786,19 +5704,19 @@
             "status": "available",
             "reason": null,
             "selection": "Eintracht Frankfurt",
-            "probability": 0.5515757912161254,
-            "pA": 0.24985087545704743,
-            "pB": 0.5515757912161254,
-            "pDraw": 0.19857333332682647,
+            "probability": 0.544850787666867,
+            "pA": 0.2551946042951484,
+            "pB": 0.544850787666867,
+            "pDraw": 0.19995460803798476,
             "confidence": null,
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00",
+            "timestamp": "2026-10-10T17:06:21.873542+00:00",
             "outcomes": {
-              "away": 0.24985087545704743,
-              "draw": 0.19857333332682647,
-              "home": 0.5515757912161254
+              "away": 0.2551946042951484,
+              "draw": 0.19995460803798476,
+              "home": 0.544850787666867
             },
             "market_scope": "90 minutes plus stoppage time; three outcomes including draw",
             "calibration_status": "unvalidated",
@@ -5811,8 +5729,8 @@
               "family_count": 1,
               "market_available": false,
               "combination": "Single independent family; no consensus uplift",
-              "away_mean": 1.5125259692298318,
-              "home_mean": 2.2923401088171724
+              "away_mean": 1.5247829099864811,
+              "home_mean": 2.2713915986319377
             }
           },
           "ou": {
@@ -5832,7 +5750,7 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           },
           "k": {
             "model_id": "final_combined",
@@ -5851,14 +5769,14 @@
             "odds": null,
             "line": null,
             "edge": null,
-            "timestamp": "2026-10-10T11:57:01.296697+00:00"
+            "timestamp": "2026-10-10T17:06:21.873542+00:00"
           }
         }
       },
       "score_distribution": {
         "type": "independent_poisson",
-        "away_mean": 1.5125259692298318,
-        "home_mean": 2.2923401088171724,
+        "away_mean": 1.5247829099864811,
+        "home_mean": 2.2713915986319377,
         "scope": "90 minutes plus stoppage time; three outcomes including draw",
         "model_ids": [
           "season_stats",

@@ -1,8 +1,8 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-10-10T11:57:18.439118+00:00",
+  "updated": "2026-10-10T17:06:37.461487+00:00",
   "captured_games": 575,
-  "verified_settled_games": 437,
+  "verified_settled_games": 440,
   "model_scores": [
     {
       "sport": "MLB",
@@ -1051,11 +1051,11 @@
       "sport": "SOC",
       "model": "season_stats",
       "version": "league-goals-1.0.0",
-      "n": 14,
+      "n": 17,
       "outcome_type": "three_way_90_minutes",
-      "brier": 0.6030041145090561,
-      "log_loss": 1.0021874922278755,
-      "accuracy": 0.5714285714285714,
+      "brier": 0.6657325492278946,
+      "log_loss": 1.0906306640910635,
+      "accuracy": 0.5294117647058824,
       "uniform_baseline_brier": 0.6666666666666666,
       "uniform_baseline_log_loss": 1.0986122886681098,
       "calibration_bins": []
@@ -1064,11 +1064,11 @@
       "sport": "SOC",
       "model": "final_combined",
       "version": "league-goals-1.0.0",
-      "n": 14,
+      "n": 17,
       "outcome_type": "three_way_90_minutes",
-      "brier": 0.6030041145090561,
-      "log_loss": 1.0021874922278755,
-      "accuracy": 0.5714285714285714,
+      "brier": 0.6657325492278946,
+      "log_loss": 1.0906306640910635,
+      "accuracy": 0.5294117647058824,
       "uniform_baseline_brier": 0.6666666666666666,
       "uniform_baseline_log_loss": 1.0986122886681098,
       "calibration_bins": []
@@ -2658,7 +2658,7 @@
   ],
   "model_lab": {
     "schema_version": 1,
-    "as_of": "2026-10-10T11:57:18.439137+00:00",
+    "as_of": "2026-10-10T17:06:37.461507+00:00",
     "market": "moneyline",
     "confident_threshold": 0.65,
     "sports": [
@@ -3199,31 +3199,31 @@
           "season_stats": "league-goals-1.0.0",
           "final_combined": "league-goals-1.0.0"
         },
-        "verified_games": 14,
-        "matched_games": 14,
+        "verified_games": 17,
+        "matched_games": 17,
         "excluded_from_comparison": 0,
         "coverage": {
-          "season_stats": 14,
-          "final_combined": 14
+          "season_stats": 17,
+          "final_combined": 17
         },
         "first_start": "2026-09-12T13:30:00+00:00",
-        "last_start": "2026-10-09T18:30:00+00:00",
+        "last_start": "2026-10-10T13:30:00+00:00",
         "scores": [
           {
             "model": "final_combined",
             "version": "league-goals-1.0.0",
-            "n": 14,
-            "correct": 8,
-            "accuracy": 0.5714285714285714,
-            "brier": 0.6030041145090561,
-            "log_loss": 1.0021874922278755,
+            "n": 17,
+            "correct": 9,
+            "accuracy": 0.5294117647058824,
+            "brier": 0.6657325492278946,
+            "log_loss": 1.0906306640910635,
             "reliability": [
               {
                 "lower": 0,
                 "upper": 0.5,
-                "n": 9,
-                "mean_probability": 0.4263738303779954,
-                "observed_win_rate": 0.5555555555555556
+                "n": 10,
+                "mean_probability": 0.42392152297096386,
+                "observed_win_rate": 0.6
               },
               {
                 "lower": 0.5,
@@ -3235,9 +3235,9 @@
               {
                 "lower": 0.6,
                 "upper": 0.7,
-                "n": 1,
-                "mean_probability": 0.6509370157373321,
-                "observed_win_rate": 1.0
+                "n": 3,
+                "mean_probability": 0.6584220025981697,
+                "observed_win_rate": 0.3333333333333333
               },
               {
                 "lower": 0.7,
@@ -3254,8 +3254,8 @@
                 "observed_win_rate": 1.0
               }
             ],
-            "confident_games": 3,
-            "confident_misses": 1,
+            "confident_games": 4,
+            "confident_misses": 2,
             "miss_examples": [
               {
                 "event_id": "83192",
@@ -3265,24 +3265,33 @@
                 "selection": "Borussia Dortmund",
                 "probability": 0.725009992208571,
                 "actual_winner": "Draw"
+              },
+              {
+                "event_id": "83196",
+                "away": "FC Bayern M\u00fcnchen",
+                "home": "FC Augsburg",
+                "start_at": "2026-10-10T13:30:00+00:00",
+                "selection": "FC Bayern M\u00fcnchen",
+                "probability": 0.6815886357565784,
+                "actual_winner": "Draw"
               }
             ]
           },
           {
             "model": "season_stats",
             "version": "league-goals-1.0.0",
-            "n": 14,
-            "correct": 8,
-            "accuracy": 0.5714285714285714,
-            "brier": 0.6030041145090561,
-            "log_loss": 1.0021874922278755,
+            "n": 17,
+            "correct": 9,
+            "accuracy": 0.5294117647058824,
+            "brier": 0.6657325492278946,
+            "log_loss": 1.0906306640910635,
             "reliability": [
               {
                 "lower": 0,
                 "upper": 0.5,
-                "n": 9,
-                "mean_probability": 0.4263738303779954,
-                "observed_win_rate": 0.5555555555555556
+                "n": 10,
+                "mean_probability": 0.42392152297096386,
+                "observed_win_rate": 0.6
               },
               {
                 "lower": 0.5,
@@ -3294,9 +3303,9 @@
               {
                 "lower": 0.6,
                 "upper": 0.7,
-                "n": 1,
-                "mean_probability": 0.6509370157373321,
-                "observed_win_rate": 1.0
+                "n": 3,
+                "mean_probability": 0.6584220025981697,
+                "observed_win_rate": 0.3333333333333333
               },
               {
                 "lower": 0.7,
@@ -3313,8 +3322,8 @@
                 "observed_win_rate": 1.0
               }
             ],
-            "confident_games": 3,
-            "confident_misses": 1,
+            "confident_games": 4,
+            "confident_misses": 2,
             "miss_examples": [
               {
                 "event_id": "83192",
@@ -3323,6 +3332,15 @@
                 "start_at": "2026-10-09T18:30:00+00:00",
                 "selection": "Borussia Dortmund",
                 "probability": 0.725009992208571,
+                "actual_winner": "Draw"
+              },
+              {
+                "event_id": "83196",
+                "away": "FC Bayern M\u00fcnchen",
+                "home": "FC Augsburg",
+                "start_at": "2026-10-10T13:30:00+00:00",
+                "selection": "FC Bayern M\u00fcnchen",
+                "probability": 0.6815886357565784,
                 "actual_winner": "Draw"
               }
             ]
