@@ -1,6 +1,6 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-10-12T04:27:18.970950+00:00",
+  "updated": "2026-10-12T06:58:16.084057+00:00",
   "captured_games": 614,
   "verified_settled_games": 508,
   "model_scores": [
@@ -2686,7 +2686,7 @@
   ],
   "model_lab": {
     "schema_version": 1,
-    "as_of": "2026-10-12T04:27:18.970971+00:00",
+    "as_of": "2026-10-12T06:58:16.084081+00:00",
     "market": "moneyline",
     "confident_threshold": 0.65,
     "sports": [
@@ -3566,6 +3566,16 @@
     "active": false,
     "original_ace_status": "not_comparable_without_frozen_original_forecasts_and_dated_market_inputs",
     "policy": "Same games, same frozen pregame source inputs. Shadow versions never vote in Combined. The legacy CHD calculation is not the market-anchored MLB ACE website. No retrospective backfill, training-accuracy promotion or guaranteed profitability. Lower Brier/log loss is better."
+  },
+  "probability_calibration": {
+    "version": "winner-calibration-1",
+    "market": "moneyline",
+    "as_of": "2026-10-12T06:58:16.084057+00:00",
+    "training_games_required": 100,
+    "evaluation_games_required": 100,
+    "evaluation_days_required": 20,
+    "models": [],
+    "policy": "Separate sport/model/source-version histories. Only frozen prospective candidates count toward promotion. Daily paired Brier and log-loss bounds must improve, with no observed winner-accuracy regression. Winner results do not validate totals or player props."
   },
   "learning_policy": {
     "training_games_required": 100,
