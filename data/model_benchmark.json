@@ -1,7 +1,7 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-10-12T14:30:00.098378+00:00",
-  "captured_games": 614,
+  "updated": "2026-10-13T00:11:18.972382+00:00",
+  "captured_games": 618,
   "verified_settled_games": 508,
   "model_scores": [
     {
@@ -2686,7 +2686,7 @@
   ],
   "model_lab": {
     "schema_version": 1,
-    "as_of": "2026-10-12T14:30:00.098402+00:00",
+    "as_of": "2026-10-13T00:11:18.972401+00:00",
     "market": "moneyline",
     "confident_threshold": 0.65,
     "sports": [
@@ -3570,11 +3570,42 @@
   "probability_calibration": {
     "version": "winner-calibration-1",
     "market": "moneyline",
-    "as_of": "2026-10-12T14:30:00.098378+00:00",
+    "as_of": "2026-10-13T00:11:18.972382+00:00",
     "training_games_required": 100,
     "evaluation_games_required": 100,
     "evaluation_days_required": 20,
-    "models": [],
+    "models": [
+      {
+        "sport": "NHL",
+        "model": "final_combined",
+        "source_version": "league-goals-1.0.0",
+        "status_at_last_capture": "collecting_training_data",
+        "active_at_last_capture": false,
+        "training_games": 81,
+        "evidence": {
+          "evaluation_games": 0,
+          "evaluation_days": 0,
+          "passed": false,
+          "required_games": 100,
+          "required_days": 20
+        }
+      },
+      {
+        "sport": "NHL",
+        "model": "season_stats",
+        "source_version": "league-goals-1.0.0",
+        "status_at_last_capture": "collecting_training_data",
+        "active_at_last_capture": false,
+        "training_games": 81,
+        "evidence": {
+          "evaluation_games": 0,
+          "evaluation_days": 0,
+          "passed": false,
+          "required_games": 100,
+          "required_days": 20
+        }
+      }
+    ],
     "policy": "Separate sport/model/source-version histories. Only frozen prospective candidates count toward promotion. Daily paired Brier and log-loss bounds must improve, with no observed winner-accuracy regression. Winner results do not validate totals or player props."
   },
   "learning_policy": {
