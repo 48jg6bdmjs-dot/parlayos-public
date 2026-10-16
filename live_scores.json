@@ -4,8 +4,8 @@
       "id": "mlb_849817",
       "lg": "MLB",
       "date": "2026-10-16",
-      "status": "Scheduled",
-      "inning": "Scheduled",
+      "status": "Pre-Game",
+      "inning": "Pre-Game",
       "final": false,
       "a": "Tampa Bay Rays",
       "b": "Cleveland Guardians",
@@ -18,7 +18,7 @@
       "gamePk": 849817,
       "gameDate": "2026-10-17T00:00:00Z",
       "abstractGameState": "Preview",
-      "detailedState": "Scheduled",
+      "detailedState": "Pre-Game",
       "boxScore": {
         "aHits": null,
         "bHits": null,
@@ -41,8 +41,8 @@
         "id": "mlb_849817",
         "lg": "MLB",
         "date": "2026-10-16",
-        "status": "Scheduled",
-        "inning": "Scheduled",
+        "status": "Pre-Game",
+        "inning": "Pre-Game",
         "final": false,
         "a": "Tampa Bay Rays",
         "b": "Cleveland Guardians",
@@ -55,7 +55,7 @@
         "gamePk": 849817,
         "gameDate": "2026-10-17T00:00:00Z",
         "abstractGameState": "Preview",
-        "detailedState": "Scheduled",
+        "detailedState": "Pre-Game",
         "boxScore": {
           "aHits": null,
           "bHits": null,
@@ -262,12 +262,12 @@
         "lg": "Soccer",
         "a": "1. FC Köln",
         "b": "Eintracht Frankfurt",
-        "aScore": null,
-        "bScore": null,
+        "aScore": 0,
+        "bScore": 1,
         "date": "2026-10-16T18:30:00+00:00",
-        "completed": false,
-        "state": "pre",
-        "status": "Scheduled",
+        "completed": true,
+        "state": "post",
+        "status": "Final",
         "source": "OpenLigaDB",
         "attribution": {
           "name": "OpenLigaDB",
@@ -277,41 +277,10 @@
         }
       }
     ],
-    "NHL": [
-      {
-        "id": "nhl_2026020119",
-        "eventId": "2026020119",
-        "lg": "NHL",
-        "a": "Pittsburgh Penguins",
-        "b": "Colorado Avalanche",
-        "aAbbr": "PIT",
-        "bAbbr": "COL",
-        "aScore": null,
-        "bScore": null,
-        "date": "2026-10-17T01:00:00Z",
-        "completed": false,
-        "state": "pre",
-        "status": "Scheduled"
-      },
-      {
-        "id": "nhl_2026020120",
-        "eventId": "2026020120",
-        "lg": "NHL",
-        "a": "Boston Bruins",
-        "b": "Anaheim Ducks",
-        "aAbbr": "BOS",
-        "bAbbr": "ANA",
-        "aScore": null,
-        "bScore": null,
-        "date": "2026-10-17T02:00:00Z",
-        "completed": false,
-        "state": "pre",
-        "status": "Scheduled"
-      }
-    ]
+    "NHL": []
   },
-  "updated": "2026-10-16T16:08:32.135969+00:00",
-  "count": 16,
+  "updated": "2026-10-16T20:32:28.791339+00:00",
+  "count": 14,
   "source": {
     "MLB": "MLB Stats API",
     "NFL": "ESPN public scoreboard",
