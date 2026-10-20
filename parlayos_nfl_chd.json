@@ -1,5 +1,5 @@
 {
-  "runDate": "Oct 19 2026 06:00 PM",
+  "runDate": "Oct 19 2026 11:30 PM",
   "pickCount": 14,
   "games": [
     {
@@ -12,7 +12,7 @@
       "away_abbr": "WSH",
       "startAt": "2026-10-20T00:15Z",
       "date": "2026-10-20",
-      "generated_at": "2026-10-19T22:00:46.407481+00:00",
+      "generated_at": "2026-10-20T03:30:24.225837+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -39,7 +39,7 @@
           ],
           "through_date": "2026-10-11",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407379+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225726+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 5,
@@ -90,7 +90,7 @@
           ],
           "through_date": "2026-10-11",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407404+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225750+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 5,
@@ -121,7 +121,7 @@
       },
       "odds": {},
       "total_line": null,
-      "status": "Scheduled",
+      "status": "Final",
       "factorsA": {
         "epa_offense": 0.4972211694507127,
         "epa_defense": 0.4004068986105155,
@@ -161,471 +161,8 @@
         "Away: 5 current-season games through 2026-10-11; prior season 2025 regularized to eight game-equivalents. Weight is unfitted.",
         "Home: 5 current-season games through 2026-10-11; prior season 2025 regularized to eight game-equivalents. Weight is unfitted."
       ],
-      "player_prop_models": [
-        {
-          "model_id": "nfl_player_empirical_v1",
-          "model_version": "1.0.0",
-          "data_status": "validated",
-          "distribution": "empirical_smoothed",
-          "calibration_status": "unvalidated",
-          "player_id": "00-0033280",
-          "player_name": "Christian McCaffrey",
-          "team": "SF",
-          "metric": "rushing_yards",
-          "observations": [
-            54.0,
-            129.0,
-            25.0,
-            106.0,
-            30.0,
-            81.0,
-            89.0,
-            53.0,
-            73.0,
-            117.0,
-            140.0,
-            23.0,
-            68.0,
-            23.0,
-            75.0,
-            52.0,
-            68.0
-          ],
-          "games": 17,
-          "mean": 70.94117647058823,
-          "current_season_games": 5,
-          "game_ids": [
-            "2025_06_SF_TB",
-            "2025_07_ATL_SF",
-            "2025_08_SF_HOU",
-            "2025_09_SF_NYG",
-            "2025_10_LA_SF",
-            "2025_11_SF_ARI",
-            "2025_12_CAR_SF",
-            "2025_13_SF_CLE",
-            "2025_15_TEN_SF",
-            "2025_16_SF_IND",
-            "2025_17_CHI_SF",
-            "2025_18_SEA_SF",
-            "2026_01_SF_LA",
-            "2026_02_MIA_SF",
-            "2026_03_ARI_SF",
-            "2026_04_DEN_SF",
-            "2026_05_SF_SEA"
-          ],
-          "latest_game_at": "2026-10-11T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
-          "season": 2026,
-          "roster_week": 6,
-          "source": "nflverse player game statistics and current roster",
-          "source_urls": [
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2025.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2026.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_2026.csv",
-            "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
-          ]
-        },
-        {
-          "model_id": "nfl_player_empirical_v1",
-          "model_version": "1.0.0",
-          "data_status": "validated",
-          "distribution": "empirical_smoothed",
-          "calibration_status": "unvalidated",
-          "player_id": "00-0033280",
-          "player_name": "Christian McCaffrey",
-          "team": "SF",
-          "metric": "receiving_yards",
-          "observations": [
-            57.0,
-            72.0,
-            43.0,
-            67.0,
-            66.0,
-            40.0,
-            53.0,
-            21.0,
-            14.0,
-            29.0,
-            41.0,
-            34.0,
-            20.0,
-            43.0,
-            41.0,
-            18.0,
-            15.0
-          ],
-          "games": 17,
-          "mean": 39.64705882352941,
-          "current_season_games": 5,
-          "game_ids": [
-            "2025_06_SF_TB",
-            "2025_07_ATL_SF",
-            "2025_08_SF_HOU",
-            "2025_09_SF_NYG",
-            "2025_10_LA_SF",
-            "2025_11_SF_ARI",
-            "2025_12_CAR_SF",
-            "2025_13_SF_CLE",
-            "2025_15_TEN_SF",
-            "2025_16_SF_IND",
-            "2025_17_CHI_SF",
-            "2025_18_SEA_SF",
-            "2026_01_SF_LA",
-            "2026_02_MIA_SF",
-            "2026_03_ARI_SF",
-            "2026_04_DEN_SF",
-            "2026_05_SF_SEA"
-          ],
-          "latest_game_at": "2026-10-11T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
-          "season": 2026,
-          "roster_week": 6,
-          "source": "nflverse player game statistics and current roster",
-          "source_urls": [
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2025.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2026.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_2026.csv",
-            "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
-          ]
-        },
-        {
-          "model_id": "nfl_player_empirical_v1",
-          "model_version": "1.0.0",
-          "data_status": "validated",
-          "distribution": "empirical_smoothed",
-          "calibration_status": "unvalidated",
-          "player_id": "00-0033288",
-          "player_name": "George Kittle",
-          "team": "SF",
-          "metric": "receiving_yards",
-          "observations": [
-            25.0,
-            0.0,
-            43.0,
-            32.0,
-            84.0,
-            67.0,
-            78.0,
-            67.0,
-            88.0,
-            115.0,
-            29.0,
-            12.0,
-            80.0,
-            82.0,
-            70.0,
-            24.0
-          ],
-          "games": 16,
-          "mean": 56.0,
-          "current_season_games": 5,
-          "game_ids": [
-            "2025_01_SF_SEA",
-            "2025_07_ATL_SF",
-            "2025_08_SF_HOU",
-            "2025_09_SF_NYG",
-            "2025_10_LA_SF",
-            "2025_11_SF_ARI",
-            "2025_12_CAR_SF",
-            "2025_13_SF_CLE",
-            "2025_15_TEN_SF",
-            "2025_16_SF_IND",
-            "2025_18_SEA_SF",
-            "2026_01_SF_LA",
-            "2026_02_MIA_SF",
-            "2026_03_ARI_SF",
-            "2026_04_DEN_SF",
-            "2026_05_SF_SEA"
-          ],
-          "latest_game_at": "2026-10-11T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
-          "season": 2026,
-          "roster_week": 6,
-          "source": "nflverse player game statistics and current roster",
-          "source_urls": [
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2025.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2026.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_2026.csv",
-            "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
-          ]
-        },
-        {
-          "model_id": "nfl_player_empirical_v1",
-          "model_version": "1.0.0",
-          "data_status": "validated",
-          "distribution": "empirical_smoothed",
-          "calibration_status": "unvalidated",
-          "player_id": "00-0035659",
-          "player_name": "Terry McLaurin",
-          "team": "WSH",
-          "metric": "receiving_yards",
-          "observations": [
-            27.0,
-            48.0,
-            74.0,
-            54.0,
-            96.0,
-            41.0,
-            69.0,
-            53.0,
-            63.0,
-            57.0,
-            14.0,
-            50.0,
-            77.0,
-            62.0
-          ],
-          "games": 14,
-          "mean": 56.07142857142857,
-          "current_season_games": 4,
-          "game_ids": [
-            "2025_01_NYG_WAS",
-            "2025_02_WAS_GB",
-            "2025_03_LV_WAS",
-            "2025_08_WAS_KC",
-            "2025_13_DEN_WAS",
-            "2025_14_WAS_MIN",
-            "2025_15_WAS_NYG",
-            "2025_16_PHI_WAS",
-            "2025_17_DAL_WAS",
-            "2025_18_WAS_PHI",
-            "2026_01_WAS_PHI",
-            "2026_02_WAS_DAL",
-            "2026_03_SEA_WAS",
-            "2026_05_NYG_WAS"
-          ],
-          "latest_game_at": "2026-10-11T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
-          "season": 2026,
-          "roster_week": 6,
-          "source": "nflverse player game statistics and current roster",
-          "source_urls": [
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2025.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2026.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_2026.csv",
-            "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
-          ]
-        },
-        {
-          "model_id": "nfl_player_empirical_v1",
-          "model_version": "1.0.0",
-          "data_status": "validated",
-          "distribution": "empirical_smoothed",
-          "calibration_status": "unvalidated",
-          "player_id": "00-0037834",
-          "player_name": "Brock Purdy",
-          "team": "SF",
-          "metric": "passing_yards",
-          "observations": [
-            277.0,
-            309.0,
-            200.0,
-            193.0,
-            168.0,
-            295.0,
-            295.0,
-            303.0,
-            127.0,
-            205.0,
-            287.0,
-            297.0,
-            218.0,
-            189.0
-          ],
-          "games": 14,
-          "mean": 240.21428571428572,
-          "current_season_games": 5,
-          "game_ids": [
-            "2025_01_SF_SEA",
-            "2025_04_JAX_SF",
-            "2025_11_SF_ARI",
-            "2025_12_CAR_SF",
-            "2025_13_SF_CLE",
-            "2025_15_TEN_SF",
-            "2025_16_SF_IND",
-            "2025_17_CHI_SF",
-            "2025_18_SEA_SF",
-            "2026_01_SF_LA",
-            "2026_02_MIA_SF",
-            "2026_03_ARI_SF",
-            "2026_04_DEN_SF",
-            "2026_05_SF_SEA"
-          ],
-          "latest_game_at": "2026-10-11T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
-          "season": 2026,
-          "roster_week": 6,
-          "source": "nflverse player game statistics and current roster",
-          "source_urls": [
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2025.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2026.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_2026.csv",
-            "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
-          ]
-        },
-        {
-          "model_id": "nfl_player_empirical_v1",
-          "model_version": "1.0.0",
-          "data_status": "validated",
-          "distribution": "empirical_smoothed",
-          "calibration_status": "unvalidated",
-          "player_id": "00-0039910",
-          "player_name": "Jayden Daniels",
-          "team": "WSH",
-          "metric": "passing_yards",
-          "observations": [
-            233.0,
-            200.0,
-            231.0,
-            211.0,
-            156.0,
-            153.0,
-            78.0,
-            164.0,
-            96.0,
-            199.0
-          ],
-          "games": 10,
-          "mean": 172.1,
-          "current_season_games": 3,
-          "game_ids": [
-            "2025_01_NYG_WAS",
-            "2025_02_WAS_GB",
-            "2025_05_WAS_LAC",
-            "2025_06_CHI_WAS",
-            "2025_07_WAS_DAL",
-            "2025_09_SEA_WAS",
-            "2025_14_WAS_MIN",
-            "2026_01_WAS_PHI",
-            "2026_02_WAS_DAL",
-            "2026_05_NYG_WAS"
-          ],
-          "latest_game_at": "2026-10-11T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
-          "season": 2026,
-          "roster_week": 6,
-          "source": "nflverse player game statistics and current roster",
-          "source_urls": [
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2025.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2026.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_2026.csv",
-            "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
-          ]
-        },
-        {
-          "model_id": "nfl_player_empirical_v1",
-          "model_version": "1.0.0",
-          "data_status": "validated",
-          "distribution": "empirical_smoothed",
-          "calibration_status": "unvalidated",
-          "player_id": "00-0039910",
-          "player_name": "Jayden Daniels",
-          "team": "WSH",
-          "metric": "rushing_yards",
-          "observations": [
-            68.0,
-            17.0,
-            39.0,
-            52.0,
-            35.0,
-            51.0,
-            16.0,
-            31.0,
-            69.0,
-            103.0
-          ],
-          "games": 10,
-          "mean": 48.1,
-          "current_season_games": 3,
-          "game_ids": [
-            "2025_01_NYG_WAS",
-            "2025_02_WAS_GB",
-            "2025_05_WAS_LAC",
-            "2025_06_CHI_WAS",
-            "2025_07_WAS_DAL",
-            "2025_09_SEA_WAS",
-            "2025_14_WAS_MIN",
-            "2026_01_WAS_PHI",
-            "2026_02_WAS_DAL",
-            "2026_05_NYG_WAS"
-          ],
-          "latest_game_at": "2026-10-11T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
-          "season": 2026,
-          "roster_week": 6,
-          "source": "nflverse player game statistics and current roster",
-          "source_urls": [
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2025.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2026.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_2026.csv",
-            "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
-          ]
-        },
-        {
-          "model_id": "nfl_player_empirical_v1",
-          "model_version": "1.0.0",
-          "data_status": "validated",
-          "distribution": "empirical_smoothed",
-          "calibration_status": "unvalidated",
-          "player_id": "00-0040242",
-          "player_name": "Jacory Croskey-Merritt",
-          "team": "WSH",
-          "metric": "rushing_yards",
-          "observations": [
-            61.0,
-            33.0,
-            25.0,
-            38.0,
-            30.0,
-            28.0,
-            20.0,
-            32.0,
-            96.0,
-            25.0,
-            105.0,
-            29.0,
-            63.0,
-            43.0,
-            36.0,
-            15.0,
-            82.0
-          ],
-          "games": 17,
-          "mean": 44.76470588235294,
-          "current_season_games": 5,
-          "game_ids": [
-            "2025_06_CHI_WAS",
-            "2025_07_WAS_DAL",
-            "2025_08_WAS_KC",
-            "2025_09_SEA_WAS",
-            "2025_10_DET_WAS",
-            "2025_11_WAS_MIA",
-            "2025_13_DEN_WAS",
-            "2025_14_WAS_MIN",
-            "2025_15_WAS_NYG",
-            "2025_16_PHI_WAS",
-            "2025_17_DAL_WAS",
-            "2025_18_WAS_PHI",
-            "2026_01_WAS_PHI",
-            "2026_02_WAS_DAL",
-            "2026_03_SEA_WAS",
-            "2026_04_IND_WAS",
-            "2026_05_NYG_WAS"
-          ],
-          "latest_game_at": "2026-10-11T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
-          "season": 2026,
-          "roster_week": 6,
-          "source": "nflverse player game statistics and current roster",
-          "source_urls": [
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2025.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2026.csv",
-            "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_2026.csv",
-            "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
-          ]
-        }
-      ],
-      "player_prop_status": "available",
+      "player_prop_models": [],
+      "player_prop_status": "No eligible pregame NFL player history",
       "models": {
         "monte_carlo": {
           "model_id": "monte_carlo",
@@ -658,7 +195,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 22.3126,
@@ -708,7 +245,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             },
             "k": {
@@ -733,7 +270,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             }
           }
@@ -769,7 +306,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             },
             "ou": {
@@ -794,7 +331,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             },
             "k": {
@@ -819,7 +356,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             }
           }
@@ -855,7 +392,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             },
             "ou": {
@@ -880,7 +417,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             },
             "k": {
@@ -905,7 +442,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             }
           }
@@ -941,7 +478,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -986,7 +523,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             },
             "k": {
@@ -1011,7 +548,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             }
           }
@@ -1047,7 +584,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {
                 "offense_a": -0.003,
                 "offense_b": 0.124
@@ -1092,7 +629,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             },
             "k": {
@@ -1117,7 +654,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             }
           }
@@ -1153,7 +690,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -1198,7 +735,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             },
             "k": {
@@ -1223,7 +760,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {}
             }
           }
@@ -1258,7 +795,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -1384,7 +921,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -1424,7 +961,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407481+00:00",
+              "timestamp": "2026-10-20T03:30:24.225837+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -1471,7 +1008,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.407481+00:00",
+            "timestamp": "2026-10-20T03:30:24.225837+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -1597,7 +1134,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407481+00:00",
+            "timestamp": "2026-10-20T03:30:24.225837+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -1637,7 +1174,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407481+00:00",
+            "timestamp": "2026-10-20T03:30:24.225837+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -1726,6 +1263,87 @@
             "ensemble_version": "2.4.0"
           }
         }
+      },
+      "pregame_snapshot": {
+        "event_id": "401873008",
+        "sport": "NFL",
+        "away": "Washington Commanders",
+        "home": "San Francisco 49ers",
+        "generated_at": "2026-10-13T13:37:03.777246+00:00",
+        "captured_at": "2026-10-13T13:37:30.144994+00:00",
+        "start_at": "2026-10-20T00:15:00+00:00",
+        "forecasts": {
+          "monte_carlo": {
+            "model_id": "monte_carlo",
+            "model_version": "2.4.0",
+            "status": "available",
+            "pA": 0.31855770292566155,
+            "pB": 0.6814422970743385,
+            "pDraw": null,
+            "probability": 0.6814422970743385,
+            "selection": "San Francisco 49ers",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          },
+          "my_chd": {
+            "model_id": "my_chd",
+            "model_version": "2.4.0",
+            "status": "available",
+            "pA": 0.5073694461031117,
+            "pB": 0.49263055389688826,
+            "pDraw": null,
+            "probability": 0.5073694461031117,
+            "selection": "Washington Commanders",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          },
+          "season_stats": {
+            "model_id": "season_stats",
+            "model_version": "2.4.0",
+            "status": "available",
+            "pA": 0.3977675431102088,
+            "pB": 0.6022324568897912,
+            "pDraw": null,
+            "probability": 0.6022324568897912,
+            "selection": "San Francisco 49ers",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          },
+          "chd_master_predictor": {
+            "model_id": "chd_master_predictor",
+            "model_version": "2.4.0",
+            "status": "available",
+            "pA": 0.5073694461031117,
+            "pB": 0.49263055389688826,
+            "pDraw": null,
+            "probability": 0.5073694461031117,
+            "selection": "Washington Commanders",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          },
+          "final_combined": {
+            "model_id": "final_combined",
+            "model_version": "2.4.0",
+            "status": "available",
+            "pA": 0.41502821715522603,
+            "pB": 0.584971782844774,
+            "pDraw": null,
+            "probability": 0.584971782844774,
+            "selection": "San Francisco 49ers",
+            "confidence": null,
+            "odds": null,
+            "edge": null,
+            "calibration_status": "unvalidated"
+          }
+        }
       }
     },
     {
@@ -1738,7 +1356,7 @@
       "away_abbr": "NE",
       "startAt": "2026-10-23T00:15Z",
       "date": "2026-10-23",
-      "generated_at": "2026-10-19T22:00:46.407631+00:00",
+      "generated_at": "2026-10-20T03:30:24.226046+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -1766,7 +1384,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407233+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225483+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -1818,7 +1436,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407322+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225665+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -1942,7 +1560,7 @@
             "2026_06_NYJ_NE"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -2005,7 +1623,7 @@
             "2026_06_CHI_ATL"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -2068,7 +1686,7 @@
             "2026_06_NYJ_NE"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -2131,7 +1749,7 @@
             "2026_06_NYJ_NE"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -2194,7 +1812,7 @@
             "2026_06_CHI_ATL"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -2257,7 +1875,7 @@
             "2026_06_CHI_ATL"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -2320,7 +1938,7 @@
             "2026_06_CHI_ATL"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -2383,7 +2001,7 @@
             "2026_06_CHI_ATL"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -2428,7 +2046,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 23.8098,
@@ -2478,7 +2096,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             },
             "k": {
@@ -2503,7 +2121,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             }
           }
@@ -2539,7 +2157,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             },
             "ou": {
@@ -2564,7 +2182,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             },
             "k": {
@@ -2589,7 +2207,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             }
           }
@@ -2625,7 +2243,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             },
             "ou": {
@@ -2650,7 +2268,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             },
             "k": {
@@ -2675,7 +2293,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             }
           }
@@ -2711,7 +2329,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -2756,7 +2374,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             },
             "k": {
@@ -2781,7 +2399,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             }
           }
@@ -2817,7 +2435,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {
                 "offense_a": 0.107,
                 "offense_b": 0.048
@@ -2862,7 +2480,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             },
             "k": {
@@ -2887,7 +2505,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             }
           }
@@ -2923,7 +2541,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -2968,7 +2586,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             },
             "k": {
@@ -2993,7 +2611,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {}
             }
           }
@@ -3028,7 +2646,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -3153,7 +2771,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -3193,7 +2811,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407631+00:00",
+              "timestamp": "2026-10-20T03:30:24.226046+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -3240,7 +2858,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.407631+00:00",
+            "timestamp": "2026-10-20T03:30:24.226046+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -3365,7 +2983,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407631+00:00",
+            "timestamp": "2026-10-20T03:30:24.226046+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -3405,7 +3023,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407631+00:00",
+            "timestamp": "2026-10-20T03:30:24.226046+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -3505,7 +3123,7 @@
       "away_abbr": "PIT",
       "startAt": "2026-10-25T13:30Z",
       "date": "2026-10-25",
-      "generated_at": "2026-10-19T22:00:46.407706+00:00",
+      "generated_at": "2026-10-20T03:30:24.226183+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -3533,7 +3151,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407327+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225673+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -3585,7 +3203,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407365+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225706+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -3709,7 +3327,7 @@
             "2026_06_PIT_TB"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -3770,7 +3388,7 @@
             "2026_06_NO_NYG"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -3833,7 +3451,7 @@
             "2026_06_PIT_TB"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -3896,7 +3514,7 @@
             "2026_06_NO_NYG"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -3959,7 +3577,7 @@
             "2026_06_PIT_TB"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -4022,7 +3640,7 @@
             "2026_06_PIT_TB"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -4085,7 +3703,7 @@
             "2026_06_PIT_TB"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -4148,7 +3766,7 @@
             "2026_06_NO_NYG"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -4207,7 +3825,7 @@
             "2026_06_NO_NYG"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -4270,7 +3888,7 @@
             "2026_06_PIT_TB"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -4333,7 +3951,7 @@
             "2026_06_NO_NYG"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -4378,7 +3996,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 21.8008,
@@ -4428,7 +4046,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             },
             "k": {
@@ -4453,7 +4071,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             }
           }
@@ -4489,7 +4107,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             },
             "ou": {
@@ -4514,7 +4132,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             },
             "k": {
@@ -4539,7 +4157,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             }
           }
@@ -4575,7 +4193,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             },
             "ou": {
@@ -4600,7 +4218,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             },
             "k": {
@@ -4625,7 +4243,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             }
           }
@@ -4661,7 +4279,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -4706,7 +4324,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             },
             "k": {
@@ -4731,7 +4349,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             }
           }
@@ -4767,7 +4385,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {
                 "offense_a": -0.014,
                 "offense_b": -0.057
@@ -4812,7 +4430,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             },
             "k": {
@@ -4837,7 +4455,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             }
           }
@@ -4873,7 +4491,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -4918,7 +4536,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             },
             "k": {
@@ -4943,7 +4561,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {}
             }
           }
@@ -4978,7 +4596,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -5103,7 +4721,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -5143,7 +4761,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407706+00:00",
+              "timestamp": "2026-10-20T03:30:24.226183+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -5190,7 +4808,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.407706+00:00",
+            "timestamp": "2026-10-20T03:30:24.226183+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -5315,7 +4933,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407706+00:00",
+            "timestamp": "2026-10-20T03:30:24.226183+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -5355,7 +4973,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407706+00:00",
+            "timestamp": "2026-10-20T03:30:24.226183+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -5455,7 +5073,7 @@
       "away_abbr": "SF",
       "startAt": "2026-10-25T17:00Z",
       "date": "2026-10-25",
-      "generated_at": "2026-10-19T22:00:46.407779+00:00",
+      "generated_at": "2026-10-20T03:30:24.226319+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -5483,7 +5101,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407201+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225435+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -5534,7 +5152,7 @@
           ],
           "through_date": "2026-10-11",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407379+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225726+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 5,
@@ -5658,7 +5276,7 @@
             "2026_05_SF_SEA"
           ],
           "latest_game_at": "2026-10-11T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -5721,7 +5339,7 @@
             "2026_05_SF_SEA"
           ],
           "latest_game_at": "2026-10-11T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -5782,7 +5400,7 @@
             "2026_05_SF_SEA"
           ],
           "latest_game_at": "2026-10-11T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -5845,7 +5463,7 @@
             "2026_06_CHI_ATL"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -5908,7 +5526,7 @@
             "2026_06_CHI_ATL"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -5965,7 +5583,7 @@
             "2026_05_SF_SEA"
           ],
           "latest_game_at": "2026-10-11T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -6028,7 +5646,7 @@
             "2026_06_CHI_ATL"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -6091,7 +5709,7 @@
             "2026_06_CHI_ATL"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -6146,7 +5764,7 @@
             "2026_06_CHI_ATL"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -6191,7 +5809,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 23.8561,
@@ -6241,7 +5859,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             },
             "k": {
@@ -6266,7 +5884,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             }
           }
@@ -6302,7 +5920,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             },
             "ou": {
@@ -6327,7 +5945,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             },
             "k": {
@@ -6352,7 +5970,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             }
           }
@@ -6388,7 +6006,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             },
             "ou": {
@@ -6413,7 +6031,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             },
             "k": {
@@ -6438,7 +6056,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             }
           }
@@ -6474,7 +6092,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -6519,7 +6137,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             },
             "k": {
@@ -6544,7 +6162,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             }
           }
@@ -6580,7 +6198,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {
                 "offense_a": 0.124,
                 "offense_b": -0.032
@@ -6625,7 +6243,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             },
             "k": {
@@ -6650,7 +6268,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             }
           }
@@ -6686,7 +6304,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -6731,7 +6349,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             },
             "k": {
@@ -6756,7 +6374,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {}
             }
           }
@@ -6791,7 +6409,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -6916,7 +6534,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -6956,7 +6574,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407779+00:00",
+              "timestamp": "2026-10-20T03:30:24.226319+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -7003,7 +6621,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.407779+00:00",
+            "timestamp": "2026-10-20T03:30:24.226319+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -7128,7 +6746,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407779+00:00",
+            "timestamp": "2026-10-20T03:30:24.226319+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -7168,7 +6786,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407779+00:00",
+            "timestamp": "2026-10-20T03:30:24.226319+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -7268,7 +6886,7 @@
       "away_abbr": "CLE",
       "startAt": "2026-10-25T17:00Z",
       "date": "2026-10-25",
-      "generated_at": "2026-10-19T22:00:46.407850+00:00",
+      "generated_at": "2026-10-20T03:30:24.226450+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -7296,7 +6914,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407396+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225742+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -7348,7 +6966,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407248+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225500+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -7472,7 +7090,7 @@
             "2026_06_TEN_IND"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -7535,7 +7153,7 @@
             "2026_06_BAL_CLE"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -7598,7 +7216,7 @@
             "2026_06_BAL_CLE"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -7661,7 +7279,7 @@
             "2026_06_TEN_IND"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -7706,7 +7324,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 20.8292,
@@ -7756,7 +7374,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             },
             "k": {
@@ -7781,7 +7399,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             }
           }
@@ -7817,7 +7435,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             },
             "ou": {
@@ -7842,7 +7460,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             },
             "k": {
@@ -7867,7 +7485,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             }
           }
@@ -7903,7 +7521,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             },
             "ou": {
@@ -7928,7 +7546,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             },
             "k": {
@@ -7953,7 +7571,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             }
           }
@@ -7989,7 +7607,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {
                 "model": "ensemble(0.62*simple+0.38*wave_true)",
                 "raw_score": 0.0284
@@ -8034,7 +7652,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             },
             "k": {
@@ -8059,7 +7677,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             }
           }
@@ -8095,7 +7713,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {
                 "offense_a": -0.136,
                 "offense_b": -0.15
@@ -8140,7 +7758,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             },
             "k": {
@@ -8165,7 +7783,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             }
           }
@@ -8201,7 +7819,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {
                 "model": "ensemble(0.62*simple+0.38*wave_true)",
                 "raw_score": 0.0284
@@ -8246,7 +7864,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             },
             "k": {
@@ -8271,7 +7889,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {}
             }
           }
@@ -8306,7 +7924,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -8431,7 +8049,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -8471,7 +8089,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407850+00:00",
+              "timestamp": "2026-10-20T03:30:24.226450+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -8518,7 +8136,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.407850+00:00",
+            "timestamp": "2026-10-20T03:30:24.226450+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -8643,7 +8261,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407850+00:00",
+            "timestamp": "2026-10-20T03:30:24.226450+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -8683,7 +8301,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407850+00:00",
+            "timestamp": "2026-10-20T03:30:24.226450+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -8783,7 +8401,7 @@
       "away_abbr": "IND",
       "startAt": "2026-10-25T17:00Z",
       "date": "2026-10-25",
-      "generated_at": "2026-10-19T22:00:46.407926+00:00",
+      "generated_at": "2026-10-20T03:30:24.226609+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -8810,7 +8428,7 @@
           ],
           "through_date": "2026-10-11",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407316+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225656+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 5,
@@ -8862,7 +8480,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407280+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225582+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -8986,7 +8604,7 @@
             "2026_06_TEN_IND"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -9049,7 +8667,7 @@
             "2026_06_TEN_IND"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -9112,7 +8730,7 @@
             "2026_06_TEN_IND"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -9175,7 +8793,7 @@
             "2026_06_TEN_IND"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -9220,7 +8838,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 20.2384,
@@ -9270,7 +8888,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             },
             "k": {
@@ -9295,7 +8913,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             }
           }
@@ -9331,7 +8949,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             },
             "ou": {
@@ -9356,7 +8974,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             },
             "k": {
@@ -9381,7 +8999,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             }
           }
@@ -9417,7 +9035,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             },
             "ou": {
@@ -9442,7 +9060,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             },
             "k": {
@@ -9467,7 +9085,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             }
           }
@@ -9503,7 +9121,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -9548,7 +9166,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             },
             "k": {
@@ -9573,7 +9191,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             }
           }
@@ -9609,7 +9227,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {
                 "offense_a": 0.022,
                 "offense_b": -0.107
@@ -9654,7 +9272,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             },
             "k": {
@@ -9679,7 +9297,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             }
           }
@@ -9715,7 +9333,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -9760,7 +9378,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             },
             "k": {
@@ -9785,7 +9403,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {}
             }
           }
@@ -9820,7 +9438,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -9946,7 +9564,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -9986,7 +9604,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407926+00:00",
+              "timestamp": "2026-10-20T03:30:24.226609+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -10033,7 +9651,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.407926+00:00",
+            "timestamp": "2026-10-20T03:30:24.226609+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -10159,7 +9777,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407926+00:00",
+            "timestamp": "2026-10-20T03:30:24.226609+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -10199,7 +9817,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407926+00:00",
+            "timestamp": "2026-10-20T03:30:24.226609+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -10300,7 +9918,7 @@
       "away_abbr": "MIA",
       "startAt": "2026-10-25T17:00Z",
       "date": "2026-10-25",
-      "generated_at": "2026-10-19T22:00:46.407992+00:00",
+      "generated_at": "2026-10-20T03:30:24.226737+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -10328,7 +9946,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407337+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225689+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -10379,7 +9997,7 @@
           ],
           "through_date": "2026-10-11",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407310+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225648+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 5,
@@ -10495,7 +10113,7 @@
             "2026_06_NYJ_NE"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -10556,7 +10174,7 @@
             "2026_06_NYJ_NE"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -10601,7 +10219,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 22.1815,
@@ -10651,7 +10269,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             },
             "k": {
@@ -10676,7 +10294,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             }
           }
@@ -10712,7 +10330,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             },
             "ou": {
@@ -10737,7 +10355,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             },
             "k": {
@@ -10762,7 +10380,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             }
           }
@@ -10798,7 +10416,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             },
             "ou": {
@@ -10823,7 +10441,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             },
             "k": {
@@ -10848,7 +10466,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             }
           }
@@ -10884,7 +10502,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -10929,7 +10547,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             },
             "k": {
@@ -10954,7 +10572,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             }
           }
@@ -10990,7 +10608,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {
                 "offense_a": -0.044,
                 "offense_b": -0.09
@@ -11035,7 +10653,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             },
             "k": {
@@ -11060,7 +10678,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             }
           }
@@ -11096,7 +10714,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -11141,7 +10759,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             },
             "k": {
@@ -11166,7 +10784,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {}
             }
           }
@@ -11201,7 +10819,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -11326,7 +10944,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -11366,7 +10984,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.407992+00:00",
+              "timestamp": "2026-10-20T03:30:24.226737+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -11413,7 +11031,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.407992+00:00",
+            "timestamp": "2026-10-20T03:30:24.226737+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -11538,7 +11156,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407992+00:00",
+            "timestamp": "2026-10-20T03:30:24.226737+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -11578,7 +11196,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.407992+00:00",
+            "timestamp": "2026-10-20T03:30:24.226737+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -11678,7 +11296,7 @@
       "away_abbr": "TB",
       "startAt": "2026-10-25T17:00Z",
       "date": "2026-10-25",
-      "generated_at": "2026-10-19T22:00:46.408063+00:00",
+      "generated_at": "2026-10-20T03:30:24.226877+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -11705,7 +11323,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407227+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225474+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 5,
@@ -11757,7 +11375,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407389+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225735+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -11881,7 +11499,7 @@
             "2026_06_PIT_TB"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -11944,7 +11562,7 @@
             "2026_06_CAR_PHI"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -12005,7 +11623,7 @@
             "2026_06_PIT_TB"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -12066,7 +11684,7 @@
             "2026_06_PIT_TB"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -12129,7 +11747,7 @@
             "2026_06_CAR_PHI"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -12192,7 +11810,7 @@
             "2026_06_PIT_TB"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -12251,7 +11869,7 @@
             "2026_06_PIT_TB"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -12310,7 +11928,7 @@
             "2026_06_CAR_PHI"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -12355,7 +11973,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 21.6213,
@@ -12405,7 +12023,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             },
             "k": {
@@ -12430,7 +12048,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             }
           }
@@ -12466,7 +12084,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             },
             "ou": {
@@ -12491,7 +12109,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             },
             "k": {
@@ -12516,7 +12134,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             }
           }
@@ -12552,7 +12170,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             },
             "ou": {
@@ -12577,7 +12195,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             },
             "k": {
@@ -12602,7 +12220,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             }
           }
@@ -12638,7 +12256,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -12683,7 +12301,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             },
             "k": {
@@ -12708,7 +12326,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             }
           }
@@ -12744,7 +12362,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {
                 "offense_a": -0.058,
                 "offense_b": 0.014
@@ -12789,7 +12407,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             },
             "k": {
@@ -12814,7 +12432,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             }
           }
@@ -12850,7 +12468,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -12895,7 +12513,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             },
             "k": {
@@ -12920,7 +12538,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {}
             }
           }
@@ -12955,7 +12573,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -13081,7 +12699,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -13121,7 +12739,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408063+00:00",
+              "timestamp": "2026-10-20T03:30:24.226877+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -13168,7 +12786,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.408063+00:00",
+            "timestamp": "2026-10-20T03:30:24.226877+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -13294,7 +12912,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408063+00:00",
+            "timestamp": "2026-10-20T03:30:24.226877+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -13334,7 +12952,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408063+00:00",
+            "timestamp": "2026-10-20T03:30:24.226877+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -13435,7 +13053,7 @@
       "away_abbr": "CIN",
       "startAt": "2026-10-25T17:00Z",
       "date": "2026-10-25",
-      "generated_at": "2026-10-19T22:00:46.408133+00:00",
+      "generated_at": "2026-10-20T03:30:24.227011+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -13463,7 +13081,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407212+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225452+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -13514,7 +13132,7 @@
           ],
           "through_date": "2026-10-11",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407239+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225492+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 5,
@@ -13638,7 +13256,7 @@
             "2026_06_BAL_CLE"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -13701,7 +13319,7 @@
             "2026_06_BAL_CLE"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -13764,7 +13382,7 @@
             "2026_06_BAL_CLE"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -13809,7 +13427,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 22.8384,
@@ -13859,7 +13477,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             },
             "k": {
@@ -13884,7 +13502,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             }
           }
@@ -13920,7 +13538,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             },
             "ou": {
@@ -13945,7 +13563,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             },
             "k": {
@@ -13970,7 +13588,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             }
           }
@@ -14006,7 +13624,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             },
             "ou": {
@@ -14031,7 +13649,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             },
             "k": {
@@ -14056,7 +13674,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             }
           }
@@ -14092,7 +13710,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -14137,7 +13755,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             },
             "k": {
@@ -14162,7 +13780,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             }
           }
@@ -14198,7 +13816,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {
                 "offense_a": 0.04,
                 "offense_b": 0.08
@@ -14243,7 +13861,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             },
             "k": {
@@ -14268,7 +13886,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             }
           }
@@ -14304,7 +13922,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -14349,7 +13967,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             },
             "k": {
@@ -14374,7 +13992,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {}
             }
           }
@@ -14409,7 +14027,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -14535,7 +14153,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -14575,7 +14193,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408133+00:00",
+              "timestamp": "2026-10-20T03:30:24.227011+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -14622,7 +14240,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.408133+00:00",
+            "timestamp": "2026-10-20T03:30:24.227011+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -14748,7 +14366,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408133+00:00",
+            "timestamp": "2026-10-20T03:30:24.227011+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -14788,7 +14406,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408133+00:00",
+            "timestamp": "2026-10-20T03:30:24.227011+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -14889,7 +14507,7 @@
       "away_abbr": "NYG",
       "startAt": "2026-10-25T17:00Z",
       "date": "2026-10-25",
-      "generated_at": "2026-10-19T22:00:46.408200+00:00",
+      "generated_at": "2026-10-20T03:30:24.227135+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -14917,7 +14535,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407275+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225544+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -14969,7 +14587,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407332+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225681+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -15093,7 +14711,7 @@
             "2026_06_HOU_JAX"
           ],
           "latest_game_at": "2026-10-18T13:30:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -15156,7 +14774,7 @@
             "2026_06_HOU_JAX"
           ],
           "latest_game_at": "2026-10-18T13:30:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -15219,7 +14837,7 @@
             "2026_06_HOU_JAX"
           ],
           "latest_game_at": "2026-10-18T13:30:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -15282,7 +14900,7 @@
             "2026_06_HOU_JAX"
           ],
           "latest_game_at": "2026-10-18T13:30:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -15345,7 +14963,7 @@
             "2026_06_HOU_JAX"
           ],
           "latest_game_at": "2026-10-18T13:30:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -15400,7 +15018,7 @@
             "2026_05_NYG_WAS"
           ],
           "latest_game_at": "2026-10-11T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -15445,7 +15063,7 @@
             "2026_06_NO_NYG"
           ],
           "latest_game_at": "2026-10-18T17:00:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -15490,7 +15108,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 20.9046,
@@ -15540,7 +15158,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             },
             "k": {
@@ -15565,7 +15183,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             }
           }
@@ -15601,7 +15219,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             },
             "ou": {
@@ -15626,7 +15244,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             },
             "k": {
@@ -15651,7 +15269,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             }
           }
@@ -15687,7 +15305,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             },
             "ou": {
@@ -15712,7 +15330,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             },
             "k": {
@@ -15737,7 +15355,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             }
           }
@@ -15773,7 +15391,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -15818,7 +15436,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             },
             "k": {
@@ -15843,7 +15461,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             }
           }
@@ -15879,7 +15497,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {
                 "offense_a": -0.005,
                 "offense_b": 0.006
@@ -15924,7 +15542,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             },
             "k": {
@@ -15949,7 +15567,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             }
           }
@@ -15985,7 +15603,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -16030,7 +15648,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             },
             "k": {
@@ -16055,7 +15673,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {}
             }
           }
@@ -16090,7 +15708,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -16216,7 +15834,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -16256,7 +15874,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408200+00:00",
+              "timestamp": "2026-10-20T03:30:24.227135+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -16303,7 +15921,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.408200+00:00",
+            "timestamp": "2026-10-20T03:30:24.227135+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -16429,7 +16047,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408200+00:00",
+            "timestamp": "2026-10-20T03:30:24.227135+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -16469,7 +16087,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408200+00:00",
+            "timestamp": "2026-10-20T03:30:24.227135+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -16570,7 +16188,7 @@
       "away_abbr": "DEN",
       "startAt": "2026-10-25T20:05Z",
       "date": "2026-10-25",
-      "generated_at": "2026-10-19T22:00:46.408264+00:00",
+      "generated_at": "2026-10-20T03:30:24.227256+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -16598,7 +16216,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407171+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225409+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -16650,7 +16268,7 @@
           ],
           "through_date": "2026-10-15",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407258+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225520+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -16774,7 +16392,7 @@
             "2026_06_SEA_DEN"
           ],
           "latest_game_at": "2026-10-16T00:15:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -16835,7 +16453,7 @@
             "2026_06_SEA_DEN"
           ],
           "latest_game_at": "2026-10-16T00:15:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -16898,7 +16516,7 @@
             "2026_06_ARI_LA"
           ],
           "latest_game_at": "2026-10-18T20:05:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -16961,7 +16579,7 @@
             "2026_06_ARI_LA"
           ],
           "latest_game_at": "2026-10-18T20:05:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -17024,7 +16642,7 @@
             "2026_06_SEA_DEN"
           ],
           "latest_game_at": "2026-10-16T00:15:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -17087,7 +16705,7 @@
             "2026_06_ARI_LA"
           ],
           "latest_game_at": "2026-10-18T20:05:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -17132,7 +16750,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 23.2072,
@@ -17182,7 +16800,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             },
             "k": {
@@ -17207,7 +16825,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             }
           }
@@ -17243,7 +16861,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             },
             "ou": {
@@ -17268,7 +16886,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             },
             "k": {
@@ -17293,7 +16911,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             }
           }
@@ -17329,7 +16947,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             },
             "ou": {
@@ -17354,7 +16972,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             },
             "k": {
@@ -17379,7 +16997,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             }
           }
@@ -17415,7 +17033,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -17460,7 +17078,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             },
             "k": {
@@ -17485,7 +17103,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             }
           }
@@ -17521,7 +17139,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {
                 "offense_a": -0.008,
                 "offense_b": -0.02
@@ -17566,7 +17184,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             },
             "k": {
@@ -17591,7 +17209,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             }
           }
@@ -17627,7 +17245,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -17672,7 +17290,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             },
             "k": {
@@ -17697,7 +17315,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {}
             }
           }
@@ -17732,7 +17350,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -17857,7 +17475,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -17897,7 +17515,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408264+00:00",
+              "timestamp": "2026-10-20T03:30:24.227256+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -17944,7 +17562,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.408264+00:00",
+            "timestamp": "2026-10-20T03:30:24.227256+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -18069,7 +17687,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408264+00:00",
+            "timestamp": "2026-10-20T03:30:24.227256+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -18109,7 +17727,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408264+00:00",
+            "timestamp": "2026-10-20T03:30:24.227256+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -18209,7 +17827,7 @@
       "away_abbr": "GB",
       "startAt": "2026-10-25T20:25Z",
       "date": "2026-10-25",
-      "generated_at": "2026-10-19T22:00:46.408325+00:00",
+      "generated_at": "2026-10-20T03:30:24.227376+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -18236,7 +17854,7 @@
           ],
           "through_date": "2026-10-11",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407264+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225528+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 5,
@@ -18288,7 +17906,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407269+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225536+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -18412,7 +18030,7 @@
             "2026_06_DAL_GB"
           ],
           "latest_game_at": "2026-10-19T00:20:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -18469,7 +18087,7 @@
             "2026_06_DAL_GB"
           ],
           "latest_game_at": "2026-10-19T00:20:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -18530,7 +18148,7 @@
             "2026_06_DAL_GB"
           ],
           "latest_game_at": "2026-10-19T00:20:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -18575,7 +18193,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 23.6358,
@@ -18625,7 +18243,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             },
             "k": {
@@ -18650,7 +18268,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             }
           }
@@ -18686,7 +18304,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             },
             "ou": {
@@ -18711,7 +18329,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             },
             "k": {
@@ -18736,7 +18354,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             }
           }
@@ -18772,7 +18390,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             },
             "ou": {
@@ -18797,7 +18415,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             },
             "k": {
@@ -18822,7 +18440,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             }
           }
@@ -18858,7 +18476,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -18903,7 +18521,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             },
             "k": {
@@ -18928,7 +18546,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             }
           }
@@ -18964,7 +18582,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {
                 "offense_a": 0.05,
                 "offense_b": 0.121
@@ -19009,7 +18627,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             },
             "k": {
@@ -19034,7 +18652,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             }
           }
@@ -19070,7 +18688,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -19115,7 +18733,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             },
             "k": {
@@ -19140,7 +18758,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {}
             }
           }
@@ -19175,7 +18793,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -19301,7 +18919,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -19341,7 +18959,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408325+00:00",
+              "timestamp": "2026-10-20T03:30:24.227376+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -19388,7 +19006,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.408325+00:00",
+            "timestamp": "2026-10-20T03:30:24.227376+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -19514,7 +19132,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408325+00:00",
+            "timestamp": "2026-10-20T03:30:24.227376+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -19554,7 +19172,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408325+00:00",
+            "timestamp": "2026-10-20T03:30:24.227376+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -19655,7 +19273,7 @@
       "away_abbr": "LAR",
       "startAt": "2026-10-25T20:25Z",
       "date": "2026-10-25",
-      "generated_at": "2026-10-19T22:00:46.408400+00:00",
+      "generated_at": "2026-10-20T03:30:24.227495+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -19683,7 +19301,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407305+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225640+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -19735,7 +19353,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407294+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225623+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -19859,7 +19477,7 @@
             "2026_06_ARI_LA"
           ],
           "latest_game_at": "2026-10-18T20:05:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -19922,7 +19540,7 @@
             "2026_06_ARI_LA"
           ],
           "latest_game_at": "2026-10-18T20:05:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -19981,7 +19599,7 @@
             "2026_06_ARI_LA"
           ],
           "latest_game_at": "2026-10-18T20:05:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -20044,7 +19662,7 @@
             "2026_06_ARI_LA"
           ],
           "latest_game_at": "2026-10-18T20:05:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -20107,7 +19725,7 @@
             "2026_06_ARI_LA"
           ],
           "latest_game_at": "2026-10-18T20:05:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -20170,7 +19788,7 @@
             "2026_06_BUF_LV"
           ],
           "latest_game_at": "2026-10-18T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -20233,7 +19851,7 @@
             "2026_06_ARI_LA"
           ],
           "latest_game_at": "2026-10-18T20:05:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -20294,7 +19912,7 @@
             "2026_06_BUF_LV"
           ],
           "latest_game_at": "2026-10-18T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -20357,7 +19975,7 @@
             "2026_06_ARI_LA"
           ],
           "latest_game_at": "2026-10-18T20:05:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -20420,7 +20038,7 @@
             "2026_06_BUF_LV"
           ],
           "latest_game_at": "2026-10-18T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -20483,7 +20101,7 @@
             "2026_06_BUF_LV"
           ],
           "latest_game_at": "2026-10-18T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -20528,7 +20146,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 23.9811,
@@ -20578,7 +20196,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             },
             "k": {
@@ -20603,7 +20221,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             }
           }
@@ -20639,7 +20257,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             },
             "ou": {
@@ -20664,7 +20282,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             },
             "k": {
@@ -20689,7 +20307,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             }
           }
@@ -20725,7 +20343,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             },
             "ou": {
@@ -20750,7 +20368,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             },
             "k": {
@@ -20775,7 +20393,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             }
           }
@@ -20811,7 +20429,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -20856,7 +20474,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             },
             "k": {
@@ -20881,7 +20499,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             }
           }
@@ -20917,7 +20535,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {
                 "offense_a": 0.096,
                 "offense_b": -0.108
@@ -20962,7 +20580,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             },
             "k": {
@@ -20987,7 +20605,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             }
           }
@@ -21023,7 +20641,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -21068,7 +20686,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             },
             "k": {
@@ -21093,7 +20711,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {}
             }
           }
@@ -21128,7 +20746,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -21253,7 +20871,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -21293,7 +20911,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408400+00:00",
+              "timestamp": "2026-10-20T03:30:24.227495+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -21340,7 +20958,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.408400+00:00",
+            "timestamp": "2026-10-20T03:30:24.227495+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -21465,7 +21083,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408400+00:00",
+            "timestamp": "2026-10-20T03:30:24.227495+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -21505,7 +21123,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408400+00:00",
+            "timestamp": "2026-10-20T03:30:24.227495+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -21605,7 +21223,7 @@
       "away_abbr": "KC",
       "startAt": "2026-10-26T00:20Z",
       "date": "2026-10-26",
-      "generated_at": "2026-10-19T22:00:46.408464+00:00",
+      "generated_at": "2026-10-20T03:30:24.227634+00:00",
       "source": "ESPN schedule with validated season team statistics",
       "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261019-20261025&limit=100",
       "stats": {
@@ -21633,7 +21251,7 @@
           ],
           "through_date": "2026-10-15",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407372+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225714+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 6,
@@ -21684,7 +21302,7 @@
           ],
           "through_date": "2026-10-18",
           "source_url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.csv",
-          "fetched_at": "2026-10-19T22:00:46.407290+00:00",
+          "fetched_at": "2026-10-20T03:30:24.225614+00:00",
           "current_data_status": "current_plus_prior",
           "current_season": 2026,
           "current_games": 5,
@@ -21808,7 +21426,7 @@
             "2026_06_LAC_KC"
           ],
           "latest_game_at": "2026-10-18T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -21871,7 +21489,7 @@
             "2026_06_LAC_KC"
           ],
           "latest_game_at": "2026-10-18T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -21934,7 +21552,7 @@
             "2026_06_SEA_DEN"
           ],
           "latest_game_at": "2026-10-16T00:15:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -21997,7 +21615,7 @@
             "2026_06_SEA_DEN"
           ],
           "latest_game_at": "2026-10-16T00:15:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -22060,7 +21678,7 @@
             "2026_06_SEA_DEN"
           ],
           "latest_game_at": "2026-10-16T00:15:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -22123,7 +21741,7 @@
             "2026_06_SEA_DEN"
           ],
           "latest_game_at": "2026-10-16T00:15:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -22186,7 +21804,7 @@
             "2026_06_LAC_KC"
           ],
           "latest_game_at": "2026-10-18T20:25:00+00:00",
-          "generated_at": "2026-10-19T22:00:46.408920+00:00",
+          "generated_at": "2026-10-20T03:30:24.228116+00:00",
           "season": 2026,
           "roster_week": 6,
           "source": "nflverse player game statistics and current roster",
@@ -22231,7 +21849,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {
                 "sims": 0,
                 "away_mean": 21.1938,
@@ -22281,7 +21899,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             },
             "k": {
@@ -22306,7 +21924,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             }
           }
@@ -22342,7 +21960,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             },
             "ou": {
@@ -22367,7 +21985,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             },
             "k": {
@@ -22392,7 +22010,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "ZiPS not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             }
           }
@@ -22428,7 +22046,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             },
             "ou": {
@@ -22453,7 +22071,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             },
             "k": {
@@ -22478,7 +22096,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer not applicable to NFL",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             }
           }
@@ -22514,7 +22132,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -22559,7 +22177,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             },
             "k": {
@@ -22584,7 +22202,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             }
           }
@@ -22620,7 +22238,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {
                 "offense_a": 0.072,
                 "offense_b": -0.02
@@ -22665,7 +22283,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             },
             "k": {
@@ -22690,7 +22308,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             }
           }
@@ -22726,7 +22344,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {
                 "model": "ensemble(0.66*simple+0.34*wave_true)",
                 "raw_score": 0.0295
@@ -22771,7 +22389,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             },
             "k": {
@@ -22796,7 +22414,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {}
             }
           }
@@ -22831,7 +22449,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
@@ -22956,7 +22574,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -22996,7 +22614,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-19T22:00:46.408464+00:00",
+              "timestamp": "2026-10-20T03:30:24.227634+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -23043,7 +22661,7 @@
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-19T22:00:46.408464+00:00",
+            "timestamp": "2026-10-20T03:30:24.227634+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
@@ -23168,7 +22786,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408464+00:00",
+            "timestamp": "2026-10-20T03:30:24.227634+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -23208,7 +22826,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-19T22:00:46.408464+00:00",
+            "timestamp": "2026-10-20T03:30:24.227634+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -23303,8 +22921,8 @@
     "model": "NFL dated current-season EPA with prior-season regularization; explicit prior-only fallback",
     "calibration_status": "unvalidated"
   },
-  "updated": "2026-10-19T22:00:49.909746+00:00",
-  "generated_at": "2026-10-19T22:00:49.909746+00:00",
+  "updated": "2026-10-20T03:30:28.468844+00:00",
+  "generated_at": "2026-10-20T03:30:28.468844+00:00",
   "status": "ok",
   "data_quality_gate": {
     "invalid_games": 0,
