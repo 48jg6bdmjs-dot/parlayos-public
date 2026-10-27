@@ -1,345 +1,379 @@
 {
-  "runDate": "Oct 26 2026 11:48 PM",
+  "runDate": "Oct 27 2026 07:38 AM",
   "pickCount": 1,
   "games": [
     {
-      "id": "mlb_849804",
-      "gamePk": 849804,
+      "id": "mlb_849803",
+      "gamePk": 849803,
       "sport": "MLB",
       "home": "Tampa Bay Rays",
       "away": "Milwaukee Brewers",
       "home_abbr": "TB",
       "away_abbr": "MIL",
-      "startAt": "2026-10-27T00:00:00Z",
-      "date": "2026-10-26",
-      "generated_at": "2026-10-27T03:48:27.154306+00:00",
-      "status": "Final",
+      "startAt": "2026-10-28T00:00:00Z",
+      "date": "2026-10-27",
+      "generated_at": "2026-10-27T11:38:17.623495+00:00",
+      "status": "Scheduled",
       "source": "mlb_statsapi",
       "pitchers": {
-        "home": "Freddy Peralta",
-        "away": "Robert Gasser",
-        "home_id": 642547,
-        "away_id": 688107,
+        "home": "Griffin Jax",
+        "away": null,
+        "home_id": 643377,
+        "away_id": null,
         "home_stats": {
-          "era": 4.42,
-          "k9": 8.31,
-          "whip": 1.33,
+          "era": 3.53,
+          "k9": 9.29,
+          "whip": 1.18,
           "source": "mlb_statsapi",
           "data_status": "validated",
-          "innings_pitched": "169.0",
-          "games_started": 32.0,
-          "games_pitched": 32.0,
-          "earned_runs": 83.0,
+          "innings_pitched": "112.1",
+          "games_started": 23.0,
+          "games_pitched": 34.0,
+          "earned_runs": 44.0,
           "season": 2026,
-          "pitcher_id": 642547,
-          "source_url": "https://statsapi.mlb.com/api/v1/people/642547/stats?stats=season&group=pitching&season=2026",
-          "fetched_at": "2026-10-27T03:48:26.952041+00:00",
+          "pitcher_id": 643377,
+          "source_url": "https://statsapi.mlb.com/api/v1/people/643377/stats?stats=season&group=pitching&season=2026",
+          "fetched_at": "2026-10-27T11:38:17.537273+00:00",
           "recent_starts": {
             "data_status": "unavailable",
             "reason": "Last observed start is more than 30 days old; current workload unknown",
-            "source_url": "https://statsapi.mlb.com/api/v1/people/642547/stats?stats=gameLog&group=pitching&season=2026",
-            "fetched_at": "2026-10-27T03:48:26.739884+00:00"
+            "source_url": "https://statsapi.mlb.com/api/v1/people/643377/stats?stats=gameLog&group=pitching&season=2026",
+            "fetched_at": "2026-10-27T11:38:17.282113+00:00"
           }
         },
-        "away_stats": {
-          "era": 3.87,
-          "k9": 8.48,
-          "whip": 1.19,
-          "source": "mlb_statsapi",
-          "data_status": "validated",
-          "innings_pitched": "109.1",
-          "games_started": 20.0,
-          "games_pitched": 21.0,
-          "earned_runs": 47.0,
-          "season": 2026,
-          "pitcher_id": 688107,
-          "source_url": "https://statsapi.mlb.com/api/v1/people/688107/stats?stats=season&group=pitching&season=2026",
-          "fetched_at": "2026-10-27T03:48:27.075999+00:00",
-          "recent_starts": {
-            "data_status": "unavailable",
-            "reason": "Last observed start is more than 30 days old; current workload unknown",
-            "source_url": "https://statsapi.mlb.com/api/v1/people/688107/stats?stats=gameLog&group=pitching&season=2026",
-            "fetched_at": "2026-10-27T03:48:26.743817+00:00"
-          }
-        }
+        "away_stats": {}
       },
       "lineups": {
         "home": [
+          {
+            "id": 691406,
+            "name": "Junior Caminero",
+            "pos": "3B",
+            "team": "TB",
+            "season": 2026,
+            "source": "mlb_statsapi",
+            "avg": 0.276,
+            "ops": 0.884,
+            "obp": 0.36,
+            "slg": 0.524,
+            "hr": 42.0,
+            "pa": 702.0,
+            "ab": 616.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/139/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:17.195265+00:00"
+          },
           {
             "id": 650490,
             "name": "Yandy D\u00edaz",
             "pos": "DH",
             "team": "TB",
+            "season": 2026,
             "source": "mlb_statsapi",
-            "avg": 0.269,
-            "ops": 0.777,
-            "obp": 0.296,
-            "slg": 0.481,
-            "hr": 2.0,
-            "pa": 54.0,
-            "ab": 52.0,
-            "data_status": "validated"
+            "avg": 0.293,
+            "ops": 0.805,
+            "obp": 0.359,
+            "slg": 0.446,
+            "hr": 22.0,
+            "pa": 686.0,
+            "ab": 614.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/139/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:17.195276+00:00"
           },
           {
             "id": 666018,
             "name": "Jonathan Aranda",
             "pos": "1B",
             "team": "TB",
+            "season": 2026,
             "source": "mlb_statsapi",
-            "avg": 0.295,
-            "ops": 0.753,
-            "obp": 0.367,
-            "slg": 0.386,
-            "hr": 1.0,
-            "pa": 50.0,
-            "ab": 44.0,
-            "data_status": "validated"
+            "avg": 0.274,
+            "ops": 0.792,
+            "obp": 0.358,
+            "slg": 0.434,
+            "hr": 22.0,
+            "pa": 668.0,
+            "ab": 580.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/139/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:17.195261+00:00"
           },
           {
             "id": 802415,
             "name": "Chandler Simpson",
             "pos": "LF",
             "team": "TB",
+            "season": 2026,
             "source": "mlb_statsapi",
-            "avg": 0.25,
-            "ops": 0.596,
-            "obp": 0.263,
-            "slg": 0.333,
-            "hr": 0.0,
-            "pa": 39.0,
-            "ab": 36.0,
-            "data_status": "validated"
-          },
-          {
-            "id": 691406,
-            "name": "Junior Caminero",
-            "pos": "3B",
-            "team": "TB",
-            "source": "mlb_statsapi",
-            "avg": 0.256,
-            "ops": 0.752,
+            "avg": 0.306,
+            "ops": 0.689,
             "obp": 0.333,
-            "slg": 0.419,
-            "hr": 1.0,
-            "pa": 48.0,
-            "ab": 43.0,
-            "data_status": "validated"
-          },
-          {
-            "id": 810938,
-            "name": "Ben Williamson",
-            "pos": "2B",
-            "team": "TB",
-            "source": "mlb_statsapi",
-            "avg": 0.067,
-            "ops": 0.289,
-            "obp": 0.222,
-            "slg": 0.067,
+            "slg": 0.356,
             "hr": 0.0,
-            "pa": 18.0,
-            "ab": 15.0,
-            "data_status": "validated"
+            "pa": 612.0,
+            "ab": 571.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/139/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:17.195254+00:00"
           },
           {
-            "id": 676356,
-            "name": "Jonny DeLuca",
-            "pos": "CF",
+            "id": 689414,
+            "name": "Liam Hicks",
+            "pos": "C",
             "team": "TB",
+            "season": 2026,
             "source": "mlb_statsapi",
-            "avg": 0.195,
-            "ops": 0.453,
-            "obp": 0.209,
-            "slg": 0.244,
-            "hr": 0.0,
-            "pa": 43.0,
-            "ab": 41.0,
-            "data_status": "validated"
-          },
-          {
-            "id": 683748,
-            "name": "Victor Mesa Jr.",
-            "pos": "RF",
-            "team": "TB",
-            "source": "mlb_statsapi",
-            "avg": 0.154,
-            "ops": 0.481,
-            "obp": 0.25,
-            "slg": 0.231,
-            "hr": 1.0,
-            "pa": 44.0,
-            "ab": 39.0,
-            "data_status": "validated"
+            "avg": 0.284,
+            "ops": 0.801,
+            "obp": 0.367,
+            "slg": 0.434,
+            "hr": 18.0,
+            "pa": 554.0,
+            "ab": 479.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/139/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:17.195267+00:00"
           },
           {
             "id": 656775,
             "name": "Cedric Mullins",
-            "pos": "PH",
+            "pos": "CF",
             "team": "TB",
+            "season": 2026,
             "source": "mlb_statsapi",
-            "avg": 0.4,
-            "ops": 1.4,
-            "obp": 0.4,
-            "slg": 1.0,
-            "hr": 1.0,
-            "pa": 5.0,
-            "ab": 5.0,
-            "data_status": "validated"
+            "avg": 0.205,
+            "ops": 0.628,
+            "obp": 0.284,
+            "slg": 0.344,
+            "hr": 15.0,
+            "pa": 502.0,
+            "ab": 439.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/139/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:17.195252+00:00"
           },
           {
-            "id": 622761,
-            "name": "Jorge Mateo",
-            "pos": "PH",
+            "id": 670764,
+            "name": "Taylor Walls",
+            "pos": "SS",
             "team": "TB",
+            "season": 2026,
             "source": "mlb_statsapi",
-            "avg": 0.0,
-            "ops": 0.0,
-            "obp": 0.0,
-            "slg": 0.0,
-            "hr": 0.0,
-            "pa": 1.0,
-            "ab": 1.0,
-            "data_status": "validated"
+            "avg": 0.222,
+            "ops": 0.607,
+            "obp": 0.309,
+            "slg": 0.298,
+            "hr": 2.0,
+            "pa": 433.0,
+            "ab": 369.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/139/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:17.195273+00:00"
+          },
+          {
+            "id": 680700,
+            "name": "Richie Palacios",
+            "pos": "2B",
+            "team": "TB",
+            "season": 2026,
+            "source": "mlb_statsapi",
+            "avg": 0.235,
+            "ops": 0.704,
+            "obp": 0.33,
+            "slg": 0.374,
+            "hr": 10.0,
+            "pa": 399.0,
+            "ab": 345.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/139/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:17.195270+00:00"
+          },
+          {
+            "id": 676356,
+            "name": "Jonny DeLuca",
+            "pos": "RF",
+            "team": "TB",
+            "season": 2026,
+            "source": "mlb_statsapi",
+            "avg": 0.266,
+            "ops": 0.729,
+            "obp": 0.3,
+            "slg": 0.429,
+            "hr": 11.0,
+            "pa": 370.0,
+            "ab": 350.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/139/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:17.195262+00:00"
           }
         ],
         "away": [
           {
-            "id": 694192,
-            "name": "Jackson Chourio",
-            "pos": "LF",
+            "id": 668930,
+            "name": "Brice Turang",
+            "pos": "2B",
             "team": "MIL",
+            "season": 2026,
             "source": "mlb_statsapi",
-            "avg": 0.286,
-            "ops": 0.737,
-            "obp": 0.308,
-            "slg": 0.429,
-            "hr": 2.0,
-            "pa": 52.0,
-            "ab": 49.0,
-            "data_status": "validated"
+            "avg": 0.268,
+            "ops": 0.816,
+            "obp": 0.366,
+            "slg": 0.45,
+            "hr": 21.0,
+            "pa": 680.0,
+            "ab": 582.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/158/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:16.808802+00:00"
+          },
+          {
+            "id": 661388,
+            "name": "William Contreras",
+            "pos": "C",
+            "team": "MIL",
+            "season": 2026,
+            "source": "mlb_statsapi",
+            "avg": 0.27,
+            "ops": 0.758,
+            "obp": 0.341,
+            "slg": 0.417,
+            "hr": 18.0,
+            "pa": 640.0,
+            "ab": 566.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/158/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:16.808825+00:00"
           },
           {
             "id": 641343,
             "name": "Jake Bauers",
             "pos": "1B",
             "team": "MIL",
+            "season": 2026,
             "source": "mlb_statsapi",
-            "avg": 0.243,
-            "ops": 0.768,
-            "obp": 0.417,
-            "slg": 0.351,
-            "hr": 1.0,
-            "pa": 48.0,
-            "ab": 37.0,
-            "data_status": "validated"
+            "avg": 0.266,
+            "ops": 0.873,
+            "obp": 0.389,
+            "slg": 0.484,
+            "hr": 26.0,
+            "pa": 578.0,
+            "ab": 477.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/158/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:16.808814+00:00"
           },
           {
-            "id": 683734,
-            "name": "Andrew Vaughn",
-            "pos": "DH",
+            "id": 694192,
+            "name": "Jackson Chourio",
+            "pos": "LF",
             "team": "MIL",
+            "season": 2026,
             "source": "mlb_statsapi",
-            "avg": 0.25,
-            "ops": 0.775,
-            "obp": 0.4,
-            "slg": 0.375,
-            "hr": 0.0,
-            "pa": 10.0,
-            "ab": 8.0,
-            "data_status": "validated"
-          },
-          {
-            "id": 596142,
-            "name": "Gary S\u00e1nchez",
-            "pos": "C",
-            "team": "MIL",
-            "source": "mlb_statsapi",
-            "avg": 0.0,
-            "ops": 0.5,
-            "obp": 0.5,
-            "slg": 0.0,
-            "hr": 0.0,
-            "pa": 2.0,
-            "ab": 1.0,
-            "data_status": "validated"
-          },
-          {
-            "id": 668930,
-            "name": "Brice Turang",
-            "pos": "2B",
-            "team": "MIL",
-            "source": "mlb_statsapi",
-            "avg": 0.263,
+            "avg": 0.291,
             "ops": 0.838,
-            "obp": 0.417,
-            "slg": 0.421,
-            "hr": 1.0,
-            "pa": 49.0,
-            "ab": 38.0,
-            "data_status": "validated"
+            "obp": 0.351,
+            "slg": 0.487,
+            "hr": 25.0,
+            "pa": 573.0,
+            "ab": 522.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/158/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:16.808812+00:00"
           },
           {
-            "id": 800325,
-            "name": "Luis Lara",
+            "id": 669003,
+            "name": "Garrett Mitchell",
             "pos": "CF",
             "team": "MIL",
+            "season": 2026,
             "source": "mlb_statsapi",
-            "avg": 0.091,
-            "ops": 0.258,
-            "obp": 0.167,
-            "slg": 0.091,
-            "hr": 0.0,
-            "pa": 12.0,
-            "ab": 11.0,
-            "data_status": "validated"
+            "avg": 0.262,
+            "ops": 0.77,
+            "obp": 0.354,
+            "slg": 0.416,
+            "hr": 11.0,
+            "pa": 531.0,
+            "ab": 461.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/158/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:16.808809+00:00"
           },
           {
-            "id": 806198,
-            "name": "Cooper Pratt",
+            "id": 592885,
+            "name": "Christian Yelich",
+            "pos": "DH",
+            "team": "MIL",
+            "season": 2026,
+            "source": "mlb_statsapi",
+            "avg": 0.235,
+            "ops": 0.693,
+            "obp": 0.315,
+            "slg": 0.378,
+            "hr": 12.0,
+            "pa": 500.0,
+            "ab": 442.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/158/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:16.808803+00:00"
+          },
+          {
+            "id": 687401,
+            "name": "Joey Ortiz",
             "pos": "SS",
             "team": "MIL",
+            "season": 2026,
             "source": "mlb_statsapi",
-            "avg": 0.275,
-            "ops": 0.635,
-            "obp": 0.31,
-            "slg": 0.325,
-            "hr": 0.0,
-            "pa": 43.0,
-            "ab": 40.0,
-            "data_status": "validated"
+            "avg": 0.27,
+            "ops": 0.73,
+            "obp": 0.328,
+            "slg": 0.402,
+            "hr": 9.0,
+            "pa": 415.0,
+            "ab": 371.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/158/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:16.808816+00:00"
+          },
+          {
+            "id": 666152,
+            "name": "David Hamilton",
+            "pos": "3B",
+            "team": "MIL",
+            "season": 2026,
+            "source": "mlb_statsapi",
+            "avg": 0.245,
+            "ops": 0.65,
+            "obp": 0.314,
+            "slg": 0.336,
+            "hr": 4.0,
+            "pa": 387.0,
+            "ab": 339.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/158/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:16.808807+00:00"
           },
           {
             "id": 686217,
             "name": "Sal Frelick",
             "pos": "RF",
             "team": "MIL",
+            "season": 2026,
             "source": "mlb_statsapi",
-            "avg": 0.269,
-            "ops": 0.798,
-            "obp": 0.375,
-            "slg": 0.423,
-            "hr": 1.0,
-            "pa": 32.0,
-            "ab": 26.0,
-            "data_status": "validated"
-          },
-          {
-            "id": 687401,
-            "name": "Joey Ortiz",
-            "pos": "3B",
-            "team": "MIL",
-            "source": "mlb_statsapi",
-            "avg": 0.105,
-            "ops": 0.21,
-            "obp": 0.105,
-            "slg": 0.105,
-            "hr": 0.0,
-            "pa": 20.0,
-            "ab": 19.0,
-            "data_status": "validated"
+            "avg": 0.23,
+            "ops": 0.614,
+            "obp": 0.295,
+            "slg": 0.319,
+            "hr": 4.0,
+            "pa": 384.0,
+            "ab": 339.0,
+            "data_status": "validated",
+            "source_url": "https://statsapi.mlb.com/api/v1/teams/158/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
+            "fetched_at": "2026-10-27T11:38:16.808822+00:00"
           }
         ],
-        "home_source": "confirmed batting order",
-        "away_source": "confirmed batting order"
+        "home_source": "projected from active roster season plate appearances",
+        "away_source": "projected from active roster season plate appearances"
       },
       "weather": {
         "status": "not_used",
@@ -368,7 +402,7 @@
           "source": "mlb_statsapi",
           "data_status": "validated",
           "source_url": "https://statsapi.mlb.com/api/v1/teams/stats?sportIds=1&stats=season&group=hitting,pitching&season=2026",
-          "fetched_at": "2026-10-27T03:48:26.824077+00:00"
+          "fetched_at": "2026-10-27T11:38:17.460273+00:00"
         },
         "home": {
           "games": 162.0,
@@ -385,7 +419,7 @@
           "source": "mlb_statsapi",
           "data_status": "validated",
           "source_url": "https://statsapi.mlb.com/api/v1/teams/stats?sportIds=1&stats=season&group=hitting,pitching&season=2026",
-          "fetched_at": "2026-10-27T03:48:26.824094+00:00"
+          "fetched_at": "2026-10-27T11:38:17.460281+00:00"
         },
         "league": {
           "runs_per_game": 4.481062165500206,
@@ -410,9 +444,9 @@
               668941,
               656730
             ],
-            "target_date": "2026-10-26",
+            "target_date": "2026-10-27",
             "source_url": "https://statsapi.mlb.com/api/v1/teams/158/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
-            "fetched_at": "2026-10-27T03:48:26.120308+00:00",
+            "fetched_at": "2026-10-27T11:38:16.808796+00:00",
             "basis": "Active pitchers with zero season starts; ERA from measured earned runs and outs. Mixed-role pitchers excluded. Trades can include prior-team innings; usage and availability are not modeled."
           },
           "home": {
@@ -431,112 +465,23 @@
               687330,
               669330
             ],
-            "target_date": "2026-10-26",
+            "target_date": "2026-10-27",
             "source_url": "https://statsapi.mlb.com/api/v1/teams/139/roster?rosterType=active&season=2026&hydrate=person(stats(type=[season],group=[hitting,pitching],season=2026))",
-            "fetched_at": "2026-10-27T03:48:26.590168+00:00",
+            "fetched_at": "2026-10-27T11:38:17.195249+00:00",
             "basis": "Active pitchers with zero season starts; ERA from measured earned runs and outs. Mixed-role pitchers excluded. Trades can include prior-team innings; usage and availability are not modeled."
           }
         }
       },
-      "factorsA": {
-        "pitcher_dominance": 0.5901447484032307,
-        "lineup_ops": 0.5330809731592248,
-        "bullpen": 0.5,
-        "park": 0.5,
-        "weather": 0.5,
-        "rest": 0.5,
-        "umpire": 0.5,
-        "form": 0.5,
-        "entropy": 0.5
-      },
-      "factorsB": {
-        "pitcher_dominance": 0.5709991150398688,
-        "lineup_ops": 0.48974218823494753,
-        "bullpen": 0.5,
-        "park": 0.5,
-        "weather": 0.5,
-        "rest": 0.5,
-        "umpire": 0.5,
-        "form": 0.5,
-        "entropy": 0.5
-      },
-      "chd": {
-        "pA": 0.5041318837054296,
-        "pB": 0.4958681162945704,
-        "raw_score": 0.01652791105810236,
-        "model": "mlb_monotone_logit",
-        "input_version": "mlb-monotone-logit-role-2",
-        "factor_contributions": {
-          "pitcher_dominance": 0.006126602676275823,
-          "lineup_ops": 0.010401308381826535
-        },
-        "weights": {
-          "pitcher_dominance": 0.32,
-          "lineup_ops": 0.24
-        },
-        "calibration_status": "unvalidated",
-        "assumptions": "Unfitted batting/pitching coefficients; neutral home advantage. No wave transform or confidence-based weighting. Injury, weather, park and bullpen availability effects are not modeled. Validated starter game-log workload and active relief-only season evidence are used when supported; regularization priors remain unfitted."
-      },
       "data_quality": {
         "status": "validated",
-        "prediction_available": true
+        "checked_by": "sports_data",
+        "prediction_available": true,
+        "input_basis": "team_season",
+        "reason": "Starter or lineup incomplete; using verified team season estimates"
       },
       "player_prop_models": [],
       "player_prop_policy": "recent-start-mixture-1",
-      "ab_test_mode": "wave",
-      "chd_all_modes": {
-        "simple": {
-          "pA": 0.5041318837054296,
-          "pB": 0.4958681162945704,
-          "raw_score": 0.01652791105810236,
-          "model": "mlb_monotone_logit",
-          "input_version": "mlb-monotone-logit-role-2",
-          "factor_contributions": {
-            "pitcher_dominance": 0.006126602676275823,
-            "lineup_ops": 0.010401308381826535
-          },
-          "weights": {
-            "pitcher_dominance": 0.32,
-            "lineup_ops": 0.24
-          },
-          "calibration_status": "unvalidated",
-          "assumptions": "Unfitted batting/pitching coefficients; neutral home advantage. No wave transform or confidence-based weighting. Injury, weather, park and bullpen availability effects are not modeled. Validated starter game-log workload and active relief-only season evidence are used when supported; regularization priors remain unfitted."
-        },
-        "wave": {
-          "pA": 0.5041318837054296,
-          "pB": 0.4958681162945704,
-          "raw_score": 0.01652791105810236,
-          "model": "mlb_monotone_logit",
-          "input_version": "mlb-monotone-logit-role-2",
-          "factor_contributions": {
-            "pitcher_dominance": 0.006126602676275823,
-            "lineup_ops": 0.010401308381826535
-          },
-          "weights": {
-            "pitcher_dominance": 0.32,
-            "lineup_ops": 0.24
-          },
-          "calibration_status": "unvalidated",
-          "assumptions": "Unfitted batting/pitching coefficients; neutral home advantage. No wave transform or confidence-based weighting. Injury, weather, park and bullpen availability effects are not modeled. Validated starter game-log workload and active relief-only season evidence are used when supported; regularization priors remain unfitted."
-        },
-        "ensemble": {
-          "pA": 0.5041318837054296,
-          "pB": 0.4958681162945704,
-          "raw_score": 0.01652791105810236,
-          "model": "mlb_monotone_logit",
-          "input_version": "mlb-monotone-logit-role-2",
-          "factor_contributions": {
-            "pitcher_dominance": 0.006126602676275823,
-            "lineup_ops": 0.010401308381826535
-          },
-          "weights": {
-            "pitcher_dominance": 0.32,
-            "lineup_ops": 0.24
-          },
-          "calibration_status": "unvalidated",
-          "assumptions": "Unfitted batting/pitching coefficients; neutral home advantage. No wave transform or confidence-based weighting. Injury, weather, park and bullpen availability effects are not modeled. Validated starter game-log workload and active relief-only season evidence are used when supported; regularization priors remain unfitted."
-        }
-      },
+      "ab_test_mode": "simple",
       "models": {
         "monte_carlo": {
           "model_id": "monte_carlo",
@@ -555,51 +500,44 @@
               "sport": "MLB",
               "market": "ml",
               "implementation_type": "internal_baseline",
-              "selection": "Milwaukee Brewers",
+              "selection": "Tampa Bay Rays",
               "player_id": null,
               "player_name": null,
               "line": null,
               "odds": null,
-              "probability": 0.5344796526098097,
-              "pA": 0.5344796526098097,
-              "pB": 0.4655203473901903,
+              "probability": 0.5418911216982556,
+              "pA": 0.4581088783017444,
+              "pB": 0.5418911216982556,
               "implied_probability": null,
               "edge": null,
               "ev": null,
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {
                 "matchup": {
                   "away": {
-                    "projected_ops": 0.7365404865796124,
+                    "projected_ops": 0.7503754205362315,
                     "measured_batters": 9,
                     "opposing_pitching": {
                       "basis": "starter plus team season pitching proxy",
-                      "starter_innings": 5.28125,
-                      "workload_basis": "season IP/start capped at seven",
-                      "observed_innings": 169.0,
-                      "starter_weight": 0.7379912663755459,
-                      "regressed_era": 4.231353711790393,
+                      "starter_innings": 5.0,
+                      "workload_basis": "unfitted five-inning prior",
+                      "observed_innings": 112.33333333333333,
+                      "starter_weight": 0.6518375241779497,
+                      "regressed_era": 3.589187620889749,
                       "relief_era": 2.688867745004757,
                       "relief_basis": "active relief-only season pool plus 60-inning pitching prior; availability unknown",
                       "recent_starts": null
                     }
                   },
                   "home": {
-                    "projected_ops": 0.7148710941174737,
+                    "projected_ops": 0.73743420407104,
                     "measured_batters": 9,
                     "opposing_pitching": {
-                      "basis": "starter plus team season pitching proxy",
-                      "starter_innings": 5.0,
-                      "workload_basis": "unfitted five-inning prior",
-                      "observed_innings": 109.33333333333333,
-                      "starter_weight": 0.6456692913385828,
-                      "regressed_era": 3.7424409448818903,
-                      "relief_era": 3.1403433476394853,
-                      "relief_basis": "active relief-only season pool plus 60-inning pitching prior; availability unknown",
-                      "recent_starts": null
+                      "basis": "team season pitching; starter unavailable",
+                      "starter_innings": null
                     }
                   }
                 },
@@ -608,8 +546,8 @@
                 "team_prior_games": 30,
                 "assumptions": "Unfitted priors; neutral park/weather/home advantage; measured active relief-only pool when supported, otherwise team pitching proxy; no injury or bullpen availability adjustment",
                 "input_basis": "season_lineup_and_workload",
-                "away_mean": 3.9555521552711697,
-                "home_mean": 3.7118837207993938,
+                "away_mean": 3.5757806642950505,
+                "home_mean": 3.8677817194224278,
                 "sims": 0
               },
               "evaluation": "analytic_poisson",
@@ -623,15 +561,15 @@
                 "source_version": "2.3.0",
                 "market": "ml",
                 "raw_probabilities": [
-                  0.4655203473901903,
-                  0.5344796526098097
+                  0.5418911216982556,
+                  0.4581088783017444
                 ],
                 "candidate_probabilities": null,
                 "active": false,
                 "status": "collecting_training_data",
-                "training_games": 27,
+                "training_games": 28,
                 "required_training_games": 100,
-                "trained_through": "2026-10-25T10:47:01.749840+00:00"
+                "trained_through": "2026-10-27T03:48:55.019426+00:00"
               }
             },
             "ou": {
@@ -656,7 +594,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             },
             "k": {
@@ -681,7 +619,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             }
           }
@@ -717,7 +655,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Zips projections not connected: current batting and pitching exports required",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             },
             "ou": {
@@ -742,7 +680,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             },
             "k": {
@@ -767,7 +705,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             }
           }
@@ -803,7 +741,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "Steamer projections not connected: current batting and pitching exports required",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             },
             "ou": {
@@ -828,7 +766,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             },
             "k": {
@@ -853,7 +791,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             }
           }
@@ -864,8 +802,8 @@
           "model_version": "2.4.0",
           "methodology": "Internal CHD matchup heuristic. My CHD and CHD Master expose the same winner probability and share one ensemble family; neither is an external projection system. MLB uses a monotone paired batting/pitching logit with unfitted coefficients and neutral home advantage; legacy wave modes are retired for MLB. MLB uses validated recent-start workload and an active relief-only season pitching pool when supported; daily bullpen availability remains unknown.",
           "sport": "MLB",
-          "status": "available",
-          "reason": null,
+          "status": "unavailable",
+          "reason": "model not applicable / no inputs",
           "markets": {
             "ml": {
               "model_id": "my_chd",
@@ -875,52 +813,22 @@
               "sport": "MLB",
               "market": "ml",
               "implementation_type": "internal_baseline",
-              "selection": "Milwaukee Brewers",
+              "selection": null,
               "player_id": null,
               "player_name": null,
               "line": null,
               "odds": null,
-              "probability": 0.5041318837054296,
-              "pA": 0.5041318837054296,
-              "pB": 0.4958681162945704,
+              "probability": null,
+              "pA": null,
+              "pB": null,
               "implied_probability": null,
               "edge": null,
               "ev": null,
               "confidence": null,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
-              "inputs": {
-                "model": "mlb_monotone_logit",
-                "raw_score": 0.0165,
-                "input_version": "mlb-monotone-logit-role-2",
-                "factor_contributions": {
-                  "pitcher_dominance": 0.006126602676275823,
-                  "lineup_ops": 0.010401308381826535
-                },
-                "weights": {
-                  "pitcher_dominance": 0.32,
-                  "lineup_ops": 0.24
-                },
-                "assumptions": "Unfitted batting/pitching coefficients; neutral home advantage. No wave transform or confidence-based weighting. Injury, weather, park and bullpen availability effects are not modeled. Validated starter game-log workload and active relief-only season evidence are used when supported; regularization priors remain unfitted."
-              },
-              "calibration_status": "unvalidated",
-              "calibration": {
-                "version": "winner-calibration-1",
-                "signature": "0776bae6bb853eb95336",
-                "source_version": "2.4.0",
-                "market": "ml",
-                "raw_probabilities": [
-                  0.4958681162945704,
-                  0.5041318837054296
-                ],
-                "candidate_probabilities": null,
-                "active": false,
-                "status": "collecting_training_data",
-                "training_games": 22,
-                "required_training_games": 100,
-                "trained_through": "2026-10-25T10:47:01.749840+00:00"
-              }
+              "status": "unavailable",
+              "reason": "prediction error: Nine measured batters and measured starter workload are required",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
+              "inputs": {}
             },
             "ou": {
               "model_id": "my_chd",
@@ -944,7 +852,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             },
             "k": {
@@ -969,7 +877,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             }
           }
@@ -1005,7 +913,7 @@
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {
                 "matchup": {
                   "away": {
@@ -1045,9 +953,9 @@
                 "candidate_probabilities": null,
                 "active": false,
                 "status": "collecting_training_data",
-                "training_games": 27,
+                "training_games": 28,
                 "required_training_games": 100,
-                "trained_through": "2026-10-25T10:47:01.749840+00:00"
+                "trained_through": "2026-10-27T03:48:55.019426+00:00"
               }
             },
             "ou": {
@@ -1072,7 +980,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             },
             "k": {
@@ -1097,7 +1005,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             }
           }
@@ -1108,8 +1016,8 @@
           "model_version": "2.4.0",
           "methodology": "The same CHD winner probability as My CHD, with optional market-price comparison when supplied. Market prices do not change this win forecast. Not an independent prediction engine. MLB uses a monotone paired batting/pitching logit with unfitted coefficients and neutral home advantage; legacy wave modes are retired for MLB. MLB uses validated recent-start workload and an active relief-only season pitching pool when supported; daily bullpen availability remains unknown.",
           "sport": "MLB",
-          "status": "available",
-          "reason": null,
+          "status": "unavailable",
+          "reason": "model not applicable / no inputs",
           "markets": {
             "ml": {
               "model_id": "chd_master_predictor",
@@ -1119,52 +1027,22 @@
               "sport": "MLB",
               "market": "ml",
               "implementation_type": "internal_baseline",
-              "selection": "Milwaukee Brewers",
+              "selection": null,
               "player_id": null,
               "player_name": null,
               "line": null,
               "odds": null,
-              "probability": 0.5041318837054296,
-              "pA": 0.5041318837054296,
-              "pB": 0.4958681162945704,
+              "probability": null,
+              "pA": null,
+              "pB": null,
               "implied_probability": null,
               "edge": null,
               "ev": null,
               "confidence": null,
-              "status": "available",
-              "reason": null,
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
-              "inputs": {
-                "model": "mlb_monotone_logit",
-                "raw_score": 0.0165,
-                "input_version": "mlb-monotone-logit-role-2",
-                "factor_contributions": {
-                  "pitcher_dominance": 0.006126602676275823,
-                  "lineup_ops": 0.010401308381826535
-                },
-                "weights": {
-                  "pitcher_dominance": 0.32,
-                  "lineup_ops": 0.24
-                },
-                "assumptions": "Unfitted batting/pitching coefficients; neutral home advantage. No wave transform or confidence-based weighting. Injury, weather, park and bullpen availability effects are not modeled. Validated starter game-log workload and active relief-only season evidence are used when supported; regularization priors remain unfitted."
-              },
-              "calibration_status": "unvalidated",
-              "calibration": {
-                "version": "winner-calibration-1",
-                "signature": "c64cabf16b4d95fdf9cd",
-                "source_version": "2.4.0",
-                "market": "ml",
-                "raw_probabilities": [
-                  0.4958681162945704,
-                  0.5041318837054296
-                ],
-                "candidate_probabilities": null,
-                "active": false,
-                "status": "collecting_training_data",
-                "training_games": 22,
-                "required_training_games": 100,
-                "trained_through": "2026-10-25T10:47:01.749840+00:00"
-              }
+              "status": "unavailable",
+              "reason": "prediction error: Nine measured batters and measured starter workload are required",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
+              "inputs": {}
             },
             "ou": {
               "model_id": "chd_master_predictor",
@@ -1188,7 +1066,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No observed total line; a model prior is not a market",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             },
             "k": {
@@ -1213,7 +1091,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "No validated player-prop or spread adapter is configured",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {}
             }
           }
@@ -1239,32 +1117,30 @@
               "player_name": null,
               "line": null,
               "odds": null,
-              "probability": 0.5393258075432725,
-              "pA": 0.5393258075432725,
-              "pB": 0.46067419245672747,
+              "probability": 0.5194293348057185,
+              "pA": 0.5194293348057185,
+              "pB": 0.4805706651942815,
               "implied_probability": null,
               "edge": null,
               "ev": null,
               "confidence": null,
               "status": "available",
               "reason": null,
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {
                 "available_models": [
                   "monte_carlo",
-                  "my_chd",
-                  "season_stats",
-                  "chd_master_predictor"
+                  "season_stats"
                 ],
                 "unavailable_models": [
                   "zips",
-                  "steamer"
+                  "steamer",
+                  "my_chd",
+                  "chd_master_predictor"
                 ],
                 "weights": {
-                  "monte_carlo": 0.3333333333333333,
-                  "my_chd": 0.16666666666666666,
-                  "chd_master_predictor": 0.16666666666666666,
-                  "season_stats": 0.3333333333333333
+                  "monte_carlo": 0.5,
+                  "season_stats": 0.5
                 },
                 "model_families": {
                   "monte_carlo": "mlb_run_projection",
@@ -1274,18 +1150,17 @@
                   "chd_master_predictor": "chd",
                   "season_stats": "season_stats"
                 },
-                "family_count": 3,
+                "family_count": 2,
                 "family_probabilities": {
-                  "mlb_run_projection": 0.5344796526098097,
-                  "chd": 0.5041318837054296,
+                  "mlb_run_projection": 0.4581088783017444,
                   "season_stats": 0.5833456030445537
                 },
-                "unshrunk_probability_away": 0.5406523797865977,
-                "base_probability": 0.5393258075432725,
+                "unshrunk_probability_away": 0.5207272406731491,
+                "base_probability": 0.5194293348057185,
                 "learning": {
                   "version": "family-brier-1",
-                  "signature": "ec18066a3aa8aeaa737a",
-                  "training_games": 22,
+                  "signature": "2cc66432c89db8452878",
+                  "training_games": 5,
                   "required_training_games": 100,
                   "status": "collecting_training_data",
                   "active": false,
@@ -1296,39 +1171,32 @@
               },
               "ensemble_version": "2.5.0",
               "calibration_status": "unvalidated",
-              "model_disagreement": 0.03263209313425129,
+              "model_disagreement": 0.06261836237140467,
               "agreement": {
-                "total": 4,
-                "available": 4,
+                "total": 2,
+                "available": 2,
                 "supporting": [
-                  "Monte Carlo",
-                  "My CHD",
-                  "Season Stats",
-                  "CHD Master Predictor"
+                  "Season Stats"
                 ],
-                "opposing": [],
+                "opposing": [
+                  "Monte Carlo"
+                ],
                 "unavailable": [
                   "zips",
-                  "steamer"
+                  "steamer",
+                  "my_chd",
+                  "chd_master_predictor"
                 ],
-                "agreement_ratio": 0.9999999999999999,
+                "agreement_ratio": 0.5,
                 "agreement_basis": "family weight; duplicate forecasts share a vote",
                 "model_votes": {
                   "monte_carlo": {
-                    "pA": 0.5344796526098097,
-                    "weight": 0.3333333333333333
-                  },
-                  "my_chd": {
-                    "pA": 0.5041318837054296,
-                    "weight": 0.16666666666666666
+                    "pA": 0.4581088783017444,
+                    "weight": 0.5
                   },
                   "season_stats": {
                     "pA": 0.5833456030445537,
-                    "weight": 0.3333333333333333
-                  },
-                  "chd_master_predictor": {
-                    "pA": 0.5041318837054296,
-                    "weight": 0.16666666666666666
+                    "weight": 0.5
                   }
                 },
                 "market_available": false,
@@ -1340,15 +1208,15 @@
                 "source_version": "2.5.0",
                 "market": "ml",
                 "raw_probabilities": [
-                  0.46067419245672747,
-                  0.5393258075432725
+                  0.4805706651942815,
+                  0.5194293348057185
                 ],
                 "candidate_probabilities": null,
                 "active": false,
                 "status": "collecting_training_data",
-                "training_games": 27,
+                "training_games": 28,
                 "required_training_games": 100,
-                "trained_through": "2026-10-25T10:47:01.749840+00:00"
+                "trained_through": "2026-10-27T03:48:55.019426+00:00"
               }
             },
             "ou": {
@@ -1373,7 +1241,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -1413,7 +1281,7 @@
               "confidence": null,
               "status": "unavailable",
               "reason": "no compatible validated model predictions",
-              "timestamp": "2026-10-27T03:48:27.154306+00:00",
+              "timestamp": "2026-10-27T11:38:17.623495+00:00",
               "inputs": {},
               "agreement": {
                 "total": 0,
@@ -1451,32 +1319,30 @@
             "player_name": null,
             "line": null,
             "odds": null,
-            "probability": 0.5393258075432725,
-            "pA": 0.5393258075432725,
-            "pB": 0.46067419245672747,
+            "probability": 0.5194293348057185,
+            "pA": 0.5194293348057185,
+            "pB": 0.4805706651942815,
             "implied_probability": null,
             "edge": null,
             "ev": null,
             "confidence": null,
             "status": "available",
             "reason": null,
-            "timestamp": "2026-10-27T03:48:27.154306+00:00",
+            "timestamp": "2026-10-27T11:38:17.623495+00:00",
             "inputs": {
               "available_models": [
                 "monte_carlo",
-                "my_chd",
-                "season_stats",
-                "chd_master_predictor"
+                "season_stats"
               ],
               "unavailable_models": [
                 "zips",
-                "steamer"
+                "steamer",
+                "my_chd",
+                "chd_master_predictor"
               ],
               "weights": {
-                "monte_carlo": 0.3333333333333333,
-                "my_chd": 0.16666666666666666,
-                "chd_master_predictor": 0.16666666666666666,
-                "season_stats": 0.3333333333333333
+                "monte_carlo": 0.5,
+                "season_stats": 0.5
               },
               "model_families": {
                 "monte_carlo": "mlb_run_projection",
@@ -1486,18 +1352,17 @@
                 "chd_master_predictor": "chd",
                 "season_stats": "season_stats"
               },
-              "family_count": 3,
+              "family_count": 2,
               "family_probabilities": {
-                "mlb_run_projection": 0.5344796526098097,
-                "chd": 0.5041318837054296,
+                "mlb_run_projection": 0.4581088783017444,
                 "season_stats": 0.5833456030445537
               },
-              "unshrunk_probability_away": 0.5406523797865977,
-              "base_probability": 0.5393258075432725,
+              "unshrunk_probability_away": 0.5207272406731491,
+              "base_probability": 0.5194293348057185,
               "learning": {
                 "version": "family-brier-1",
-                "signature": "ec18066a3aa8aeaa737a",
-                "training_games": 22,
+                "signature": "2cc66432c89db8452878",
+                "training_games": 5,
                 "required_training_games": 100,
                 "status": "collecting_training_data",
                 "active": false,
@@ -1508,39 +1373,32 @@
             },
             "ensemble_version": "2.5.0",
             "calibration_status": "unvalidated",
-            "model_disagreement": 0.03263209313425129,
+            "model_disagreement": 0.06261836237140467,
             "agreement": {
-              "total": 4,
-              "available": 4,
+              "total": 2,
+              "available": 2,
               "supporting": [
-                "Monte Carlo",
-                "My CHD",
-                "Season Stats",
-                "CHD Master Predictor"
+                "Season Stats"
               ],
-              "opposing": [],
+              "opposing": [
+                "Monte Carlo"
+              ],
               "unavailable": [
                 "zips",
-                "steamer"
+                "steamer",
+                "my_chd",
+                "chd_master_predictor"
               ],
-              "agreement_ratio": 0.9999999999999999,
+              "agreement_ratio": 0.5,
               "agreement_basis": "family weight; duplicate forecasts share a vote",
               "model_votes": {
                 "monte_carlo": {
-                  "pA": 0.5344796526098097,
-                  "weight": 0.3333333333333333
-                },
-                "my_chd": {
-                  "pA": 0.5041318837054296,
-                  "weight": 0.16666666666666666
+                  "pA": 0.4581088783017444,
+                  "weight": 0.5
                 },
                 "season_stats": {
                   "pA": 0.5833456030445537,
-                  "weight": 0.3333333333333333
-                },
-                "chd_master_predictor": {
-                  "pA": 0.5041318837054296,
-                  "weight": 0.16666666666666666
+                  "weight": 0.5
                 }
               },
               "market_available": false,
@@ -1552,15 +1410,15 @@
               "source_version": "2.5.0",
               "market": "ml",
               "raw_probabilities": [
-                0.46067419245672747,
-                0.5393258075432725
+                0.4805706651942815,
+                0.5194293348057185
               ],
               "candidate_probabilities": null,
               "active": false,
               "status": "collecting_training_data",
-              "training_games": 27,
+              "training_games": 28,
               "required_training_games": 100,
-              "trained_through": "2026-10-25T10:47:01.749840+00:00"
+              "trained_through": "2026-10-27T03:48:55.019426+00:00"
             }
           },
           "ou": {
@@ -1585,7 +1443,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-27T03:48:27.154306+00:00",
+            "timestamp": "2026-10-27T11:38:17.623495+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -1625,7 +1483,7 @@
             "confidence": null,
             "status": "unavailable",
             "reason": "no compatible validated model predictions",
-            "timestamp": "2026-10-27T03:48:27.154306+00:00",
+            "timestamp": "2026-10-27T11:38:17.623495+00:00",
             "inputs": {},
             "agreement": {
               "total": 0,
@@ -1646,37 +1504,30 @@
         },
         "agreement": {
           "ml": {
-            "total": 4,
-            "available": 4,
+            "total": 2,
+            "available": 2,
             "supporting": [
-              "Monte Carlo",
-              "My CHD",
-              "Season Stats",
-              "CHD Master Predictor"
+              "Season Stats"
             ],
-            "opposing": [],
+            "opposing": [
+              "Monte Carlo"
+            ],
             "unavailable": [
               "zips",
-              "steamer"
+              "steamer",
+              "my_chd",
+              "chd_master_predictor"
             ],
-            "agreement_ratio": 0.9999999999999999,
+            "agreement_ratio": 0.5,
             "agreement_basis": "family weight; duplicate forecasts share a vote",
             "model_votes": {
               "monte_carlo": {
-                "pA": 0.5344796526098097,
-                "weight": 0.3333333333333333
-              },
-              "my_chd": {
-                "pA": 0.5041318837054296,
-                "weight": 0.16666666666666666
+                "pA": 0.4581088783017444,
+                "weight": 0.5
               },
               "season_stats": {
                 "pA": 0.5833456030445537,
-                "weight": 0.3333333333333333
-              },
-              "chd_master_predictor": {
-                "pA": 0.5041318837054296,
-                "weight": 0.16666666666666666
+                "weight": 0.5
               }
             },
             "market_available": false,
@@ -1713,87 +1564,6 @@
             "ensemble_version": "2.5.0"
           }
         }
-      },
-      "pregame_snapshot": {
-        "event_id": "849804",
-        "sport": "MLB",
-        "away": "Milwaukee Brewers",
-        "home": "Tampa Bay Rays",
-        "generated_at": "2026-10-26T12:18:00.849721+00:00",
-        "captured_at": "2026-10-26T12:18:22.772021+00:00",
-        "start_at": "2026-10-27T00:00:00+00:00",
-        "forecasts": {
-          "monte_carlo": {
-            "model_id": "monte_carlo",
-            "model_version": "2.3.0",
-            "status": "available",
-            "pA": 0.5280896822018052,
-            "pB": 0.4719103177981948,
-            "pDraw": null,
-            "probability": 0.5280896822018052,
-            "selection": "Milwaukee Brewers",
-            "confidence": null,
-            "odds": null,
-            "edge": null,
-            "calibration_status": "unvalidated"
-          },
-          "my_chd": {
-            "model_id": "my_chd",
-            "model_version": "2.4.0",
-            "status": "available",
-            "pA": 0.5030845575133222,
-            "pB": 0.49691544248667785,
-            "pDraw": null,
-            "probability": 0.5030845575133222,
-            "selection": "Milwaukee Brewers",
-            "confidence": null,
-            "odds": null,
-            "edge": null,
-            "calibration_status": "unvalidated"
-          },
-          "season_stats": {
-            "model_id": "season_stats",
-            "model_version": "2.3.0",
-            "status": "available",
-            "pA": 0.5833456030445537,
-            "pB": 0.41665439695544626,
-            "pDraw": null,
-            "probability": 0.5833456030445537,
-            "selection": "Milwaukee Brewers",
-            "confidence": null,
-            "odds": null,
-            "edge": null,
-            "calibration_status": "unvalidated"
-          },
-          "chd_master_predictor": {
-            "model_id": "chd_master_predictor",
-            "model_version": "2.4.0",
-            "status": "available",
-            "pA": 0.5030845575133222,
-            "pB": 0.49691544248667785,
-            "pDraw": null,
-            "probability": 0.5030845575133222,
-            "selection": "Milwaukee Brewers",
-            "confidence": null,
-            "odds": null,
-            "edge": null,
-            "calibration_status": "unvalidated"
-          },
-          "final_combined": {
-            "model_id": "final_combined",
-            "model_version": "2.5.0",
-            "status": "available",
-            "pA": 0.5368932068247333,
-            "pB": 0.4631067931752667,
-            "pDraw": null,
-            "probability": 0.5368932068247333,
-            "selection": "Milwaukee Brewers",
-            "confidence": null,
-            "odds": null,
-            "edge": null,
-            "calibration_status": "unvalidated"
-          }
-        }
       }
     }
   ],
@@ -1801,8 +1571,8 @@
     "model": "Validated season inputs; uncalibrated CHD priors; no synthetic historical outcomes",
     "calibration_status": "unvalidated"
   },
-  "updated": "2026-10-27T03:48:32.104810+00:00",
-  "generated_at": "2026-10-27T03:48:32.104810+00:00",
+  "updated": "2026-10-27T11:38:23.832378+00:00",
+  "generated_at": "2026-10-27T11:38:23.832378+00:00",
   "status": "ok",
   "data_quality_gate": {
     "invalid_games": 0,
