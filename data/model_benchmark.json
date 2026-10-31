@@ -1,8 +1,8 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-10-31T16:51:56.148500+00:00",
+  "updated": "2026-10-31T21:00:54.054966+00:00",
   "captured_games": 925,
-  "verified_settled_games": 785,
+  "verified_settled_games": 791,
   "model_scores": [
     {
       "sport": "MLB",
@@ -1051,11 +1051,11 @@
       "sport": "SOC",
       "model": "season_stats",
       "version": "league-goals-1.0.0",
-      "n": 38,
+      "n": 44,
       "outcome_type": "three_way_90_minutes",
-      "brier": 0.5997852352354988,
-      "log_loss": 1.0011844552413074,
-      "accuracy": 0.5789473684210527,
+      "brier": 0.6213077362599214,
+      "log_loss": 1.0297606717805818,
+      "accuracy": 0.5454545454545454,
       "uniform_baseline_brier": 0.6666666666666666,
       "uniform_baseline_log_loss": 1.0986122886681098,
       "calibration_bins": []
@@ -1064,11 +1064,11 @@
       "sport": "SOC",
       "model": "final_combined",
       "version": "league-goals-1.0.0",
-      "n": 38,
+      "n": 44,
       "outcome_type": "three_way_90_minutes",
-      "brier": 0.5997852352354988,
-      "log_loss": 1.0011844552413074,
-      "accuracy": 0.5789473684210527,
+      "brier": 0.6213077362599214,
+      "log_loss": 1.0297606717805818,
+      "accuracy": 0.5454545454545454,
       "uniform_baseline_brier": 0.6666666666666666,
       "uniform_baseline_log_loss": 1.0986122886681098,
       "calibration_bins": []
@@ -2686,7 +2686,7 @@
   ],
   "model_lab": {
     "schema_version": 1,
-    "as_of": "2026-10-31T16:51:56.148522+00:00",
+    "as_of": "2026-10-31T21:00:54.054988+00:00",
     "market": "moneyline",
     "confident_threshold": 0.65,
     "sports": [
@@ -3276,45 +3276,45 @@
           "season_stats": "league-goals-1.0.0",
           "final_combined": "league-goals-1.0.0"
         },
-        "verified_games": 38,
-        "matched_games": 38,
+        "verified_games": 44,
+        "matched_games": 44,
         "excluded_from_comparison": 0,
         "coverage": {
-          "season_stats": 38,
-          "final_combined": 38
+          "season_stats": 44,
+          "final_combined": 44
         },
         "first_start": "2026-09-12T13:30:00+00:00",
-        "last_start": "2026-10-30T19:30:00+00:00",
+        "last_start": "2026-10-31T17:30:00+00:00",
         "scores": [
           {
             "model": "final_combined",
             "version": "league-goals-1.0.0",
-            "n": 38,
-            "correct": 22,
-            "accuracy": 0.5789473684210527,
-            "brier": 0.5997852352354988,
-            "log_loss": 1.0011844552413074,
+            "n": 44,
+            "correct": 24,
+            "accuracy": 0.5454545454545454,
+            "brier": 0.6213077362599214,
+            "log_loss": 1.0297606717805818,
             "reliability": [
               {
                 "lower": 0,
                 "upper": 0.5,
-                "n": 17,
-                "mean_probability": 0.43358394338422906,
-                "observed_win_rate": 0.5294117647058824
+                "n": 21,
+                "mean_probability": 0.42966950479433336,
+                "observed_win_rate": 0.5238095238095238
               },
               {
                 "lower": 0.5,
                 "upper": 0.6,
-                "n": 10,
-                "mean_probability": 0.5406477030719393,
-                "observed_win_rate": 0.7
+                "n": 11,
+                "mean_probability": 0.5424771637670465,
+                "observed_win_rate": 0.6363636363636364
               },
               {
                 "lower": 0.6,
                 "upper": 0.7,
-                "n": 7,
-                "mean_probability": 0.6401559224258188,
-                "observed_win_rate": 0.42857142857142855
+                "n": 8,
+                "mean_probability": 0.6389224074155306,
+                "observed_win_rate": 0.375
               },
               {
                 "lower": 0.7,
@@ -3366,32 +3366,32 @@
           {
             "model": "season_stats",
             "version": "league-goals-1.0.0",
-            "n": 38,
-            "correct": 22,
-            "accuracy": 0.5789473684210527,
-            "brier": 0.5997852352354988,
-            "log_loss": 1.0011844552413074,
+            "n": 44,
+            "correct": 24,
+            "accuracy": 0.5454545454545454,
+            "brier": 0.6213077362599214,
+            "log_loss": 1.0297606717805818,
             "reliability": [
               {
                 "lower": 0,
                 "upper": 0.5,
-                "n": 17,
-                "mean_probability": 0.43358394338422906,
-                "observed_win_rate": 0.5294117647058824
+                "n": 21,
+                "mean_probability": 0.42966950479433336,
+                "observed_win_rate": 0.5238095238095238
               },
               {
                 "lower": 0.5,
                 "upper": 0.6,
-                "n": 10,
-                "mean_probability": 0.5406477030719393,
-                "observed_win_rate": 0.7
+                "n": 11,
+                "mean_probability": 0.5424771637670465,
+                "observed_win_rate": 0.6363636363636364
               },
               {
                 "lower": 0.6,
                 "upper": 0.7,
-                "n": 7,
-                "mean_probability": 0.6401559224258188,
-                "observed_win_rate": 0.42857142857142855
+                "n": 8,
+                "mean_probability": 0.6389224074155306,
+                "observed_win_rate": 0.375
               },
               {
                 "lower": 0.7,
@@ -3607,7 +3607,7 @@
   "probability_calibration": {
     "version": "winner-calibration-1",
     "market": "moneyline",
-    "as_of": "2026-10-31T16:51:56.148500+00:00",
+    "as_of": "2026-10-31T21:00:54.054966+00:00",
     "training_games_required": 100,
     "evaluation_games_required": 100,
     "evaluation_days_required": 20,
@@ -3885,7 +3885,7 @@
         "source_version": "league-goals-1.0.0",
         "status_at_last_capture": "collecting_training_data",
         "active_at_last_capture": false,
-        "training_games": 38,
+        "training_games": 44,
         "evidence": {
           "evaluation_games": 0,
           "evaluation_days": 0,
@@ -3900,7 +3900,7 @@
         "source_version": "league-goals-1.0.0",
         "status_at_last_capture": "collecting_training_data",
         "active_at_last_capture": false,
-        "training_games": 38,
+        "training_games": 44,
         "evidence": {
           "evaluation_games": 0,
           "evaluation_days": 0,
