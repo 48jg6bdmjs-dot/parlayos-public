@@ -23,8 +23,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Apply published Final Combined prediction fix
-        run: python scripts/apply_final_combined_patch.py
+      # Merge only after parlayos-main publishes its source-owned precedence fix.
+      - name: Verify source-owned Final Combined precedence (no deploy-time mutation)
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          for name in ('index.html', 'parlayos.html'):
+              html = Path(name).read_text(encoding='utf-8')
+              assert 'const published = getPublishedFinalCombined(game, market);' in html, f'{name}: source precedence fix not published yet'
+              assert 'source.edge != null' in html, f'{name}: source-owned nullable quote fix missing'
+          print('Source artifact verified; Pages will not rewrite HTML or release hashes')
+          PY
 
       - name: Validate five-sport runtime artifact contract
         run: |
