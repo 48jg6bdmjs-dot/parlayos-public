@@ -1,8 +1,8 @@
 {
   "status": "collecting_prospective_evidence",
-  "updated": "2026-11-20T14:56:18.888053+00:00",
-  "captured_games": 1236,
-  "verified_settled_games": 1073,
+  "updated": "2026-11-20T23:42:43.480805+00:00",
+  "captured_games": 1241,
+  "verified_settled_games": 1074,
   "model_scores": [
     {
       "sport": "MLB",
@@ -1051,11 +1051,11 @@
       "sport": "SOC",
       "model": "season_stats",
       "version": "league-goals-1.0.0",
-      "n": 55,
+      "n": 56,
       "outcome_type": "three_way_90_minutes",
-      "brier": 0.573194305260945,
-      "log_loss": 0.9652546996647786,
-      "accuracy": 0.6,
+      "brier": 0.5912873731538422,
+      "log_loss": 0.9918505847431073,
+      "accuracy": 0.5892857142857143,
       "uniform_baseline_brier": 0.6666666666666666,
       "uniform_baseline_log_loss": 1.0986122886681098,
       "calibration_bins": []
@@ -1064,11 +1064,11 @@
       "sport": "SOC",
       "model": "final_combined",
       "version": "league-goals-1.0.0",
-      "n": 55,
+      "n": 56,
       "outcome_type": "three_way_90_minutes",
-      "brier": 0.573194305260945,
-      "log_loss": 0.9652546996647786,
-      "accuracy": 0.6,
+      "brier": 0.5912873731538422,
+      "log_loss": 0.9918505847431073,
+      "accuracy": 0.5892857142857143,
       "uniform_baseline_brier": 0.6666666666666666,
       "uniform_baseline_log_loss": 1.0986122886681098,
       "calibration_bins": []
@@ -2707,7 +2707,7 @@
   ],
   "model_lab": {
     "schema_version": 1,
-    "as_of": "2026-11-20T14:56:18.888074+00:00",
+    "as_of": "2026-11-20T23:42:43.480830+00:00",
     "market": "moneyline",
     "confident_threshold": 0.65,
     "sports": [
@@ -3311,24 +3311,24 @@
           "season_stats": "league-goals-1.0.0",
           "final_combined": "league-goals-1.0.0"
         },
-        "verified_games": 55,
-        "matched_games": 55,
+        "verified_games": 56,
+        "matched_games": 56,
         "excluded_from_comparison": 0,
         "coverage": {
-          "season_stats": 55,
-          "final_combined": 55
+          "season_stats": 56,
+          "final_combined": 56
         },
         "first_start": "2026-09-12T13:30:00+00:00",
-        "last_start": "2026-11-08T18:30:00+00:00",
+        "last_start": "2026-11-20T19:30:00+00:00",
         "scores": [
           {
             "model": "final_combined",
             "version": "league-goals-1.0.0",
-            "n": 55,
+            "n": 56,
             "correct": 33,
-            "accuracy": 0.6,
-            "brier": 0.573194305260945,
-            "log_loss": 0.9652546996647786,
+            "accuracy": 0.5892857142857143,
+            "brier": 0.5912873731538422,
+            "log_loss": 0.9918505847431073,
             "reliability": [
               {
                 "lower": 0,
@@ -3361,14 +3361,23 @@
               {
                 "lower": 0.8,
                 "upper": 0.9,
-                "n": 1,
-                "mean_probability": 0.8633682813199067,
-                "observed_win_rate": 1.0
+                "n": 2,
+                "mean_probability": 0.8642401290895831,
+                "observed_win_rate": 0.5
               }
             ],
-            "confident_games": 10,
-            "confident_misses": 3,
+            "confident_games": 11,
+            "confident_misses": 4,
             "miss_examples": [
+              {
+                "event_id": "83237",
+                "away": "1. FC K\u00f6ln",
+                "home": "FC Bayern M\u00fcnchen",
+                "start_at": "2026-11-20T19:30:00+00:00",
+                "selection": "FC Bayern M\u00fcnchen",
+                "probability": 0.8651119768592596,
+                "actual_winner": "Draw"
+              },
               {
                 "event_id": "83192",
                 "away": "SV Werder Bremen",
@@ -3386,26 +3395,17 @@
                 "selection": "FC Bayern M\u00fcnchen",
                 "probability": 0.6815886357565784,
                 "actual_winner": "Draw"
-              },
-              {
-                "event_id": "83212",
-                "away": "Borussia M\u00f6nchengladbach",
-                "home": "VfB Stuttgart",
-                "start_at": "2026-10-23T18:30:00+00:00",
-                "selection": "VfB Stuttgart",
-                "probability": 0.6717689333784587,
-                "actual_winner": "Borussia M\u00f6nchengladbach"
               }
             ]
           },
           {
             "model": "season_stats",
             "version": "league-goals-1.0.0",
-            "n": 55,
+            "n": 56,
             "correct": 33,
-            "accuracy": 0.6,
-            "brier": 0.573194305260945,
-            "log_loss": 0.9652546996647786,
+            "accuracy": 0.5892857142857143,
+            "brier": 0.5912873731538422,
+            "log_loss": 0.9918505847431073,
             "reliability": [
               {
                 "lower": 0,
@@ -3438,14 +3438,23 @@
               {
                 "lower": 0.8,
                 "upper": 0.9,
-                "n": 1,
-                "mean_probability": 0.8633682813199067,
-                "observed_win_rate": 1.0
+                "n": 2,
+                "mean_probability": 0.8642401290895831,
+                "observed_win_rate": 0.5
               }
             ],
-            "confident_games": 10,
-            "confident_misses": 3,
+            "confident_games": 11,
+            "confident_misses": 4,
             "miss_examples": [
+              {
+                "event_id": "83237",
+                "away": "1. FC K\u00f6ln",
+                "home": "FC Bayern M\u00fcnchen",
+                "start_at": "2026-11-20T19:30:00+00:00",
+                "selection": "FC Bayern M\u00fcnchen",
+                "probability": 0.8651119768592596,
+                "actual_winner": "Draw"
+              },
               {
                 "event_id": "83192",
                 "away": "SV Werder Bremen",
@@ -3463,15 +3472,6 @@
                 "selection": "FC Bayern M\u00fcnchen",
                 "probability": 0.6815886357565784,
                 "actual_winner": "Draw"
-              },
-              {
-                "event_id": "83212",
-                "away": "Borussia M\u00f6nchengladbach",
-                "home": "VfB Stuttgart",
-                "start_at": "2026-10-23T18:30:00+00:00",
-                "selection": "VfB Stuttgart",
-                "probability": 0.6717689333784587,
-                "actual_winner": "Borussia M\u00f6nchengladbach"
               }
             ]
           }
@@ -3642,7 +3642,7 @@
   "probability_calibration": {
     "version": "winner-calibration-1",
     "market": "moneyline",
-    "as_of": "2026-11-20T14:56:18.888053+00:00",
+    "as_of": "2026-11-20T23:42:43.480805+00:00",
     "training_games_required": 100,
     "evaluation_games_required": 100,
     "evaluation_days_required": 20,
@@ -3958,7 +3958,7 @@
         "source_version": "league-goals-1.0.0",
         "status_at_last_capture": "collecting_training_data",
         "active_at_last_capture": false,
-        "training_games": 55,
+        "training_games": 56,
         "evidence": {
           "evaluation_games": 0,
           "evaluation_days": 0,
@@ -3973,7 +3973,7 @@
         "source_version": "league-goals-1.0.0",
         "status_at_last_capture": "collecting_training_data",
         "active_at_last_capture": false,
-        "training_games": 55,
+        "training_games": 56,
         "evidence": {
           "evaluation_games": 0,
           "evaluation_days": 0,
