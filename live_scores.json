@@ -4,34 +4,34 @@
     "MLB": [],
     "NFL": [
       {
-        "id": "nfl_401873081",
-        "lg": "NFL",
-        "a": "Chicago Bears",
-        "b": "Detroit Lions",
-        "aAbbr": "CHI",
-        "bAbbr": "DET",
-        "aScore": "0",
-        "bScore": "0",
-        "status": "11/26 - 1:00 PM EST",
-        "state": "pre",
-        "completed": false,
-        "date": "2026-11-26T18:00Z",
-        "eventId": "401873081"
-      },
-      {
         "id": "nfl_401873080",
         "lg": "NFL",
         "a": "Philadelphia Eagles",
         "b": "Dallas Cowboys",
         "aAbbr": "PHI",
         "bAbbr": "DAL",
-        "aScore": "0",
-        "bScore": "0",
-        "status": "11/26 - 4:30 PM EST",
-        "state": "pre",
+        "aScore": "36",
+        "bScore": "38",
+        "status": "0:11 - 4th",
+        "state": "in",
         "completed": false,
         "date": "2026-11-26T21:30Z",
         "eventId": "401873080"
+      },
+      {
+        "id": "nfl_401873081",
+        "lg": "NFL",
+        "a": "Chicago Bears",
+        "b": "Detroit Lions",
+        "aAbbr": "CHI",
+        "bAbbr": "DET",
+        "aScore": "39",
+        "bScore": "35",
+        "status": "Final",
+        "state": "post",
+        "completed": true,
+        "date": "2026-11-26T18:00Z",
+        "eventId": "401873081"
       },
       {
         "id": "nfl_401873082",
@@ -42,19 +42,40 @@
         "bAbbr": "BUF",
         "aScore": "0",
         "bScore": "0",
-        "status": "11/26 - 8:20 PM EST",
-        "state": "pre",
+        "status": "14:53 - 1st",
+        "state": "in",
         "completed": false,
         "date": "2026-11-27T01:20Z",
         "eventId": "401873082"
       }
     ],
     "NBA": [],
-    "SOC": [],
+    "SOC": [
+      {
+        "id": "soc_openligadb_83253",
+        "eventId": "83253",
+        "lg": "Soccer",
+        "a": "Borussia Mönchengladbach",
+        "b": "SV Werder Bremen",
+        "aScore": null,
+        "bScore": null,
+        "date": "2026-11-27T19:30:00+00:00",
+        "completed": false,
+        "state": "pre",
+        "status": "Scheduled",
+        "source": "OpenLigaDB",
+        "attribution": {
+          "name": "OpenLigaDB",
+          "url": "https://www.openligadb.de/",
+          "license": "ODbL-1.0",
+          "license_url": "https://opendatacommons.org/licenses/odbl/1-0/"
+        }
+      }
+    ],
     "NHL": []
   },
-  "updated": "2026-11-26T16:26:58.704930+00:00",
-  "count": 3,
+  "updated": "2026-11-27T01:30:32.003884+00:00",
+  "count": 4,
   "source": {
     "MLB": "MLB Stats API",
     "NFL": "ESPN public scoreboard",
